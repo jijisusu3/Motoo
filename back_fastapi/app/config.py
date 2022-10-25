@@ -20,6 +20,8 @@ TORTOISE_ORM = {
         'b204': {
             'models': [
                 'aerich.models',
+                'app.models.users',
+                'app.models.accounts',
                 'app.models.stocks',
                 'app.models.study',
             ],
