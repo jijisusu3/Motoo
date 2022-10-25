@@ -1,8 +1,13 @@
 from pydantic import BaseSettings
 
+
 class Settings(BaseSettings):
     DB_URL: str = ""
-    ROOT_PASSWORD: str=""
+    ROOT_PASSWORD: str = ""
+
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
 
 
 settings = Settings()
@@ -15,7 +20,6 @@ TORTOISE_ORM = {
         'b204': {
             'models': [
                 'aerich.models',
-                'app.models.accounts',
             ],
             'default_connection': 'default',
         }
