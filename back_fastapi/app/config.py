@@ -24,6 +24,8 @@ TORTOISE_ORM = {
                 'app.models.accounts',
                 'app.models.stocks',
                 'app.models.study',
+                'app.models.daycharts',
+                'app.models.candles',
             ],
             'default_connection': 'default',
         }

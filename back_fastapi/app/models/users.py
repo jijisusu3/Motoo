@@ -15,7 +15,7 @@ class User(Model):
 class School(Model):
     schoolname = fields.CharField(max_length=24)
     location = fields.CharField(max_length=24)
-    history = fields.JSONField(null=True)
+    history = fields.JSONField()
 
 
 class Event(Model):
