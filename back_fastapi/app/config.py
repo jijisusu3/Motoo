@@ -20,6 +20,8 @@ TORTOISE_ORM = {
         'b204': {
             'models': [
                 'aerich.models',
+                'app.models.stocks',
+                'app.models.study',
             ],
             'default_connection': 'default',
         }
