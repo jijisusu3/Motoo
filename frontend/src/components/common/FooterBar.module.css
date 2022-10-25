@@ -1,0 +1,10 @@
+.footerBar {
+  /* margin-top: 4rem;
+  margin-bottom: 4rem; */
+  display: flex;
+  justify-content: center;
+  padding: 32px;
+  background-color: var(--color-grey-900);
+  color: #43B8B1;
+  text-align: center;
+}
