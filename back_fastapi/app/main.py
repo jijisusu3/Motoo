@@ -14,7 +14,12 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-# register_tortoise(app=app, config=TORTOISE_ORM)
+register_tortoise(app=app, config=TORTOISE_ORM)
 
 
 app.include_router(router)
+
+
+@app.get("/")
+async def root():
+    return {"message": "Tomato"}

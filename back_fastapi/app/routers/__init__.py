@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 
-
 # from app.routers import 
 
 router = APIRouter(
@@ -8,4 +7,3 @@ router = APIRouter(
 )
 
 # router.include_router(index.router)
-
