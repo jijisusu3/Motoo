@@ -9,6 +9,7 @@ class User(Model):
     phone_number = fields.CharField(max_length=24)
     birthday = fields.DatetimeField()
     school_id = fields.IntField(null=True)
+    current = fields.IntField()
     my_stock = fields.ManyToManyField('b204.Stock', through='favoritestock', related_name='stock_user')
 
 
