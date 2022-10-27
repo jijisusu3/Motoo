@@ -28,16 +28,16 @@ class Stock(Model):
 
 
 class Keyword(Model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name='keywords')
+    stock = fields.ForeignKeyField('b204.Stock', related_name='keywords')
     keyword = fields.JSONField(null=True)
 
 
 class Bidask(Model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name='bidask')
+    stock = fields.ForeignKeyField('b204.Stock', related_name='bidask')
 
 
 class Candle(Model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name='candlechart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name='candlechart')
     time = fields.CharField(max_length=24)
     price = fields.IntField()
     volumn = fields.IntField(null=True)
@@ -47,7 +47,7 @@ class Candle(Model):
 
 
 class Day(Model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name='daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name='daychart')
     date = fields.CharField(max_length=24)
     volumn = fields.IntField(null=True)
     open_price = fields.IntField()
