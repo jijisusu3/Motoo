@@ -3,7 +3,7 @@ from tortoise import fields, Model
 
 class Category(Model):
     name = fields.CharField(max_length=24)
-    keyword = fields.JSONField(null=True)
+    keyword = fields.JSONField()
 
 
 class Stock(Model):
@@ -15,12 +15,14 @@ class Stock(Model):
     fluctuation_rate = fields.FloatField(null=True)
     fluctuation_price = fields.IntField(null=True)
     volumn = fields.IntField(null=True)
-    trading_value = fields.IntField(null=True)
+    trading_value = fields.BigIntField(null=True)
     maximun = fields.IntField(null=True)
     minimun = fields.IntField(null=True)
     per = fields.FloatField(null=True)
-    m_capitia= fields.IntField(null=True)
-    issued = fields.IntField(null=True)
+    roe = fields.FloatField(null=True)
+    eps = fields.FloatField(null=True)
+    m_capital = fields.BigIntField(null=True)
+    issued = fields.BigIntField(null=True)
     capital = fields.IntField(null=True)
     user = fields.ManyToManyField('b204.User', through='favoritestock', related_name='user_stock')
 
