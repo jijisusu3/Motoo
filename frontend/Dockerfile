@@ -8,7 +8,7 @@ RUN npm run build
 
 FROM nginx:stable-alpine
 RUN rm /etc/nginx/conf.d/default.conf
-COPY ./nginx/k7b204.conf /etc/nginx/conf.d/k7b204.conf
+COPY ./default.conf /etc/nginx/conf.d/default.conf
 
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=build-stage /app/build /usr/share/nginx/html
