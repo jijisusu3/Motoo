@@ -1,20 +1,20 @@
 pipeline {
     agent any 
     stages {
-        stage('Clean') {
-            steps {
-                script {
-                    try {
-                        sh "docker stop motoo_react_container"
-                        sleep 1
-                        sh "docker rm motoo_react_container"
-                    } catch (error) {
-                        echo error
-                        sh 'exit 0'
-                    }
-                }
-            }
-        }
+        // stage('Clean') {
+        //     steps {
+        //         script {
+        //             try {
+        //                 sh "docker stop motoo_react_container"
+        //                 sleep 1
+        //                 sh "docker rm motoo_react_container"
+        //             } catch (error) {
+        //                 echo error
+        //                 sh 'exit 0'
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Build') {
             steps {
