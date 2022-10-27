@@ -38,6 +38,7 @@ class Bidask(Model):
 
 class Candle(Model):
     stock = fields.ForeignKeyField('b204.Stock', related_name='candlechart')
+    date = fields.DatetimeField(auto_now_add=True)
     time = fields.CharField(max_length=24)
     price = fields.IntField()
     volume = fields.IntField(null=True)
