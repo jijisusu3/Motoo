@@ -6,7 +6,7 @@ COPY . .
 
 RUN npm run build
 FROM nginx:alpine
-RUN rm /etc/nginx/conf.d/default.conf
+# RUN rm /etc/nginx/conf.d/default.conf
 RUN mkdir /app
 WORKDIR /app
 RUN mkdir ./build
