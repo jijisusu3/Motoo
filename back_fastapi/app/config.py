@@ -4,6 +4,12 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     DB_URL: str = ""
     ROOT_PASSWORD: str = ""
+    OPEN_API_DOMAIN: str = ""
+    CANDLE_API_URL: str = ""
+    APPKEY_FOR_CANDLE: str = ""
+    APPSECRET_FOR_CANDLE: str = ""
+    AUTHORIZATION_FOR_CANDLE: str = ""
+    TRADE_ID_FOR_CANDLE: str = ""
 
     class Config:
         env_file = ".env"
