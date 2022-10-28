@@ -15,5 +15,6 @@ RUN mkdir ./build
 COPY --from=build-stage /var/jenkins_home/workspace/motoo/frontend/build ./build
 COPY ./nginx.conf /etc/nginx/conf.d
 
+
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
