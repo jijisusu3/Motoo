@@ -1,14 +1,17 @@
 package com.motoo.db.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * 유저 모델 정의.
+ */
 @Entity
 @Getter
 @Builder
@@ -20,48 +23,54 @@ public class User {
     private Long id;
 
     //스쿨이랑 일대일
-    @OneToOne
-    private School school;
+//    @OneToOne
+//    private School school;
+
+    //계좌랑 일대다
+
+    @Builder.Default
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Accounts> accounts= new ArrayList<>();
+
+    private int school_id;
+//    @OneToMany(mappedBy = "user")
+//    private List<School> schools = new ArrayList<>();
 
 
-    @Column(nullable = false)
+    @OneToMany(mappedBy = "user")
+    private List<FavoriteStock> favoriteStocks = new ArrayList<>();
+
+    @OneToMany
+    private List<Trading> tradings = new ArrayList<>();
+
     private String email;
-    @Column(nullable = false)
+
     private String username;
 
-    @Column(nullable = false)
     private String nickname;
-    @Column(nullable = false)
+
     private String password;
-    @Column(nullable = false)
-    private String phone_number;
-    @Column(nullable = false)
-    private Date birthday;
 
-    @Column(nullable = false)
-    private String school_id;
-
-//    private int current;
+    private int current;
 
     public void updatePw(String password) {
         this.password = password;
     }
 
 
-//    public void updateCurrent(String current){
-//        this.curent  = current
-//    }
+    public void updateCurrent(int current){
+        this.current = current;
+    }
 
 
     public void updateUser(String username, String nickname, String email, String phone_number,
-                           Date birthday, String school_id
+                           Date birthday
                            ){
         this.username = username;
         this.nickname = nickname;
         this.email = email;
-        this.phone_number = phone_number;
-        this.birthday = birthday;
-        this.school_id = school_id;
+
 
     }
 

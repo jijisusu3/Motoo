@@ -1,12 +1,15 @@
 package com.motoo.db.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
+
+import javax.persistence.*;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name= "stock")
 public class Stock {
 
     @Id
@@ -47,4 +50,15 @@ public class Stock {
 
     private double eps;
 
+
+    @JsonIgnore
+    @Builder.Default
+    @OneToMany(mappedBy="stock")
+    private List<FavoriteStock> favoriteStocks = new ArrayList<>();
+
+
+    @JsonIgnore
+    @Builder.Default
+    @OneToMany(mappedBy="stock")
+    private List<AccountsStock> accountsStocks = new ArrayList<>();
 }
