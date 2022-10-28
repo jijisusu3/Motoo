@@ -24,7 +24,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh "docker run -d --name=motoo_react_container -p 80:80 -p 443:443 motoo_react"
+                sh "docker run -d --name=motoo_react_container -p 4000:4000 -p 443:443 motoo_react"
                 sh "docker image prune --force"
 
             }
