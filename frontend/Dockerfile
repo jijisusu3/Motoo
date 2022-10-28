@@ -1,5 +1,5 @@
 FROM node:16.16.0 as build-stage
-WORKDIR /jenkins_home/workspace/motoo/frontend
+WORKDIR /var/jenkins_home/workspace/motoo/frontend
 COPY package*.json ./
 RUN npm install --force
 COPY . .
@@ -11,8 +11,8 @@ RUN mkdir /app
 WORKDIR /app
 RUN mkdir ./build
 
-# RUN rm -rf /usr/share/nginx/html/*
-COPY --from=build-stage /jenkins_home/workspace/motoo/frontend/build ./build
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=build-stage /var/jenkins_home/workspace/motoo/frontend/build /usr/share/nginx/html
 COPY ./nginx.conf /etc/nginx/conf.d
 
 
