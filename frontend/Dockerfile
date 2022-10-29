@@ -9,11 +9,11 @@ FROM nginx:alpine
 # RUN rm /etc/nginx/conf.d/default.conf
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=build-stage /var/jenkins_home/workspace/motoo/frontend/build /usr/share/nginx/html
-RUN mkdir /app
-WORKDIR /app
-RUN mkdir ./build
+# RUN mkdir /app
+# WORKDIR /app
+# RUN mkdir ./build
 
-# COPY ./nginx.conf /etc/nginx/conf.d
+COPY ./nginx.conf /etc/nginx/conf.d
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
