@@ -6,8 +6,8 @@ class User(Model):
     username = fields.CharField(max_length=20)
     nickname = fields.CharField(max_length=24)
     password = fields.CharField(max_length=100)
-    phone_number = fields.CharField(max_length=24)
     school_id = fields.IntField(null=True)
+    current = fields.IntField()
     my_stock = fields.ManyToManyField('b204.Stock', through='favoritestock', related_name='stock_user')
 
 

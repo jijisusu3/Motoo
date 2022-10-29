@@ -1,6 +1,12 @@
 from tortoise import fields, Model
 
 
+class Token(Model):
+    token = fields.CharField(max_length=250)
+    created_at = fields.DatetimeField(auto_now_add=True)
+
+
+
 class Category(Model):
     name = fields.CharField(max_length=24)
     keyword = fields.JSONField()
@@ -14,10 +20,10 @@ class Stock(Model):
     close_price = fields.IntField(null=True)
     fluctuation_rate = fields.FloatField(null=True)
     fluctuation_price = fields.IntField(null=True)
-    volumn = fields.IntField(null=True)
+    volume = fields.IntField(null=True)
     trading_value = fields.BigIntField(null=True)
-    maximun = fields.IntField(null=True)
-    minimun = fields.IntField(null=True)
+    maximum = fields.IntField(null=True)
+    minimum = fields.IntField(null=True)
     per = fields.FloatField(null=True)
     roe = fields.FloatField(null=True)
     eps = fields.FloatField(null=True)
@@ -28,28 +34,29 @@ class Stock(Model):
 
 
 class Keyword(Model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name='keywords')
+    stock = fields.ForeignKeyField('b204.Stock', related_name='keywords')
     keyword = fields.JSONField(null=True)
 
 
 class Bidask(Model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name='bidask')
+    stock = fields.ForeignKeyField('b204.Stock', related_name='bidask')
 
 
 class Candle(Model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name='candlechart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name='candlechart')
+    date = fields.DatetimeField(auto_now_add=True)
     time = fields.CharField(max_length=24)
     price = fields.IntField()
-    volumn = fields.IntField(null=True)
+    volume = fields.IntField(null=True)
     open_price = fields.IntField()
     max_price = fields.IntField()
     min_price = fields.IntField()
 
 
 class Day(Model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name='daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name='daychart')
     date = fields.CharField(max_length=24)
-    volumn = fields.IntField(null=True)
+    volume = fields.IntField(null=True)
     open_price = fields.IntField()
     close_price = fields.IntField()
     max_price = fields.IntField()

@@ -30,93 +30,93 @@ categories = [
 
 
 class DayConstruction(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[0]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[0]}_daychart')
 
 
 class DayFinance(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[1]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[1]}_daychart')
 
 
 class DayMechanic(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[2]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[2]}_daychart')
 
 
 class DayManufacturing(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[3]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[3]}_daychart')
 
 
 class DayAgriculture(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[4]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[4]}_daychart')
 
 
 class DayInsurance(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[5]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[5]}_daychart')
 
 
 class DayNonmetal(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[6]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[6]}_daychart')
 
 
 class DayService(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[7]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[7]}_daychart')
 
 
 class DayFiber(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[8]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[8]}_daychart')
 
 
 class DayTransportEquip(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[9]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[9]}_daychart')
 
 
 class DayTransportDepot(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[10]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[10]}_daychart')
 
 
 class DayDistribution(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[11]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[11]}_daychart')
 
 
 class DayBank(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[12]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[12]}_daychart')
 
 
 class DayFood(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[13]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[13]}_daychart')
 
 
 class DayMedicalPrecision(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[14]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[14]}_daychart')
 
 
 class DayMedication(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[15]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[15]}_daychart')
 
 
 class DayElecGas(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[16]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[16]}_daychart')
 
 
 class DayElectronic(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[17]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[17]}_daychart')
 
 
 class DayWood(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[18]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[18]}_daychart')
 
 
 class DayStockIndustry(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[19]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[19]}_daychart')
 
 
 class DaySteel(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[20]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[20]}_daychart')
 
 
 class DayTelecommunication(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[21]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[21]}_daychart')
 
 
 class DayChemistry(base_model):
-    stock_id = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[22]}_daychart')
+    stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[22]}_daychart')
 
