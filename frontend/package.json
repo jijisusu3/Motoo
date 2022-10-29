@@ -1,7 +1,7 @@
 {
   "name": "front",
   "version": "0.1.0",
-  "homepage": ".",
+  "homepage": "https://k7b204.p.ssafy.io/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
