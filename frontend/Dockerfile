@@ -16,5 +16,5 @@ RUN mkdir ./build
 COPY ./nginx.conf /etc/nginx/conf.d
 
 
-EXPOSE 3000
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
