@@ -5,15 +5,15 @@ import redis
 
 
 class Settings(BaseSettings):
-    DB_URL = os.environ.get("DB_URL")
-    ROOT_PASSWORD = os.environ.get("ROOT_PASSWORD")
-    OPEN_API_DOMAIN = os.environ.get("OPEN_API_DOMAIN")
-    CANDLE_API_URL = os.environ.get("CANDLE_API_URL")
-    APPKEY_FOR_CANDLE = os.environ.get("APPKEY_FOR_CANDLE")
-    APPSECRET_FOR_CANDLE = os.environ.get("APPSECRET_FOR_CANDLE")
-    TRADE_ID_FOR_CANDLE = os.environ.get("TRADE_ID_FOR_CANDLE")
-    REDIS_HOST = os.environ.get("REDIS_HOST")
-    REDIS_PORT = os.environ.get("REDIS_PORT")
+    DB_URL: str = os.environ.get("DB_URL")
+    ROOT_PASSWORD: str = os.environ.get("ROOT_PASSWORD")
+    OPEN_API_DOMAIN: str = os.environ.get("OPEN_API_DOMAIN")
+    CANDLE_API_URL: str = os.environ.get("CANDLE_API_URL")
+    APPKEY_FOR_CANDLE: str = os.environ.get("APPKEY_FOR_CANDLE")
+    APPSECRET_FOR_CANDLE: str = os.environ.get("APPSECRET_FOR_CANDLE")
+    TRADE_ID_FOR_CANDLE: str = os.environ.get("TRADE_ID_FOR_CANDLE")
+    REDIS_HOST: str = os.environ.get("REDIS_HOST")
+    REDIS_PORT: int = os.environ.get("REDIS_PORT")
     # DB_URL: str = ""
     # ROOT_PASSWORD: str = ""
     # OPEN_API_DOMAIN: str = ""
