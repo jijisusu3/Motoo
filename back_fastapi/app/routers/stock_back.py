@@ -107,25 +107,3 @@ async def update_stock_list(req_time: str):
     finished = time.time()
     print(f'{finished-initial_start}s 종료')
     return None
-
-
-class Dispatcher:
-
-    def do_run(self):
-        pass
-
-    def do_fly(self):
-        pass
-
-    def do_eat(self):
-        pass
-
-    def dispatch(self, command):
-        mname = 'do_' + str(command)
-        if hasattr(self, mname):
-            method = getattr(self, mname)
-            method()
-        else:
-            self.error()
-
-

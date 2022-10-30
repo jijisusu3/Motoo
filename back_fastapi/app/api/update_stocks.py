@@ -47,8 +47,6 @@ tickers = [
     "017390",
     "298050",
 ]
-asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-
 
 def parameter_setter(ticker: str):
     parameter["fid_input_iscd"] = ticker
@@ -102,11 +100,3 @@ async def update_single_stock(ticker: str):
     end = time.time()
     print(f"{end - start:.5f} sec")
     return data
-
-
-asyncio.run(update_stock())
-# update_single_stock_client("005930", client())
-# asyncio.run(update_single_stock("005930"), debug=True)
-# asyncio.run(update_single_stock("005930"), debug=True)
-# r = update_stock(await)
-# asyncio.run(update_stock(), debug=True)
