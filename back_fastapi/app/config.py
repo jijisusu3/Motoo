@@ -1,9 +1,9 @@
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from pydantic import BaseSettings
 import redis
 
-load_dotenv()
+# load_dotenv()
 
 
 class Settings(BaseSettings):
