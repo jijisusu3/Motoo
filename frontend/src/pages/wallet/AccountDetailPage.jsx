@@ -10,6 +10,7 @@ import { useState } from "react";
 import classes from "./AccountDetailPage.module.css";
 import Modal from "@mui/material/Modal";
 import RealizedPL from "../../components/wallet/RealizedPL";
+import AccountHistory from "../../components/wallet/AccountHistory";
 
 const style = {
   position: "absolute",
@@ -123,7 +124,7 @@ function AccountDetailPage() {
           />
           <img
             onClick={handleOnKeyPress}
-            src={`${process.env.PUBLIC_URL}/editIcon.svg`}
+            src={`${process.env.PUBLIC_URL}/wallet/editIcon.svg`}
             alt=""
           />
         </div>
@@ -158,7 +159,7 @@ function AccountDetailPage() {
       >
         <EditShow />
         <div onClick={settingOpen}>
-          <img src={`${process.env.PUBLIC_URL}/settingIcon.svg`} alt="" />
+          <img src={`${process.env.PUBLIC_URL}/wallet/settingIcon.svg`} alt="" />
         </div>
       </Grid>
       <SettingShow />
@@ -204,7 +205,7 @@ function AccountDetailPage() {
                   color={value === 2 ? "#43B8B1" : "#929E9E"}
                   fontFamily="Pretendard"
                 >
-                  계좌자산
+                  거래내역
                 </Typography>
               }
               {...a11yProps(2)}
@@ -218,7 +219,7 @@ function AccountDetailPage() {
           <RealizedPL />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Item Three
+          <AccountHistory />
         </TabPanel>
       </Box>
     </div>
