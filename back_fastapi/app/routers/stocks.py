@@ -18,4 +18,5 @@ from app.schemes.stocks import CandleData
 router = APIRouter(prefix="/stocks")
 #
 #
-# @router.get("/save_token", description="access token 저장", response_model=CommonResponse)
+# @router.get("/detail/{ticker}", description="access token 저장", response_model=CommonResponse):
+# async def get_stock_detail()
