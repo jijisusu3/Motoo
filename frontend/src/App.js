@@ -17,7 +17,7 @@ import StockDetailPage from "./pages/stock-detail/StockDetailPage";
 
 function App() {
   return (
-    <div style={{marginBottom: '4rem'}}>
+    <div style={{marginBottom: '4rem', marginTop: 40}}>
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -26,8 +26,8 @@ function App() {
         <Route path="stock/limit-order" element={<LimitOrderPage />} />
         <Route path="stock/limit-order/:id" element={<LimitOrderEditPage />} />
         <Route path="stock/detail/:id" element={<StockDetailPage />} />
-        <Route path="stock/sell/:id" element={<SellStockPage />} />
-        <Route path="stock/buy/:id" element={<BuyStockPage />} />
+        <Route name="sell" path="stock/sell" element={<SellStockPage />} />
+        <Route name="buy" path="stock/buy" element={<BuyStockPage />} />
         <Route path="stock/industry" element={<IndustryPage />} />
         <Route path="/wallet" element={<MyPage />} />
         <Route path="wallet/detail" element={<AccountDetailPage />} />

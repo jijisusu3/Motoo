@@ -1,9 +1,18 @@
 from pydantic import BaseSettings
+import redis
 
 
 class Settings(BaseSettings):
     DB_URL: str = ""
     ROOT_PASSWORD: str = ""
+    OPEN_API_DOMAIN: str = ""
+    CANDLE_API_URL: str = ""
+    APPKEY_FOR_CANDLE: str = ""
+    APPSECRET_FOR_CANDLE: str = ""
+    AUTHORIZATION_FOR_CANDLE: str = ""
+    TRADE_ID_FOR_CANDLE: str = ""
+    REDIS_HOST: str = ""
+    REDIS_PORT: int
 
     class Config:
         env_file = ".env"
@@ -33,3 +42,11 @@ TORTOISE_ORM = {
     'use_tz': False,
     'timezone': 'Asia/Seoul'
 }
+
+pool = redis.ConnectionPool(
+    host=settings.REDIS_HOST,
+    port=settings.REDIS_PORT,
+    # password=configs.REDIS_PASSWORD,
+    decode_responses=True
+)
+redis_session = redis.Redis(connection_pool=pool)
