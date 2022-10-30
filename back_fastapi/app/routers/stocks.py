@@ -16,7 +16,9 @@ from app.schemes.common import CommonResponse
 from app.schemes.stocks import CandleData
 
 router = APIRouter(prefix="/stocks")
-#
-#
-# @router.get("/detail/{ticker}", description="access token 저장", response_model=CommonResponse):
-# async def get_stock_detail()
+
+
+@router.get("/detail/{ticker}", description="주식 상세 조회")
+async def get_stock_detail(ticker: str):
+    stock = await Stock.get(ticker=ticker)
+    return stock
