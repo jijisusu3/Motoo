@@ -19,12 +19,14 @@ pipeline {
         stage('Build') {
             steps {
                 sh "docker build -t motoo_react ./frontend"
+                sh "docker build -t motoo_fastapi ./back_fastapi"
             }
         }
 
         stage('Deploy') {
             steps {
                 sh "docker run -d --name=motoo_react_container -p 4000:4000 -p 8081:80 motoo_react"
+                sh "docker run -d --name=motoo_fastapi_container -p8080:8080 motoo_react"
                 sh "docker image prune --force"
 
             }
