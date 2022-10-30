@@ -8,7 +8,7 @@ appsecret = settings.APPSECRET_FOR_CANDLE
 tr_id_candle = settings.TRADE_ID_FOR_CANDLE
 header = {
     "content-type": "application/json; charset=utf-8",
-    "authorization": "Bearer "+"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6IjA0N2E4MzYxLWRjZTQtNGU2Yy05YjAyLWYxYzhmNWEwNTg4YSIsImlzcyI6InVub2d3IiwiZXhwIjoxNjY2OTczNjUwLCJpYXQiOjE2NjY4ODcyNTAsImp0aSI6IlBTYm5Rd2lVVmpTRHJLcEtoTlRGbEJST2ZpcjVlRGdlNW1BbSJ9.RaisQ8Tnxx69JUAEiXEN_kaSK74mIJP2mPu52jvROaPpmUByPNRVcqlukPkH46WYPAfimpb0mvoIegosGK1lAg",
+    "authorization": "",
     "appkey": appkey,
     "appsecret": appsecret,
     "tr_id": "FHKST03010200",
@@ -17,7 +17,7 @@ header = {
 parameter = {
     "fid_cond_mrkt_div_code": "J",
     "fid_etc_cls_code": "",
-    "fid_input_hour_1": "100000",
+    "fid_input_hour_1": "",
     "fid_input_iscd": "000660",
     "fid_pw_data_incu_yn": "Y"
 }

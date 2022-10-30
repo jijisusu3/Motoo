@@ -1,12 +1,6 @@
 from tortoise import fields, Model
 
 
-class Token(Model):
-    token = fields.CharField(max_length=250)
-    created_at = fields.DatetimeField(auto_now_add=True)
-
-
-
 class Category(Model):
     name = fields.CharField(max_length=24)
     keyword = fields.JSONField()
