@@ -37,15 +37,11 @@ from app.main import app
 #     # Then: 실패를 응답하고
 #     res_data = res.json()
 #     assert res_data["message"] == "success"
-
-#
-# @pytest.mark.asyncio
-# async def test_trivial():
-#     assert True
-
 # @pytest.mark.anyio
-# async def test_get_article_detail():
-#     async with AsyncClient(app=app, base_url="http://test") as ac:
-#         response = await ac.get("/examples/7")
-#     assert response.status_code == 200
-#     assert response.json() == {"message": "Tomato"}
+# async class TestStock(client: AsyncClient):
+#     # When: username, password로 회원가입을 성공했을 때
+#     res = await client.post("/example/signup", json={"username": 'username', "password": 'password'})
+#
+#     # Then: 성공을 응답
+#     res_data = res.json()
+#     assert res_data["message"] == "success"
