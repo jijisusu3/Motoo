@@ -1,12 +1,12 @@
-import datetime
-from typing import List
+from datetime import datetime
+from typing import List, Union
 from pydantic import BaseModel, Field, validator
 
 
 class ChartBase(BaseModel):
     id: int
     stock_id: int
-    date: str
+    date: datetime
     max_price: int
     min_price: int
     volume: int
@@ -29,25 +29,25 @@ class ShortStockData(BaseModel):
     fluctuation_price: int
     volume: int
     trading_value: int
-    daily: List[CandleData]
+    daily: Union[List[CandleData], None] = []
 
 
 class EntireStockData(ShortStockData):
     ticker: str
     category_id: int
-    category_name: str
+    category_name: Union[str, None] = None
     close_price: int
-    maximum: int
-    minimum: int
-    per: float
-    roe: float
-    eps: float
+    maximum: Union[int, None] = None
+    minimum: Union[int, None] = None
+    per: Union[float, None] = None
+    roe: Union[float, None] = None
+    eps: Union[float, None] = None
     m_capital: int
     issued: int
-    capital: int
-    weekly: List[CandleData]
-    monthly: List[DayChartData]
-    yearly: List[DayChartData]
+    capital: Union[int, None] = None
+    weekly: Union[List[CandleData], None] = []
+    monthly: Union[List[DayChartData], None] = []
+    yearly: Union[List[DayChartData], None] = []
 
 
 
