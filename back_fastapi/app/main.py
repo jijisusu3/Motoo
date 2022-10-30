@@ -28,7 +28,7 @@ app.include_router(router)
 
 @app.get("/")
 async def root():
-    return {"message": "Tomato"}
+    return {"message": settings.OPEN_API_DOMAIN}
 
 
 def main():
