@@ -7,8 +7,7 @@ pipeline {
                     try {
                         sh "docker stop motoo_react_container"
                         sh "docker stop motoo_fastapi_container"
-                        sleep 1
-                        
+                        sleep 1  
                         sh "docker rm motoo_react_container"
                         sh "docker rm motoo_fastapi_container"
                     } catch (error) {
