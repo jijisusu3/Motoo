@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./RealizedPL.module.css";
 // import RealizedList from "./RealizedList";
-import classes from "./RealizedPL.module.css";
+import classes from "./AccountHistory.module.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import datejs from "dayjs";
@@ -12,7 +12,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 datejs.extend(isBetween);
 
-function RealizedPL() {
+function AccountHistory() {
   const [data, setData] = useState([
     {
       priceHigh: [
@@ -21,33 +21,21 @@ function RealizedPL() {
           dateTime: "2022-09-26",
           code: 300020,
           profit: 111600,
-          percent: 29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
+          differ: 1,
         },
         {
           name: "SK하이닉스",
           dateTime: "2021-09-26",
           profit: -111600,
           code: 671021,
-          percent: -29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
+          differ: 2,
         },
         {
           name: "LG디스플레이",
           dateTime: "2022-10-23",
           profit: 111600,
           code: 582901,
-          percent: 29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
+          differ: 3,
         },
       ],
     },
@@ -58,33 +46,21 @@ function RealizedPL() {
           dateTime: "2022-09-26",
           code: 300020,
           profit: 111600,
-          percent: 29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
+          differ: 1,
         },
         {
           name: "ggggg",
           dateTime: "2021-09-26",
           profit: -111600,
           code: 671021,
-          percent: -29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
+          differ: 2,
         },
         {
           name: "LG디스플레이",
           dateTime: "2022-10-23",
           profit: 111600,
           code: 582901,
-          percent: 29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
+          differ: 3,
         },
       ],
     },
@@ -95,33 +71,21 @@ function RealizedPL() {
           dateTime: "2022-09-26",
           code: 300020,
           profit: 111600,
-          percent: 29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
+          differ: 1,
         },
         {
           name: "SK하이닉스",
           dateTime: "2021-09-26",
           profit: -111600,
           code: 671021,
-          percent: -29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
+          differ: 2,
         },
         {
           name: "ggggg",
           dateTime: "2022-10-23",
           profit: 111600,
           code: 582901,
-          percent: 29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
+          differ: 3,
         },
       ],
     },
@@ -225,92 +189,112 @@ function RealizedPL() {
   }
   // 드롭다운 value기준 정렬
   function RealizedList() {
-    const [value, setValue] = useState('1');
-    const [ data, setData ] = useState(timeList)
-    const [ example, setExample ] = useState(timeList[0]['priceHigh'])
-  
+    const [value, setValue] = useState("1");
+    const [data, setData] = useState(timeList);
+    const [example, setExample] = useState(timeList[0]["priceHigh"]);
+
     function setDropdownData(value) {
-      if (value === '1') {
-        setExample(data[0]['priceHigh']);
-      } else if (value === '2') {
-        setExample(data[1]['profitHigh']);
+      if (value === "1") {
+        setExample(data[0]["priceHigh"]);
+      } else if (value === "2") {
+        setExample(data[1]["profitHigh"]);
       } else {
-        setExample(data[2]['profitLow'])
+        setExample(data[2]["profitLow"]);
       }
     }
     const handleValueChange = (event) => {
       setValue(event.target.value);
-      setDropdownData(event.target.value)
+      setDropdownData(event.target.value);
     };
-  
-  
+
     function MyRealizedCard(stock) {
       function profitCheck() {
         if (stock.profit < 0) {
-          return "#4D97ED";
+          return;
         } else {
-          return "#DD4956";
+          return "+";
         }
       }
-    const profitColor = profitCheck();
+      const profitLabel = profitCheck();
+      var differText = ''
+      function differCheck() {
+        if (stock.differ === 1) {
+          differText = '판매'
+          return "#4D97ED";
+        } else if (stock.differ === 2) {
+          differText = '구매'
+          return "#DD4956";
+        } else {
+          differText = '입금'
+          return "#FEBF45";
+        }
+      }
+      const differLabel = differCheck();
       return (
-        <div className={classes.myRealizedCard}>
+        <div className={classes.myHistoryCard}>
           <p>{stock.name}</p>
           <p>
-            평가손익: <span style={{ color: profitColor }}>{stock.profit}</span>
+            평가손익:{" "}
+            <span>
+              {" "}
+              {profitLabel}
+              {stock.profit}
+            </span>
           </p>
-          <p>
-            평가손익: <span style={{ color: profitColor }}>{stock.percent}%</span>
-          </p>
-          <p>{stock.mean}</p>
-          <p>{stock.now}</p>
-          <p>{stock.all}</p>
+          <div
+            style={{
+              width: 33,
+              height: 17,
+              borderRadius: 5,
+              backgroundColor: differLabel,
+            }}
+          >
+            <p style={{ color: "white", fontSize: 10, fontWeight: 700 }}>
+              {differText}
+            </p>
+          </div>
         </div>
       );
     }
-  
+
     return (
       <>
-      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-        <Select
-          labelId="demo-select-small"
-          id="demo-select-small"
-          value={value}
-          onChange={handleValueChange}
-          sx={{
-            boxShadow: "none",
-            border: 0,
-            ".MuiOutlinedInput-notchedOutline": { border: 0 },
-          }}
-        >
-          <MenuItem value={'1'}>보유가격순</MenuItem>
-          <MenuItem value={'2'}>수익률높은순</MenuItem>
-          <MenuItem value={'3'}>수익률낮은순</MenuItem>
-        </Select>
-      </FormControl>
-      <div>
-        {example.map((stock) => (
-          <MyRealizedCard
-            key={stock.code}
-            name={stock.name}
-            profit={stock.profit}
-            percent={stock.percent}
-            mean={stock.mean}
-            now={stock.now}
-            many={stock.many}
-            all={stock.all}
-          />
-        ))}
-      </div>
-    </>
+        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+          <Select
+            labelId="demo-select-small"
+            id="demo-select-small"
+            value={value}
+            onChange={handleValueChange}
+            sx={{
+              boxShadow: "none",
+              border: 0,
+              ".MuiOutlinedInput-notchedOutline": { border: 0 },
+            }}
+          >
+            <MenuItem value={"1"}>보유가격순</MenuItem>
+            <MenuItem value={"2"}>수익률높은순</MenuItem>
+            <MenuItem value={"3"}>수익률낮은순</MenuItem>
+          </Select>
+        </FormControl>
+        <div>
+          {example.map((stock) => (
+            <MyRealizedCard
+              key={stock.code}
+              name={stock.name}
+              profit={stock.profit}
+              differ={stock.differ}
+            />
+          ))}
+        </div>
+      </>
     );
   }
   return (
     <>
       <GetCalenderData />
-      <RealizedList/>
+      <RealizedList />
     </>
   );
 }
 
-export default RealizedPL;
+export default AccountHistory;

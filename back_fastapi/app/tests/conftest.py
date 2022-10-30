@@ -10,7 +10,7 @@ DB_URL = "sqlite://:memory:"
 async def init_db(db_url, create_db: bool = False, schemas: bool = False) -> None:
     """Initial database connection"""
     await Tortoise.init(
-        db_url=db_url, modules={"b204": ['aerich.models']}, _create_db=create_db
+        db_url=db_url, modules={"b204": ['aerich.models','app.models.stocks']}, _create_db=create_db
     )
     if create_db:
         print(f"Database created! {db_url = }")
