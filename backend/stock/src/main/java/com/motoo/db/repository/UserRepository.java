@@ -12,17 +12,17 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-//    Optional<User> findByid(Long id);
-//
-//    Optional<User> findByusername(String username);
-//
-//    Optional<User> findBynickname(String nickname);
-//
-//    Optional<User> findByusernameAndemail(String username, String email);
-//
-//    Optional<User> findByusernameAndemailAndid(String username, String email, String id);
-//
-//    @Transactional
-//    Optional<User> deleteById(String id);
+//    Optional<User> findByUserNo(Long id);
+
+    Optional<User> findByUserId(String userId);
+
+    Optional<User> findByEmail(String email);
+
+    Optional<User> findByUsernameAndEmail(String username, String email);
+
+    Optional<User> findByUsernameAndEmailAndUserId(String username, String email, String userId);
+
+    @Transactional
+    Optional<User> deleteByUserId(String userId);
 
 }

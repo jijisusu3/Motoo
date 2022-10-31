@@ -15,8 +15,9 @@ import javax.persistence.*;
 @Table(name="accountstock")
 public class AccountsStock {
     @Id
+    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long accountsStockId;
 
     private int amount;
 
@@ -28,5 +29,10 @@ public class AccountsStock {
     @ManyToOne(fetch = FetchType.LAZY)
     private Stock stock;
 
-
+    public void createAccountsStock(Accounts accounts, Stock stock, int amount, int price){
+        this.accounts =accounts;
+        this.stock = stock;
+        this.price =price;
+        this.amount = amount;
+    }
 }

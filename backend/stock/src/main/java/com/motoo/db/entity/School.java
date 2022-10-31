@@ -26,7 +26,10 @@ public class School {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name="id")
+    private Long schoolId;
+
+
     private String schoolname;
     private String location;
 

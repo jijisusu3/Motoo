@@ -13,8 +13,9 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name= "favoritestock")
 public class FavoriteStock {
     @Id
+    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long favoriteStockId;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
