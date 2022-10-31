@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from app.routers import stock_back, stocks
 
 router = APIRouter(
-    # prefix="/project",
+    prefix="/api1",
 )
 
 # router.include_router(index.router)

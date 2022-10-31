@@ -30,10 +30,10 @@ app.include_router(router)
 async def root():
     return {"message": settings.OPEN_API_DOMAIN}
 
-
-def main():
-    asyncio.run(update_stock_back("104000"))
-
-
-if __name__ == "__main__":
-    typer.run(main)
+#
+# def main():
+#     asyncio.run(update_stock_back("104000"))
+#
+#
+# if __name__ == "__main__":
+#     typer.run(main)
