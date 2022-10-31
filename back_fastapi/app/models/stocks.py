@@ -12,6 +12,7 @@ class Stock(Model):
     name = fields.CharField(max_length=24)
     price = fields.IntField()
     close_price = fields.IntField(null=True)
+    open_price = fields.IntField(null=True)
     fluctuation_rate = fields.FloatField(null=True)
     fluctuation_price = fields.IntField(null=True)
     volume = fields.IntField(null=True)
@@ -38,7 +39,7 @@ class Bidask(Model):
 
 class Candle(Model):
     stock = fields.ForeignKeyField('b204.Stock', related_name='candlechart')
-    date = fields.DatetimeField(auto_now_add=True)
+    date = fields.DateField(auto_now_add=True)
     time = fields.CharField(max_length=24)
     price = fields.IntField()
     volume = fields.IntField(null=True)
@@ -49,7 +50,7 @@ class Candle(Model):
 
 class Day(Model):
     stock = fields.ForeignKeyField('b204.Stock', related_name='daychart')
-    date = fields.CharField(max_length=24)
+    date = fields.DateField()
     volume = fields.IntField(null=True)
     open_price = fields.IntField()
     close_price = fields.IntField()
