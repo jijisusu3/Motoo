@@ -38,7 +38,7 @@ def anyio_backend():
 
 @pytest.fixture(scope="session")
 async def client():
-    async with AsyncClient(app=app, base_url="http://test") as client:
+    async with AsyncClient(app=app, base_url="http://test/api1") as client:
         print("Client is ready")
         yield client
 
