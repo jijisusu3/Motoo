@@ -18,10 +18,12 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name= "account")
 public class Accounts {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @Column(name="id")
+    private Long accountsId;
 
     //유저 다대일
     @JsonIgnore
@@ -43,5 +45,12 @@ public class Accounts {
     @OneToMany
     private List<Trading> tradings = new ArrayList<>();
 
+    public void createAccounts(User user, String name){
+        this.user = user;
+        this.name = name;
+    }
 
+    public void updateAccountsName(String name){
+        this.name = name;
+    }
 }

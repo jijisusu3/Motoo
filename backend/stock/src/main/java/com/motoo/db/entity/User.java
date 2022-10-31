@@ -19,8 +19,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @AllArgsConstructor
 @Table(name="user")
 public class User {
+
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name="id")
+    private Long userId;
 
     //스쿨이랑 일대일
 //    @OneToOne
