@@ -1,8 +1,17 @@
+
+buildscript {
+	dependencies {
+		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")
+	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.7.5'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'java'
 }
+
+apply plugin: "com.ewerk.gradle.plugins.querydsl"
 
 group = 'motoo'
 version = '0.0.1-SNAPSHOT'
@@ -36,12 +45,41 @@ dependencies {
 	//jwt
 	implementation("com.auth0:java-jwt:3.10.3")
 
+	//querydsl 추가
+	implementation 'com.querydsl:querydsl-jpa'
+	//querydsl 추가
+	implementation 'com.querydsl:querydsl-apt'
+
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
+
+//querydsl 추가
+//def querydslDir = 'src/main/generated'
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+	library = "com.querydsl:querydsl-apt"
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main {
+		java {
+			srcDirs = ['src/main/java', querydslDir]
+		}
+	}
+}
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+	querydsl.extendsFrom compileClasspath
+}
+
 
 tasks.named('test') {
 	useJUnitPlatform()
