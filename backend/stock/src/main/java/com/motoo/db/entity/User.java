@@ -53,13 +53,10 @@ public class User {
 
     private String nickname;
 
-    private String password;
+    private String role;
 
     private int current;
 
-    public void updatePw(String password) {
-        this.password = password;
-    }
 
 
     public void updateCurrent(int current){
