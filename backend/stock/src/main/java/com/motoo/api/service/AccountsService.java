@@ -20,14 +20,13 @@ public interface AccountsService {
 
     int deleteAccounts(Long accountsId);
 
-    long[] getAccountsCount(List<Accounts> accounts);
+
 
     AccountsStock addAccountsStock(AccountsStockAddPostReq accountsStockAddPostReq);
 
     AccountsStock getByStockId(Long userId);
 
-//    AccountsStock getByAccounts
-
+    AccountsStock getByAccountsAndStockId(Long stockId);
 
     List<AccountsStock> listAccountsStock(Long accountsId);
 
@@ -35,6 +34,6 @@ public interface AccountsService {
 
     int deleteAccountsStock(Long accountsId);
 
-
+    long[] getAccountsCount(List<Accounts> accounts);
 
 }
