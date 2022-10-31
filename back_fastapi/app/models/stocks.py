@@ -50,7 +50,7 @@ class Candle(Model):
 
 class Day(Model):
     stock = fields.ForeignKeyField('b204.Stock', related_name='daychart')
-    date = fields.DateField(max_length=24)
+    date = fields.DateField()
     volume = fields.IntField(null=True)
     open_price = fields.IntField()
     close_price = fields.IntField()
