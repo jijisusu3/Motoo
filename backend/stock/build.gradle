@@ -1,17 +1,19 @@
 
 buildscript {
-	dependencies {
-		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")
+	ext {
+		queryDslVersion = "5.0.0"
 	}
 }
-
 plugins {
 	id 'org.springframework.boot' version '2.7.5'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'java'
+
+	// querydsl 플러그인 추가
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
-apply plugin: "com.ewerk.gradle.plugins.querydsl"
+//apply plugin: "com.ewerk.gradle.plugins.querydsl"
 
 group = 'motoo'
 version = '0.0.1-SNAPSHOT'
@@ -45,10 +47,9 @@ dependencies {
 	//jwt
 	implementation("com.auth0:java-jwt:3.10.3")
 
-	//querydsl 추가
-	implementation 'com.querydsl:querydsl-jpa'
-	//querydsl 추가
-	implementation 'com.querydsl:querydsl-apt'
+	// querydsl 디펜던시 추가
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
 
 	compileOnly 'org.projectlombok:lombok'
@@ -57,30 +58,36 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-//querydsl 추가
-//def querydslDir = 'src/main/generated'
-def querydslDir = "$buildDir/generated/querydsl"
+// querydsl 사용할 경로 지정합니다. 현재 지정한 부분은 .gitignore에 포함되므로 git에 올라가지 않습니다.
+def querydslDir = "$buildDir/generated/'querydsl'"
+
+// JPA 사용여부 및 사용 경로 설정
 querydsl {
-	library = "com.querydsl:querydsl-apt"
 	jpa = true
 	querydslSourcesDir = querydslDir
 }
+
+// build시 사용할 sourceSet 추가 설정
 sourceSets {
-	main {
-		java {
-			srcDirs = ['src/main/java', querydslDir]
-		}
-	}
+	main.java.srcDir querydslDir
 }
-compileQuerydsl{
+
+
+// querydsl 컴파일 시 사용할 옵션 설정
+compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
 }
 
+// querydsl이 compileClassPath를 상속하도록 설정
 configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
 	querydsl.extendsFrom compileClasspath
 }
-
-
+clean.doLast {
+	file(generated).deleteDir()
+}
 tasks.named('test') {
 	useJUnitPlatform()
 }
