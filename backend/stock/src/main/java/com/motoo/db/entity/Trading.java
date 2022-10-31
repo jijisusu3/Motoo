@@ -18,7 +18,10 @@ public class Trading {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name="id")
+    private Long tradeId;
+
+
     private String ticker_name;
 
     private String ticker;
