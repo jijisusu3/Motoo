@@ -1,9 +1,6 @@
 package com.motoo.db.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -18,6 +15,7 @@ import org.hibernate.annotations.TypeDef;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +30,9 @@ public class School {
 
     private String schoolname;
     private String location;
+
+
+
 
     @Type(type = "json")
     @Column(columnDefinition = "json")
