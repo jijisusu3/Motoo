@@ -18,11 +18,9 @@ public interface UserService {
 
     Optional<User> getByUserEmail(String email);
 
-    Optional<User> getByUserNameAndUserEmail(String username, String email);
+    Long signupUser(String email, String nickname);
 
     void deleteUser(String id);
-
-    Optional<User> getByUserNameAndUserEmailAndId(String username, String email, String id);
 
     void updatePassword(User user, String pw);
 

@@ -49,13 +49,16 @@ public class User {
 
     private String email;
 
-    private String username;
-
     private String nickname;
 
     private String role;
 
     private int current;
+
+    public void createUser(String email, String nickname){
+        this.email = email;
+        this.nickname = nickname;
+    }
 
 
 
@@ -64,10 +67,9 @@ public class User {
     }
 
 
-    public void updateUser(String username, String nickname, String email, String phone_number,
+    public void updateUser(String nickname, String email, String phone_number,
                            Date birthday
                            ){
-        this.username = username;
         this.nickname = nickname;
         this.email = email;
 

@@ -24,19 +24,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getByUserNameAndUserEmail(String username, String email) {
-        return Optional.empty();
+    public Long signupUser(String email, String nickname) {
+        User newUser = new User();
+        newUser.createUser(email, nickname);
+        userRepository.save(newUser);
+        return newUser.getUserId();
     }
+
 
     @Override
     public void deleteUser(String id) {
 
     }
 
-    @Override
-    public Optional<User> getByUserNameAndUserEmailAndId(String username, String email, String id) {
-        return Optional.empty();
-    }
 
     @Override
     public void updatePassword(User user, String pw) {

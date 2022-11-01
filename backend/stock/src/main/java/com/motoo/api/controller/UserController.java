@@ -15,9 +15,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -34,6 +36,11 @@ public class UserController {
     @GetMapping("/test/test")
     public String test() {
         return "hello";
+    }
+
+    @PostMapping("/signup")
+    private String signup(String email, String nickname) {
+        return "success";
     }
 
     @GetMapping("/auth/kakao/callback")
