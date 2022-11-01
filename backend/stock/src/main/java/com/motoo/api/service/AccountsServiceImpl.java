@@ -1,8 +1,10 @@
 package com.motoo.api.service;
 
 
+import com.motoo.api.request.AccountsStockAddPostReq;
 import com.motoo.db.entity.Accounts;
 import com.motoo.db.entity.AccountsStock;
+import com.motoo.db.entity.User;
 import com.motoo.db.repository.AccountsRepository;
 import com.motoo.db.repository.AccountsRepositorySupport;
 import com.motoo.db.repository.AccountsStockRepositorySupport;
@@ -27,8 +29,13 @@ public class AccountsServiceImpl implements AccountsService{
 
     private final AccountsRepositorySupport accountsRepositorySupport;
 
-    public void createAccounts(Long userId, String name) {
 
+    @Override
+    public void createAccounts(Long userId, String name) {
+        Accounts accounts = new Accounts();
+        User user = userRepository.findByUserId(userId).get();
+        accounts.createAccounts(user, name);
+        accountsRepository.save(accounts);
     }
 
     @Override
@@ -47,9 +54,41 @@ public class AccountsServiceImpl implements AccountsService{
     }
 
     @Override
-    public int deleteAccounts(Long accountsId) {
+    public int deleteAccounts(Long userId, Long accountsId) {
+        Accounts accounts;
+        try {
+            accounts = accountsRepository.findByAccountsId(accountsId).get();
+//            accounts = accountsRepositorySupport.findAccountsByAccountsIdAndUserId(userId, accountsId).get();
+
+        }catch (Exception e){
+            return 0;
+        }
+        Long accountsNo = accounts.getAccountsId();
+        accountsRepository.deleteByAccountsId(accountsNo);
+        return 1;
+
 
     }
+
+//    @Override
+//    public AccountsStock addAccountsStock(AccountsStockAddPostReq accountsStockAddPostReq){
+//        AccountsStock accountsStock = new AccountsStock();
+//        Accounts accounts = accountsRepository.findByAccountsId(accountsStockAddPostReq.getAccountsId()).orElse(null);
+//        Long stockId = accountsStockAddPostReq.getStockId();
+//
+//        accountsStock.createAccountsStock(accounts, );
+//
+//    }
+    @Override
+    public long[] getAccountsCount(List<Accounts> accounts) {
+        long[] detailCounts = new long[accounts.size()];
+        int idx = 0;
+        for (Accounts account : accounts) {
+            detailCounts[idx++] =accountsStockRepositorySupport.CountByAccountsId(account.getAccountsId());
+        }
+        return detailCounts;
+    }
+
 
 
 }
