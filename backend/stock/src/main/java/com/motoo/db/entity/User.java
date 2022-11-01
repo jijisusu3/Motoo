@@ -58,6 +58,7 @@ public class User {
     public void createUser(String email, String nickname){
         this.email = email;
         this.nickname = nickname;
+        this.current = 1;
     }
 
 

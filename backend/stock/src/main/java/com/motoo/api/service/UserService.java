@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    Optional<User> getByUserId(String id);
+    Optional<User> getByUserId(Long id);
 
     Optional<User> getByUserEmail(String email);
 

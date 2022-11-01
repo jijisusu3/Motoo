@@ -14,8 +14,6 @@ public class BaseUserInfo {
 
     private String email;
 
-    private String username;
-
     private String nickname;
 
     private int current;
