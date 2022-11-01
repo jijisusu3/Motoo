@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 
 @EnableJpaAuditing
-@SpringBootApplication(scanBasePackages = {"com.package.motoo"})
+@SpringBootApplication
 public class StockApplication {
 
 	public static void main(String[] args) {

@@ -14,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountsRepositorySupport {
 
-
     private final JPAQueryFactory jpaQueryFactory;
 
     QAccounts qAccounts = QAccounts.accounts;
