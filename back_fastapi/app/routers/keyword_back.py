@@ -13,7 +13,7 @@ from app.models.stocks import Category, Keyword
 
 from fastapi import APIRouter
 
-router = APIRouter(prefix="/keyword")
+router = APIRouter(prefix="/keyword_back")
 
 tokenizer = AutoTokenizer.from_pretrained("snunlp/KR-FinBert-SC")
 model = AutoModelForSequenceClassification.from_pretrained("snunlp/KR-FinBert-SC")
@@ -93,11 +93,65 @@ async def get_category_keyword():
     return None
 
 
+@router.get("/category/sentiment")
+async def get_category_sentiment():
+    tm = time.time()
+    for i in range(len(category_lst)):
+        category = await Category.get(id=i+1)
+        url = settings.NAVER_API_DOMAIN + str(category_lst[i]) + '&display=100&start=1&sort=sim'
+        headers = {
+            'X-Naver-Client-Id': settings.CLIENT_ID,
+            'X-Naver-Client-Secret': settings.CLIENT_SECRET
+        }
+        r = requests.get(url, headers=headers)
+        kf = pd.DataFrame(r.json()['items'])
+        kf.drop(['originallink', 'link', 'pubDate'], axis=1, inplace=True)
+
+        kf['text'] = kf[['title', 'description']].apply(lambda row: ' '.join(row.values.astype(str)), axis=1)
+        kf['text'] = kf['text'].apply(lambda x: fst(x))
+        kf.drop(['title', 'description'], axis=1, inplace=True)
+        kf = kf.dropna()
+
+        txts = list(kf['text'])
+        tokenizer.tokenize(txts[i])
+
+        output_lst = []
+        for ts in tqdm(txts):
+            inputs = tokenizer(ts, return_tensors='pt')
+            output = model(**inputs)
+            output = output.logits.tolist()[0]
+            output_lst.append(output)
+
+        outputs = torch.tensor(output_lst)
+
+        predictions = nn.functional.softmax(outputs, dim=-1)
+
+        kf_sc = pd.DataFrame(predictions.detach().numpy())
+        kf_sc.columns = ['부정', '중립', '긍정']
+        
+        kf = pd.concat([kf, kf_sc], axis=1)
+
+        result = list()
+        avg1 = kf['부정'].mean()
+        avg1 = avg1*100
+        avg2 = kf['중립'].mean()
+        avg2 = avg2*100
+        avg3 = kf['긍정'].mean()
+        avg3 = avg3*100
+        result.extend([avg1, avg2, avg3])
+
+        category.sentiment = result
+        await category.save(update_fields=('sentiment',))
+        now = time.time()
+        print(now-tm)
+    return None
+
+
 @router.get("/company")
 async def get_company_keyword():
     tm = time.time()
     for i in range(len(company_lst)):
-        stock = await Keyword.get(id=i+1)
+        keyword = await Keyword.get(id=i+1)
         url = settings.NAVER_API_DOMAIN + str(company_lst[i]) + '&display=100&start=1&sort=sim'
         headers = {
             'X-Naver-Client-Id': settings.CLIENT_ID,
@@ -124,17 +178,17 @@ async def get_company_keyword():
 
         now = time.time()
         print(now-tm)
-        stock.keyword = result
-        await stock.save(update_fields=('keyword',))
+        keyword.keyword = result
+        await keyword.save(update_fields=('keyword',))
     return None
 
 
-@router.get("/sentiment")
+@router.get("/company/sentiment")
 async def get_company_sentiment():
     tm = time.time()
-    for i in range(len(category_lst)):
-        stock = await Keyword.get(id=i+1)
-        url = settings.NAVER_API_DOMAIN + str(category_lst[i]) + '&display=100&start=1&sort=sim'
+    for i in range(len(company_lst)):
+        keyword = await Keyword.get(id=i+1)
+        url = settings.NAVER_API_DOMAIN + str(company_lst[i]) + '&display=100&start=1&sort=sim'
         headers = {
             'X-Naver-Client-Id': settings.CLIENT_ID,
             'X-Naver-Client-Secret': settings.CLIENT_SECRET
@@ -150,7 +204,6 @@ async def get_company_sentiment():
 
         txts = list(kf['text'])
         tokenizer.tokenize(txts[i])
-        print(tokenizer.tokenize(txts[i]))
 
         output_lst = []
         for ts in tqdm(txts):
@@ -168,10 +221,17 @@ async def get_company_sentiment():
         
         kf = pd.concat([kf, kf_sc], axis=1)
 
-        result = kf.mean()*100
+        result = list()
         avg1 = kf['부정'].mean()
+        avg1 = avg1*100
         avg2 = kf['중립'].mean()
+        avg2 = avg2*100
         avg3 = kf['긍정'].mean()
+        avg3 = avg3*100
         result.extend([avg1, avg2, avg3])
-        print(result)
 
+        keyword.sentiment = result
+        await keyword.save(update_fields=('sentiment',))
+        now = time.time()
+        print(now-tm)
+    return None
