@@ -1,5 +1,4 @@
 import os
-from dotenv import load_dotenv
 from pydantic import BaseSettings
 import redis
 #
@@ -25,6 +24,9 @@ class Settings(BaseSettings):
     TRADE_ID_FOR_CANDLE: str = ""
     REDIS_HOST: str = ""
     REDIS_PORT: int
+    CLIENT_ID: str = ""
+    CLIENT_SECRET: str = ""
+    NAVER_API_DOMAIN: str = ""
 
     class Config:
         env_file = ".env"

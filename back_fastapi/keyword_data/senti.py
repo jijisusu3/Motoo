@@ -66,5 +66,7 @@ for i in range(len(t)):
   kf_sc.columns = ['부정', '중립', '긍정']
   
   kf = pd.concat([kf, kf_sc], axis=1)
+  avg = kf.mean()*100
+  result = avg.round(2)
   print(kf)
   
