@@ -1,27 +1,21 @@
 # import threading
 # import Schedule
-import datetime
-from typing import TypeVar
-from app.config import settings
+from datetime import datetime, date
 import requests
 import aiohttp
 import asyncio
 from httpx import AsyncClient
 import time
-API_KEY_FOR_CANDLE=...
-
-candle_url = "https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/quotations/inquire-time-itemchartprice"
-appkey = "PSbnQwiUVjSDrKpKhNTFlBROfir5eDge5mAm"
-appsecret="JNJtaSfSmVypQARem1fCeM6XVP0aqxWA7hfbspryHlngj6nTRgV97eYhAUjtreet1O7oHNMz20Ia3h6komEuHvqe3dcO6korBsUfl5+PViswjiwdpDqHLoS0LxP1MWFe0XQmEM5h61T6+Xx17grpxmy6eOo91clDn/aC1XaNPsvi7MrbAyc="
-
-header = {
-    "content-type": "application/json; charset=utf-8",
-    "authorization": "Bearer "+"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6IjA0N2E4MzYxLWRjZTQtNGU2Yy05YjAyLWYxYzhmNWEwNTg4YSIsImlzcyI6InVub2d3IiwiZXhwIjoxNjY2OTczNjUwLCJpYXQiOjE2NjY4ODcyNTAsImp0aSI6IlBTYm5Rd2lVVmpTRHJLcEtoTlRGbEJST2ZpcjVlRGdlNW1BbSJ9.RaisQ8Tnxx69JUAEiXEN_kaSK74mIJP2mPu52jvROaPpmUByPNRVcqlukPkH46WYPAfimpb0mvoIegosGK1lAg",
-    "appkey": appkey,
-    "appsecret": appsecret,
-    "tr_id": "FHKST03010200",
-    "custtype": "P"
-}
+from pykrx import stock
+from pykrx import bond
+# header = {
+#     "content-type": "application/json; charset=utf-8",
+#     "authorization": "Bearer ",
+#     "appkey": appkey,
+#     "appsecret": appsecret,
+#     "tr_id": "FHKST03010200",
+#     "custtype": "P"
+# }
 parameter = {
     "fid_cond_mrkt_div_code": "J",
     "fid_etc_cls_code": "",
@@ -100,3 +94,22 @@ async def update_single_stock(ticker: str):
     end = time.time()
     print(f"{end - start:.5f} sec")
     return data
+
+df = stock.get_market_ohlcv("20221030")
+new_d = df.to_dict()
+print(new_d)
+print(len(new_d.keys()))
+res = []
+for k in new_d['시가'].keys():
+    res.append(
+        {
+            'date': k.date(),
+            'volume': new_d.get('거래량')[k],
+            'open_price': new_d.get('시가')[k],
+            'close_price': new_d.get('종가')[k],
+            'min_price': new_d.get('저가')[k],
+            'max_price': new_d.get('고가')[k],
+        }
+    )
+
+
