@@ -11,28 +11,15 @@ public interface AccountsService {
 
     void createAccounts(Long userId, String name);
 
-    List<Accounts> listAccounts(Long id);
+    List<Accounts> listAccounts(Long userId);
 
-    Accounts getAccounts(Long accountsId, Long userId);
+    Accounts getAccounts(Long userId , Long accountsId );
 
 
     void updateAccounts(Accounts accounts, String name);
 
-    int deleteAccounts(Long accountsId);
+    int deleteAccounts(Long userId,Long accountsId);
 
-
-
-    AccountsStock addAccountsStock(AccountsStockAddPostReq accountsStockAddPostReq);
-
-    AccountsStock getByStockId(Long userId);
-
-    AccountsStock getByAccountsAndStockId(Long stockId);
-
-    List<AccountsStock> listAccountsStock(Long accountsId);
-
-    void updateAccounts(AccountsStock accountsStock, AccountsStockAddPostReq accountsStockAddPostReq);
-
-    int deleteAccountsStock(Long accountsId);
 
     long[] getAccountsCount(List<Accounts> accounts);
 
