@@ -15,6 +15,14 @@ public class AccountsStockAddPostReq {
 
     //주식 id
     @NotNull
-    Long stackId;
+    Long stockId;
+
+    @NotNull
+    int amount;
+
+    @NotNull
+    int price;
+
+
 
 }

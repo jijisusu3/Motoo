@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AccountsRepository {
+public interface AccountsRepository extends JpaRepository<Accounts, Long>{
 
 //    private final EntityManager em;
 //

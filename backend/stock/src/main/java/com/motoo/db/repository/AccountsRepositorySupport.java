@@ -5,6 +5,7 @@ import com.motoo.db.entity.Accounts;
 import com.motoo.db.entity.QAccounts;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

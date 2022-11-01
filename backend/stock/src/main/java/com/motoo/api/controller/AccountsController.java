@@ -27,6 +27,7 @@ public class AccountsController {
             throws Exception {
 //        UserDetails userDetails = (UserDetails) authentication.getDetails();
 //        Long userNo = userDetails.getUserNo();
+        System.out.println(name);
         long userId = 1;
 
         try {
@@ -37,19 +38,24 @@ public class AccountsController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌가 생성되었습니다."));
 
     }
+
+
    //계좌 목록조회
     @GetMapping()
     public ResponseEntity<AccountsListRes> listAccounts(){
 //        UserDetails userDetails = (UserDetails) authentication.getDetails();
 //        Long userNo = userDetails.getUserNo();
+
+
         long userId = 1;
         List<Accounts> accounts = accountsService.listAccounts(userId);
+
         long[] accountsCount = accountsService.getAccountsCount(accounts);
         return ResponseEntity.status(200).body(AccountsListRes.of(accounts, accountsCount, 200, "계좌 목록조회에 성공하였습니다."));
 
     }
 
-//    //계좌 이름 수정
+    //계좌 이름 수정
     @PutMapping()
     public ResponseEntity<? extends BaseResponseBody> updateAccounts(@RequestParam Long accountsId, @RequestParam String name){
 //        UserDetails userDetails = (UserDetails) authentication.getDetails();
@@ -63,8 +69,8 @@ public class AccountsController {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌이름 수정에 실패했습니다."));
         }
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌 이름 수정에 성공했습니다."));
-
     }
+
     //계좌 삭제
     @DeleteMapping()
     public ResponseEntity<? extends BaseResponseBody> deleteAccounts(@RequestParam Long accountsId){
@@ -73,7 +79,7 @@ public class AccountsController {
         long userId = 1;
         Accounts accounts = accountsService.getAccounts(accountsId, userId);
         if (accounts  == null) return ResponseEntity.status(402).body(BaseResponseBody.of(402, "해당 계좌가 없습니다."));
-        int result = accountsService.deleteAccounts(accountsId);
+        int result = accountsService.deleteAccounts(accountsId, userId);
         if (result == 1) return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌가 삭제되었습니다."));
         else return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌 삭제에 실패하였습니다."));
 
@@ -82,7 +88,7 @@ public class AccountsController {
     //계좌별 주식 작성
 //    @PutMapping("/{stockId}")
 //    public ResponseEntity<? extends BaseResponseBody> addStock(@PathVariable  Long stockId, AccountsStockAddPostReq accountsStockAddPostReq) throws Exception {
-//
+
 //    }
 
 }
