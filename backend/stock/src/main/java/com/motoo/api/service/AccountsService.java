@@ -23,4 +23,17 @@ public interface AccountsService {
 
     long[] getAccountsCount(List<Accounts> accounts);
 
+
+    //accounts Stock 관련
+    AccountsStock addAccountsStock(AccountsStockAddPostReq accountsStockAddPostReq);
+
+    AccountsStock getByAccountsId(Long accountsId);
+
+    AccountsStock getByAccountsIdAndAccountsStockId(Long accountsId, Long accountsStockId);
+
+    List<AccountsStock> listAccountsStock(Long accountsStockId);
+
+
+
+
 }

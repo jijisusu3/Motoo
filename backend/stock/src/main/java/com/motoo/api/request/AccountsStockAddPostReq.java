@@ -17,11 +17,11 @@ public class AccountsStockAddPostReq {
     @NotNull
     Long stockId;
 
-//    @NotNull
-//    int amount;
-//
-//    @NotNull
-//    int price;
+    @NotNull
+    int amount;
+
+    @NotNull
+    int price;
 
 
 

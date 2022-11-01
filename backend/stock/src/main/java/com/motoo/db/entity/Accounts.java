@@ -34,7 +34,7 @@ public class Accounts {
 
     private Date created_at;
 
-    private int type;
+//    private int type;
 
     private String name;
 
