@@ -2,7 +2,11 @@ package com.motoo.api.service;
 
 
 import com.motoo.db.entity.Accounts;
+import com.motoo.db.entity.AccountsStock;
 import com.motoo.db.repository.AccountsRepository;
+import com.motoo.db.repository.AccountsRepositorySupport;
+import com.motoo.db.repository.AccountsStockRepositorySupport;
+import com.motoo.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +19,13 @@ public class AccountsServiceImpl implements AccountsService{
 
     private final AccountsRepository accountsRepository;
 
+    private final AccountsStock accountsStock;
 
+    private final UserRepository userRepository;
+
+    private final AccountsStockRepositorySupport accountsStockRepositorySupport;
+
+    private final AccountsRepositorySupport accountsRepositorySupport;
 
     public void createAccounts(Long userId, String name) {
 
@@ -38,6 +48,8 @@ public class AccountsServiceImpl implements AccountsService{
 
     @Override
     public int deleteAccounts(Long accountsId) {
-        return 0;
+
     }
+
+
 }

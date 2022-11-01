@@ -12,22 +12,25 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class AccountsRepository {
+public interface AccountsRepository {
 
-    private final EntityManager em;
+//    private final EntityManager em;
+//
+//    public AccountsRepository(EntityManager em){
+//       this.em = em;
+//    }
+//
+//    public void save(Accounts accounts){
+//        em.persist(accounts);
+//    }
+//
+//    public Accounts findAccounts(Long accountsId){
+//        return em.find(Accounts.class, accountsId);
+//    }
+//
+////    public List<Accounts> findAllByString(Accounts )
+    Optional<Accounts> findByAccountsId(Long accountsId);
 
-    public AccountsRepository(EntityManager em){
-       this.em = em;
-    }
-
-    public void save(Accounts accounts){
-        em.persist(accounts);
-    }
-
-    public Accounts findAccounts(Long accountsId){
-        return em.find(Accounts.class, accountsId);
-    }
-
-//    public List<Accounts> findAllByString(Accounts )
-
+    @Transactional
+    Optional<Accounts> deleteByAccountsId(Long accountsId);
 }
