@@ -5,11 +5,11 @@ import com.motoo.api.request.AccountsStockAddPostReq;
 import com.motoo.db.entity.Accounts;
 import com.motoo.db.entity.AccountsStock;
 import com.motoo.db.entity.User;
-import com.motoo.db.repository.AccountsRepository;
-import com.motoo.db.repository.AccountsRepositorySupport;
-import com.motoo.db.repository.AccountsStockRepositorySupport;
-import com.motoo.db.repository.UserRepository;
+import com.motoo.db.repository.*;
+
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +21,8 @@ public class AccountsServiceImpl implements AccountsService{
 
     private final AccountsRepository accountsRepository;
 
-    private final AccountsStock accountsStock;
 
+    private final AccountsStockRepository accountsStockRepository;
     private final UserRepository userRepository;
 
     private final AccountsStockRepositorySupport accountsStockRepositorySupport;

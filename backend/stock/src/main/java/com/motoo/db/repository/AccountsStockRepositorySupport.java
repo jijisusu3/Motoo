@@ -6,10 +6,15 @@ import com.motoo.db.entity.AccountsStock;
 
 import com.motoo.db.entity.QAccountsStock;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+
+@Repository
+@RequiredArgsConstructor
 public class AccountsStockRepositorySupport {
 
 
