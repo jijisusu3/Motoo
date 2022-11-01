@@ -73,7 +73,7 @@ public class AccountsController {
         long userId = 1;
         Accounts accounts = accountsService.getAccounts(accountsId, userId);
         if (accounts  == null) return ResponseEntity.status(402).body(BaseResponseBody.of(402, "해당 계좌가 없습니다."));
-        int result = accountsService.deleteAccounts(accountsId);
+        int result = accountsService.deleteAccounts(accountsId, userId);
         if (result == 1) return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌가 삭제되었습니다."));
         else return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌 삭제에 실패하였습니다."));
 
