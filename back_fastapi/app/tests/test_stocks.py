@@ -1,5 +1,5 @@
 import datetime
-
+from time import strftime, struct_time, mktime
 import pytest
 from httpx import AsyncClient
 
@@ -14,7 +14,7 @@ class TestStockDetail:
     async def test_stock_exist_no_chart_data(self, client: AsyncClient):
         # 업종명: category_1,
         # 해당 업종으로 종목 TMPCORP 생성
-        category_tmp = await Category.create(name='category_1', keyword=[1])
+        category_tmp = await Category.create(name='category_1', keyword=[1], info='category for test')
         stock_tmp = await Stock.create(
             ticker='999999',
             name='TMPCORP',
@@ -43,7 +43,7 @@ class TestStockDetail:
         # 종목 TMPCORP에 대한 차트용 데이터
         for k in range(6):
             await candle_map[1].create(
-                time=100000+1000*k,
+                time=f'09{k}000',
                 price=1000+10*k,
                 volume=100+k,
                 open_price=1000,
@@ -67,10 +67,10 @@ class TestStockDetail:
         today = datetime.date.today()
         assert res.status_code == 200
         assert res_data["message"] == "success"
-        assert res_data["daily"][0]["time"] == "100000"
-        assert res_data["daily"][5]["time"] == "105000"
+        assert res_data["daily"][0]["time"] == "090000"
+        assert res_data["daily"][5]["time"] == "095000"
         assert res_data["daily"][5]["date"] == today.strftime("%Y-%m-%d")
-        assert res_data["weekly"][0]["time"] == "100000"
+        assert res_data["weekly"][0]["time"] == "090000"
         assert res_data["monthly"][0]["date"] == (today-datetime.timedelta(7)).strftime("%Y-%m-%d")
         assert res_data["monthly"][7]["date"] == today.strftime("%Y-%m-%d")
         assert res_data["yearly"][0]["date"] == (today-datetime.timedelta(7)).strftime("%Y-%m-%d")

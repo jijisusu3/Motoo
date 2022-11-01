@@ -3,7 +3,9 @@ from tortoise import fields, Model
 
 class Category(Model):
     name = fields.CharField(max_length=24)
+    info = fields.TextField()
     keyword = fields.JSONField()
+    sentiment = fields.JSONField()
 
 
 class Stock(Model):
@@ -30,7 +32,8 @@ class Stock(Model):
 
 class Keyword(Model):
     stock = fields.ForeignKeyField('b204.Stock', related_name='keywords')
-    keyword = fields.JSONField(null=True)
+    keyword = fields.JSONField()
+    sentiment = fields.JSONField()
 
 
 class Bidask(Model):
