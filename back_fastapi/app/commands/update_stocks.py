@@ -95,7 +95,7 @@ async def update_single_stock(ticker: str):
     print(f"{end - start:.5f} sec")
     return data
 
-df = stock.get_market_ohlcv("20221030")
+df = stock.get_market_ohlcv("20221101","20221101","005930", adjusted=False)
 new_d = df.to_dict()
 print(new_d)
 print(len(new_d.keys()))
