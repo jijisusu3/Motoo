@@ -1,6 +1,5 @@
 import tortoise
 from app.models.stocks import Category
-from app.routers.const import *
 
 from fastapi import APIRouter, Response
 from app.schemes.categories import GetCategoryDetailResponse
