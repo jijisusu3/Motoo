@@ -4,7 +4,7 @@ from tortoise import fields, Model
 class User(Model):
     email = fields.CharField(max_length=24)
     nickname = fields.CharField(max_length=24)
-    role = fields.CharField(max_length=30)
+    role = fields.CharField(max_length=30, null=True)
     school_id = fields.IntField(null=True)
     current = fields.IntField()
     my_stock = fields.ManyToManyField('b204.Stock', through='favoritestock', related_name='stock_user')
