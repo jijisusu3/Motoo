@@ -28,7 +28,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api2/users")
 public class UserController {
     private final UserService userService;
     private final KakaoService kakaoService;
