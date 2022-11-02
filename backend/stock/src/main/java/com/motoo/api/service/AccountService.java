@@ -13,12 +13,12 @@ public interface AccountService {
 
     List<Account> listAccount(Long userId);
 
-    Account getAccount(Long userId , Long accountsId );
+    Account getAccount(Long accountId,Long userId );
 
 
     void updateAccount(Account account, String name);
 
-    int deleteAccount(Long userId,Long accountsId);
+    int deleteAccount(Long accountsId,Long userId);
 
 
     long[] getAccountCount(List<Account> accounts);
@@ -27,9 +27,10 @@ public interface AccountService {
     //accounts Stock 관련
     AccountStock addAccountStock(AccountStockAddPostReq accountStockAddPostReq);
 
-    AccountStock getByAccountId(Long accountId);
+    AccountStock getAccountStockByAccountId(Long accountId);
 
-    AccountStock getByAccountIdAndAccountStockId(Long accountId, Long accountStockId);
+    AccountStock getAccountStockByAccountIdAndAccountStockId(Long accountId, Long accountStockId);
+    List<AccountStock> getAccountStockByUserId(Long userId);
 
     List<AccountStock> listAccountStock(Long accountStockId);
 

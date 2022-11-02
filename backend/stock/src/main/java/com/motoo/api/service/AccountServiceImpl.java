@@ -41,7 +41,7 @@ public class AccountServiceImpl implements AccountService{
     //계정목록 조회
     @Override
     public List<Account> listAccount(Long userId) {
-        return accountRepositorySupport.findAllAccountsByUserId(userId);
+        return accountRepositorySupport.findAllAccountByUserId(userId);
 //        User user = userRepository.getById(userId);
 //
 //        List<Accounts>accounts = user.getAccounts();
@@ -51,23 +51,31 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public Account getAccount(Long accountId, Long userId) {
-        return null;
+        return accountRepositorySupport.findAccountByAccountIdAndUserId(accountId, userId);
     }
 
     @Override
     @Transactional
     public void updateAccount(Account account, String name) {
 
+        account.updateAccountName(name);
+
     }
 
     @Override
-    @Transactional
-    public AccountStock getByAccountId(Long accountId){
+    public AccountStock getAccountStockByAccountId(Long accountId){
         return accountStockRepository.getReferenceById(accountId);
     }
 
     @Override
-    public AccountStock getByAccountIdAndAccountStockId(Long accountId, Long accountStockId) {
+    public List<AccountStock> getAccountStockByUserId(Long userId){
+        return accountStockRepositorySupport.findAllAccountStockByUserId(userId);
+    }
+
+
+
+    @Override
+    public AccountStock getAccountStockByAccountIdAndAccountStockId(Long accountId, Long accountStockId) {
         return null;
     }
 
@@ -89,7 +97,7 @@ public class AccountServiceImpl implements AccountService{
 
 
     @Override
-    public int deleteAccount(Long userId, Long accountId) {
+    public int deleteAccount( Long accountId,Long userId) {
         Account account;
         try {
             account = accountRepository.findByAccountId(accountId).get();
