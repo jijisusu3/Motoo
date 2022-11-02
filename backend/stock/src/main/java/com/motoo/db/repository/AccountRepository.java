@@ -1,18 +1,16 @@
 package com.motoo.db.repository;
 
 
-import com.motoo.db.entity.Accounts;
-import lombok.RequiredArgsConstructor;
+import com.motoo.db.entity.Account;
+import com.motoo.db.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AccountsRepository extends JpaRepository<Accounts, Long>{
+public interface AccountRepository extends JpaRepository<Account, Long>{
 
 //    private final EntityManager em;
 //
@@ -29,8 +27,8 @@ public interface AccountsRepository extends JpaRepository<Accounts, Long>{
 //    }
 //
 ////    public List<Accounts> findAllByString(Accounts )
-    Optional<Accounts> findByAccountsId(Long accountsId);
+    Optional<Account> findByAccountId(Long accountId);
 
     @Transactional
-    Optional<Accounts> deleteByAccountsId(Long accountsId);
+    Optional<Account> deleteByAccountId(Long accountId);
 }
