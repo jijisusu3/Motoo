@@ -1,20 +1,10 @@
-from datetime import date, datetime, timedelta
-import time
-import requests
-from collections import defaultdict
-from typing import Union
+from datetime import date, timedelta
 import tortoise
 from app.models.stocks import Stock
-from app.routers.const import *
-from app.config import settings, redis_session
+from app.const import *
 
-from fastapi import APIRouter, BackgroundTasks, Response
-import aiohttp
-import pykrx
-import asyncio
-import typer
-from app.schemes.common import CommonResponse
-from app.schemes.stocks import CandleData, EntireStockData, GetStockDetailResponse
+from fastapi import APIRouter, Response
+from app.schemes.stocks import GetStockDetailResponse
 
 router = APIRouter(prefix="/stocks")
 

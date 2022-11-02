@@ -1,20 +1,15 @@
-import datetime
 import time
 import requests
 from collections import defaultdict
 
-from app.models.stocks import Stock, Category
-from app.routers.const import *
+from app.models.stocks import Stock
+from app.const import *
 from app.config import settings, redis_session
 
 from fastapi import APIRouter, BackgroundTasks
 import aiohttp
-import pykrx
 from pykrx import stock
-import asyncio
-import typer
 from app.schemes.common import CommonResponse
-from app.schemes.stocks import CandleData
 
 router = APIRouter(prefix="/stock_back")
 

@@ -1,10 +1,9 @@
 import datetime
-from time import strftime, struct_time, mktime
 import pytest
 from httpx import AsyncClient
 
 from app.models.stocks import Stock, Category
-from app.routers.const import *
+from app.const import *
 
 
 @pytest.mark.anyio
