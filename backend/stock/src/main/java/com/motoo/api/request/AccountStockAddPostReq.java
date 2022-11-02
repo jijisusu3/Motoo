@@ -11,7 +11,7 @@ public class AccountStockAddPostReq {
 
     //계좌 id
     @NotNull
-    Long accountsId;
+    Long accountId;
 
     //주식 id
     @NotNull
