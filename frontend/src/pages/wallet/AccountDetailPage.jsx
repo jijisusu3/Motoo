@@ -11,6 +11,8 @@ import classes from "./AccountDetailPage.module.css";
 import Modal from "@mui/material/Modal";
 import RealizedPL from "../../components/wallet/RealizedPL";
 import AccountHistory from "../../components/wallet/AccountHistory";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -38,7 +40,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          <p>{children}</p>
         </Box>
       )}
     </div>
@@ -62,7 +64,13 @@ function AccountDetailPage() {
   const [value, setValue] = useState(0);
   const [nowEdit, setNowEdit] = useState(false);
   const [openDeleteModal, setDeleteModalOpen] = useState(false);
+  const navigate = useNavigate();
+  function backToMyWallet() {
+    navigate(`/wallet`);
+  }
 
+  const params = useParams();
+  const id = params.id;
   const handleDeleteModalOpen = () => {
     setDeleteModalOpen(true);
     setShowSettings(false);
@@ -137,11 +145,13 @@ function AccountDetailPage() {
   // 삭제하고나서 redirect해서 지갑 화면으로 돌아가야함
   function deleteSubmit() {
     handleDeleteModalClose(false);
+    backToMyWallet();
   }
 
   return (
     <div>
       <h1>계좌상세페이지입니다</h1>
+      <h1>{id}</h1>
       <Modal open={openDeleteModal} onClose={handleDeleteModalClose}>
         <Box sx={style}>
           <p>정말 삭제하시겠습니까?</p>
@@ -159,7 +169,10 @@ function AccountDetailPage() {
       >
         <EditShow />
         <div onClick={settingOpen}>
-          <img src={`${process.env.PUBLIC_URL}/wallet/settingIcon.svg`} alt="" />
+          <img
+            src={`${process.env.PUBLIC_URL}/wallet/settingIcon.svg`}
+            alt=""
+          />
         </div>
       </Grid>
       <SettingShow />
@@ -182,6 +195,11 @@ function AccountDetailPage() {
                   계좌자산
                 </Typography>
               }
+              sx={{
+                "&.Mui-selected": {
+                  color: "rgba(0, 0, 0, 0)",
+                },
+              }}
               {...a11yProps(0)}
             />
             <Tab
@@ -195,6 +213,11 @@ function AccountDetailPage() {
                   판매손익
                 </Typography>
               }
+              sx={{
+                "&.Mui-selected": {
+                  color: "rgba(0, 0, 0, 0)",
+                },
+              }}
               {...a11yProps(1)}
             />
             <Tab
@@ -208,6 +231,11 @@ function AccountDetailPage() {
                   거래내역
                 </Typography>
               }
+              sx={{
+                "&.Mui-selected": {
+                  color: "rgba(0, 0, 0, 0)",
+                },
+              }}
               {...a11yProps(2)}
             />
           </Tabs>
