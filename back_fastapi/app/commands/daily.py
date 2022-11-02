@@ -13,11 +13,6 @@ import typer
 app = typer.Typer()
 
 
-@app.command()
-def new_daily():
-    asyncio.run(insert_daily())
-
-
 async def insert_daily():
     yesterday = (date.today()-timedelta(days=1)).strftime("%Y%m%d")
     ctgr_list = await Category.all().values('id')
@@ -60,6 +55,11 @@ def get_auth_token(key, secret):
     else:
         print("Error Code : " + str(res_code) + " | " + res.text)
         return None
+
+
+@app.command()
+def new_daily():
+    asyncio.run(insert_daily())
 
 
 @app.command()
