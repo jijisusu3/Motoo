@@ -1,15 +1,13 @@
 package com.motoo.api.controller;
 
-import com.motoo.api.request.AccountStockAddPostReq;
 import com.motoo.api.response.AccountsListRes;
+import com.motoo.api.response.AccountStockListRes;
 import com.motoo.api.service.AccountService;
-import com.motoo.api.service.AccountServiceImpl;
 import com.motoo.common.model.response.BaseResponseBody;
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,9 +27,7 @@ public class AccountsController {
 
 //        UserDetails userDetails = (UserDetails) authentication.getDetails();
 //        Long userNo = userDetails.getUserNo();
-
     long userId = 1;
-
         try
 
     {
@@ -96,11 +92,24 @@ public class AccountsController {
 
     }
 
-    //계좌별 주식 작성
-//    @PutMapping("/{stockId}")
-//    public ResponseEntity<? extends BaseResponseBody> addStock(@PathVariable  Long stockId, AccountStockAddPostReq accountStockAddPostReq) throws Exception {
+    //계좌 상세조회
+    @GetMapping("/accountStock")
+    //계좌 목록조회
+    public ResponseEntity<AccountStockListRes> listStockAccounts(){
+//        UserDetails userDetails = (UserDetails) authentication.getDetails();
+//        Long userNo = userDetails.getUserNo();
 
-//    }
+        long userId = 1;
+        List<AccountStock> accountStocks = accountService.getAccountStockByUserId(1L);
+//        List<Account> account = accountService.listAccount(1L);
+        System.out.println('김');
+        System.out.println(accountStocks);
+//        long[] accountsCount = accountsService.getAccountsCount(accounts);
+
+        return ResponseEntity.status(200).body(AccountStockListRes.of(accountStocks, 200, "계좌 목록조회에 성공하였습니다."));
+
+
+    }
 
 }
 

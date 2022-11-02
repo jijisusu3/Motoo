@@ -1,30 +1,27 @@
 package com.motoo.api.response;
 
-
 import com.motoo.common.model.response.BaseResponseBody;
 import com.motoo.db.entity.Account;
+import com.motoo.db.entity.AccountStock;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
+
 @Getter
 @Setter
-public class AccountsListRes extends BaseResponseBody {
+public class AccountStockListRes extends BaseResponseBody {
 
-    List<Account> account;
+    List<AccountStock> accountStock;
 
-//    long[] accountsCounts;
-
-    public static AccountsListRes of(List<Account> account,  Integer statusCode, String message){
-        AccountsListRes res = new AccountsListRes();
-
-        res.setAccount(account);
+    public static AccountStockListRes of(List<AccountStock> accountStock, Integer statusCode, String message){
+        AccountStockListRes res = new AccountStockListRes();
+        res.setAccountStock(accountStock);
 //        res.setAccountsCounts(accountsCounts);
         res.setStatusCode(statusCode);
         res.setMessage(message);
 
         return res;
     }
-
 }

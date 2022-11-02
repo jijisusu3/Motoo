@@ -2,6 +2,7 @@ package com.motoo.db.repository;
 
 
 
+import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
 
 import com.motoo.db.entity.QAccountStock;
@@ -38,7 +39,16 @@ public class AccountStockRepositorySupport {
                 .where(qAccountStock.account.accountId.eq(accountsId)).fetch();
         if (accountStocks == null) return null;
         return accountStocks;
-        
+
+    }
+
+    public List<AccountStock> findAllAccountStockByUserId(Long userId){
+        List<AccountStock> accountStocks = jpaQueryFactory.
+                select(qAccountStock).from(qAccountStock)
+                .where(qAccountStock.account.user.userId.eq(userId)).fetch();
+        if (accountStocks == null) return null;
+        return accountStocks;
+
     }
 
     public long CountByAccountId(Long accountId){

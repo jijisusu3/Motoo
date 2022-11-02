@@ -31,7 +31,7 @@ public class AccountStock {
     @JoinColumn(name="account_id")
     private Account account;
 
-    @JsonIgnore
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="stock_id")
     private Stock stock;

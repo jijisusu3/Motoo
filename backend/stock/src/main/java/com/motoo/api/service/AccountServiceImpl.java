@@ -63,13 +63,19 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    @Transactional
-    public AccountStock getByAccountId(Long accountId){
+    public AccountStock getAccountStockByAccountId(Long accountId){
         return accountStockRepository.getReferenceById(accountId);
     }
 
     @Override
-    public AccountStock getByAccountIdAndAccountStockId(Long accountId, Long accountStockId) {
+    public List<AccountStock> getAccountStockByUserId(Long userId){
+        return accountStockRepositorySupport.findAllAccountStockByUserId(userId);
+    }
+
+
+
+    @Override
+    public AccountStock getAccountStockByAccountIdAndAccountStockId(Long accountId, Long accountStockId) {
         return null;
     }
 

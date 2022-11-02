@@ -27,9 +27,10 @@ public interface AccountService {
     //accounts Stock 관련
     AccountStock addAccountStock(AccountStockAddPostReq accountStockAddPostReq);
 
-    AccountStock getByAccountId(Long accountId);
+    AccountStock getAccountStockByAccountId(Long accountId);
 
-    AccountStock getByAccountIdAndAccountStockId(Long accountId, Long accountStockId);
+    AccountStock getAccountStockByAccountIdAndAccountStockId(Long accountId, Long accountStockId);
+    List<AccountStock> getAccountStockByUserId(Long userId);
 
     List<AccountStock> listAccountStock(Long accountStockId);
 
