@@ -29,6 +29,8 @@ public class School {
 
 
     private String schoolname;
+
+
     private String location;
 
 

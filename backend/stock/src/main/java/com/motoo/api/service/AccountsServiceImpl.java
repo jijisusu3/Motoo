@@ -45,12 +45,12 @@ public class AccountsServiceImpl implements AccountsService{
     //계정목록 조회
     @Override
     public List<Accounts> listAccounts(Long userId) {
-//        return accountsRepositorySupport.findAllAccountsByUserId(userId);
-        User user = userRepository.getById(userId);
-
-        List<Accounts>accounts = user.getAccounts();
-
-        return accounts;
+        return accountsRepositorySupport.findAllAccountsByUserId(userId);
+//        User user = userRepository.getById(userId);
+//
+//        List<Accounts>accounts = user.getAccounts();
+//
+//        return accounts;
     }
 
     @Override
