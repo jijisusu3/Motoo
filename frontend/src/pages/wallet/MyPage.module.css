@@ -1,0 +1,29 @@
+.firstAssetCard {
+  height: 50px;
+  border: 1px solid #FAE0C1;
+  width: 88%;
+  height: auto;
+  border-radius: 10px;
+  background-color: #FEFAF0;
+}
+.otherAssetCard {
+  height: 50px;
+  border: 1px solid #FAE0C1;
+  width: 88%;
+  height: auto;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+.vibration {
+  animation: vibration 0.1s infinite;
+}
+
+@keyframes vibration {
+  from {
+    transform: rotate(0.5deg);
+  }
+  to {
+    transform: rotate(-0.5deg);
+  }
+}

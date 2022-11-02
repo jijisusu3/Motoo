@@ -404,7 +404,7 @@ function BuyStockPage() {
   }
   return (
     <div>
-      <h1>{tradeData.name}</h1>
+      <div>{tradeData.name}</div>
       {isMarketPrice ? (
         <div>
           <img
