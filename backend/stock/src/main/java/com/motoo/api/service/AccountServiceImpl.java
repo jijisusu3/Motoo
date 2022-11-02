@@ -2,28 +2,24 @@ package com.motoo.api.service;
 
 
 import com.motoo.api.request.AccountStockAddPostReq;
-import com.motoo.db.entity.Accounts;
+import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
-import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.User;
 import com.motoo.db.repository.*;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AccountsServiceImpl implements AccountsService{
+public class AccountServiceImpl implements AccountService{
 
 
-    private final AccountsRepository accountsRepository;
-    private final AccountsRepositorySupport accountsRepositorySupport;
+    private final AccountRepository accountRepository;
+    private final AccountRepositorySupport accountRepositorySupport;
 
     private final AccountStockRepository accountStockRepository;
     private final UserRepository userRepository;
@@ -34,18 +30,18 @@ public class AccountsServiceImpl implements AccountsService{
 
     //계정생성
     @Override
-    public void createAccounts(Long userId, String name) {
-        Accounts accounts = new Accounts();
+    public void createAccount(Long userId, String name) {
+        Account account = new Account();
         User user = userRepository.findByUserId(userId).get();
-        accounts.createAccounts(user, name);
-        accountsRepository.save(accounts);
+        account.createAccount(user, name);
+        accountRepository.save(account);
     }
 
 
     //계정목록 조회
     @Override
-    public List<Accounts> listAccounts(Long userId) {
-        return accountsRepositorySupport.findAllAccountsByUserId(userId);
+    public List<Account> listAccount(Long userId) {
+        return accountRepositorySupport.findAllAccountsByUserId(userId);
 //        User user = userRepository.getById(userId);
 //
 //        List<Accounts>accounts = user.getAccounts();
@@ -54,24 +50,24 @@ public class AccountsServiceImpl implements AccountsService{
     }
 
     @Override
-    public Accounts getAccounts(Long accountsId, Long userId) {
+    public Account getAccount(Long accountId, Long userId) {
         return null;
     }
 
     @Override
     @Transactional
-    public void updateAccounts(Accounts accounts, String name) {
+    public void updateAccount(Account account, String name) {
 
     }
 
     @Override
     @Transactional
-    public AccountStock getByAccountsId(Long accountsId){
-        return accountStockRepository.getReferenceById(accountsId);
+    public AccountStock getByAccountId(Long accountId){
+        return accountStockRepository.getReferenceById(accountId);
     }
 
     @Override
-    public AccountStock getByAccountsIdAndAccountStockId(Long accountsId, Long accountStockId) {
+    public AccountStock getByAccountIdAndAccountStockId(Long accountId, Long accountStockId) {
         return null;
     }
 
@@ -87,23 +83,23 @@ public class AccountsServiceImpl implements AccountsService{
     public AccountStock addAccountStock(AccountStockAddPostReq accountStockAddPostReq){
     AccountStock accountStock = new AccountStock();
 //    Stock stock = new Stock();
-    Accounts accounts = accountsRepository.findByAccountsId(accountStockAddPostReq.getAccountsId()).orElse(null);
+    Account account = accountRepository.findByAccountId(accountStockAddPostReq.getAccountId()).orElse(null);
     return null;
     }
 
 
     @Override
-    public int deleteAccounts(Long userId, Long accountsId) {
-        Accounts accounts;
+    public int deleteAccount(Long userId, Long accountId) {
+        Account account;
         try {
-            accounts = accountsRepository.findByAccountsId(accountsId).get();
+            account = accountRepository.findByAccountId(accountId).get();
 //            accounts = accountsRepositorySupport.findAccountsByAccountsIdAndUserId(userId, accountsId).get();
 
         }catch (Exception e){
             return 0;
         }
-        Long accountsNo = accounts.getAccountsId();
-        accountsRepository.deleteByAccountsId(accountsNo);
+        Long accountsNo = account.getAccountId();
+        accountRepository.deleteByAccountId(accountsNo);
         return 1;
 
 
@@ -119,11 +115,11 @@ public class AccountsServiceImpl implements AccountsService{
 //
 //    }
     @Override
-    public long[] getAccountsCount(List<Accounts> accounts) {
+    public long[] getAccountCount(List<Account> accounts) {
         long[] detailCounts = new long[accounts.size()];
         int idx = 0;
-        for (Accounts account : accounts) {
-            detailCounts[idx++] =accountStockRepositorySupport.CountByAccountsId(account.getAccountsId());
+        for (Account account : accounts) {
+            detailCounts[idx++] =accountStockRepositorySupport.CountByAccountId(account.getAccountId());
         }
         return detailCounts;
     }
