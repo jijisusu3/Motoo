@@ -39,7 +39,7 @@ public class JwtTokenUtil {
 
     public static JWTVerifier getVerifier() {
         return JWT
-                .require(Algorithm.HMAC512(secretKey.getBytes()))
+                .require(Algorithm.HMAC256(secretKey.getBytes()))
                 .withIssuer(ISSUER)
                 .build();
     }
@@ -51,7 +51,7 @@ public class JwtTokenUtil {
                 .withExpiresAt(expires)
                 .withIssuer(ISSUER)
                 .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
-                .sign(Algorithm.HMAC512(secretKey.getBytes()));
+                .sign(Algorithm.HMAC256(secretKey.getBytes()));
     }
 
     public static String getToken(Instant expires, String userId) {
@@ -60,7 +60,7 @@ public class JwtTokenUtil {
                 .withExpiresAt(Date.from(expires))
                 .withIssuer(ISSUER)
                 .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
-                .sign(Algorithm.HMAC512(secretKey.getBytes()));
+                .sign(Algorithm.HMAC256(secretKey.getBytes()));
     }
 
     public static Date getTokenExpiration(int expirationTime) {
@@ -70,7 +70,7 @@ public class JwtTokenUtil {
 
     public static void handleError(String token) {
         JWTVerifier verifier = JWT
-                .require(Algorithm.HMAC512(secretKey.getBytes()))
+                .require(Algorithm.HMAC256(secretKey.getBytes()))
                 .withIssuer(ISSUER)
                 .build();
 

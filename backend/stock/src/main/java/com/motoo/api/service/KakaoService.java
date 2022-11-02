@@ -26,11 +26,13 @@ public class KakaoService {
 
     private final String CLIENT_ID;
     private final String REDIRECT_URI;
+    private final UserService userService;
 
     public KakaoService(@Value("${kakao.client_id}") String CLIENT_ID,
-                    @Value("${kakao.redirect_uri}") String REDIRECT_URI) {
+                        @Value("${kakao.redirect_uri}") String REDIRECT_URI, UserService userService) {
         this.CLIENT_ID = CLIENT_ID;
         this.REDIRECT_URI = REDIRECT_URI;
+        this.userService = userService;
     }
 
     /**
@@ -111,20 +113,25 @@ public class KakaoService {
     /**
      * 로그인하고 JWT 토큰 발급
      */
-    public LoginResponse kakaoLogin(Optional<User> DBUser, String kakaoEmail) {
+    public LoginResponse kakaoLogin(KakaoProfile userInfo) {
+
+        //카카오에서 받아온 유저정보가 DB에 있는지 조회
+        String kakaoEmail = userInfo.getKakao_account().getEmail();
+        String kakaoNickname = userInfo.getProperties().getNickname();
+        Optional<User> DBUser = userService.getByUserEmail(kakaoEmail);
 
         // kakao 이메일 DB에 없으면 회원가입 후 로그인 처리
         if (DBUser.isEmpty()) {
-            //회원가입 로직 짜야함
-            System.out.println("회원가입 필요");
+            Long newUserId = userService.signupUser(kakaoEmail, kakaoNickname);
+            DBUser = userService.getByUserId(newUserId);
+            //초기 계좌 개설 로직 추가해야함
         }
         // 있으면 바로 로그인 처리
-        String token = JwtTokenUtil.getToken(kakaoEmail);
-        System.out.println("token: "+token);
-        System.out.println("dbuser: "+DBUser);
-        BaseUserInfo baseUserInfo = BaseUserInfo.of(DBUser);
+        String token = JwtTokenUtil.getToken(DBUser.get().getEmail());
+
 
         //토큰과 유저객체 반환
+        BaseUserInfo baseUserInfo = BaseUserInfo.of(DBUser);
         LoginResponse response = LoginResponse.of(token, baseUserInfo);
 
         return response;

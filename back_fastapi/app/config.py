@@ -1,7 +1,7 @@
 import os
 from pydantic import BaseSettings
 import redis
-#
+
 # load_dotenv()
 
 
@@ -56,6 +56,7 @@ TORTOISE_ORM = {
     'use_tz': False,
     'timezone': 'Asia/Seoul'
 }
+
 
 pool = redis.ConnectionPool(
     host=settings.REDIS_HOST,

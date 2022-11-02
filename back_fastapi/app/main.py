@@ -2,7 +2,8 @@ from app.config import TORTOISE_ORM, settings
 from app.routers import router
 from app.models.candles import *
 from app.models.stocks import Stock
-
+import os
+from dotenv import load_dotenv
 from fastapi import FastAPI
 import typer
 import asyncio
@@ -11,6 +12,8 @@ from tortoise.contrib.fastapi import register_tortoise
 
 from app.routers.stock_back import update_stock_back
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 app = FastAPI(title="b204", version="0.0")
 
 app.add_middleware(
