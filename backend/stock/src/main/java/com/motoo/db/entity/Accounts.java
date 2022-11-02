@@ -38,9 +38,10 @@ public class Accounts {
 
     private String name;
 
+
+
     @OneToMany
     private List<AccountStock> accountStocks = new ArrayList<>();
-
 
     @OneToMany
     private List<Trading> tradings = new ArrayList<>();

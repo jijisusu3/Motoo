@@ -134,7 +134,7 @@ function MyAssetList() {
         return "#DD4956";
       }
     }
-  const profitColor = profitCheck();
+    const profitColor = profitCheck();
     return (
       <div className={classes.myStockCard}>
         <p>{stock.name}</p>

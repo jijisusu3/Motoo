@@ -27,7 +27,7 @@ public class AccountsRepositorySupport {
 
     public List<Accounts> findAllAccountsByUserId(Long userId){
         return jpaQueryFactory.select(qAccounts).from(qAccounts)
-                .where(qAccounts.user.userId.eq(userId)).;
+                .where(qAccounts.user.userId.eq(userId)).fetch();
 
 
 //        return jpaQueryFactory.selectFrom(qAccounts).where(qAccounts.user.userId.eq(userId)).fetch();

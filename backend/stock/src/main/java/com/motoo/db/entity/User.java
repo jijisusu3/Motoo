@@ -36,7 +36,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Accounts> accounts= new ArrayList<>();
 
-    private int school_id;
+    private Long school_id;
 //    @OneToMany(mappedBy = "user")
 //    private List<School> schools = new ArrayList<>();
 
