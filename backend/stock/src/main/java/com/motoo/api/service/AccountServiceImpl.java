@@ -41,7 +41,7 @@ public class AccountServiceImpl implements AccountService{
     //계정목록 조회
     @Override
     public List<Account> listAccount(Long userId) {
-        return accountRepositorySupport.findAllAccountsByUserId(userId);
+        return accountRepositorySupport.findAllAccountByUserId(userId);
 //        User user = userRepository.getById(userId);
 //
 //        List<Accounts>accounts = user.getAccounts();
@@ -51,7 +51,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public Account getAccount(Long accountId, Long userId) {
-        return null;
+        return accountRepositorySupport.findAccountByAccountIdAndUserId(accountId, userId);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class AccountServiceImpl implements AccountService{
 
 
     @Override
-    public int deleteAccount(Long userId, Long accountId) {
+    public int deleteAccount( Long accountId,Long userId) {
         Account account;
         try {
             account = accountRepository.findByAccountId(accountId).get();

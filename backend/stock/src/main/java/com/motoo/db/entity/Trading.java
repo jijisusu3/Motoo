@@ -36,7 +36,7 @@ public class Trading {
 
 
     @ManyToOne
-    @JoinColumn(name = "accountsId")
+    @JoinColumn(name = "account_id")
     private Account account;
 
     @ManyToOne(fetch = FetchType.LAZY)

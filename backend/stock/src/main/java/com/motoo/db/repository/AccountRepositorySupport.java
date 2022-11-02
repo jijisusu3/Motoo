@@ -23,7 +23,7 @@ public class AccountRepositorySupport {
     JPAQuery jpaQuery = new JPAQuery();
 
 
-    public List<Account> findAllAccountsByUserId(Long userId){
+    public List<Account> findAllAccountByUserId(Long userId){
         return jpaQueryFactory.select(qAccount).from(qAccount)
                 .where(qAccount.user.userId.eq(userId)).fetch();
 

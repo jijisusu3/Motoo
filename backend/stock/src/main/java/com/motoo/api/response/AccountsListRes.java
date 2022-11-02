@@ -14,7 +14,7 @@ public class AccountsListRes extends BaseResponseBody {
 
     List<Account> account;
 
-    long[] accountsCounts;
+//    long[] accountsCounts;
 
     public static AccountsListRes of(List<Account> account,  Integer statusCode, String message){
         AccountsListRes res = new AccountsListRes();
