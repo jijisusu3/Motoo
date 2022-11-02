@@ -1,8 +1,8 @@
 package com.motoo.db.repository;
 
 
-import com.motoo.db.entity.AccountsStock;
-import com.motoo.db.entity.QAccountsStock;
+import com.motoo.db.entity.AccountStock;
+import com.motoo.db.entity.QAccountStock;
 import com.motoo.db.entity.QStock;
 import com.motoo.db.entity.Stock;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -17,17 +17,17 @@ public class StockRepositorySupport {
 
 //    private final JPAQueryFactory jpaQueryFactory;
 //
-//    QAccountsStock qAccountsStock = QAccountsStock.accountsStock;
+//    QAccountStock qAccountStock = QAccountStock.accountStock;
 //
 //
-//    public Optional<AccountsStock> findAccountsStockByAccountsStockId(Long accountsStockId){
+//    public Optional<AccountStock> findAccountStockByAccountStockId(Long accountStockId){
 //    return null;
 //    }
 //
 //
 //    public long CountByAccountsId(Long accountsId){
-//        return jpaQueryFactory.selectFrom(qAccountsStock)
-//                .where(qAccountsStock.accounts.accountsId.eq(accountsId)).fetch().size();
+//        return jpaQueryFactory.selectFrom(qAccountStock)
+//                .where(qAccountStock.accounts.accountsId.eq(accountsId)).fetch().size();
 //    }
 
 }
