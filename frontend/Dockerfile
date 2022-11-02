@@ -6,14 +6,14 @@ COPY . .
 
 RUN npm run build
 FROM nginx:alpine
-RUN rm /etc/nginx/conf.d/default.conf
-RUN mkdir /app
-WORKDIR /app
-RUN mkdir ./build
+# RUN rm /etc/nginx/conf.d/default.conf
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=build-stage /var/jenkins_home/workspace/motoo/frontend/build /usr/share/nginx/html
+# RUN mkdir /app
+# WORKDIR /app
+# RUN mkdir ./build
 
-# RUN rm -rf /usr/share/nginx/html/*
-COPY --from=build-stage /var/jenkins_home/workspace/motoo/frontend/build ./build
-COPY ./nginx.conf /etc/nginx/conf.d
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 3000
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

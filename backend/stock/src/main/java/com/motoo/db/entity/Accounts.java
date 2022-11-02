@@ -34,12 +34,12 @@ public class Accounts {
 
     private Date created_at;
 
-    private int type;
+//    private int type;
 
     private String name;
 
     @OneToMany
-    private List<AccountsStock> accountsStocks = new ArrayList<>();
+    private List<AccountStock> accountStocks = new ArrayList<>();
 
 
     @OneToMany
