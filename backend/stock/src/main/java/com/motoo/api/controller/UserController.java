@@ -15,6 +15,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.parameters.P;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -34,8 +35,9 @@ public class UserController {
     private final KakaoService kakaoService;
 
     @GetMapping("/test/test")
-    public String test() {
-        return "hello";
+    public User test(Authentication authentication) {
+        User userInfo = userService.getUserInfo(authentication);
+        return userInfo;
     }
 
     @PostMapping("/signup")

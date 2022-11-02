@@ -1,9 +1,11 @@
 package com.motoo.api.service;
 
 import com.motoo.api.request.UpdateUserPutReq;
+import com.motoo.common.auth.AppUserDetails;
 import com.motoo.db.entity.User;
 import com.motoo.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,6 +14,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+
+    @Override
+    public User getUserInfo(Authentication authentication) {
+        AppUserDetails userDetails=(AppUserDetails)authentication.getDetails();
+        String email= userDetails.getUsername();
+        User user = getByUserEmail(email).orElseGet(() -> new User());
+        return user;
+    }
 
     @Override
     public Optional<User> getByUserId(Long id) {
