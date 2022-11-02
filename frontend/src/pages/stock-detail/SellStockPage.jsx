@@ -248,7 +248,6 @@ function SellStockPage() {
         }
         if (tempPrice > nowPrice * 1.3) {
           // 상한가보다 클때
-          console.log(typeof nowPrice);
           setIsTooHigh(true);
           setTimeout(() => {
             setIsTooHigh(false);
@@ -262,6 +261,11 @@ function SellStockPage() {
       } else {
         if (wantedPrice !== "") {
           const tmp = wantedPrice.slice(0, -1);
+          const tmpNum = Number(tmp);
+          if (tmpNum < nowPrice * 0.7) {
+            // 하한가보다 낮을때
+            setIsTooLow(true);
+          }
           setWantedPrice(tmp);
         }
       }

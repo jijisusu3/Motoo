@@ -234,7 +234,6 @@ function AccountHistory() {
         <div className={classes.myHistoryCard}>
           <p>{stock.name}</p>
           <p>
-            평가손익:{" "}
             <span>
               {" "}
               {profitLabel}
