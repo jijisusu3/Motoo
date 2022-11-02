@@ -15,9 +15,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -36,17 +38,21 @@ public class UserController {
         return "hello";
     }
 
+    @PostMapping("/signup")
+    private String signup(String email, String nickname) {
+        userService.signupUser(email, nickname);
+        return "success";
+    }
+
     @GetMapping("/auth/kakao/callback")
     public LoginResponse login(String code) {
         System.out.println("kakaoservice");
+        //카카오에 요청해서 유저 정보 받아오기
         String accessToken = kakaoService.getAccessToken(code);
         KakaoProfile userInfo = kakaoService.getUserInfo(accessToken);
 
-        //카카오에서 받아온 해당 유저의 이메일이 DB에 있는지 조회
-        String kakaoEmail = userInfo.getKakao_account().getEmail();
-        Optional<User> DBUser = userService.getByUserEmail(kakaoEmail);
-
-        LoginResponse loginResponse = kakaoService.kakaoLogin(DBUser, kakaoEmail);
+        //로그인 시키고 토큰 유저객체 반환
+        LoginResponse loginResponse = kakaoService.kakaoLogin(userInfo);
 
         return loginResponse;
     }

@@ -3,13 +3,14 @@ import time
 import requests
 from collections import defaultdict
 
-from app.models.stocks import Stock
+from app.models.stocks import Stock, Category
 from app.routers.const import *
 from app.config import settings, redis_session
 
 from fastapi import APIRouter, BackgroundTasks
 import aiohttp
 import pykrx
+from pykrx import stock
 import asyncio
 import typer
 from app.schemes.common import CommonResponse
@@ -84,12 +85,12 @@ async def update_stock_list(req_time: str):
     async with aiohttp.ClientSession(headers=header) as session:
         for r in range(len(stocks)//15):
             start = time.time()
-            for stock in stocks[15*r:15*(r+1)]:
-                async with session.get(candle_url, params=parameter_setter(stock["ticker"], req_time)) as response:
+            for stock_d in stocks[15*r:15*(r+1)]:
+                async with session.get(candle_url, params=parameter_setter(stock_d["ticker"], req_time)) as response:
                     data = await response.json()
                 latest = data['output2'][0]
-                res = candle_map[stock["category_id"]](
-                    stock_id=stock["id"],
+                res = candle_map[stock_d["category_id"]](
+                    stock_id=stock_d["id"],
                     date=latest['stck_bsop_date'],
                     time=latest['stck_cntg_hour'],
                     price=latest['stck_prpr'],
@@ -98,7 +99,7 @@ async def update_stock_list(req_time: str):
                     max_price=latest['stck_hgpr'],
                     min_price=latest['stck_lwpr'],
                 )
-                category_dict[stock["category_id"]].append(res)
+                category_dict[stock_d["category_id"]].append(res)
             time.sleep(1)
             end = time.time()
             print(f'{min(15*(r+1), len(stocks))}개 {end-start}s')
@@ -106,4 +107,39 @@ async def update_stock_list(req_time: str):
         await candle_map[category].bulk_create(category_dict[category])
     finished = time.time()
     print(f'{finished-initial_start}s 종료')
+    return None
+
+
+@router.post("/day-stock_list", description="모든 일별 종목 리스트", response_model=CommonResponse)
+async def update_day_stock_back(background_tasks: BackgroundTasks):
+    background_tasks.add_task(update_day_stock)
+    return CommonResponse()
+
+
+async def update_day_stock():
+    stocks = await Stock.all().values('id', 'ticker', 'name', 'category_id')
+    start = time.time()
+    print("start")
+    datas = []
+    for stock_d in stocks:
+        df = stock.get_market_ohlcv("20211102", "20221031", stock_d["ticker"], adjusted=False)
+        new_df = df.to_dict()
+        time.sleep(1)
+        for k in new_df['시가'].keys():
+            res = day_map[stock_d["category_id"]](
+                stock_id=stock_d["id"],
+                date=k.date(),
+                close_price=new_df.get('종가')[k],
+                volume=new_df.get('거래량')[k],
+                open_price=new_df.get('시가')[k],
+                max_price=new_df.get('고가')[k],
+                min_price=new_df.get('저가')[k],
+            )
+            datas.append(res)
+            await day_map[stock_d["category_id"]].bulk_create(datas)
+            datas.clear()
+        print(f'{len(datas)}')
+        time.sleep(2)
+    end = time.time()
+    print(end-start)
     return None

@@ -4,7 +4,7 @@ from tortoise import fields, Model
 class Account(Model):
     seed = fields.IntField()
     created_at = fields.DatetimeField(auto_now_add=True)
-    type = fields.IntField()
+    school = fields.BooleanField(default=False)
     name = fields.CharField(max_length=24)
     user = fields.ForeignKeyField('b204.User', related_name='accounts', description='계좌 생성 유저')
 

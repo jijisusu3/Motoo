@@ -14,15 +14,13 @@ import java.util.Optional;
 
 public interface UserService {
 
-    Optional<User> getByUserId(String id);
+    Optional<User> getByUserId(Long id);
 
     Optional<User> getByUserEmail(String email);
 
-    Optional<User> getByUserNameAndUserEmail(String username, String email);
+    Long signupUser(String email, String nickname);
 
     void deleteUser(String id);
-
-    Optional<User> getByUserNameAndUserEmailAndId(String username, String email, String id);
 
     void updatePassword(User user, String pw);
 
