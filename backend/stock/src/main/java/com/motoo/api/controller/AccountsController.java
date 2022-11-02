@@ -55,7 +55,7 @@ public class AccountsController {
 //        Long userNo = userDetails.getUserNo();
 
         long userId = 1;
-        List<Accounts> accounts = accountsService.listAccounts(1L);
+        List<Accounts> accounts = accountsService.listAccounts(1l);
         System.out.println('김');
         System.out.println(accounts);
 //        long[] accountsCount = accountsService.getAccountsCount(accounts);
