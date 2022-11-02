@@ -7,7 +7,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 
 @Getter @Setter
-public class AccountsStockAddPostReq {
+public class AccountStockAddPostReq {
 
     //계좌 id
     @NotNull

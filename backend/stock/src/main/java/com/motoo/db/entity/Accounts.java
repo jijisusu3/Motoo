@@ -39,7 +39,7 @@ public class Accounts {
     private String name;
 
     @OneToMany
-    private List<AccountsStock> accountsStocks = new ArrayList<>();
+    private List<AccountStock> accountStocks = new ArrayList<>();
 
 
     @OneToMany
