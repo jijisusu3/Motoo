@@ -70,8 +70,8 @@ public class AccountsController {
     public ResponseEntity<? extends BaseResponseBody> updateAccounts(@RequestParam Long accountId, @RequestParam String name){
 //        UserDetails userDetails = (UserDetails) authentication.getDetails();
 //        Long userNo = userDetails.getUserNo();
-        long userId = 1;
-        Account account = accountService.getAccount(userId, accountId);
+        Long userId = 1L;
+        Account account = accountService.getAccount(accountId,userId);
         if (account == null) return ResponseEntity.status(402).body(BaseResponseBody.of(402, "해당 계좌가 없습니다."));
         try {
             accountService.updateAccount(account,name);
