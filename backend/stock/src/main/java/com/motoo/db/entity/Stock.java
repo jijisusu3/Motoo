@@ -64,5 +64,5 @@ public class Stock {
     @JsonIgnore
     @Builder.Default
     @OneToMany(mappedBy="stock")
-    private List<AccountsStock> accountsStocks = new ArrayList<>();
+    private List<AccountStock> accountStocks = new ArrayList<>();
 }

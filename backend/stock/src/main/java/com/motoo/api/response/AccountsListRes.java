@@ -16,10 +16,10 @@ public class AccountsListRes extends BaseResponseBody {
 
     long[] accountsCounts;
 
-    public static AccountsListRes of(List<Accounts> accounts, long[] accountsCounts, Integer statusCode, String message){
+    public static AccountsListRes of(List<Accounts> accounts,  Integer statusCode, String message){
         AccountsListRes res = new AccountsListRes();
         res.setAccounts(accounts);
-        res.setAccountsCounts(accountsCounts);
+//        res.setAccountsCounts(accountsCounts);
         res.setStatusCode(statusCode);
         res.setMessage(message);
 

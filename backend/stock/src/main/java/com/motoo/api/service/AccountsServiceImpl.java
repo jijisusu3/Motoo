@@ -1,9 +1,9 @@
 package com.motoo.api.service;
 
 
-import com.motoo.api.request.AccountsStockAddPostReq;
+import com.motoo.api.request.AccountStockAddPostReq;
 import com.motoo.db.entity.Accounts;
-import com.motoo.db.entity.AccountsStock;
+import com.motoo.db.entity.AccountStock;
 import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.User;
 import com.motoo.db.repository.*;
@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,10 +25,10 @@ public class AccountsServiceImpl implements AccountsService{
     private final AccountsRepository accountsRepository;
     private final AccountsRepositorySupport accountsRepositorySupport;
 
-    private final AccountsStockRepository accountsStockRepository;
+    private final AccountStockRepository accountStockRepository;
     private final UserRepository userRepository;
 
-    private final AccountsStockRepositorySupport accountsStockRepositorySupport;
+    private final AccountStockRepositorySupport accountStockRepositorySupport;
 
 
 
@@ -44,7 +45,12 @@ public class AccountsServiceImpl implements AccountsService{
     //계정목록 조회
     @Override
     public List<Accounts> listAccounts(Long userId) {
-        return accountsRepositorySupport.findAllAccountsByUserId(userId);
+//        return accountsRepositorySupport.findAllAccountsByUserId(userId);
+        User user = userRepository.getById(userId);
+
+        List<Accounts>accounts = user.getAccounts();
+
+        return accounts;
     }
 
     @Override
@@ -60,28 +66,28 @@ public class AccountsServiceImpl implements AccountsService{
 
     @Override
     @Transactional
-    public AccountsStock getByAccountsId(Long accountsId){
-        return accountsStockRepository.getReferenceById(accountsId);
+    public AccountStock getByAccountsId(Long accountsId){
+        return accountStockRepository.getReferenceById(accountsId);
     }
 
     @Override
-    public AccountsStock getByAccountsIdAndAccountsStockId(Long accountsId, Long accountsStockId) {
+    public AccountStock getByAccountsIdAndAccountStockId(Long accountsId, Long accountStockId) {
         return null;
     }
 
     @Override
-    public List<AccountsStock> listAccountsStock(Long accountsStockId) {
+    public List<AccountStock> listAccountStock(Long accountStockId) {
         return null;
     }
 
     //    getByAccountsId
-//    getByAccountsIdAndAccountsStockId
-//    listAccountsStock
+//    getByAccountsIdAndAccountStockId
+//    listAccountStock
     @Override
-    public AccountsStock addAccountsStock(AccountsStockAddPostReq accountsStockAddPostReq){
-    AccountsStock accountsStock = new AccountsStock();
+    public AccountStock addAccountStock(AccountStockAddPostReq accountStockAddPostReq){
+    AccountStock accountStock = new AccountStock();
 //    Stock stock = new Stock();
-    Accounts accounts = accountsRepository.findByAccountsId(accountsStockAddPostReq.getAccountsId()).orElse(null);
+    Accounts accounts = accountsRepository.findByAccountsId(accountStockAddPostReq.getAccountsId()).orElse(null);
     return null;
     }
 
@@ -104,12 +110,12 @@ public class AccountsServiceImpl implements AccountsService{
     }
 
 //    @Override
-//    public AccountsStock addAccountsStock(AccountsStockAddPostReq accountsStockAddPostReq){
-//        AccountsStock accountsStock = new AccountsStock();
-//        Accounts accounts = accountsRepository.findByAccountsId(accountsStockAddPostReq.getAccountsId()).orElse(null);
-//        Long stockId = accountsStockAddPostReq.getStockId();
+//    public AccountStock addAccountStock(AccountStockAddPostReq accountStockAddPostReq){
+//        AccountStock accountStock = new AccountStock();
+//        Accounts accounts = accountsRepository.findByAccountsId(accountStockAddPostReq.getAccountsId()).orElse(null);
+//        Long stockId = accountStockAddPostReq.getStockId();
 //
-//        accountsStock.createAccountsStock(accounts, );
+//        accountStock.createAccountStock(accounts, );
 //
 //    }
     @Override
@@ -117,7 +123,7 @@ public class AccountsServiceImpl implements AccountsService{
         long[] detailCounts = new long[accounts.size()];
         int idx = 0;
         for (Accounts account : accounts) {
-            detailCounts[idx++] =accountsStockRepositorySupport.CountByAccountsId(account.getAccountsId());
+            detailCounts[idx++] =accountStockRepositorySupport.CountByAccountsId(account.getAccountsId());
         }
         return detailCounts;
     }

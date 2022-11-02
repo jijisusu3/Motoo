@@ -1,8 +1,8 @@
 package com.motoo.api.service;
 
-import com.motoo.api.request.AccountsStockAddPostReq;
+import com.motoo.api.request.AccountStockAddPostReq;
 import com.motoo.db.entity.Accounts;
-import com.motoo.db.entity.AccountsStock;
+import com.motoo.db.entity.AccountStock;
 
 import java.util.List;
 
@@ -25,13 +25,13 @@ public interface AccountsService {
 
 
     //accounts Stock 관련
-    AccountsStock addAccountsStock(AccountsStockAddPostReq accountsStockAddPostReq);
+    AccountStock addAccountStock(AccountStockAddPostReq accountStockAddPostReq);
 
-    AccountsStock getByAccountsId(Long accountsId);
+    AccountStock getByAccountsId(Long accountsId);
 
-    AccountsStock getByAccountsIdAndAccountsStockId(Long accountsId, Long accountsStockId);
+    AccountStock getByAccountsIdAndAccountStockId(Long accountsId, Long accountStockId);
 
-    List<AccountsStock> listAccountsStock(Long accountsStockId);
+    List<AccountStock> listAccountStock(Long accountStockId);
 
 
 
