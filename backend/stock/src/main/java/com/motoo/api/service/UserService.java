@@ -2,6 +2,7 @@ package com.motoo.api.service;
 
 import com.motoo.api.request.UpdateUserPutReq;
 import com.motoo.db.entity.User;
+import org.springframework.security.core.Authentication;
 
 import java.util.Optional;
 
@@ -13,6 +14,8 @@ import java.util.Optional;
 
 
 public interface UserService {
+
+    User getUserInfo(Authentication authentication);
 
     Optional<User> getByUserId(Long id);
 
