@@ -25,3 +25,7 @@
   border-radius: 10px;
   
 }
+.out{
+  /* height: 100vh; */
+  background: linear-gradient(180deg, #FBF7F0 0%, #F2FFF8 100%);
+}

@@ -40,7 +40,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <p>{children}</p>
+          <div>{children}</div>
         </Box>
       )}
     </div>
@@ -118,6 +118,7 @@ function AccountDetailPage() {
       if (event.key === "Enter") {
         setNowEdit(false);
       }
+      setNowEdit(false);
     };
     if (nowEdit) {
       return (
@@ -149,7 +150,7 @@ function AccountDetailPage() {
   }
 
   return (
-    <div>
+    <div className={classes.out}>
       <h1>계좌상세페이지입니다</h1>
       <h1>{id}</h1>
       <Modal open={openDeleteModal} onClose={handleDeleteModalClose}>

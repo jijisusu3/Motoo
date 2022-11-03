@@ -1,6 +1,43 @@
 .myHistoryCard {
-  width: 335px;
-  height: 80px;
-  background-color: aquamarine;
+  width: 342px;
+  height: 48px;
+  background-color: #fff;
   border: 1px solid;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  border: none;
+}
+.namebox{
+  display: flex;
+  margin-left: 1.5rem;
+  align-items: center;
+}
+.pricebox{
+  display: flex;
+  margin-right: 1.5rem;
+  align-items: center;
+  font-weight: 600;
+  color: #929E9E;
+}
+.listbox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.section{
+  margin-right: 1rem;
+  display: flex;
+  justify-content: center;
+  width: 32px;
+  height: 16px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+}
+.stname{
+  font-weight: 600;
 }

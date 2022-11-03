@@ -232,25 +232,20 @@ function AccountHistory() {
       const differLabel = differCheck();
       return (
         <div className={classes.myHistoryCard}>
-          <p>{stock.name}</p>
-          <p>
-            <span>
-              {" "}
-              {profitLabel}
-              {stock.profit}
-            </span>
-          </p>
-          <div
-            style={{
-              width: 33,
-              height: 17,
-              borderRadius: 5,
-              backgroundColor: differLabel,
-            }}
-          >
-            <p style={{ color: "white", fontSize: 10, fontWeight: 700 }}>
+          <div className={classes.namebox}>
+            <div className={classes.section}
+              style={{
+                backgroundColor: differLabel,
+              }}
+            >
               {differText}
-            </p>
+            </div>
+            <div className={classes.stname}>{stock.name}</div>
+          </div>
+          <div className={classes.pricebox}>
+            {" "}
+            {profitLabel}
+            {stock.profit}
           </div>
         </div>
       );
@@ -275,7 +270,7 @@ function AccountHistory() {
             <MenuItem value={"3"}>수익률낮은순</MenuItem>
           </Select>
         </FormControl>
-        <div>
+        <div className={classes.listbox}>
           {example.map((stock) => (
             <MyRealizedCard
               key={stock.code}
