@@ -35,4 +35,15 @@ public class Trading {
     private Date tr_date;
 
 
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User user;
+
+    public void setAccounts(Account accounts) {
+        this.account = accounts;
+    }
 }

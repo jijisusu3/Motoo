@@ -56,7 +56,6 @@ class EntireStockData(ShortStockData, MinMaxPrice, OpenPrice, ClosePrice):
     category_id: Union[int, None] = Field(description="업종 id")
     category_name: Union[str, None] = Field(default=None, description="업종 이름")
     per: Union[float, None] = Field(default=None, description="주가수익률")
-    roe: Union[float, None] = Field(default=None, description="자기자본이익률")
     eps: Union[float, None] = Field(default=None, description="주당순이익")
     m_capital: Union[int, None] = Field(description="시가총액")
     issued: Union[int, None] = Field(description="발행주식수")

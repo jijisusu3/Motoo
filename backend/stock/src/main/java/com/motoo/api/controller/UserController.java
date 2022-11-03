@@ -8,6 +8,7 @@ import com.motoo.api.dto.user.BaseUserInfo;
 import com.motoo.api.response.LoginResponse;
 import com.motoo.api.service.KakaoService;
 import com.motoo.api.service.UserService;
+import com.motoo.common.model.response.BaseResponseBody;
 import com.motoo.common.util.JwtTokenUtil;
 import com.motoo.db.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.parameters.P;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
@@ -33,19 +31,32 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
     private final KakaoService kakaoService;
-
-    @GetMapping("/test/test")
-    public User test(Authentication authentication) {
-        User userInfo = userService.getUserInfo(authentication);
-        return userInfo;
+    /**유저 정보 받아오기
+     *
+     */
+    @GetMapping("/profile")
+    public User profile(Authentication authentication) {
+        System.out.println("hello");
+        User user = userService.getUserInfo(authentication);
+        return user;
     }
 
-    @PostMapping("/signup")
-    private String signup(String email, String nickname) {
-        userService.signupUser(email, nickname);
-        return "success";
+    /**유저 닉네임 변경
+     *
+     */
+    @PostMapping("/changenickname")
+    public ResponseEntity test(Authentication authentication, @RequestParam String nickname) {
+        if (nickname.length() == 0) {
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "닉네임 변경에 실패하였습니다."));
+        }
+        User user = userService.getUserInfo(authentication);
+        userService.updateNickname(user, nickname);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "닉네임이 변경되었습니다."));
     }
 
+    /**소셜로그인
+     *
+     */
     @GetMapping("/auth/kakao/callback")
     public LoginResponse login(String code) {
         System.out.println("kakaoservice");

@@ -49,8 +49,10 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void updatePassword(User user, String pw) {
-
+    public Long updateNickname(User user, String nickname) {
+        user.updateNickname(nickname);
+        userRepository.save(user);
+        return user.getUserId();
     }
 
     @Override

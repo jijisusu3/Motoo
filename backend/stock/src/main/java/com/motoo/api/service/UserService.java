@@ -25,7 +25,7 @@ public interface UserService {
 
     void deleteUser(String id);
 
-    void updatePassword(User user, String pw);
+    Long updateNickname(User user, String Nickname);
 
     int updateUser(User user, UpdateUserPutReq updateUserPutReq);
 
