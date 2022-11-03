@@ -22,7 +22,6 @@ class Stock(Model):
     maximum = fields.IntField(null=True)
     minimum = fields.IntField(null=True)
     per = fields.FloatField(null=True)
-    roe = fields.FloatField(null=True)
     eps = fields.FloatField(null=True)
     m_capital = fields.BigIntField(null=True)
     issued = fields.BigIntField(null=True)

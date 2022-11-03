@@ -1,6 +1,9 @@
 package com.motoo.db.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.security.PrivateKey;
 import java.util.ArrayList;
@@ -10,6 +13,7 @@ import java.util.Stack;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
+@Getter
 @Table(name= "favoritestock")
 public class FavoriteStock {
     @Id
@@ -18,10 +22,14 @@ public class FavoriteStock {
     private Long favoriteStockId;
 
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id")
     private User user;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="stock_id")
     private Stock stock;
 
 //    private List<User> user = new ArrayList<>();

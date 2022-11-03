@@ -13,7 +13,12 @@ class TestStockDetail:
     async def test_stock_exist_no_chart_data(self, client: AsyncClient):
         # 업종명: category_1,
         # 해당 업종으로 종목 TMPCORP 생성
-        category_tmp = await Category.create(name='category_1', keyword=[1], info='category for test')
+        category_tmp = await Category.create(
+            name='category_1',
+            keyword=[1],
+            info='category for test',
+            sentiment=[20.83934247493744, 77.13800072669983, 2.022657170891762]
+        )
         stock_tmp = await Stock.create(
             ticker='999999',
             name='TMPCORP',
