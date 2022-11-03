@@ -12,10 +12,11 @@ import "./styles/index.css";
 import "./styles/minireset.min.css";
 import "./styles/pretendard.css";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import BottomNav from "./components/common/BottomNav";
 import FooterBar from "./components/common/FooterBar";
+
 export default function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -24,6 +25,32 @@ export default function ScrollToTop() {
   return null;
 }
 
+// export default function NavShow() {
+//   const [showNav, setShowNav] = useState(true)
+//   const { pathname } = useLocation();
+//   function checkShowNav(u) {
+//     const { nowPath } = JSON.stringify(u)
+//     const tmpList = [
+//       "/stock/limit-order/buy",
+//       "/stock/limit-order/sell",
+//       "/stock/buy",
+//       "/stock/sell",
+//       "/stock/industry",
+//     ];
+//     if (nowPath === '/stock/buy') {
+//       setShowNav(false)
+//     } else {
+//       setShowNav(true)
+//       return
+//     }
+//   }
+//   console.log(pathname)
+//   useEffect(() => {
+//     window.scrollTo(0, 0);
+//     checkShowNav(pathname)
+//   }, [pathname])
+//   return console.log('ㅠㅠㅠㅠ')
+// }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import ReactApexChart from "react-apexcharts";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -18,8 +19,8 @@ const style = {
   p: 1,
 };
 
+
 function SellStockPage() {
-  const mySeed = 100000000;
   const myStock = 600;
   const location = useLocation();
   const tradeData = location.state?.data;
@@ -33,7 +34,11 @@ function SellStockPage() {
   const [isTooLow, setIsTooLow] = useState(false);
   const [total, setTotal] = useState(0);
   const [showAskingPrice, setShowAskingPrice] = useState(false);
-
+  
+  const navigate = useNavigate();
+  function backTo() {
+    navigate(-1);
+  }
   const handleOpen = () => setShowAskingPrice(true);
   const handleClose = () => setShowAskingPrice(false);
   function AskingGraphModal() {
@@ -379,6 +384,7 @@ function SellStockPage() {
   }
   return (
     <div>
+      <img onClick={backTo} src={`${process.env.PUBLIC_URL}/grayBack.svg`} alt="" />
       <h1>{tradeData.name}</h1>
       {isMarketPrice ? (
         <div>

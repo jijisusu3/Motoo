@@ -8,6 +8,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { Diversity1 } from "@mui/icons-material";
 
 const style = {
   position: "absolute",
@@ -66,6 +67,12 @@ function StockListPage() {
   };
   const handleDeleteModalClose = () => setDeleteModalOpen(false);
 
+  const goToDetail = (e) => {
+    const isPk = e.target.id
+    if (Boolean(isPk)) {
+      navigate(`/stock/detail/${isPk}`)
+    }
+  }
   // 삭제버튼 누르면 해당함수 실행,
   // BE에 삭제요청 보내고, 해당페이지재구성하고,
   // 유저정보 관심주식리스트 업데이트 되어야함
@@ -463,10 +470,10 @@ function StockListPage() {
     }
     const profitColor = profitCheck();
     return (
-      <div>
-        <span>{stock.name}</span>
-        <span style={{ color: profitColor }}>{stock.profit}</span>
-        <span>{stock.price}</span>
+      <div style={{height: 'auto', width: 'auto', border: '1px solid black' }}>
+        <div id={stock.code} onClick={goToDetail} >{stock.name}</div>
+        <div style={{ color: profitColor }}>{stock.profit}</div>
+        <div >{stock.price}</div>
       </div>
     );
   }
@@ -608,7 +615,7 @@ function StockListPage() {
       const profitColor = profitCheck();
       return (
         <div>
-          <span>{stock.name}</span>
+          <span id={stock.code} onClick={goToDetail}>{stock.name}</span>
           <span style={{ color: profitColor }}>{stock.profit}</span>
           <span>{stock.price}</span>
         </div>

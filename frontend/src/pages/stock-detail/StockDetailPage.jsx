@@ -8,8 +8,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 function StockDetailPage() {
   const navigate = useNavigate();
-  function backToSearch() {
-    navigate(`/stock/search`);
+  function backTo() {
+    navigate(-1);
   }
 
   const params = useParams();
@@ -518,7 +518,7 @@ function StockDetailPage() {
       <h1>{id}</h1>
 
       <img
-        onClick={backToSearch}
+        onClick={backTo}
         src={`${process.env.PUBLIC_URL}/stock-detail/back.svg`}
         alt=""
       />
