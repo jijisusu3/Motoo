@@ -17,7 +17,6 @@ class SiGunGu(Model):
 
 class School(Model):
     schoolname = fields.CharField(max_length=24)
-    history = fields.JSONField()
     sigungu = fields.ForeignKeyField('b204.SiGunGu', related_name='schools')
 
 

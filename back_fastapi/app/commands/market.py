@@ -16,12 +16,6 @@ import typer
 app = typer.Typer()
 
 
-def parameter_setter(ticker: str, req_time: str):
-    parameter["fid_input_iscd"] = ticker
-    parameter["fid_input_hour_1"] = req_time
-    return parameter
-
-
 def check_time_interval(my_date, my_time, obj):
     if my_date == obj['stck_bsop_date'] and abs(my_time - int(obj['stck_cntg_hour'])) < 10:
         return True

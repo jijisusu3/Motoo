@@ -2,6 +2,7 @@ from app.models.candles import *
 from app.models.daycharts import *
 from app.config import settings
 
+
 candle_url = settings.OPEN_API_DOMAIN+settings.CANDLE_API_URL
 appkey = settings.APPKEY_FOR_CANDLE
 appsecret = settings.APPSECRET_FOR_CANDLE
@@ -71,3 +72,9 @@ day_map = {
     22: DayTelecommunication,
     23: DayChemistry
 }
+
+
+def parameter_setter(ticker: str, req_time: str):
+    parameter["fid_input_iscd"] = ticker
+    parameter["fid_input_hour_1"] = req_time
+    return parameter
