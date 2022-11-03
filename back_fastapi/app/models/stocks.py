@@ -6,6 +6,7 @@ class Category(Model):
     info = fields.TextField()
     keyword = fields.JSONField()
     sentiment = fields.JSONField()
+    represent = fields.JSONField()
 
 
 class Stock(Model):

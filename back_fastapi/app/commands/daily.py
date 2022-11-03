@@ -103,8 +103,19 @@ def new_daily():
 def save_token(token_use: str = 'update_stock'):
     res = get_auth_token(settings.APPKEY_FOR_CANDLE, settings.APPSECRET_FOR_CANDLE)
     if res is not None:
-        redis_session.set(token_use, res)
-        redis_session.expire(token_use, 43200)
+        redis_session.set(token_use, res, ex=43200)
+        print('save_token complete!')
+
+
+@app.command()
+def save_any(any_word: str):
+    redis_session.set(any_word, 'success')
+    print('saved!')
+
+
+@app.command()
+def get_any(any_word: str):
+    print(redis_session.get(any_word))
 
 
 if __name__ == "__main__":
