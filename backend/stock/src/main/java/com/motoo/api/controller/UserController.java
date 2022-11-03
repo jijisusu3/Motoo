@@ -31,26 +31,43 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
     private final KakaoService kakaoService;
+
+    @GetMapping("/test")
+    public String test() {
+        return "hi";
+    }
+
     /**유저 정보 받아오기
      *
      */
-    @GetMapping("/profile")
+    @GetMapping
     public User profile(Authentication authentication) {
         System.out.println("hello");
-        User user = userService.getUserInfo(authentication);
+        String email = userService.getUserEmailByToken(authentication);
+        User user = userService.getByUserEmail(email).orElseGet(() -> new User());
         return user;
+    }
+
+    /**회원 탈퇴
+     *
+     */
+    @DeleteMapping
+    public ResponseEntity deleteUser(Authentication authentication) {
+        String email = userService.getUserEmailByToken(authentication);
+        userService.deleteUser(email);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "회원 탈퇴 성공"));
     }
 
     /**유저 닉네임 변경
      *
      */
-    @PostMapping("/changenickname")
-    public ResponseEntity test(Authentication authentication, @RequestParam String nickname) {
+    @PutMapping("/changenickname")
+    public ResponseEntity changeNickname(Authentication authentication, @RequestParam String nickname) {
         if (nickname.length() == 0) {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "닉네임 변경에 실패하였습니다."));
         }
-        User user = userService.getUserInfo(authentication);
-        userService.updateNickname(user, nickname);
+        String email = userService.getUserEmailByToken(authentication);
+        userService.updateNickname(email, nickname);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "닉네임이 변경되었습니다."));
     }
 
