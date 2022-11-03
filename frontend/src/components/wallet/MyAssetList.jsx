@@ -4,6 +4,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { useNavigate } from "react-router-dom";
 
 function MyAssetList() {
   const [value, setValue] = useState('1');
@@ -111,6 +112,13 @@ function MyAssetList() {
       ],
     },
   ]);
+  const navigate = useNavigate()
+  const goToDetail = (e) => {
+    const isPk = e.target.id
+    if (Boolean(isPk)) {
+      navigate(`/stock/detail/${isPk}`)
+    }
+  }
   function setDropdownData(value) {
     if (value === '1') {
       setExample(data[0]['priceHigh']);
@@ -136,7 +144,7 @@ function MyAssetList() {
     }
     const profitColor = profitCheck();
     return (
-      <div className={classes.myStockCard}>
+      <div id={stock.code} onClick={goToDetail} className={classes.myStockCard}>
         <div className={classes.abovebox}>
             <div className={classes.stname}>{stock.name}</div>
             <div>
