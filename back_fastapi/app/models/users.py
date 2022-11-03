@@ -11,7 +11,7 @@ class User(Model):
 
 
 class SiGunGu(Model):
-    sigungu = fields.CharField(max_length=24)
+    sigungu_name = fields.CharField(max_length=24)
     sido = fields.CharField(max_length=24)
 
 
