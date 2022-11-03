@@ -16,11 +16,10 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User getUserInfo(Authentication authentication) {
+    public String getUserEmailByToken(Authentication authentication) {
         AppUserDetails userDetails=(AppUserDetails)authentication.getDetails();
         String email= userDetails.getUsername();
-        User user = getByUserEmail(email).orElseGet(() -> new User());
-        return user;
+        return email;
     }
 
     @Override
@@ -43,13 +42,14 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void deleteUser(String id) {
-
+    public void deleteUser(String email) {
+        userRepository.deleteByEmail(email);
     }
 
 
     @Override
-    public Long updateNickname(User user, String nickname) {
+    public Long updateNickname(String email, String nickname) {
+        User user = getByUserEmail(email).orElseGet(() -> new User());
         user.updateNickname(nickname);
         userRepository.save(user);
         return user.getUserId();
