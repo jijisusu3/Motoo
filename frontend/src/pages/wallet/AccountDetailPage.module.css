@@ -2,13 +2,23 @@
   position: absolute;
   width: 120px;
   height: 60px;
-  border-radius: 15px;
-  border: 2px solid gray;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
   background-color: white;
-  top: 100px;
-  left: 240px;
+  top: 12%;
+  right: 6%;
   z-index: 2;
   float: right;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.txts{
+  margin-left: 0.5rem;
+  color: #000;
+  font-size: 14px;
+  font-weight: 600;
 }
 .exceptSetting {
   position: fixed;
@@ -21,11 +31,20 @@
 }
 .editInput{
   width: 180px;
-  height: 40px;
   border-radius: 10px;
-  
+  margin-left: 1.5rem;
+  border: #929e9e 1px solid;
+  height: 32px;
 }
 .out{
   /* height: 100vh; */
   background: linear-gradient(180deg, #FBF7F0 0%, #F2FFF8 100%);
+}
+.accountname{
+  font-weight: 600;
+  font-size: 5vw;
+  margin-left: 1.5rem;
+}
+.dot{
+  margin-right: 1.5rem;
 }
