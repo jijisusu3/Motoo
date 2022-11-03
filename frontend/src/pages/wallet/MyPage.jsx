@@ -131,12 +131,27 @@ function MyPage() {
     }
     const profitColor = profitCheck();
     return (
-      <div style={{ border: "1px solid gray" }}>
-        <img src={`${process.env.PUBLIC_URL}/wallet/moneyBag.svg`} alt="" />
-        <div>총 보유자산</div>
-        <div>{data.all.all_asset}</div>
-        <div>수익률</div>
-        <div style={{ color: profitColor }}>{data.all.profit}%</div>
+      <div className={classes.present}>
+        <div>
+          <div>총 보유자산</div>
+          <div className={classes.cntbox}>
+            <img src={`${process.env.PUBLIC_URL}/wallet/money.svg`} style={{ width: 24, height: 24 }} alt="" />
+            <div  className={classes.basebox}>
+              <div className={classes.count}>{data.all.all_asset}</div>
+              <div>원</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div>수익률</div>
+          <div className={classes.rev}
+            style={{
+              color: profitColor,
+            }}
+          >
+            {data.all.profit}%
+          </div>
+        </div>
       </div>
     );
   }
@@ -266,18 +281,20 @@ function MyPage() {
     <div>
       <h1>마이페이지임니다</h1>
       <EditShow />
-      <AllAssets />
-      {data.assets.map((asset, index) => (
-        <WalletAssetCard
-          key={asset.accounts_pk}
-          name={asset.name}
-          accountId={asset.accounts_pk}
-          seed={asset.seed}
-          isSchool={asset.isSchool}
-          open={asset.open}
-          num={index}
-        />
-      ))}
+      <div className={classes.centerbox}>
+        <AllAssets />
+        {data.assets.map((asset, index) => (
+          <WalletAssetCard
+            key={asset.accounts_pk}
+            name={asset.name}
+            accountId={asset.accounts_pk}
+            seed={asset.seed}
+            isSchool={asset.isSchool}
+            open={asset.open}
+            num={index}
+          />
+        ))}
+      </div>
       <Modal open={openCreateModal} onClose={handleCreateModalClose}>
         <Box sx={style}>
           <div>

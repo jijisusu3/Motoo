@@ -37,24 +37,48 @@ function MyAssets(props) {
   return (
     <div>
       <div className={classes.assetCard}>
-        <span>계좌 내 자산</span>
-        <span>수익률</span>
-        <span>405,219,228 원</span>
-        <p
-          style={{
-            color: assetProfitColor,
-          }}
-        >
-          {assetProfit}%
-        </p>
-        <span>현재 씨앗</span>
-        <span>140,204,201원</span>
-        <p>전일 손익</p>
-        <span>- 200,434,000 원</span>
-        <div style={{ width:33, height:17, borderRadius:5, border:`1px solid ${yesterdayProfitColor}` }}>
-          <p style={{color:yesterdayProfitColor, fontSize:10, fontWeight:700 }}>-30%</p>
+        <div className={classes.present}>
+          <div>
+            <div>계좌 내 자산</div>
+            <div className={classes.cntbox}>
+              <img src={`${process.env.PUBLIC_URL}/wallet/money.svg`} style={{ width: 20, height: 20 }} alt="" />
+              <div  className={classes.basebox}>
+                <div className={classes.count}>405,219,228</div>
+                <div>원</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div>수익률</div>
+            <div className={classes.rev}
+              style={{
+                color: assetProfitColor,
+              }}
+            >
+              {assetProfit}%
+            </div>
+          </div>
         </div>
-        
+        <div className={classes.bar}></div>
+        <div className={classes.lst}>
+          <div className={classes.rowbox}>
+            <div className={classes.rowbox}>
+              <div>현재 씨앗</div>
+              <img src={`${process.env.PUBLIC_URL}/wallet/seeds.svg`} style={{ width: 12, height: 12 }} alt="" />
+            </div>
+            <div className={classes.detail}>140,204,201원</div>
+          </div>
+          <div className={classes.rowbox}>
+            <div className={classes.rowbox}>
+              <div>전일 손익</div>
+              <img src={`${process.env.PUBLIC_URL}/wallet/vege.svg`} style={{ width: 12, height: 12 }} alt="" />
+            </div>
+            <div className={classes.detail}>- 200,434,000원</div>
+            <div className={classes.persent} style={{ width:33, height:17, borderRadius:5, border:`1px solid ${yesterdayProfitColor}` }}>
+              <div style={{color:yesterdayProfitColor, fontSize:10, fontWeight:700 }}>-30%</div>
+            </div>
+          </div>
+        </div>
       </div>
       <Accordion
         sx={{ width: "100%" }}
@@ -62,16 +86,17 @@ function MyAssets(props) {
         onChange={handleChange("panel1")}
       >
         <AccordionSummary
+          className={classes.acd}
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1bh-content"
           id="panel1bh-header"
         >
-          <p
-            sx={{ width: "100%", flexShrink: 0 }}
-            style={{ fontSize: "4vw", fontWeight: 600 }}
-          >
-            보유자산 포트폴리오
-          </p>
+          <div className={classes.rowbox}>
+            <img src={`${process.env.PUBLIC_URL}/wallet/files.svg`} style={{ width: 24, height: 24 }} alt="" />
+            <div className={classes.ptfl}>
+              보유자산 포트폴리오
+            </div>
+          </div>
         </AccordionSummary>
         <AccordionDetails>
           <Portfolio />
