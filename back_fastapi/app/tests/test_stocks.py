@@ -46,9 +46,9 @@ class TestStockDetail:
 
     async def test_stock_exist_with_chart_data(self, client: AsyncClient):
         # 종목 TMPCORP에 대한 차트용 데이터
-        for k in range(6):
+        for k in range(37):
             await candle_map[1].create(
-                time=f'09{k}000',
+                time=f'{(9+k//6)//10}{(9+k//6)%10}{k%6}000',
                 price=1000+10*k,
                 volume=100+k,
                 open_price=1000,
@@ -73,9 +73,10 @@ class TestStockDetail:
         assert res.status_code == 200
         assert res_data["message"] == "success"
         assert res_data["daily"][0]["time"] == "090000"
-        assert res_data["daily"][5]["time"] == "095000"
+        assert res_data["daily"][-1]["time"] == "150000"
         assert res_data["daily"][5]["date"] == today.strftime("%Y-%m-%d")
-        assert res_data["weekly"][0]["time"] == "090000"
+        assert res_data["weekly"][-1]["time"] == "150000"
+        assert len(res_data['weekly']) == (5+37)//6
         assert res_data["monthly"][0]["date"] == (today-datetime.timedelta(7)).strftime("%Y-%m-%d")
         assert res_data["monthly"][7]["date"] == today.strftime("%Y-%m-%d")
         assert len(res_data["yearly"]) == 2

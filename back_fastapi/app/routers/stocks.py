@@ -22,10 +22,15 @@ async def get_stock_detail(ticker: str, response: Response):
     today = date.today().strftime("%Y-%m-%d")
     # 차트 데이터
     daily = await candle_map[stock.category_id].filter(stock=stock.pk, date=today)
-    weekly = (await candle_map[stock.category_id].filter(stock=stock.pk, date__gte=date.today()-timedelta(7)))[::6]
+    weekly = (await candle_map[stock.category_id].filter(
+        stock=stock.pk,
+        date__gte=date.today()-timedelta(7)
+    ).order_by('-id'))[::6][::-1]
     monthly = await day_map[stock.category_id].filter(stock=stock.pk, date__gte=date.today()-timedelta(31))
-    yearly = (await day_map[stock.category_id].filter(stock=stock.pk, date__gte=date.today()-timedelta(365)))[::5]
-
+    yearly = (await day_map[stock.category_id].filter(
+        stock=stock.pk,
+        date__gte=date.today()-timedelta(365)
+    ).order_by('-id'))[::5][::-1]
     return GetStockDetailResponse(**dict(stock), daily=daily, weekly=weekly, monthly=monthly, yearly=yearly)
 
 
