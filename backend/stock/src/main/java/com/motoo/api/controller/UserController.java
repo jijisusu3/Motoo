@@ -1,28 +1,18 @@
 package com.motoo.api.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.motoo.api.dto.kakao.KakaoProfile;
-import com.motoo.api.dto.kakao.OauthToken;
 import com.motoo.api.dto.user.BaseUserInfo;
 import com.motoo.api.response.LoginResponse;
 import com.motoo.api.service.KakaoService;
 import com.motoo.api.service.UserService;
 import com.motoo.common.model.response.BaseResponseBody;
-import com.motoo.common.util.JwtTokenUtil;
 import com.motoo.db.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.parameters.P;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -41,11 +31,14 @@ public class UserController {
      *
      */
     @GetMapping
-    public User profile(Authentication authentication) {
+    public BaseUserInfo profile(Authentication authentication) {
         System.out.println("hello");
         String email = userService.getUserEmailByToken(authentication);
-        User user = userService.getByUserEmail(email).orElseGet(() -> new User());
-        return user;
+        Optional<User> user = userService.getByUserEmail(email);
+        BaseUserInfo baseUserInfo = BaseUserInfo.of(user);
+        List<String> favoriteStockCode = userService.getFavoriteStockCode(user);
+        baseUserInfo.setFavoriteStockCode(favoriteStockCode);
+        return baseUserInfo;
     }
 
     /**회원 탈퇴

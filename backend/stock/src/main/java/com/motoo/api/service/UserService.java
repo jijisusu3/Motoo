@@ -4,6 +4,7 @@ import com.motoo.api.request.UpdateUserPutReq;
 import com.motoo.db.entity.User;
 import org.springframework.security.core.Authentication;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -28,5 +29,7 @@ public interface UserService {
     Long updateNickname(String email, String Nickname);
 
     int updateUser(User user, UpdateUserPutReq updateUserPutReq);
+
+    List<String> getFavoriteStockCode(Optional<User> user);
 
 }
