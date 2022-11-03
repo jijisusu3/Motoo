@@ -3,8 +3,9 @@ from tortoise import fields, Model
 
 class Quiz(Model):
     question = fields.CharField(max_length=200)
-    examples = fields.CharField(max_length=200)
-    answer = fields.CharField(max_length=20)
+    examples = fields.JSONField()
+    answer = fields.IntField()
+    explanation = fields.TextField(null=True)
 
 
 class Voca(Model):
