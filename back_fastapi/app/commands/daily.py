@@ -64,10 +64,9 @@ def new_daily():
 
 @app.command()
 def save_token(token_use: str = 'update_stock'):
-    now = time.time()
     res = get_auth_token(settings.APPKEY_FOR_CANDLE, settings.APPSECRET_FOR_CANDLE)
     if res is not None:
-        redis_session.rpush(token_use, res, now)
+        redis_session.set(token_use, res)
         redis_session.expire(token_use, 43200)
 
 

@@ -10,6 +10,7 @@ from fastapi import APIRouter, BackgroundTasks
 import aiohttp
 from pykrx import stock
 from app.schemes.common import CommonResponse
+from app.schemes.stocks import EntireStockData, GetAllStocks
 
 router = APIRouter(prefix="/stock_back")
 
@@ -36,36 +37,35 @@ def get_auth_token(key, secret):
         return None
 
 
-@router.post("/save_token", description="access token 저장", response_model=CommonResponse)
 def save_access_token(token_use: str):
     now = time.time()
     # if now - redis_session.lindex(token_use, 1) > 43200:
     if True:
         res = get_auth_token(settings.APPKEY_FOR_CANDLE, settings.APPSECRET_FOR_CANDLE)
-        redis_session.rpush(token_use, res, now)
+        redis_session.set(token_use, res)
         redis_session.expire(token_use, 43200)
     return CommonResponse()
 
 
-@router.post("/regular_tickers", description="모든 종목 코드 형식 수정")
-async def regular_tickers(background: BackgroundTasks):
+@router.post("/ticker-normalization", description="모든 종목 코드 형식 수정")
+async def ticker_normalization():
     start = time.time()
     stocks = await Stock.all()
     for stock in stocks:
         stock.ticker = (6 - len(stock.ticker)) * '0' + stock.ticker
-        await stock.save(update_fields=("ticker",))
+        # await stock.save(update_fields=("ticker",))
+
     end = time.time()
     print(start-end)
     return stocks
 
 
-@router.get("/stock_list", description="모든 종목 리스트")
-async def get_stock_list(background: BackgroundTasks):
-    stocks = await Stock.all()
-    return stocks
+@router.get("/stock_list", description="모든 종목 리스트", response_model=GetAllStocks)
+async def get_stock_list():
+    stocks = await Stock.filter(id__gte=500).limit(100)
+    return GetAllStocks(stocks=stocks)
 
 
-@router.post("/stock_list", description="모든 종목 리스트", response_model=CommonResponse)
 async def update_stock_back(req_time: str, background_tasks: BackgroundTasks):
     background_tasks.add_task(update_stock_list, req_time)
     return CommonResponse()
@@ -73,7 +73,7 @@ async def update_stock_back(req_time: str, background_tasks: BackgroundTasks):
 
 async def update_stock_list(req_time: str):
     initial_start = time.time()
-    access_token = redis_session.lindex("update_stock", 0)
+    access_token = redis_session.get("update_stock")
     header["authorization"] = "Bearer " + access_token
     category_dict = defaultdict(list)
     stocks = await Stock.all().values('id', 'ticker', 'name', 'category_id')
@@ -105,7 +105,6 @@ async def update_stock_list(req_time: str):
     return None
 
 
-@router.post("/day-stock_list", description="모든 일별 종목 리스트", response_model=CommonResponse)
 async def update_day_stock_back(background_tasks: BackgroundTasks):
     background_tasks.add_task(update_day_stock)
     return CommonResponse()
