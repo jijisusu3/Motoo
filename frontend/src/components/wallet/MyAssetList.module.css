@@ -1,6 +1,69 @@
 .myStockCard {
-  width: 335px;
-  height: 137px;
-  background-color: aquamarine;
-  border: 1px solid;
+  width: 100%;
+  height: 120px;
+  background-color: #fff;
+  border: none;
+  border-radius: 10px;
+  display: flex;
+  /* flex-direction: column; */
+  flex-wrap: wrap;
+  align-content: space-between;
+  margin-bottom: 1rem;
+}
+.listbox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.abovebox{
+  display: flex;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+.result{
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  margin-left: 1rem;
+}
+.rowbox{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+.belowbox{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  width: 100%;
+}
+.stname{
+  font-weight: 600;
+  font-size: 18px;
+}
+.section{
+  margin-left: 2rem;
+}
+.infobox{
+  display: flex;
+  flex-direction: column;
+  color: #929E9E;
+  font-weight: 600;
+  font-size: 10px;
+}
+.numbox{
+  display: flex;
+  align-items: baseline;
+}
+.txts{
+  color: #000;
+  font-size: 16px;
 }

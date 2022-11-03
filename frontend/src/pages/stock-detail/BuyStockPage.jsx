@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import ReactApexChart from "react-apexcharts";
-
+import { useNavigate } from "react-router-dom";
 const style = {
   position: "absolute",
   top: "50%",
@@ -33,6 +33,10 @@ function BuyStockPage() {
   const [total, setTotal] = useState(0);
   const [showAskingPrice, setShowAskingPrice] = useState(false);
 
+  const navigate = useNavigate();
+  function backTo() {
+    navigate(-1);
+  }
   const handleOpen = () => setShowAskingPrice(true);
   const handleClose = () => setShowAskingPrice(false);
 
@@ -404,6 +408,7 @@ function BuyStockPage() {
   }
   return (
     <div>
+      <img onClick={backTo} src={`${process.env.PUBLIC_URL}/grayBack.svg`} alt="" />
       <div>{tradeData.name}</div>
       {isMarketPrice ? (
         <div>

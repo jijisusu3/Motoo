@@ -52,7 +52,6 @@ function MyPage() {
   
   const navigate = useNavigate()
   const goToDetail = (e) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const isPk = e.target.id
     if (Boolean(isPk)) {
       navigate(`/wallet/detail/${isPk}`)

@@ -17,20 +17,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name= "account")
-public class Accounts {
+public class Account {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private Long accountsId;
+    private Long accountId;
 
     //유저 다대일
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id")
     private User user;
 
     private int seed;
+
 
     private Date created_at;
 
@@ -40,18 +42,18 @@ public class Accounts {
 
 
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
     private List<AccountStock> accountStocks = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
     private List<Trading> tradings = new ArrayList<>();
 
-    public void createAccounts(User user, String name){
+    public void createAccount(User user, String name){
         this.user = user;
         this.name = name;
     }
 
-    public void updateAccountsName(String name){
+    public void updateAccountName(String name){
         this.name = name;
     }
 }

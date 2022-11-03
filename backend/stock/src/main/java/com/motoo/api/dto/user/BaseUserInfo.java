@@ -22,9 +22,6 @@ public class BaseUserInfo {
         BaseUserInfo userinfo = new BaseUserInfo();
         userinfo.setUserId(user.get().getUserId());
         userinfo.setEmail(user.get().getEmail());
-
-
-
         userinfo.setNickname(user.get().getNickname());
         userinfo.setCurrent(user.get().getCurrent());
         return userinfo;

@@ -34,7 +34,7 @@ public class User {
     @Builder.Default
     @JsonIgnore
     @OneToMany(mappedBy = "user")
-    private List<Accounts> accounts= new ArrayList<>();
+    private List<Account> account = new ArrayList<>();
 
     private Long school_id;
 //    @OneToMany(mappedBy = "user")
@@ -44,7 +44,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<FavoriteStock> favoriteStocks = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<Trading> tradings = new ArrayList<>();
 
     private String email;
@@ -68,13 +68,8 @@ public class User {
     }
 
 
-    public void updateUser(String nickname, String email, String phone_number,
-                           Date birthday
-                           ){
+    public void updateNickname(String nickname){
         this.nickname = nickname;
-        this.email = email;
-
-
     }
 
 

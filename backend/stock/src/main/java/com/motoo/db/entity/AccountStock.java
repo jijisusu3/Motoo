@@ -1,5 +1,6 @@
 package com.motoo.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,14 +26,18 @@ public class AccountStock {
 
     private int price;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    private Accounts accounts;
+    @JoinColumn(name="account_id")
+    private Account account;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="stock_id")
     private Stock stock;
 
-    public void createAccountStock(Accounts accounts, Stock stock, int amount, int price){
-        this.accounts =accounts;
+    public void createAccountStock(Account account, Stock stock, int amount, int price){
+        this.account = account;
         this.stock = stock;
         this.price =price;
         this.amount = amount;

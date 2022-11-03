@@ -8,6 +8,7 @@ import com.motoo.api.dto.user.BaseUserInfo;
 import com.motoo.api.response.LoginResponse;
 import com.motoo.api.service.KakaoService;
 import com.motoo.api.service.UserService;
+import com.motoo.common.model.response.BaseResponseBody;
 import com.motoo.common.util.JwtTokenUtil;
 import com.motoo.db.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.parameters.P;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
@@ -34,18 +32,48 @@ public class UserController {
     private final UserService userService;
     private final KakaoService kakaoService;
 
-    @GetMapping("/test/test")
-    public User test(Authentication authentication) {
-        User userInfo = userService.getUserInfo(authentication);
-        return userInfo;
+    @GetMapping("/test")
+    public String test() {
+        return "hi";
     }
 
-    @PostMapping("/signup")
-    private String signup(String email, String nickname) {
-        userService.signupUser(email, nickname);
-        return "success";
+    /**유저 정보 받아오기
+     *
+     */
+    @GetMapping
+    public User profile(Authentication authentication) {
+        System.out.println("hello");
+        String email = userService.getUserEmailByToken(authentication);
+        User user = userService.getByUserEmail(email).orElseGet(() -> new User());
+        return user;
     }
 
+    /**회원 탈퇴
+     *
+     */
+    @DeleteMapping
+    public ResponseEntity deleteUser(Authentication authentication) {
+        String email = userService.getUserEmailByToken(authentication);
+        userService.deleteUser(email);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "회원 탈퇴 성공"));
+    }
+
+    /**유저 닉네임 변경
+     *
+     */
+    @PutMapping("/changenickname")
+    public ResponseEntity changeNickname(Authentication authentication, @RequestParam String nickname) {
+        if (nickname.length() == 0) {
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "닉네임 변경에 실패하였습니다."));
+        }
+        String email = userService.getUserEmailByToken(authentication);
+        userService.updateNickname(email, nickname);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "닉네임이 변경되었습니다."));
+    }
+
+    /**소셜로그인
+     *
+     */
     @GetMapping("/auth/kakao/callback")
     public LoginResponse login(String code) {
         System.out.println("kakaoservice");

@@ -4,6 +4,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { useNavigate } from "react-router-dom";
 
 function MyAssetList() {
   const [value, setValue] = useState('1');
@@ -111,6 +112,13 @@ function MyAssetList() {
       ],
     },
   ]);
+  const navigate = useNavigate()
+  const goToDetail = (e) => {
+    const isPk = e.target.id
+    if (Boolean(isPk)) {
+      navigate(`/stock/detail/${isPk}`)
+    }
+  }
   function setDropdownData(value) {
     if (value === '1') {
       setExample(data[0]['priceHigh']);
@@ -136,17 +144,56 @@ function MyAssetList() {
     }
     const profitColor = profitCheck();
     return (
-      <div className={classes.myStockCard}>
-        <p>{stock.name}</p>
-        <p>
-          평가손익: <span style={{ color: profitColor }}>{stock.profit}</span>
-        </p>
-        <p>
-          평가손익: <span style={{ color: profitColor }}>{stock.percent}%</span>
-        </p>
-        <p>{stock.mean}</p>
-        <p>{stock.now}</p>
-        <p>{stock.all}</p>
+      <div id={stock.code} onClick={goToDetail} className={classes.myStockCard}>
+        <div className={classes.abovebox}>
+            <div className={classes.stname}>{stock.name}</div>
+            <div>
+              <div className={classes.rowbox}>
+                <div className={classes.rowbox}>
+                  <img src={`${process.env.PUBLIC_URL}/wallet/coin.svg`} style={{ width: 12, height: 12 }} alt="" />
+                  <div className={classes.result}>
+                    평가손익
+                  </div>
+                </div>
+                <div className={classes.section} style={{ color: profitColor }}>{stock.profit}</div>
+              </div>
+              <div className={classes.rowbox}>
+                <div className={classes.rowbox}>
+                  <img src={`${process.env.PUBLIC_URL}/wallet/chart.svg`} style={{ width: 12, height: 12 }} alt="" />
+                  <div className={classes.result}>
+                    수익률
+                  </div>
+                </div>
+                <div className={classes.section} style={{ color: profitColor }}>{stock.percent}%</div>
+              </div>
+            </div>
+          </div>
+          <div className={classes.belowbox}>
+            <div className={classes.infobox}>
+              평균구매가
+              <div className={classes.numbox}>
+                <p className={classes.txts}>{stock.mean}</p>원
+              </div>
+            </div>
+            <div className={classes.infobox}>
+              판매가
+              <div className={classes.numbox}>
+                <p className={classes.txts}>{stock.now}</p>원
+              </div>
+            </div>
+            <div className={classes.infobox}>
+              수량
+              <div className={classes.numbox}>
+                <p className={classes.txts}>{stock.many}</p>주
+              </div>
+            </div>
+            <div className={classes.infobox}>
+              평가금액
+              <div className={classes.numbox}>
+                <p className={classes.txts}>{stock.all}</p>원
+              </div>
+            </div>
+          </div>
       </div>
     );
   }
@@ -169,7 +216,7 @@ function MyAssetList() {
           <MenuItem value={'3'}>수익률낮은순</MenuItem>
         </Select>
       </FormControl>
-      <div>
+      <div className={classes.listbox}>
         {example.map((stock) => (
           <MyStockCard
             key={stock.code}
