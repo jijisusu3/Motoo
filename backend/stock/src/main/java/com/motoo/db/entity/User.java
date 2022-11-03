@@ -68,13 +68,8 @@ public class User {
     }
 
 
-    public void updateUser(String nickname, String email, String phone_number,
-                           Date birthday
-                           ){
+    public void updateNickname(String nickname){
         this.nickname = nickname;
-        this.email = email;
-
-
     }
 
 
