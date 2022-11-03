@@ -19,6 +19,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -132,6 +133,8 @@ public class KakaoService {
 
         //토큰과 유저객체 반환
         BaseUserInfo baseUserInfo = BaseUserInfo.of(DBUser);
+        List<String> favoriteStockCode = userService.getFavoriteStockCode(DBUser);
+        baseUserInfo.setFavoriteStockCode(favoriteStockCode);
         LoginResponse response = LoginResponse.of(token, baseUserInfo);
 
         return response;

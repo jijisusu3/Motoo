@@ -40,10 +40,10 @@ public class User {
 //    @OneToMany(mappedBy = "user")
 //    private List<School> schools = new ArrayList<>();
 
-
     @OneToMany(mappedBy = "user")
     private List<FavoriteStock> favoriteStocks = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Trading> tradings = new ArrayList<>();
 
