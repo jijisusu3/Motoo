@@ -2,13 +2,17 @@ package com.motoo.api.service;
 
 import com.motoo.api.request.UpdateUserPutReq;
 import com.motoo.common.auth.AppUserDetails;
+import com.motoo.db.entity.FavoriteStock;
+import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.User;
 import com.motoo.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,6 +62,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public int updateUser(User user, UpdateUserPutReq updateUserPutReq) {
         return 0;
+    }
+
+    @Override
+    public List<String> getFavoriteStockCode(Optional<User> user) {
+        List<FavoriteStock> favoriteStocks = user.get().getFavoriteStocks();
+        List<String> stockCode = favoriteStocks.stream().map(favoriteStock -> {
+            Stock stock = favoriteStock.getStock();
+            return stock.getTicker();
+        }).collect(Collectors.toList());
+        return stockCode;
     }
 
 }

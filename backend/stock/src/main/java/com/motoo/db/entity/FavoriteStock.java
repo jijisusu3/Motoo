@@ -21,13 +21,11 @@ public class FavoriteStock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long favoriteStockId;
 
-
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name="user_id")
     private User user;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="stock_id")
     private Stock stock;
