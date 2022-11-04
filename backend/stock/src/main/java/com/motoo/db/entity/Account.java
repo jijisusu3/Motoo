@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -31,21 +32,21 @@ public class Account {
     @JoinColumn(name="user_id")
     private User user;
 
+    @Column(name="seed")
     private int seed;
 
-
+    @Column(name="created_at")
+    @CreationTimestamp
     private Date created_at;
-
 //    private int type;
-
+    @Column(name="name")
     private String name;
 
-
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", orphanRemoval = true)
     private List<AccountStock> accountStocks = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account",orphanRemoval = true)
     private List<Trading> tradings = new ArrayList<>();
 
     public void createAccount(User user, String name){
@@ -55,5 +56,9 @@ public class Account {
 
     public void updateAccountName(String name){
         this.name = name;
+    }
+
+    public void updateSeed(int seed){
+        this.seed = seed;
     }
 }

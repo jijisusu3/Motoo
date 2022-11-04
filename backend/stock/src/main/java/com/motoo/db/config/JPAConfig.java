@@ -1,4 +1,4 @@
-package com.motoo.config;
+package com.motoo.db.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
