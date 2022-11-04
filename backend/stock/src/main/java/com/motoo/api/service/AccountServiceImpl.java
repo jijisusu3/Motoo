@@ -77,8 +77,8 @@ public class AccountServiceImpl implements AccountService{
 
 
     @Override
-    public List<AccountStock> getAccountStockByUserId(Long userId){
-        return accountStockRepositorySupport.findAllAccountStockByUserId(userId);
+    public List<AccountStock> getAccountStockByUserIdAccountId(Long accountId,Long userId){
+        return accountStockRepositorySupport.findAllAccountStockByUserIdAccountId(accountId, userId);
     }
 
     @Override
@@ -92,6 +92,15 @@ public class AccountServiceImpl implements AccountService{
         return null;
     }
 
+    @Override
+    public List<AccountStock> getAccountStockByUserId(Long userId) {
+        return null;
+    }
+
+//    @Override
+//    public List<AccountStock> getAccountStockByUserId(Long userId) {
+//        return accountStockRepositorySupport.getAccountStockByUserIdAccountId();
+//    }
 
 
     @Override

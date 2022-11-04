@@ -1,14 +1,21 @@
 package com.motoo.db.config;
 
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
+
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -16,29 +23,73 @@ import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger.web.UiConfigurationBuilder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.base.Predicates.or;
+import static springfox.documentation.builders.PathSelectors.regex;
 
-
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * API 문서 관련 swagger2 설정 정의.
  */
 
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig {
+public class SwaggerConfig implements WebMvcConfigurer {
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).useDefaultResponseMessages(false)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.ant("/api/**"))
+                .paths(PathSelectors.any())
                 .build()
+                .apiInfo(apiInfo())
+                .enable(true)
                 .securityContexts(newArrayList(securityContext()))
                 .securitySchemes(newArrayList(apiKey()))
                 ;
+
+
     }
+
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+//        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+//        super.addResourceHandlers(registry);
+//    }
+
+
+    private ApiInfo apiInfo() {
+        return new ApiInfo(
+                "Motoo REST API",
+                "모투의 API 입니다.",
+                "V1",
+                "https://k7b204.p.ssafy.io/",
+                new Contact("", "", ""),
+                "", "", Collections.emptyList());
+    }
+@Override
+public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    registry.addResourceHandler("/swagger-ui.html")
+            .addResourceLocations("classpath:/META-INF/resources/");
+
+    registry.addResourceHandler("/webjars/**")
+            .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    // -- Static resources
+    registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+    registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css");
+    registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
+    registry.addResourceHandler("/images/**").addResourceLocations("classpath:/static/images/");
+}
+
+
+
+//
+//
 
     private ApiKey apiKey() {
         return new ApiKey(SECURITY_SCHEMA_NAME, "Authorization", "header");
