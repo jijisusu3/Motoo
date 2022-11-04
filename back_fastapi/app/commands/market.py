@@ -1,17 +1,13 @@
-import time
-from datetime import date, timedelta
+import asyncio
 import datetime
 from collections import defaultdict
 
-import requests
-
-from app.models.stocks import Stock, Category
-from app.const import *
-from app.config import settings, redis_session
-import asyncio
 import aiohttp
 import typer
 
+from app.config import redis_session
+from app.const import *
+from app.models.stocks import Stock
 
 app = typer.Typer()
 
@@ -24,7 +20,8 @@ def check_time_interval(my_date, my_time, obj):
 
 async def update_and_insert_stock_list(update_time: str = None):
     input_time = datetime.datetime.now().strftime('%H%M%S')
-    if update_time:
+    print(update_time)
+    if update_time is not None:
         input_time = update_time
     print('시작')
     initial_start = time.time()
@@ -46,7 +43,7 @@ async def update_and_insert_stock_list(update_time: str = None):
                     lambda x: check_time_interval(latest['stck_bsop_date'], int(latest['stck_cntg_hour']), x),
                     data['output2']
                 ))
-                if update_time:
+                if update_time is not None:
                     res = candle_map[stck.category_id](
                         stock_id=stck.pk,
                         date=latest['stck_bsop_date'],
@@ -63,15 +60,17 @@ async def update_and_insert_stock_list(update_time: str = None):
                 stck.fluctuation_price = data['output1']['prdy_vrss']
                 stck.trading_value = data['output1']['acml_tr_pbmn']
                 stck.volume = data['output1']['acml_vol']
-            time.sleep(0.75)
+            time.sleep(0.7)
             end_s = time.time()
-            print(f'{min(20*(r+1), len(stocks))}개 {end_s-start}s')
-    if update_time:
+            print(f'{min(20 * (r + 1), len(stocks))}개 {end_s - start}s')
+    if update_time is not None:
+        print('update')
         for category in category_dict.keys():
             await candle_map[category].bulk_create(category_dict[category])
-    await Stock.bulk_update(stocks, fields=('price', 'fluctuation_rate', 'fluctuation_price', 'trading_value', 'volume',))
+    await Stock.bulk_update(stocks,
+                            fields=('price', 'fluctuation_rate', 'fluctuation_price', 'trading_value', 'volume',))
     finished = time.time()
-    print(f'{finished-initial_start}s 종료')
+    print(f'{finished - initial_start}s 종료')
     return None
 
 

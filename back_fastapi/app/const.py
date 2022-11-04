@@ -1,11 +1,13 @@
+import time
+
 import requests
 
+from app.config import settings, redis_session
 from app.models.candles import *
 from app.models.daycharts import *
-from app.config import settings, redis_session
 
-price_url = settings.OPEN_API_DOMAIN+settings.PRICE_API_URL
-candle_url = settings.OPEN_API_DOMAIN+settings.CANDLE_API_URL
+price_url = settings.OPEN_API_DOMAIN + settings.PRICE_API_URL
+candle_url = settings.OPEN_API_DOMAIN + settings.CANDLE_API_URL
 appkey = settings.APPKEY_FOR_CANDLE
 appsecret = settings.APPSECRET_FOR_CANDLE
 tr_id_candle = settings.TRADE_ID_FOR_CANDLE
@@ -109,3 +111,4 @@ def save_token(token_use: str = 'update_stock'):
     if res is not None:
         redis_session.set(token_use, res, ex=43200)
         print('save_token complete!')
+        time.sleep(1)
