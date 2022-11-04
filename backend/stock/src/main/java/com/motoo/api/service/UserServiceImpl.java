@@ -12,12 +12,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+
+    @Override
+    public Long getUserIdByToken(Authentication authentication) {
+        AppUserDetails userDetails=(AppUserDetails)authentication.getDetails();
+        Long id= userDetails.getUserId();
+        return id;
+    }
 
     @Override
     public String getUserEmailByToken(Authentication authentication) {
@@ -46,14 +54,20 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void deleteUser(String email) {
-        userRepository.deleteByEmail(email);
+    public void deleteUser(Long id) {
+//        userRepository.delete(userRepository.findById(id).orElseThrow(new Supplier<IllegalArgumentException>() {
+//            @Override
+//            public IllegalArgumentException get() {
+//                return new IllegalArgumentException("해당 id의 user가 없습니다.");
+//            }
+//        }));
+        userRepository.deleteByUserId(id);
     }
 
 
     @Override
-    public Long updateNickname(String email, String nickname) {
-        User user = getByUserEmail(email).orElseGet(() -> new User());
+    public Long updateNickname(Long id, String nickname) {
+        User user = getByUserId(id).orElseGet(() -> new User());
         user.updateNickname(nickname);
         userRepository.save(user);
         return user.getUserId();
