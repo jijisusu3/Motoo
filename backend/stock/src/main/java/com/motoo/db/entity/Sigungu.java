@@ -21,7 +21,7 @@ public class Sigungu {
 
     private String sigungu_name;
 
-    private String sigu;
+    private String sido;
 
     @OneToMany(mappedBy = "sigungu")
     private List<School> school = new ArrayList<>();

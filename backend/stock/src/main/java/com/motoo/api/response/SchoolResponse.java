@@ -10,13 +10,14 @@ import lombok.*;
 @AllArgsConstructor
 public class SchoolResponse {
 
-    private Long id;
+    private Long schoolId;
 
     private String schoolname;
 
-//    private Sigungu sigungu;
+    private SigunguResponse sigunguResponse;
+
 
     public static SchoolResponse response(School school){
-        return new SchoolResponse(school.getSchoolId(), school.getSchoolname());
+        return new SchoolResponse(school.getSchoolId(), school.getSchoolname(), SigunguResponse.response(school.getSigungu()));
     }
 }
