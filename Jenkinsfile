@@ -5,13 +5,13 @@ pipeline {
             steps {
                 script {
                     try {
-                        // sh "docker stop motoo_react_container"
-                        // sh "docker stop motoo_fastapi_container"
-                        // sh "docker stop motoo_spring_container"
-                        // sleep 1  
-                        // sh "docker rm motoo_react_container"
-                        // sh "docker rm motoo_fastapi_container"
-                        // sh "docker rm motoo_spring_container"
+                        sh "docker stop motoo_react_container"
+                        sh "docker stop motoo_fastapi_container"
+                        sh "docker stop motoo_spring_container"
+                        sleep 1  
+                        sh "docker rm motoo_react_container"
+                        sh "docker rm motoo_fastapi_container"
+                        sh "docker rm motoo_spring_container"
                     } catch (error) {
                         echo error
                         sh 'exit 0'
