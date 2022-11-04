@@ -201,7 +201,6 @@ function MyAssetList() {
     <>
       <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
         <Select
-          className={classes.slcbox}
           labelId="demo-select-small"
           id="demo-select-small"
           value={value}

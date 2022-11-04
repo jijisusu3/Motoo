@@ -154,12 +154,12 @@ function AccountDetailPage() {
       <h1>계좌상세페이지입니다</h1>
       <h1>{id}</h1>
       <Modal open={openDeleteModal} onClose={handleDeleteModalClose}>
-        <Box sx={style}>
-          <p>정말 삭제하시겠습니까?</p>
-          <p>
-            계좌를 삭제하면 해당 계좌의 구매 주식, 자산들이 같이 삭제되어요!
-          </p>
-          <button onClick={deleteSubmit}>삭제하기</button>
+        <Box className={classes.deletebox} sx={style}>
+          <div className={classes.title}>정말 삭제하시겠습니까?</div>
+          <div className={classes.graybox}>
+            계좌를 삭제하면 <br></br> 해당 계좌의 구매 주식, 자산들이 같이 삭제되어요!
+          </div>
+          <div className={classes.dltbtn} onClick={deleteSubmit}>삭제하기</div>
         </Box>
       </Modal>
       <Grid

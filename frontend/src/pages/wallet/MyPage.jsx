@@ -11,8 +11,8 @@ const style = {
   top: "40%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 324,
-  height: 300,
+  width: 344,
+  height: 360,
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 1,
@@ -295,39 +295,39 @@ function MyPage() {
         ))}
       </div>
       <Modal open={openCreateModal} onClose={handleCreateModalClose}>
-        <Box sx={style}>
+        <Box className={classes.createbox} sx={style}>
+          <div className={classes.make}>계좌 만들기</div>
           <div>
-            계좌 이름{" "}
-            <input type="text" name="assetName" onChange={onChangeInfo} />
-          </div>
-          <div>
-            계설 사유{" "}
-            <input type="text" name="openReason" onChange={onChangeInfo} />
+            <div className={classes.ipttag}>
+              계좌 이름{" "}
+              <input className={classes.ipt} type="text" name="assetName" onChange={onChangeInfo} />
+            </div>
+            <div className={classes.ipttag}>
+              개설 사유{" "}
+              <input className={classes.ipt} type="text" name="openReason" onChange={onChangeInfo} />
+            </div>
           </div>
           {warningEffect ? (
-            <div>
-              <div
-                className={classes.vibration}
-                style={{ width: 262, height: 56, backgroundColor: "#FBF7F0", border:'1px solid #FAE0C1' }}
-              >
-                <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} alt="" />
+            <div className={classes.vibration}>
+              <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} alt="" />
+              <div>
                 <p>최대 계좌 개수는 학교대항전 외 3개 이하이며</p>
                 <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
               </div>
             </div>
           ):(
-            <div
-            style={{ width: 262, height: 56, backgroundColor: "#FBF7F0", border:'1px solid #FAE0C1' }}
-          >
+            <div className={classes.notice}>
             <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} alt="" />
-            <p>최대 계좌 개수는 학교대항전 외 3개 이하이며</p>
+            <div>
+              <p>최대 계좌 개수는 학교대항전 외 3개 이하이며</p>
               <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
+            </div>
           </div>
           )}
           {!(canStartDay==="") && (
             <p style={{color:'#DD4956'}}>{canStartDay} 부터 계좌를 열 수 있어요</p>
           )}
-          <button onClick={createSubmit}>추가추가</button>
+          <div className={classes.createbtn} onClick={createSubmit}>개설</div>
         </Box>
       </Modal>
       <Modal open={openChangeModal} onClose={handleChangeModalClose}>

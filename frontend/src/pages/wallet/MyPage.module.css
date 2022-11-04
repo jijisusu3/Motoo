@@ -1,3 +1,73 @@
+.createbox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 2px 2px 10px 5px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+.make{
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+.ipttag{
+  color: #929e9e;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+.ipt{
+  margin-left: 1rem;
+  border-radius: 10px;
+  border: 0.5px solid #E1E1E1;
+  background-color: #f5f5f5;
+  width: 60%;
+}
+.createbtn{
+  width: 50%;
+  height: 12%;
+  background: #7BCDC8;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  border: none;
+  color: #fff;
+  font-size: 2vh;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.vibration {
+  animation: vibration 0.1s infinite;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  width: 80%;
+  height: 20%;
+  background: #FBF7F0;
+  border-radius: none;
+  justify-content: space-between;
+  padding: 8px;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+}
+.notice{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  font-size: 10px;
+  width: 80%;
+  height: 20%;
+  background: #FBF7F0;
+  margin-bottom: 1rem;
+  border-radius: none;
+  border-radius: 10px;
+}
 .firstAssetCard {
   border: 1px solid #FAE0C1;
   width: 100%;
@@ -36,9 +106,6 @@
   justify-content: center;
   align-items: center;
   margin-left: 0.5rem;
-}
-.vibration {
-  animation: vibration 0.1s infinite;
 }
 .basebox{
   display: flex;

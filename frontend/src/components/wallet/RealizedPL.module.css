@@ -10,6 +10,11 @@
   align-content: space-between;
   margin-bottom: 1rem;
 }
+.search{
+  border: none;
+  border-radius: 5px;
+  background: #d9d9d9;
+}
 .listbox{
   display: flex;
   flex-direction: column;
@@ -23,6 +28,9 @@
   justify-content: space-between;
   width: 100%;
   align-items: center;
+}
+.carlendar{
+  display: flex;
 }
 .result{
   display: flex;
