@@ -1,4 +1,4 @@
-package com.motoo.config;
+package com.motoo.db.config;
 
 import com.motoo.api.service.UserService;
 import com.motoo.common.auth.JwtAuthenticationFilter;
