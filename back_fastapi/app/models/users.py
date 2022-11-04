@@ -11,13 +11,12 @@ class User(Model):
 
 
 class SiGunGu(Model):
-    sigungu = fields.CharField(max_length=24)
+    sigungu_name = fields.CharField(max_length=24)
     sido = fields.CharField(max_length=24)
 
 
 class School(Model):
     schoolname = fields.CharField(max_length=24)
-    history = fields.JSONField()
     sigungu = fields.ForeignKeyField('b204.SiGunGu', related_name='schools')
 
 
