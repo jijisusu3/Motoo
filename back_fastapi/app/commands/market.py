@@ -16,29 +16,26 @@ import typer
 app = typer.Typer()
 
 
-def parameter_setter(ticker: str, req_time: str):
-    parameter["fid_input_iscd"] = ticker
-    parameter["fid_input_hour_1"] = req_time
-    return parameter
-
-
 def check_time_interval(my_date, my_time, obj):
     if my_date == obj['stck_bsop_date'] and abs(my_time - int(obj['stck_cntg_hour'])) < 10:
         return True
     return False
 
 
-async def update_stock_list(update_time: str = None):
+async def update_and_insert_stock_list(update_time: str = None):
     input_time = datetime.datetime.now().strftime('%H%M%S')
     if update_time:
         input_time = update_time
     print('시작')
     initial_start = time.time()
     access_token = redis_session.get("update_stock")
+    if access_token is None:
+        save_token()
+        access_token = redis_session.get("update_stock")
     header["authorization"] = "Bearer " + access_token
     category_dict = defaultdict(list)
     stocks = await Stock.all()
-    async with aiohttp.ClientSession(headers=header) as session:
+    async with aiohttp.ClientSession(headers=get_header("FHKST03010200")) as session:
         for r in range(len(stocks)//20):
             start = time.time()
             for stck in stocks[20*r:20*(r+1)]:
@@ -66,8 +63,7 @@ async def update_stock_list(update_time: str = None):
                 stck.fluctuation_price = data['output1']['prdy_vrss']
                 stck.trading_value = data['output1']['acml_tr_pbmn']
                 stck.volume = data['output1']['acml_vol']
-            check_end = time.time()
-            time.sleep(1.07-check_end+start)
+            time.sleep(0.75)
             end_s = time.time()
             print(f'{min(20*(r+1), len(stocks))}개 {end_s-start}s')
     if update_time:
@@ -90,7 +86,7 @@ def get_item(my_ticker: str ='005930'):
 
 @app.command()
 def update_stocks(time_now: str = None):
-    asyncio.run(update_stock_list(time_now))
+    asyncio.run(update_and_insert_stock_list(time_now))
 
 
 if __name__ == "__main__":

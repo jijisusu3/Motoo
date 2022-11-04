@@ -1,7 +1,10 @@
+import requests
+
 from app.models.candles import *
 from app.models.daycharts import *
-from app.config import settings
+from app.config import settings, redis_session
 
+price_url = settings.OPEN_API_DOMAIN+settings.PRICE_API_URL
 candle_url = settings.OPEN_API_DOMAIN+settings.CANDLE_API_URL
 appkey = settings.APPKEY_FOR_CANDLE
 appsecret = settings.APPSECRET_FOR_CANDLE
@@ -16,10 +19,6 @@ header = {
 }
 parameter = {
     "fid_cond_mrkt_div_code": "J",
-    "fid_etc_cls_code": "",
-    "fid_input_hour_1": "",
-    "fid_input_iscd": "000660",
-    "fid_pw_data_incu_yn": "Y"
 }
 candle_map = {
     1: CandleConstruction,
@@ -71,3 +70,42 @@ day_map = {
     22: DayTelecommunication,
     23: DayChemistry
 }
+
+
+def parameter_setter(ticker: str = None, req_time: str = None):
+    if ticker:
+        parameter["fid_input_iscd"] = ticker
+    if req_time:
+        parameter["fid_input_hour_1"] = req_time
+        parameter["fid_etc_cls_code"] = ""
+        parameter["fid_input_hour_1"] = ""
+        parameter["fid_pw_data_incu_yn"] = "Y"
+    return parameter
+
+
+def get_header(tr_id: str = 'FHKST01010100'):
+    header["tr_id"] = tr_id
+    return header
+
+
+def get_auth_token(key, secret):
+    url = settings.OPEN_API_DOMAIN+'/oauth2/tokenP'
+    request_body = {
+        "grant_type": "client_credentials",
+        "appkey": key,
+        "appsecret": secret
+    }
+    res = requests.post(url, json=request_body)
+    res_code = res.status_code
+    if res_code == 200:
+        return res.json()["access_token"]
+    else:
+        print("Error Code : " + str(res_code) + " | " + res.text)
+        return None
+
+
+def save_token(token_use: str = 'update_stock'):
+    res = get_auth_token(settings.APPKEY_FOR_CANDLE, settings.APPSECRET_FOR_CANDLE)
+    if res is not None:
+        redis_session.set(token_use, res, ex=43200)
+        print('save_token complete!')
