@@ -176,7 +176,7 @@ function AccountHistory() {
             </div>
           </div>
           <div className="section">
-            <button>찾기</button>
+            <button className={classes.search}>찾기</button>
           </div>
         </form>
         <img

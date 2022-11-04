@@ -98,9 +98,9 @@ function AccountDetailPage() {
         <>
           <div onClick={settingClose} className={classes.exceptSetting} />
           <div className={classes.settingBox}>
-            <p onClick={editOpen}>계좌명 수정하기</p>
+            <div className={classes.txts} onClick={editOpen}>계좌명 수정하기</div>
             <hr />
-            <p onClick={handleDeleteModalOpen}>계좌 삭제</p>
+            <div className={classes.txts} onClick={handleDeleteModalOpen}>계좌 삭제</div>
           </div>
         </>
       );
@@ -139,7 +139,7 @@ function AccountDetailPage() {
         </div>
       );
     }
-    return <h2>{accountName}</h2>;
+    return <div className={classes.accountname}>{accountName}</div>;
   }
 
   // 삭제했을 때, 남은 자기계좌 있는지 확인후에, 이 함수 안에서 DELETE 요청 들어가야함.
@@ -154,12 +154,12 @@ function AccountDetailPage() {
       <h1>계좌상세페이지입니다</h1>
       <h1>{id}</h1>
       <Modal open={openDeleteModal} onClose={handleDeleteModalClose}>
-        <Box sx={style}>
-          <p>정말 삭제하시겠습니까?</p>
-          <p>
-            계좌를 삭제하면 해당 계좌의 구매 주식, 자산들이 같이 삭제되어요!
-          </p>
-          <button onClick={deleteSubmit}>삭제하기</button>
+        <Box className={classes.deletebox} sx={style}>
+          <div className={classes.title}>정말 삭제하시겠습니까?</div>
+          <div className={classes.graybox}>
+            계좌를 삭제하면 <br></br> 해당 계좌의 구매 주식, 자산들이 같이 삭제되어요!
+          </div>
+          <div className={classes.dltbtn} onClick={deleteSubmit}>삭제하기</div>
         </Box>
       </Modal>
       <Grid
@@ -171,6 +171,7 @@ function AccountDetailPage() {
         <EditShow />
         <div onClick={settingOpen}>
           <img
+            className={classes.dot}
             src={`${process.env.PUBLIC_URL}/wallet/settingIcon.svg`}
             alt=""
           />
@@ -188,7 +189,7 @@ function AccountDetailPage() {
             <Tab
               label={
                 <Typography
-                  fontSize="5vw"
+                  fontSize="4vw"
                   fontWeight="600"
                   color={value === 0 ? "#43B8B1" : "#929E9E"}
                   fontFamily="Pretendard"
@@ -206,7 +207,7 @@ function AccountDetailPage() {
             <Tab
               label={
                 <Typography
-                  fontSize="5vw"
+                  fontSize="4vw"
                   fontWeight="600"
                   color={value === 1 ? "#43B8B1" : "#929E9E"}
                   fontFamily="Pretendard"
@@ -224,7 +225,7 @@ function AccountDetailPage() {
             <Tab
               label={
                 <Typography
-                  fontSize="5vw"
+                  fontSize="4vw"
                   fontWeight="600"
                   color={value === 2 ? "#43B8B1" : "#929E9E"}
                   fontFamily="Pretendard"

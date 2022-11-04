@@ -185,8 +185,8 @@ function RealizedPL() {
     return (
       <div>
         <form method="post" onSubmit={handleSubmit}>
-          <div className="section">
-            <div className="section-content">
+          <div className={classes.calender}>
+            <div>
               <div>
                 <DatePicker
                   required
@@ -210,9 +210,9 @@ function RealizedPL() {
                 />
               </div>
             </div>
-          </div>
-          <div className="section">
-            <button>찾기</button>
+            <div className="section">
+              <button className={classes.search}>찾기</button>
+            </div>
           </div>
         </form>
         <img
