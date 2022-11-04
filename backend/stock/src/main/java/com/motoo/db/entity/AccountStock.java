@@ -22,8 +22,10 @@ public class AccountStock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountStockId;
 
+    @Column(name="amount")
     private int amount;
 
+    @Column(name="price")
     private int price;
 
     @JsonIgnore
@@ -41,5 +43,9 @@ public class AccountStock {
         this.stock = stock;
         this.price =price;
         this.amount = amount;
+    }
+
+    public void updateAccountStock(Stock stock){
+        this.stock = stock;
     }
 }

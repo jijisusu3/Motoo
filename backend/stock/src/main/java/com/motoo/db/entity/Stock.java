@@ -20,28 +20,58 @@ public class Stock {
     @Column(name="id")
     private Long stockId;
 
+    @Column(name="ticker")
     private String ticker;
 
+    @Column(name="name")
     private String name;
 
 
 
-
+    @Column(name="m_capital")
     private BigInteger m_capital;
+
+    @Column(name="issued")
     private BigInteger issued;
+
+    @Column(name="trading_value")
     private BigInteger trading_value;
 
+
+    @Column(name="price")
     private Integer price;
+
+    @Column(name="close_price")
     private Integer close_price;
+
+    @Column(name="fluctuation_price")
     private Integer fluctuation_price;
+
+    @Column(name="volume")
     private Integer volume;
+
+    @Column(name="maximum")
     private Integer maximum;
+
+    @Column(name="minimum")
     private Integer minimum;
+
+    @Column(name="per")
     private Short per;
+
+    @Column(name="fluctuation_rate")
     private Short fluctuation_rate;
+
+    @Column(name="capital")
     private Integer capital;
+
+    @Column(name="open_price")
     private Integer open_price;
+
+    @Column(name="category_id")
     private Integer category_id;
+
+    @Column(name="eps")
     private Short eps; //DOUBL
 
     /**
