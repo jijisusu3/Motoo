@@ -5,6 +5,7 @@ package com.motoo.db.repository;
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
 
+import com.motoo.db.entity.QAccount;
 import com.motoo.db.entity.QAccountStock;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,11 @@ import java.util.Optional;
 public class AccountStockRepositorySupport {
 
 
-    private JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory jpaQueryFactory;
 
     QAccountStock qAccountStock = QAccountStock.accountStock;
+    //QAccount qAccount = QAccount.account;
+
 
     public Optional<AccountStock> getFindAccountStockByAccountsId(Long accountId, Long stockId){
         AccountStock accountStock = jpaQueryFactory.select(qAccountStock)
@@ -41,6 +44,16 @@ public class AccountStockRepositorySupport {
         return accountStocks;
 
     }
+    public List<AccountStock> findAllAccountStockByAccountId(Long accountId){
+        List<AccountStock> accountStocks = jpaQueryFactory.
+                select(qAccountStock)
+                .from(qAccountStock)
+                .where(qAccountStock.account.accountId.eq(accountId))
+                .fetch();
+        if (accountStocks == null) return null;
+        return accountStocks;
+
+    }
 
     public List<AccountStock> findAllAccountStockByUserId(Long userId){
         List<AccountStock> accountStocks = jpaQueryFactory.
@@ -51,6 +64,14 @@ public class AccountStockRepositorySupport {
 
     }
 
+
+    public List<AccountStock> findAccountStockByAccountId(Long accountId){
+        List<AccountStock> accountStocks = jpaQueryFactory.
+                select(qAccountStock).from(qAccountStock)
+                .where(qAccountStock.account.accountId.eq(accountId)).fetch();
+        if (accountStocks == null) return null;
+        return accountStocks;
+    }
     public long CountByAccountId(Long accountId){
         return jpaQueryFactory.selectFrom(qAccountStock)
                 .where(qAccountStock.account.accountId.eq(accountId)).fetchCount();

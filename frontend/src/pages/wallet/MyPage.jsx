@@ -11,8 +11,8 @@ const style = {
   top: "40%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 324,
-  height: 300,
+  width: 344,
+  height: 360,
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 1,
@@ -130,12 +130,27 @@ function MyPage() {
     }
     const profitColor = profitCheck();
     return (
-      <div style={{ border: "1px solid gray" }}>
-        <img src={`${process.env.PUBLIC_URL}/wallet/moneyBag.svg`} alt="" />
-        <div>총 보유자산</div>
-        <div>{data.all.all_asset}</div>
-        <div>수익률</div>
-        <div style={{ color: profitColor }}>{data.all.profit}%</div>
+      <div className={classes.present}>
+        <div>
+          <div>총 보유자산</div>
+          <div className={classes.cntbox}>
+            <img src={`${process.env.PUBLIC_URL}/wallet/money.svg`} style={{ width: 24, height: 24 }} alt="" />
+            <div  className={classes.basebox}>
+              <div className={classes.count}>{data.all.all_asset}</div>
+              <div>원</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div>수익률</div>
+          <div className={classes.rev}
+            style={{
+              color: profitColor,
+            }}
+          >
+            {data.all.profit}%
+          </div>
+        </div>
       </div>
     );
   }
@@ -157,7 +172,7 @@ function MyPage() {
     };
     if (nowEdit) {
       return (
-        <div>
+        <div className={classes.accountbox}>
           <img
             onClick={handleOnKeyPress}
             src={`${process.env.PUBLIC_URL}/wallet/mypageIcon.svg`}
@@ -166,7 +181,7 @@ function MyPage() {
           <input
             type="text"
             maxLength={8}
-            className={classes.editInput}
+            className={classes.editname}
             onChange={handleInputChange}
             value={nickname}
             onKeyPress={handleOnKeyPress}
@@ -180,18 +195,23 @@ function MyPage() {
       );
     }
     return (
-      <div>
+      <div className={classes.accountbox}>
         <img
           onClick={handleOnKeyPress}
           src={`${process.env.PUBLIC_URL}/wallet/mypageIcon.svg`}
           alt=""
         />
-        <h2>{nickname}</h2>
-        <img
-          onClick={editOpen}
-          src={`${process.env.PUBLIC_URL}/wallet/mypageEdit.svg`}
-          alt=""
-        />
+        <div className={classes.accountname}>
+          {nickname}
+          <div className={classes.mini}>님의 지갑</div>
+          <div>
+            <img
+              onClick={editOpen}
+              src={`${process.env.PUBLIC_URL}/wallet/mypageEdit.svg`}
+              alt=""
+              />
+          </div>
+        </div>
       </div>
     );
   }
@@ -230,15 +250,8 @@ function MyPage() {
             <img src={`${process.env.PUBLIC_URL}/wallet/school.svg`} alt="" />
           )}
           <div id={tmpId}>{asset.name}</div>
-          <div
-            style={{
-              width: 30,
-              height: 17,
-              borderRadius: 5,
-              backgroundColor: "#FEBF45",
-            }}
-          >
-            <div style={{ color: "white", fontSize: 13, fontWeight: 600 }}>
+          <div className={classes.select}>
+            <div style={{ color: "white", fontSize: 12, fontWeight: 600 }}>
               now
             </div>
           </div>
@@ -247,10 +260,12 @@ function MyPage() {
     } else {
       return (
         <div id={tmpId} onClick={goToDetail} className={classes.otherAssetCard}>
-          {asset.isSchool && (
-            <img src={`${process.env.PUBLIC_URL}/wallet/school.svg`} alt="" />
-          )}
-          <div id={tmpId}>{asset.name}</div>
+          <div className={classes.rowbox}>
+            {asset.isSchool && (
+              <img src={`${process.env.PUBLIC_URL}/wallet/school.svg`} alt="" />
+            )}
+            <div id={tmpId}>{asset.name}</div>
+          </div>
           <img
             onClick={handleChangeModalOpen}
             src={`${process.env.PUBLIC_URL}/wallet/change.svg`}
@@ -262,55 +277,57 @@ function MyPage() {
     }
   }
   return (
-    <div>
+    <div className={classes.mainbox}>
       <h1>마이페이지임니다</h1>
       <EditShow />
-      <AllAssets />
-      {data.assets.map((asset, index) => (
-        <WalletAssetCard
-          key={asset.accounts_pk}
-          name={asset.name}
-          accountId={asset.accounts_pk}
-          seed={asset.seed}
-          isSchool={asset.isSchool}
-          open={asset.open}
-          num={index}
-        />
-      ))}
+      <div className={classes.centerbox}>
+        <AllAssets />
+        {data.assets.map((asset, index) => (
+          <WalletAssetCard
+            key={asset.accounts_pk}
+            name={asset.name}
+            accountId={asset.accounts_pk}
+            seed={asset.seed}
+            isSchool={asset.isSchool}
+            open={asset.open}
+            num={index}
+          />
+        ))}
+      </div>
       <Modal open={openCreateModal} onClose={handleCreateModalClose}>
-        <Box sx={style}>
+        <Box className={classes.createbox} sx={style}>
+          <div className={classes.make}>계좌 만들기</div>
           <div>
-            계좌 이름{" "}
-            <input type="text" name="assetName" onChange={onChangeInfo} />
-          </div>
-          <div>
-            계설 사유{" "}
-            <input type="text" name="openReason" onChange={onChangeInfo} />
+            <div className={classes.ipttag}>
+              계좌 이름{" "}
+              <input className={classes.ipt} type="text" name="assetName" onChange={onChangeInfo} />
+            </div>
+            <div className={classes.ipttag}>
+              개설 사유{" "}
+              <input className={classes.ipt} type="text" name="openReason" onChange={onChangeInfo} />
+            </div>
           </div>
           {warningEffect ? (
-            <div>
-              <div
-                className={classes.vibration}
-                style={{ width: 262, height: 56, backgroundColor: "#FBF7F0", border:'1px solid #FAE0C1' }}
-              >
-                <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} alt="" />
+            <div className={classes.vibration}>
+              <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} alt="" />
+              <div>
                 <p>최대 계좌 개수는 학교대항전 외 3개 이하이며</p>
                 <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
               </div>
             </div>
           ):(
-            <div
-            style={{ width: 262, height: 56, backgroundColor: "#FBF7F0", border:'1px solid #FAE0C1' }}
-          >
+            <div className={classes.notice}>
             <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} alt="" />
-            <p>최대 계좌 개수는 학교대항전 외 3개 이하이며</p>
+            <div>
+              <p>최대 계좌 개수는 학교대항전 외 3개 이하이며</p>
               <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
+            </div>
           </div>
           )}
           {!(canStartDay==="") && (
             <p style={{color:'#DD4956'}}>{canStartDay} 부터 계좌를 열 수 있어요</p>
           )}
-          <button onClick={createSubmit}>추가추가</button>
+          <div className={classes.createbtn} onClick={createSubmit}>개설</div>
         </Box>
       </Modal>
       <Modal open={openChangeModal} onClose={handleChangeModalClose}>
@@ -320,13 +337,16 @@ function MyPage() {
           <button onClick={changeSubmit}>변경하기</button>
         </Box>
       </Modal>
-      {canAddNum && (
-        <img
-          onClick={handleCreateModalOpen}
-          src={`${process.env.PUBLIC_URL}/wallet/createAssets.svg`}
-          alt=""
-        />
-      )}
+      <div className={classes.addbtn}>
+        {canAddNum && (
+          <img
+            className={classes.addbtn}
+            onClick={handleCreateModalOpen}
+            src={`${process.env.PUBLIC_URL}/wallet/createAssets.svg`}
+            alt=""
+          />
+        )}
+      </div>
     </div>
   );
 }

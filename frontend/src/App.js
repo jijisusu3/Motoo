@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Outlet, Navigate } from "react-router-dom";
 
 import MainPage from "./pages/main/MainPage";
 import SchoolMainPage from "./pages/school/SchoolMainPage";
@@ -15,28 +15,34 @@ import SellStockPage from "./pages/stock-detail/SellStockPage";
 import BuyStockPage from "./pages/stock-detail/BuyStockPage";
 import IndustryPage from "./pages/stock-detail/IndustryPage";
 import StockDetailPage from "./pages/stock-detail/StockDetailPage";
+// import PrivateRoute from "./components/route/PrivateRoute";
+
+function PrivateOutlet() {
+  const isLogin = localStorage.getItem("login-token");
+  return isLogin ? <Outlet /> : <Navigate to="/login" />;
+}
 
 function App() {
   return (
-    <div style={{ marginBottom: "4rem" }}>
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/stock" element={<StockListPage />} />
-        <Route path="/stock/search" element={<StockSearchPage />} />
-        <Route path="/stock/limit-order" element={<LimitOrderPage />} />
-        <Route path="/stock/industry" element={<IndustryPage />} />
-        <Route path="/wallet" element={<MyPage />} />
-        <Route path="/wallet/detail/:id" element={<AccountDetailPage />} />
-        <Route path="/school" element={<SchoolMainPage />} />
-        <Route path="/menu" element={<MenuPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/stock/detail/:id" element={<StockDetailPage />} />
+    <Routes>
+      <Route path="/" element={<PrivateOutlet />} >
         <Route name="buy" path="stock/buy" element={<BuyStockPage />} />
         <Route name="sell" path="stock/sell" element={<SellStockPage />} />
         <Route path="/stock/limit-order/buy" element={<BuyOrderEditPage />} />
         <Route path="/stock/limit-order/sell" element={<SellOrderEditPage />} />
-      </Routes>
-    </div>
+`       <Route path="/" element={<StockListPage />} />
+        <Route path="/stock/search" element={<StockSearchPage />} />
+        <Route path="/stock/limit-order" element={<LimitOrderPage />} />
+        <Route path="/stock/industry" element={<IndustryPage />} />
+        <Route path="/wallet" element={<MyPage />} />
+        <Route path="/school" element={<SchoolMainPage />} />
+        <Route path="/menu" element={<MenuPage />} />`
+        <Route path="/stock/detail/:id" element={<StockDetailPage />} />
+        <Route path="/wallet/detail/:id" element={<AccountDetailPage />} />
+      </Route>
+      <Route path="/social-login" element={<MainPage />} />
+      <Route path="/login" element={<LoginPage />} />
+    </Routes>
   );
 }
 

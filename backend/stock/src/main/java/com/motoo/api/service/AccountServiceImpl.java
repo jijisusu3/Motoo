@@ -50,6 +50,11 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
+    public List<Account> getListByAccountIdUserId(Long accountId, Long userId) {
+        return accountRepositorySupport.findAllAccountByAccountIdUserId(accountId, userId);
+    }
+
+    @Override
     public Account getAccount(Long accountId, Long userId) {
         return accountRepositorySupport.findAccountByAccountIdAndUserId(accountId, userId);
     }
@@ -63,15 +68,23 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public AccountStock getAccountStockByAccountId(Long accountId){
-        return accountStockRepository.getReferenceById(accountId);
+    @Transactional
+    public void updateSeed(Account account, int seed){
+        int OldSeed = account.getSeed();
+        int NewSeed = OldSeed += seed;
+        account.updateSeed(NewSeed);
     }
+
 
     @Override
     public List<AccountStock> getAccountStockByUserId(Long userId){
         return accountStockRepositorySupport.findAllAccountStockByUserId(userId);
     }
 
+    @Override
+    public List<AccountStock> getAccountStockByAccountId(Long accountId) {
+        return null;
+    }
 
 
     @Override
@@ -79,9 +92,11 @@ public class AccountServiceImpl implements AccountService{
         return null;
     }
 
+
+
     @Override
-    public List<AccountStock> listAccountStock(Long accountStockId) {
-        return null;
+    public List<AccountStock> listAccountStock(Long accountId) {
+        return accountStockRepositorySupport.findAllAccountStockByAccountId(accountId);
     }
 
     //    getByAccountsId

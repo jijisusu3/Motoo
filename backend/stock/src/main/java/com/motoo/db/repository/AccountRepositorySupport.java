@@ -16,24 +16,20 @@ public class AccountRepositorySupport {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-//    QAccount qAccount = QAccount.accounts;
     QAccount qAccount = QAccount.account;
 
-//    EntityManager em = createEnti
-    JPAQuery jpaQuery = new JPAQuery();
 
 
     public List<Account> findAllAccountByUserId(Long userId){
         return jpaQueryFactory.select(qAccount).from(qAccount)
-                .where(qAccount.user.userId.eq(userId)).fetch();
-
-
-//        return jpaQueryFactory.selectFrom(qAccount).where(qAccount.user.userId.eq(userId)).fetch();
-
-//        return jpaQueryFactory.select(qAccount).where(qAccount.user.userId.eq(userId)).from(qAccount).fetch();
-
+                .where(qAccount.user.userId.eq(userId)).orderBy(qAccount.seed.desc()).fetch();
     }
 
+    public List<Account> findAllAccountByAccountIdUserId(Long accountId, Long userId){
+        return jpaQueryFactory.select(qAccount).from(qAccount)
+                .where(qAccount.accountId.eq(accountId))
+                .where(qAccount.user.userId.eq(userId)).fetch();
+    }
 
 
     public Account findAccountByAccountIdAndUserId(Long accountId, Long userId){
