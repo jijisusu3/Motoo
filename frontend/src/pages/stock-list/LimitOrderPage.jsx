@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 function LimitOrderPage() {
   const navigate = useNavigate();
   function backToStockList() {
-    navigate(`/stock`);
+    navigate(`/`);
   }
   const [data, setData] = useState([
     {
@@ -96,7 +96,7 @@ function LimitOrderPage() {
     }
     const differLabel = differCheck();
     return (
-      <Link to={`/stock/limit-order/${go}`} state={{data: stock}}>
+      <Link style={{textDecoration: 'none'}} to={`/stock/limit-order/${go}`} state={{data: stock}}>
         <div className={classes.myLimitOrderCard}>
           <p>{stock.name}</p>
           <p>
