@@ -41,6 +41,9 @@ public interface AccountService {
 
     List<AccountStock> getAccountStockByUserId(Long userId);
 
+    List<AccountStock> getAccountStockByUserIdAccountId(Long accountId, Long userId);
+
+
     List<AccountStock> getAccountStockByAccountId(Long accountId);
 
     List<AccountStock> listAccountStock(Long accountId);
