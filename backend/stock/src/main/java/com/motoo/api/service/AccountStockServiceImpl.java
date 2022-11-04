@@ -8,6 +8,7 @@ import com.motoo.db.repository.AccountStockRepository;
 import com.motoo.db.repository.AccountStockRepositorySupport;
 import com.motoo.db.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public class AccountStockServiceImpl implements AccountStockService{
@@ -35,12 +36,15 @@ public class AccountStockServiceImpl implements AccountStockService{
     private final AccountRepository accountRepository;
 
 
+    @Override
+    public void addStockToAccount(Long userId, Long accountId, Long stockId) {
+
+    }
 
     @Override
     public void addStockToAccount(Long userId, Long accountId, Long stockId, int price, int amount) {
         User user = userRepository.findByUserId(userId).get();
         Optional<Account> account = accountRepository.findByAccountId(accountId);
-        Optional<AccountStock> accountStock = accountStockRepositorySupport.
-
+        List<AccountStock> accountStock = accountStockRepositorySupport.findAccountStockByAccountId(1L);
     }
 }
