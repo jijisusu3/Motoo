@@ -22,9 +22,10 @@ public class UserController {
     private final UserService userService;
     private final KakaoService kakaoService;
 
-    @GetMapping("/test")
-    public String test() {
-        return "hi";
+    @GetMapping("/test1")
+    public Long test1(Authentication authentication) {
+        Long id = userService.getUserIdByToken(authentication);
+        return id;
     }
 
     /**유저 정보 받아오기
@@ -32,9 +33,8 @@ public class UserController {
      */
     @GetMapping
     public BaseUserInfo profile(Authentication authentication) {
-        System.out.println("hello");
-        String email = userService.getUserEmailByToken(authentication);
-        Optional<User> user = userService.getByUserEmail(email);
+        Long id = userService.getUserIdByToken(authentication);
+        Optional<User> user = userService.getByUserId(id);
         BaseUserInfo baseUserInfo = BaseUserInfo.of(user);
         List<String> favoriteStockCode = userService.getFavoriteStockCode(user);
         baseUserInfo.setFavoriteStockCode(favoriteStockCode);
@@ -46,8 +46,8 @@ public class UserController {
      */
     @DeleteMapping
     public ResponseEntity deleteUser(Authentication authentication) {
-        String email = userService.getUserEmailByToken(authentication);
-        userService.deleteUser(email);
+        Long id = userService.getUserIdByToken(authentication);
+        userService.deleteUser(id);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "회원 탈퇴 성공"));
     }
 
@@ -59,8 +59,8 @@ public class UserController {
         if (nickname.length() == 0) {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "닉네임 변경에 실패하였습니다."));
         }
-        String email = userService.getUserEmailByToken(authentication);
-        userService.updateNickname(email, nickname);
+        Long id = userService.getUserIdByToken(authentication);
+        userService.updateNickname(id, nickname);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "닉네임이 변경되었습니다."));
     }
 
@@ -69,7 +69,6 @@ public class UserController {
      */
     @GetMapping("/auth/kakao/callback")
     public LoginResponse login(String code) {
-        System.out.println("kakaoservice");
         //카카오에 요청해서 유저 정보 받아오기
         String accessToken = kakaoService.getAccessToken(code);
         KakaoProfile userInfo = kakaoService.getUserInfo(accessToken);

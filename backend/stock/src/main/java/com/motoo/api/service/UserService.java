@@ -16,6 +16,8 @@ import java.util.Optional;
 
 public interface UserService {
 
+    Long getUserIdByToken(Authentication authentication);
+
     String getUserEmailByToken(Authentication authentication);
 
     Optional<User> getByUserId(Long id);
@@ -24,9 +26,9 @@ public interface UserService {
 
     Long signupUser(String email, String nickname);
 
-    void deleteUser(String email);
+    void deleteUser(Long id);
 
-    Long updateNickname(String email, String Nickname);
+    Long updateNickname(Long id, String nickname);
 
     int updateUser(User user, UpdateUserPutReq updateUserPutReq);
 
