@@ -3,6 +3,7 @@ package com.motoo.api.controller;
 import com.motoo.api.dto.kakao.KakaoProfile;
 import com.motoo.api.dto.user.BaseUserInfo;
 import com.motoo.api.response.LoginResponse;
+import com.motoo.api.service.FavoriteStockService;
 import com.motoo.api.service.KakaoService;
 import com.motoo.api.service.UserService;
 import com.motoo.common.model.response.BaseResponseBody;
@@ -21,11 +22,13 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
     private final KakaoService kakaoService;
+    private final FavoriteStockService favoriteStockService;
 
-    @GetMapping("/test1")
-    public Long test1(Authentication authentication) {
-        Long id = userService.getUserIdByToken(authentication);
-        return id;
+    @GetMapping("/test")
+    private String test(Authentication authentication, @RequestParam Long stockId) {
+        Long userId = userService.getUserIdByToken(authentication);
+        favoriteStockService.delistStock(userId, stockId);
+        return "hi";
     }
 
     /**유저 정보 받아오기
@@ -63,6 +66,25 @@ public class UserController {
         userService.updateNickname(id, nickname);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "닉네임이 변경되었습니다."));
     }
+    /**관심종목 등록/삭제
+     *
+     */
+    @PostMapping("/like")
+    public ResponseEntity likeStock(Authentication authentication, @RequestParam Long stockId) {
+        Long userId = userService.getUserIdByToken(authentication);
+        User user = userService.getByUserId(userId).orElseGet(() -> new User());
+        List<Long> idList = favoriteStockService.getFavoriteStockIdList(user);
+
+        //관심종목 리스트에 해당 주식이 있으면 관심종목 해제
+        if (idList.contains(stockId)) {
+            favoriteStockService.delistStock(userId, stockId);
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "관심종목에서 해제함"));
+        }
+        //관심종목 리스트에 해당 주식이 없으면 관심종목 등록
+        favoriteStockService.registerStock(userId, stockId);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "관심종목으로 등록함"));
+    }
+
 
     /**소셜로그인
      *
