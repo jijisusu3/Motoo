@@ -177,6 +177,7 @@ function AccountDetailPage() {
           />
         </div>
       </Grid>
+      <div className={classes.hrline}></div>
       <SettingShow />
       <Box sx={{ width: "100%" }}>
         <Box sx={{ borderBottom: 0, borderColor: "divider" }}>
