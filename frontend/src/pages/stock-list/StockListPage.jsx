@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import classes from "./StockListPage.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as React from "react";
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
@@ -8,7 +8,8 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { Diversity1 } from "@mui/icons-material";
+import { useDispatch } from 'react-redux';
+import { setShowNav } from "../../stores/navSlice";
 
 const style = {
   position: "absolute",
@@ -73,6 +74,12 @@ function StockListPage() {
       navigate(`/stock/detail/${isPk}`)
     }
   }
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    const now = window.location.pathname
+    dispatch(setShowNav(now))
+  })
   // 삭제버튼 누르면 해당함수 실행,
   // BE에 삭제요청 보내고, 해당페이지재구성하고,
   // 유저정보 관심주식리스트 업데이트 되어야함
@@ -453,6 +460,9 @@ function StockListPage() {
   function GoToOrderListPage() {
     navigate(`/stock/limit-order`);
   }
+  function GoToQuizPage() {
+    navigate(`/quiz`);
+  }
   const editStart = () => {
     setMyListEdit(true);
   };
@@ -634,6 +644,51 @@ function StockListPage() {
       );
     }
   }
+
+  
+
+  const [isSolved, setIsSolved] = useState(false)
+  function LimitOrder() {
+    return (
+      <div onClick={GoToOrderListPage} className={classes.limitOrderCard}>
+        <img
+          src={`${process.env.PUBLIC_URL}/stock-list/waitingListIcon.svg`}
+          alt=""
+        />
+        <span>대기중인 주식 목록</span>
+        <span>{orderMany}건</span>
+        <img src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
+      </div>
+    )
+    
+  }
+  function QuizAndLimitOrder() {
+    return (
+      <div>
+        <div onClick={GoToOrderListPage} className={classes.limitOrderCard}>
+          <img
+            src={`${process.env.PUBLIC_URL}/stock-list/waitingListIcon.svg`}
+            alt=""
+          />
+          <span>대기중인 주식 목록</span>
+          <span>{orderMany}건</span>
+          <img src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
+        </div>
+        <div onClick={GoToQuizPage} className={classes.limitOrderCard}>
+          <img
+            src={`${process.env.PUBLIC_URL}/wallet/coin.svg`}
+            style={{ width: 20, height: 20 }}
+            alt=""
+          />
+          <span>오늘의퀴즈</span>
+          <span>200,000원</span>
+          <img src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
+        </div>
+      </div>
+    )
+    
+  }
+
   function MyStockList() {
     return (
       <div style={{ backgroundColor: "white", paddingTop: 20 }}>
@@ -666,16 +721,8 @@ function StockListPage() {
           onClick={GoToSearch}
           src={`${process.env.PUBLIC_URL}/stock-list/stockListSearchIcon.svg`}
           alt=""
-        />
-        <div onClick={GoToOrderListPage} className={classes.limitOrderCard}>
-          <img
-            src={`${process.env.PUBLIC_URL}/stock-list/waitingListIcon.svg`}
-            alt=""
           />
-          <span>대기중인 주식 목록</span>
-          <span>{orderMany}건</span>
-          <img src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
-        </div>
+        {isSolved ? (<LimitOrder/>):(<QuizAndLimitOrder/>)}
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 0, borderColor: "divider" }}>
             <Tabs

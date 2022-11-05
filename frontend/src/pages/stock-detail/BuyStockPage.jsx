@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import classes from "./BuyStockPage.module.css";
 import Box from "@mui/material/Box";
@@ -6,6 +6,10 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import ReactApexChart from "react-apexcharts";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setShowNav } from "../../stores/navSlice";
+
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -17,7 +21,6 @@ const style = {
   boxShadow: 24,
   p: 1,
 };
-
 function BuyStockPage() {
   const mySeed = 10000000;
   const location = useLocation();
@@ -32,6 +35,12 @@ function BuyStockPage() {
   const [isTooLow, setIsTooLow] = useState(false);
   const [total, setTotal] = useState(0);
   const [showAskingPrice, setShowAskingPrice] = useState(false);
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    const now = window.location.pathname
+    dispatch(setShowNav(now))
+  })
 
   const navigate = useNavigate();
   function backTo() {

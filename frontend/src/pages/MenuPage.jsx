@@ -1,10 +1,15 @@
 import { useDispatch } from "react-redux";
 import { setLogout } from "../stores/userSlice";
+import { useEffect } from "react";
+import { setActiveNav  } from "../stores/navSlice";
 
 function MenuPage() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setActiveNav(4))
+  })
   function logoutClick() {
-    dispatch(setLogout())
+    dispatch(setLogout());
   }
   return (
     <div>
