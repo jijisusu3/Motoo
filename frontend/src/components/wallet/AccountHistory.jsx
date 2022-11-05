@@ -147,43 +147,53 @@ function AccountHistory() {
       setEndDate();
     }
     return (
-      <div>
-        <form method="post" onSubmit={handleSubmit}>
-          <div className="section">
-            <div className="section-content">
-              <div>
-                <DatePicker
-                  required
-                  selected={startDate}
-                  onChange={(date) => setStartDate(date)}
-                  selectsStart
-                  startDate={startDate}
-                  endDate={endDate}
-                />
-              </div>
-              <div>
-                <DatePicker
-                  required
-                  selected={endDate}
-                  onChange={(date) => setEndDate(date)}
-                  selectsEnd
-                  startDate={startDate}
-                  endDate={endDate}
-                  minDate={startDate}
-                  maxDate={new Date()}
-                />
-              </div>
+      <div className={classes.calender}>
+        <div>
+          <img
+            className={classes.imgs}
+            src={`${process.env.PUBLIC_URL}/wallet/calendar.svg`}
+            alt=""
+          />
+        </div>
+        <form className={classes.formbox} method="post" onSubmit={handleSubmit}>
+          <div className={classes.dateipt}>
+            <div className={classes.wrap}>
+              <DatePicker
+                className={classes.tag}
+                required
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                selectsStart
+                startDate={startDate}
+                endDate={endDate}
+              />
+            </div>
+            <div>-</div>
+            <div className={classes.wrap}>
+              <DatePicker
+                className={classes.tag}
+                required
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                selectsEnd
+                startDate={startDate}
+                endDate={endDate}
+                minDate={startDate}
+                maxDate={new Date()}
+              />
+            </div>
+            <div className="section">
+              <button className={classes.search}>찾기</button>
             </div>
           </div>
-          <div className="section">
-            <button className={classes.search}>찾기</button>
-          </div>
         </form>
-        <img
-          onClick={dateRefresh}
-          src={`${process.env.PUBLIC_URL}/wallet/dateRefresh.svg`}
-          alt=""
-        />
+        <div>
+          <img
+            onClick={dateRefresh}
+            src={`${process.env.PUBLIC_URL}/wallet/dateRefresh.svg`}
+            alt=""
+          />
+        </div>
       </div>
     );
   }

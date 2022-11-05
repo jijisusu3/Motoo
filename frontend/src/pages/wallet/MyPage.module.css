@@ -51,7 +51,7 @@
   background: #FBF7F0;
   border-radius: none;
   justify-content: space-between;
-  padding: 8px;
+  padding: 1rem;
   margin-bottom: 1rem;
   border-radius: 10px;
 }
@@ -59,7 +59,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
+  padding: 1rem;
   font-size: 10px;
   width: 80%;
   height: 20%;

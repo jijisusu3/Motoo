@@ -61,6 +61,7 @@
 }
 .numbox{
   align-items: baseline;
+  display: flex;
 }
 .txts{
   color: #000;
