@@ -2,6 +2,8 @@ package com.motoo.api.controller;
 
 import com.motoo.api.dto.kakao.KakaoProfile;
 import com.motoo.api.dto.user.BaseUserInfo;
+import com.motoo.api.request.LikeStockReq;
+import com.motoo.api.request.UpdateUserProfileReq;
 import com.motoo.api.response.LoginResponse;
 import com.motoo.api.service.FavoriteStockService;
 import com.motoo.api.service.KakaoService;
@@ -25,9 +27,9 @@ public class UserController {
     private final FavoriteStockService favoriteStockService;
 
     @GetMapping("/test")
-    private String test(Authentication authentication, @RequestParam Long stockId) {
+    private String test(Authentication authentication, @RequestBody UpdateUserProfileReq updateUserProfileReq) {
         Long userId = userService.getUserIdByToken(authentication);
-        favoriteStockService.delistStock(userId, stockId);
+        userService.updateNickname(userId, updateUserProfileReq.getNickname());
         return "hi";
     }
 
@@ -57,31 +59,31 @@ public class UserController {
     /**유저 닉네임 변경
      *
      */
-    @PutMapping("/changenickname")
-    public ResponseEntity changeNickname(Authentication authentication, @RequestParam String nickname) {
-        if (nickname.length() == 0) {
+    @PutMapping("/nickname")
+    public ResponseEntity changeNickname(Authentication authentication, @RequestBody UpdateUserProfileReq updateUserProfileReq) {
+        if (updateUserProfileReq.getNickname().length() == 0) {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "닉네임 변경에 실패하였습니다."));
         }
         Long id = userService.getUserIdByToken(authentication);
-        userService.updateNickname(id, nickname);
+        userService.updateNickname(id, updateUserProfileReq.getNickname());
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "닉네임이 변경되었습니다."));
     }
     /**관심종목 등록/삭제
      *
      */
     @PostMapping("/like")
-    public ResponseEntity likeStock(Authentication authentication, @RequestParam Long stockId) {
+    public ResponseEntity likeStock(Authentication authentication, @RequestBody LikeStockReq likeStockReq) {
         Long userId = userService.getUserIdByToken(authentication);
         User user = userService.getByUserId(userId).orElseGet(() -> new User());
         List<Long> idList = favoriteStockService.getFavoriteStockIdList(user);
 
         //관심종목 리스트에 해당 주식이 있으면 관심종목 해제
-        if (idList.contains(stockId)) {
-            favoriteStockService.delistStock(userId, stockId);
+        if (idList.contains(likeStockReq.getStockId())) {
+            favoriteStockService.delistStock(userId, likeStockReq.getStockId());
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "관심종목에서 해제함"));
         }
         //관심종목 리스트에 해당 주식이 없으면 관심종목 등록
-        favoriteStockService.registerStock(userId, stockId);
+        favoriteStockService.registerStock(userId, likeStockReq.getStockId());
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "관심종목으로 등록함"));
     }
 
