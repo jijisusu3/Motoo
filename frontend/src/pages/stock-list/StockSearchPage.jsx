@@ -1,7 +1,9 @@
 import itemData from "../../data/item-name-code.json";
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setShowNav, setActiveNav } from "../../stores/navSlice";
 
 export const InputContainer = styled.div`
   margin-top: 0;
@@ -33,6 +35,12 @@ function StockSearchPage() {
   function goToDetail(id) {
     navigate(`/stock/detail/${id}`)
   }
+  const dispatch = useDispatch()
+  useEffect(() => {
+    const now = window.location.pathname
+    dispatch(setShowNav(now))
+    dispatch(setActiveNav(1))
+  })
   const updateField = (field, value, update = true) => {
     if (update) onSearch(value);
     if (field === "keyword") {

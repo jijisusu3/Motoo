@@ -15,7 +15,8 @@ import SellStockPage from "./pages/stock-detail/SellStockPage";
 import BuyStockPage from "./pages/stock-detail/BuyStockPage";
 import IndustryPage from "./pages/stock-detail/IndustryPage";
 import StockDetailPage from "./pages/stock-detail/StockDetailPage";
-// import PrivateRoute from "./components/route/PrivateRoute";
+import QuizPage from "./pages/stock-list/QuizPage";
+import QuizResultPage from "./pages/stock-list/QuizResultPage";
 
 function PrivateOutlet() {
   const isLogin = localStorage.getItem("login-token");
@@ -31,6 +32,8 @@ function App() {
         <Route path="/stock/limit-order/buy" element={<BuyOrderEditPage />} />
         <Route path="/stock/limit-order/sell" element={<SellOrderEditPage />} />
 `       <Route path="/" element={<StockListPage />} />
+        <Route path="/quiz" element={<QuizPage />} />
+        <Route path="/quiz-result" element={<QuizResultPage />} />
         <Route path="/stock/search" element={<StockSearchPage />} />
         <Route path="/stock/limit-order" element={<LimitOrderPage />} />
         <Route path="/stock/industry" element={<IndustryPage />} />

@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import dayjs from "dayjs";
 // import isBetween from "dayjs/plugin/isBetween";
 import classes from "./MyPage.module.css";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setShowNav } from "../../stores/navSlice";
 
 const style = {
   position: "absolute",
@@ -19,6 +21,7 @@ const style = {
   borderRadius: 5,
 };
 
+
 function MyPage() {
   const now = dayjs().format("YYYY-MM-DD");
   const standard = dayjs().add(-4, "week").format("YYYY-MM-DD");
@@ -28,16 +31,22 @@ function MyPage() {
   const [canAddDate, setCanAddDate] = useState(true);
   const [warningEffect, setWarningEffect] = useState(false);
   const [canStartDay, setCanStartDay] = useState("")
-
+  
   const [haveShool, setHaveSchool] = useState(false);
-
+  
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const now = window.location.pathname;
+    dispatch(setShowNav(now));
+  });
+  
   const [openCreateModal, setCreateModalOpen] = useState(false);
   const handleCreateModalOpen = () => {
     setCreateModalOpen(true);
     // setShowSettings(false);
   };
   const handleCreateModalClose = () => setCreateModalOpen(false);
-
+  
   const [assetInfo, setAssetInfo] = useState({
     assetName: "",
     openReason: "",

@@ -6,13 +6,15 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import classes from "./AccountDetailPage.module.css";
 import Modal from "@mui/material/Modal";
 import RealizedPL from "../../components/wallet/RealizedPL";
 import AccountHistory from "../../components/wallet/AccountHistory";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setShowNav, setActiveNav } from "../../stores/navSlice";
 
 const style = {
   position: "absolute",
@@ -68,6 +70,13 @@ function AccountDetailPage() {
   function backToMyWallet() {
     navigate(`/wallet`);
   }
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const now = window.location.pathname;
+    dispatch(setShowNav(now));
+    dispatch(setActiveNav(2));
+  });
 
   const params = useParams();
   const id = params.id;

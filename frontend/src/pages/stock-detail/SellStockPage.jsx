@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import classes from "./SellStockPage.module.css";
 import Box from "@mui/material/Box";
@@ -6,6 +6,9 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import ReactApexChart from "react-apexcharts";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setShowNav } from "../../stores/navSlice";
+
 
 const style = {
   position: "absolute",
@@ -39,6 +42,12 @@ function SellStockPage() {
   function backTo() {
     navigate(-1);
   }
+  const dispatch = useDispatch()
+  useEffect(() => {
+    const now = window.location.pathname
+    dispatch(setShowNav(now))
+  })
+
   const handleOpen = () => setShowAskingPrice(true);
   const handleClose = () => setShowAskingPrice(false);
   function AskingGraphModal() {
