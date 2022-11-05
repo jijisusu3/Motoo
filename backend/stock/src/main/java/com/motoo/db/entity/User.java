@@ -44,10 +44,6 @@ public class User {
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<FavoriteStock> favoriteStocks = new ArrayList<>();
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<Trading> tradings = new ArrayList<>();
-
     private String email;
 
     private String nickname;
