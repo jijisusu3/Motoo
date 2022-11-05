@@ -21,7 +21,6 @@ public class AccountServiceImpl implements AccountService{
     private final AccountRepository accountRepository;
     private final AccountRepositorySupport accountRepositorySupport;
 
-    private final AccountStockRepository accountStockRepository;
     private final UserRepository userRepository;
 
     private final AccountStockRepositorySupport accountStockRepositorySupport;

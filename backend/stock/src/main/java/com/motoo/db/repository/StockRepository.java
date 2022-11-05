@@ -11,11 +11,12 @@ import java.util.Optional;
 @Repository
 public interface StockRepository extends JpaRepository<Stock, Long> {
 
-//    Optional<AccountStock> findByAccountsId(Long accountsId);
+//    Optional<Stock> findStockByStockId(Long stockId);
 //
 //
 //    @Transactional
-//    Optional<AccountStock> deleteByAccountStockId(Long accountStockId);
+//    Optional<Stock> deleteByStockAccountStockId(Long stockId);
+
 
 
 }
