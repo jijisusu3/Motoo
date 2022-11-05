@@ -21,7 +21,7 @@ function StockDetailPage() {
   });
 
   useEffect(() => {
-    const ws = new WebSocket("wss://k7b204.p.ssafy.io/api1/ws");
+    const ws = new WebSocket("ws://k7b204.p.ssafy.io/ws");
     ws.onopen = () => ws.send("전지수 보이삼보이삼?");
     ws.onmessage = (event) => {
       console.log(`받았다 이 데이터 : ${event.data}`);
