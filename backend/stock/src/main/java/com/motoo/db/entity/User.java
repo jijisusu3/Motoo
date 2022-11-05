@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cascade;
+import java.util.Date;
+
 
 /**
  * 유저 모델 정의.
@@ -55,6 +57,8 @@ public class User {
     private String role;
 
     private int current;
+
+    private Date quizDay;
 
     public void createUser(String email, String nickname){
         this.email = email;
