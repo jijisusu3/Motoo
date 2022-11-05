@@ -59,7 +59,7 @@ public class Trading {
 //        this.account = accounts;
 //    }
 
-    public void updateType(int tr_type) {this.tr_type = tr_type}
+    public void updateType(int tr_type) {this.tr_type = tr_type;}
     public void updateTrading(int tr_price, int tr_amount){
         this.tr_price = tr_price;
         this.tr_amount =tr_amount;
