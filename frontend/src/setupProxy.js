@@ -24,7 +24,7 @@ module.exports = app => {
 //   app.use(
 //     '/ws',
 //     createProxyMiddleware({
-//       target: 'wss://k7b204.p.ssafy.io/ws',
+//       target: 'wss://k7b204.p.ssafy.io:8080/ws',
 //       ws: true,
 //       changeOrigin: true,
 //     }),

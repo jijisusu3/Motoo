@@ -7,15 +7,22 @@ const initialState = {
   shortStockData: {},
 };
 
-const categoryGet = createAsyncThunk("stock-detail/categoryGet", async () => {
+const categoryGet = createAsyncThunk("stock-detail/categoryGet", async (id) => {
   return axios({
     method: "get",
-    url: "api1/category/1",
+    url: `api1/category/${id}`,
   }).then((response) => {
     console.log(response.data);
   });
 });
-
+const stockDetailGet = createAsyncThunk("stock-detail", async (id) => {
+  return axios({
+    method: "get",
+    url: `api1/category/${id}`,
+  }).then((response) => {
+    console.log(response.data);
+  });
+});
 export const stockDetailSlice = createSlice({
   name: "stockDetailSlice",
   initialState: initialState,
