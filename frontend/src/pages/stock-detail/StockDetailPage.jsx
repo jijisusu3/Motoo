@@ -21,10 +21,9 @@ function StockDetailPage() {
   });
 
   useEffect(() => {
-    const wss = new WebSocket("ws://k7b204.p.ssafy.io:8080/ws");
+    const wss = new WebSocket("ws://k7b204.p.ssafy.io:8080/api1/socket/ws");
     wss.onopen = () => {
       wss.send("전지수 보이삼보이삼?");
-      console.log("???");
     };
     wss.onmessage = (event) => {
       console.log(`받았다 니 데이터 : ${event.data}`);
@@ -288,7 +287,7 @@ function StockDetailPage() {
         type: "scatter",
         data: [
           { x: new Date(2019, 4, 1), y: 93, z: "최저가" },
-          { x: new Date(2019, 11, 1), y: 142, z: "최고가" },
+          { x: new Date(2019, 10, 1), y: 142, z: "최고가" },
         ],
       },
       {
@@ -303,9 +302,9 @@ function StockDetailPage() {
           { x: new Date(2019, 6, 1), y: 200 },
           { x: new Date(2019, 7, 1), y: 250 },
           { x: new Date(2019, 8, 1), y: 300 },
-          { x: new Date(2019, 9, 1), y: 120 },
-          { x: new Date(2019, 10, 1), y: 276 },
-          { x: new Date(2019, 11, 1), y: 300 },
+          { x: new Date(2019, 9, 1), y: null },
+          { x: new Date(2019, 10, 1), y: null },
+          { x: new Date(2019, 11, 1), y: null },
         ],
       },
     ],
