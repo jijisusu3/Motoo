@@ -9,7 +9,7 @@ import typer
 import asyncio
 from fastapi.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
-from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
+# from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 
 from app.routers.stock_back import update_stock_back
 
@@ -23,10 +23,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-app.add_middleware(
-    HTTPSRedirectMiddleware,
-    allowed_hosts=["*"]
-)
+# app.add_middleware(
+#     HTTPSRedirectMiddleware,
+# )
 
 register_tortoise(app=app, config=TORTOISE_ORM)
 
