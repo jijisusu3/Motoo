@@ -117,6 +117,8 @@ public class AccountsController {
         if (account == null) return ResponseEntity.status(402).body(BaseResponseBody.of(402, "해당 계좌가 없습니다."));
         try {
             accountService.updateSeed(account, updateSeedPostReq.getSeed());
+
+
         } catch (Exception e) {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "시드머니 추가에 실패했습니다."));
         }
