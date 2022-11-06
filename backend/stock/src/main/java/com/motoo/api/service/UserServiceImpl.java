@@ -53,6 +53,13 @@ public class UserServiceImpl implements UserService {
         return newUser.getUserId();
     }
 
+    @Override
+    public void updateCurrent(Long userId, int current) {
+        User user = userRepository.findByUserId(userId).get();
+        user.updateCurrent(current);
+        userRepository.save(user);
+    }
+
 
     @Override
     public void deleteUser(Long id) {
@@ -64,6 +71,7 @@ public class UserServiceImpl implements UserService {
 //        }));
         userRepository.deleteByUserId(id);
     }
+
 
 
     @Override

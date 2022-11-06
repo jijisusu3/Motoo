@@ -4,11 +4,12 @@ from app.models.candles import *
 from app.models.stocks import Stock
 import os
 from dotenv import load_dotenv
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI
 import typer
 import asyncio
 from fastapi.middleware.cors import CORSMiddleware
 from tortoise.contrib.fastapi import register_tortoise
+# from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 
 from app.routers.stock_back import update_stock_back
 
@@ -22,6 +23,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
+# app.add_middleware(
+#     HTTPSRedirectMiddleware,
+# )
 
 register_tortoise(app=app, config=TORTOISE_ORM)
 
@@ -40,13 +44,3 @@ async def root():
 #
 # if __name__ == "__main__":
 #     typer.run(main)
-
-@app.websocket("/ws")
-async def websocket_endpoint(websoket: WebSocket):
-    await websoket.accept()
-    while True:
-        data = await websoket.receive_json()
-        print(data)
-        await websoket.send_json({
-            "result": True
-        })
