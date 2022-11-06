@@ -33,7 +33,9 @@ public class AccountServiceImpl implements AccountService{
         Account account = new Account();
         User user = userRepository.findByUserId(userId).get();
         account.createAccount(user, name);
+        account.updateSeed(20000000);
         accountRepository.save(account);
+
     }
 
 
