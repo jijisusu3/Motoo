@@ -2,26 +2,33 @@ package com.motoo.db.entity;
 
 import lombok.*;
 
+
 import javax.persistence.*;
 import java.util.Date;
 
+
+
+
 @Entity
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name = "event")
-public class Event {
+@Table(name = "events")
+public class Events {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private Long id;
+    private Long eventsId;
 
-    @NonNull
-    private Date start;
+    private Date open_date;
 
-    @NonNull
-    private Date close;
+    private Date close_date;
+
+//    @Convert(converter = StringArrayConverter.class)
+    @Column(length = 100)
+    private String hall_of_fame;
+
+
 }

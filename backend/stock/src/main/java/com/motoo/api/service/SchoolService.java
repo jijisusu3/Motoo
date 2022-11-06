@@ -15,7 +15,6 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class SchoolService {
     private final SchoolRepository schoolRepository;
-    private final SigunguRepository sigunguRepository;
 
     @Transactional
     public List<SchoolResponse> getSchoolList() {
