@@ -12,13 +12,8 @@ const initialState = {
   },
 };
 
-// const userNameFetch = createAsyncThunk(
-//   'username/edit',
-//   axios.post("")
 
-// )
-
-const userSlice = createSlice({
+export const userSlice = createSlice({
   name: "userSlice",
   initialState: initialState,
   reducers: {
@@ -36,5 +31,5 @@ const userSlice = createSlice({
     },
   },
 });
-export default userSlice;
+
 export const { setLogin, setLogout } = userSlice.actions;
