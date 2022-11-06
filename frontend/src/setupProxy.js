@@ -19,3 +19,14 @@ module.exports = app => {
     }),
   );
 };
+
+// module.exports = app => {
+//   app.use(
+//     '/ws',
+//     createProxyMiddleware({
+//       target: 'wss://k7b204.p.ssafy.io/ws',
+//       ws: true,
+//       changeOrigin: true,
+//     }),
+//   );
+// };

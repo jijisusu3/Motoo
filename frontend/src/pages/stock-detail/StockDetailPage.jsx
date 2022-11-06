@@ -21,7 +21,7 @@ function StockDetailPage() {
   });
 
   useEffect(() => {
-    const wss = new WebSocket("wss://k7b204.p.ssafy.io/ws");
+    const wss = new WebSocket("ws://k7b204.p.ssafy.io:8080/ws");
     wss.onopen = () => {
       wss.send("전지수 보이삼보이삼?");
       console.log("???");
