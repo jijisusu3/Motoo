@@ -4,6 +4,7 @@ package com.motoo.api.service;
 import com.motoo.api.request.AccountStockAddPostReq;
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
+import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.User;
 import com.motoo.db.repository.*;
 
@@ -26,7 +27,6 @@ public class AccountServiceImpl implements AccountService{
     private final AccountStockRepositorySupport accountStockRepositorySupport;
 
 
-
     //계정생성
     @Override
     public Long createAccount(Long userId, String name) {
@@ -46,11 +46,7 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public List<Account> listAccount(Long userId) {
         return accountRepositorySupport.findAllAccountByUserId(userId);
-//        User user = userRepository.getById(userId);
-//
-//        List<Accounts>accounts = user.getAccounts();
-//
-//        return accounts;
+
     }
 
     @Override
@@ -92,35 +88,14 @@ public class AccountServiceImpl implements AccountService{
 
 
     @Override
-    public AccountStock getAccountStockByAccountIdAndAccountStockId(Long accountId, Long accountStockId) {
-        return null;
-    }
-
-    @Override
     public List<AccountStock> getAccountStockByUserId(Long userId) {
         return null;
     }
-
-//    @Override
-//    public List<AccountStock> getAccountStockByUserId(Long userId) {
-//        return accountStockRepositorySupport.getAccountStockByUserIdAccountId();
-//    }
 
 
     @Override
     public List<AccountStock> listAccountStock(Long accountId) {
         return accountStockRepositorySupport.findAllAccountStockByAccountId(accountId);
-    }
-
-    //    getByAccountsId
-//    getByAccountsIdAndAccountStockId
-//    listAccountStock
-    @Override
-    public AccountStock addAccountStock(AccountStockAddPostReq accountStockAddPostReq){
-    AccountStock accountStock = new AccountStock();
-//    Stock stock = new Stock();
-    Account account = accountRepository.findByAccountId(accountStockAddPostReq.getAccountId()).orElse(null);
-    return null;
     }
 
 
