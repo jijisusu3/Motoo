@@ -64,11 +64,24 @@ public class AccountStockRepositorySupport {
 
     }
 
+    public List<AccountStock> findAllAccountStockByUserIdAccountId(Long accountId, Long userId){
+        List<AccountStock> accountStocks = jpaQueryFactory.
+                select(qAccountStock).from(qAccountStock)
+                .where(qAccountStock.account.user.userId.eq(userId))
+                .where(qAccountStock.account.accountId.eq(accountId))
+                .fetch();
+        if (accountStocks == null) return null;
+        return accountStocks;
+
+    }
+
 
     public List<AccountStock> findAccountStockByAccountId(Long accountId){
         List<AccountStock> accountStocks = jpaQueryFactory.
                 select(qAccountStock).from(qAccountStock)
-                .where(qAccountStock.account.accountId.eq(accountId)).fetch();
+                .where(qAccountStock.account.accountId.eq(accountId)
+
+                ).fetch();
         if (accountStocks == null) return null;
         return accountStocks;
     }

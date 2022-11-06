@@ -1,9 +1,7 @@
 package com.motoo.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigInteger;
@@ -92,6 +90,7 @@ public class Stock {
     @JsonIgnore
     @Builder.Default
     @OneToMany(mappedBy="stock")
+//    private List<FavoriteStock> favoriteStocks;
     private List<FavoriteStock> favoriteStocks = new ArrayList<>();
 
 

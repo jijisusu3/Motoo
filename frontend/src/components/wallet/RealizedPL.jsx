@@ -183,43 +183,54 @@ function RealizedPL() {
       setEndDate();
     }
     return (
-      <div>
-        <form method="post" onSubmit={handleSubmit}>
-          <div className={classes.calender}>
-            <div>
-              <div>
-                <DatePicker
-                  required
-                  selected={startDate}
-                  onChange={(date) => setStartDate(date)}
-                  selectsStart
-                  startDate={startDate}
-                  endDate={endDate}
-                />
-              </div>
-              <div>
-                <DatePicker
-                  required
-                  selected={endDate}
-                  onChange={(date) => setEndDate(date)}
-                  selectsEnd
-                  startDate={startDate}
-                  endDate={endDate}
-                  minDate={startDate}
-                  maxDate={new Date()}
-                />
-              </div>
+      <div className={classes.calender}>
+        <div>
+          <img
+            className={classes.imgs}
+            src={`${process.env.PUBLIC_URL}/wallet/calendar.svg`}
+            alt=""
+          />
+        </div>
+        <form className={classes.formbox} method="post" onSubmit={handleSubmit}>
+          <div className={classes.dateipt}>
+            <div className={classes.wrap}>
+              <DatePicker
+                className={classes.tag}
+                required
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                selectsStart
+                startDate={startDate}
+                endDate={endDate}
+              />
             </div>
-            <div className="section">
+            <div>-</div>
+            <div className={classes.wrap}>
+              <DatePicker
+                className={classes.tag}
+                required
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                selectsEnd
+                startDate={startDate}
+                endDate={endDate}
+                minDate={startDate}
+                maxDate={new Date()}
+              />
+            </div>
+            <div>
               <button className={classes.search}>찾기</button>
             </div>
           </div>
         </form>
-        <img
-          onClick={dateRefresh}
-          src={`${process.env.PUBLIC_URL}/wallet/dateRefresh.svg`}
-          alt=""
-        />
+        <div>
+          <img
+            className={classes.imgs}
+            onClick={dateRefresh}
+            src={`${process.env.PUBLIC_URL}/wallet/dateRefresh.svg`}
+            alt=""
+          />
+        </div>
       </div>
     );
   }
@@ -310,8 +321,9 @@ function RealizedPL() {
   
     return (
       <>
-      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      <FormControl sx={{ minWidth: 120 }} size="small">
         <Select
+          className={classes.sltbox}
           labelId="demo-select-small"
           id="demo-select-small"
           value={value}
@@ -322,7 +334,7 @@ function RealizedPL() {
             ".MuiOutlinedInput-notchedOutline": { border: 0 },
           }}
         >
-          <MenuItem value={'1'}>보유가격순</MenuItem>
+          <MenuItem sx={{ background: "#fff" }} value={'1'}>보유가격순</MenuItem>
           <MenuItem value={'2'}>수익률높은순</MenuItem>
           <MenuItem value={'3'}>수익률낮은순</MenuItem>
         </Select>

@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface AccountService {
 
-    void createAccount(Long userId, String name);
+    Long createAccount(Long userId, String name);
 
     List<Account> listAccount(Long userId);
 
@@ -40,6 +40,9 @@ public interface AccountService {
 
 
     List<AccountStock> getAccountStockByUserId(Long userId);
+
+    List<AccountStock> getAccountStockByUserIdAccountId(Long accountId, Long userId);
+
 
     List<AccountStock> getAccountStockByAccountId(Long accountId);
 

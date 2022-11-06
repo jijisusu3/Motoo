@@ -14,6 +14,17 @@
   border: none;
   border-radius: 5px;
   background: #d9d9d9;
+  width: 40px;
+  font-weight: 500;
+}
+.tag{
+  width: 95%;  display: flex;
+  justify-content: center;
+}
+.wrap{
+  width: 32%;
+  font-size: 14px;
+
 }
 .listbox{
   display: flex;
@@ -29,8 +40,23 @@
   width: 100%;
   align-items: center;
 }
-.carlendar{
+.formbox{
+  width: 78%;
+}
+.imgs{
+  width: 24px;
+}
+.calender{
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.dateipt{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .result{
   display: flex;
@@ -73,4 +99,8 @@
 .txts{
   color: #000;
   font-size: 16px;
+}
+.sltbox{
+  margin-bottom: 1rem;
+  border: none;
 }

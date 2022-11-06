@@ -1,29 +1,29 @@
-import time
-import requests
-import datetime
 from datetime import date, timedelta
-from collections import defaultdict
-from app.models.stocks import Stock, Category
-from app.const import *
-from app.config import settings, redis_session
-from pykrx import stock
-import aiohttp
 import asyncio
-import typer
+from collections import defaultdict
+from datetime import date, timedelta
 
+import aiohttp
+import typer
+from pykrx import stock
+
+from app.config import redis_session
+from app.const import *
+from app.models.stocks import Stock, Category
 
 app = typer.Typer()
 
 
 async def insert_daily_and_close_price():
-    yesterday = (date.today()-timedelta(days=1)).strftime("%Y%m%d")
+    yesterday = (date.today() - timedelta(days=1)).strftime("%Y%m%d")
+    today = date.today().strftime("%Y%m%d")
     ctgr_list = await Category.all().values('id')
     stocks = await Stock.all()
     start = time.time()
     print("start")
     ctgr_dict = defaultdict(list)
     for stck in stocks:
-        df = stock.get_market_ohlcv(yesterday, yesterday, stck.ticker, adjusted=False)
+        df = stock.get_market_ohlcv(today, today, stck.ticker, adjusted=False)
         new_df = df.to_dict()
         for k in new_df['시가'].keys():
             res = day_map[stck.category_id](

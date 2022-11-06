@@ -21,7 +21,6 @@ public class AccountServiceImpl implements AccountService{
     private final AccountRepository accountRepository;
     private final AccountRepositorySupport accountRepositorySupport;
 
-    private final AccountStockRepository accountStockRepository;
     private final UserRepository userRepository;
 
     private final AccountStockRepositorySupport accountStockRepositorySupport;
@@ -30,11 +29,16 @@ public class AccountServiceImpl implements AccountService{
 
     //계정생성
     @Override
-    public void createAccount(Long userId, String name) {
+    public Long createAccount(Long userId, String name) {
         Account account = new Account();
         User user = userRepository.findByUserId(userId).get();
         account.createAccount(user, name);
+        account.updateSeed(20000000);
+
         accountRepository.save(account);
+
+        return account.getAccountId();
+
     }
 
 
@@ -77,8 +81,8 @@ public class AccountServiceImpl implements AccountService{
 
 
     @Override
-    public List<AccountStock> getAccountStockByUserId(Long userId){
-        return accountStockRepositorySupport.findAllAccountStockByUserId(userId);
+    public List<AccountStock> getAccountStockByUserIdAccountId(Long accountId,Long userId){
+        return accountStockRepositorySupport.findAllAccountStockByUserIdAccountId(accountId, userId);
     }
 
     @Override
@@ -92,6 +96,15 @@ public class AccountServiceImpl implements AccountService{
         return null;
     }
 
+    @Override
+    public List<AccountStock> getAccountStockByUserId(Long userId) {
+        return null;
+    }
+
+//    @Override
+//    public List<AccountStock> getAccountStockByUserId(Long userId) {
+//        return accountStockRepositorySupport.getAccountStockByUserIdAccountId();
+//    }
 
 
     @Override

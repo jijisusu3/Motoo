@@ -15,15 +15,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StockRepositorySupport {
 
-//    private final JPAQueryFactory jpaQueryFactory;
-//
-//    QAccountStock qAccountStock = QAccountStock.accountStock;
-//
-//
-//    public Optional<AccountStock> findAccountStockByAccountStockId(Long accountStockId){
-//    return null;
-//    }
-//
+    private final JPAQueryFactory jpaQueryFactory;
+
+    QStock qStock = QStock.stock;
+    public Stock findStockByAStockId(Long stockId){
+        return jpaQueryFactory.selectFrom(qStock).where(qStock.stockId.eq(stockId)).fetchOne();
+    }
+
 //
 //    public long CountByAccountsId(Long accountsId){
 //        return jpaQueryFactory.selectFrom(qAccountStock)

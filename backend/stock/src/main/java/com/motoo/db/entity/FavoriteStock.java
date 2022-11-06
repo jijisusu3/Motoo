@@ -2,7 +2,10 @@ package com.motoo.db.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.security.PrivateKey;
@@ -14,7 +17,10 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@Builder
 @Table(name= "favoritestock")
+@NoArgsConstructor
+@AllArgsConstructor
 public class FavoriteStock {
     @Id
     @Column(name="id")

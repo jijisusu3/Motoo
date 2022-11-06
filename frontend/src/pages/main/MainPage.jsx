@@ -9,10 +9,11 @@ function Main() {
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get("code");
     axios
-      .get(
-        `https://k7b204.p.ssafy.io/api2/users/auth/kakao/callback?code=${code}`
+    .get(
+      `https://k7b204.p.ssafy.io/api2/users/auth/kakao/callback?code=${code}`
       )
       .then((response) => {
+        console.log(code)
         dispatch(setLogin(response.data));
         navivate('/')
       });

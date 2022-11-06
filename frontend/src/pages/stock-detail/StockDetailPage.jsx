@@ -5,12 +5,28 @@ import ReactApexChart from "react-apexcharts";
 import ko from "apexcharts/dist/locales/ko.json";
 import classes from "./StockDetailPage.module.css";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setShowNav, setActiveNav } from "../../stores/navSlice";
 
 function StockDetailPage() {
   const navigate = useNavigate();
   function backTo() {
     navigate(-1);
   }
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const now = window.location.pathname;
+    dispatch(setShowNav(now));
+    dispatch(setActiveNav(1));
+  });
+
+  useEffect(() => {
+    const ws = new WebSocket("ws://k7b204.p.ssafy.io/ws");
+    ws.onopen = () => ws.send("전지수 보이삼보이삼?");
+    ws.onmessage = (event) => {
+      console.log(`받았다 이 데이터 : ${event.data}`);
+    };
+  });
 
   const params = useParams();
   const id = params.id;

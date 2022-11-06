@@ -1,12 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import classes from './LimitOrderPage.module.css'
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setShowNav } from "../../stores/navSlice";
 
 function LimitOrderPage() {
   const navigate = useNavigate();
   function backToStockList() {
     navigate(`/`);
   }
+  const dispatch = useDispatch()
+  useEffect(() => {
+    const now = window.location.pathname
+    dispatch(setShowNav(now))
+  })
   const [data, setData] = useState([
     {
       name: "삼성전자",
