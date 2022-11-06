@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface AccountService {
 
-    void createAccount(Long userId, String name);
+    Long createAccount(Long userId, String name);
 
     List<Account> listAccount(Long userId);
 
