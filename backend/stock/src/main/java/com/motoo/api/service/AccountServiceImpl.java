@@ -29,12 +29,15 @@ public class AccountServiceImpl implements AccountService{
 
     //계정생성
     @Override
-    public void createAccount(Long userId, String name) {
+    public Long createAccount(Long userId, String name) {
         Account account = new Account();
         User user = userRepository.findByUserId(userId).get();
         account.createAccount(user, name);
         account.updateSeed(20000000);
+
         accountRepository.save(account);
+
+        return account.getAccountId();
 
     }
 
