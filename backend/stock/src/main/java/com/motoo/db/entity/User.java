@@ -68,6 +68,9 @@ public class User {
         this.current = current;
     }
 
+    public void updateQuizDay(Date quizDay) {
+        this.quizDay = quizDay;
+    }
 
     public void updateNickname(String nickname){
         this.nickname = nickname;

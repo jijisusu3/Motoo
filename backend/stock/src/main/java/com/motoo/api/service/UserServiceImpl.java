@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -69,6 +70,14 @@ public class UserServiceImpl implements UserService {
     public Long updateNickname(Long id, String nickname) {
         User user = getByUserId(id).orElseGet(() -> new User());
         user.updateNickname(nickname);
+        userRepository.save(user);
+        return user.getUserId();
+    }
+
+    @Override
+    public Long updateQuizDay(Long id, Date quizday) {
+        User user = getByUserId(id).orElseGet(() -> new User());
+        user.updateQuizDay(quizday);
         userRepository.save(user);
         return user.getUserId();
     }
