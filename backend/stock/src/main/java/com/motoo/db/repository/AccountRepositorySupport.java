@@ -37,4 +37,9 @@ public class AccountRepositorySupport {
                 .where(qAccount.accountId.eq(accountId))
                 .where(qAccount.user.userId.eq(userId)).fetchOne();
     }
+
+    public Account findAccountByUserId(Long userId){
+        return jpaQueryFactory.select(qAccount).from(qAccount)
+                .where(qAccount.user.userId.eq(userId)).fetchOne();
+    }
 }
