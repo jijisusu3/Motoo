@@ -127,9 +127,12 @@ public class KakaoService {
         if (DBUser.isEmpty()) {
             Long newUserId = userService.signupUser(kakaoEmail, kakaoNickname);
             DBUser = userService.getByUserId(newUserId);
-            //초기 계좌 개설 로직 추가해야함
+            //초기 계좌 개설 로직
             String newAccountName = kakaoNickname+"님의 계좌";
-            accountService.createAccount(newUserId, newAccountName);
+            Long accountId = accountService.createAccount(newUserId, newAccountName);
+            int intAccountId = accountId.intValue();
+            userService.updateCurrent(newUserId, intAccountId);
+
         }
         // 있으면 바로 로그인 처리
         String token = JwtTokenUtil.getToken(DBUser.get().getEmail());
