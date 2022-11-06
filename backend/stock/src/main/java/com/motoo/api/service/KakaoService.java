@@ -28,12 +28,14 @@ public class KakaoService {
     private final String CLIENT_ID;
     private final String REDIRECT_URI;
     private final UserService userService;
+    private final AccountService accountService;
 
     public KakaoService(@Value("${kakao.client_id}") String CLIENT_ID,
-                        @Value("${kakao.redirect_uri}") String REDIRECT_URI, UserService userService) {
+                        @Value("${kakao.redirect_uri}") String REDIRECT_URI, UserService userService, AccountService accountService) {
         this.CLIENT_ID = CLIENT_ID;
         this.REDIRECT_URI = REDIRECT_URI;
         this.userService = userService;
+        this.accountService = accountService;
     }
 
     /**
@@ -126,6 +128,8 @@ public class KakaoService {
             Long newUserId = userService.signupUser(kakaoEmail, kakaoNickname);
             DBUser = userService.getByUserId(newUserId);
             //초기 계좌 개설 로직 추가해야함
+            String newAccountName = kakaoNickname+"님의 계좌";
+            accountService.createAccount(newUserId, newAccountName);
         }
         // 있으면 바로 로그인 처리
         String token = JwtTokenUtil.getToken(DBUser.get().getEmail());
