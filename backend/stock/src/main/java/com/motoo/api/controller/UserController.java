@@ -5,10 +5,14 @@ import com.motoo.api.dto.user.BaseUserInfo;
 import com.motoo.api.request.LikeStockReq;
 import com.motoo.api.request.UpdateUserProfileReq;
 import com.motoo.api.response.LoginResponse;
+import com.motoo.api.service.AccountService;
 import com.motoo.api.service.FavoriteStockService;
 import com.motoo.api.service.KakaoService;
 import com.motoo.api.service.UserService;
 import com.motoo.common.model.response.BaseResponseBody;
+import com.motoo.db.entity.Account;
+import com.motoo.db.entity.FavoriteStock;
+import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +30,19 @@ public class UserController {
     private final UserService userService;
     private final KakaoService kakaoService;
     private final FavoriteStockService favoriteStockService;
+    private final AccountService accountService;
+
+    @GetMapping("/test/test")
+    private Account abc(Authentication authentication, Long accountId) {
+        Long userId = userService.getUserIdByToken(authentication);
+        try {
+            Account account = accountService.getAccount(accountId, userId);
+            return account;
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
 
     @GetMapping("/test")
     private String test(Authentication authentication, @RequestBody UpdateUserProfileReq updateUserProfileReq) {
@@ -67,6 +85,22 @@ public class UserController {
         Long id = userService.getUserIdByToken(authentication);
         userService.updateNickname(id, updateUserProfileReq.getNickname());
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "닉네임이 변경되었습니다."));
+    }
+    /**유저 주계좌 변경
+     *
+     */
+    @PutMapping("/current")
+    public ResponseEntity changeCurrent(Authentication authentication, @RequestBody UpdateUserProfileReq updateUserProfileReq) {
+        Long userId = userService.getUserIdByToken(authentication);
+        // 변경요청이 온 계좌 id를, 해당 유저가 소유하고 있는지 체크
+        Long accountId = Long.valueOf(updateUserProfileReq.getCurrent());
+        Account account = accountService.getAccount(accountId, userId);
+        if (account==null) {
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌 변경에 실패하였습니다."));
+        }
+        userService.updateCurrent(userId, updateUserProfileReq.getCurrent());
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌가 변경되었습니다."));
+
     }
     /**관심종목 등록/삭제
      *

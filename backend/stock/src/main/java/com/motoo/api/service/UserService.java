@@ -26,6 +26,8 @@ public interface UserService {
 
     Long signupUser(String email, String nickname);
 
+    void updateCurrent(Long userId, int current);
+
     void deleteUser(Long id);
 
     Long updateNickname(Long id, String nickname);
