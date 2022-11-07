@@ -29,10 +29,11 @@ async def update_and_insert_stock_list(update_time: str = None):
     if access_token is None:
         save_token()
         access_token = redis_session.get("update_stock")
+    header = get_header("FHKST03010200")
     header["authorization"] = "Bearer " + access_token
     category_dict = defaultdict(list)
     stocks = await Stock.all()
-    async with aiohttp.ClientSession(headers=get_header("FHKST03010200")) as session:
+    async with aiohttp.ClientSession(headers=header) as session:
         for r in range(len(stocks)//20):
             start = time.time()
             for stck in stocks[20*r:20*(r+1)]:
@@ -77,6 +78,7 @@ async def update_and_insert_stock_list(update_time: str = None):
 @app.command()
 def get_item(my_ticker: str ='005930'):
     access_token = redis_session.get("update_stock")
+    header = get_header()
     header["authorization"] = "Bearer " + access_token
     res = requests.get(candle_url, params=parameter_setter(my_ticker, "093109"), headers=header)
     if res.status_code == 200:

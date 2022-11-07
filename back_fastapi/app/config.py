@@ -1,5 +1,8 @@
-from pydantic import BaseSettings
+from typing import List
+
 import redis
+from fastapi import WebSocket
+from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -8,8 +11,11 @@ class Settings(BaseSettings):
     OPEN_API_DOMAIN: str = ""
     CANDLE_API_URL: str = ""
     PRICE_API_URL: str = ""
+    BIDASK_API_URL: str = ""
     APPKEY_FOR_CANDLE: str = ""
     APPSECRET_FOR_CANDLE: str = ""
+    APPKEY_FOR_BIDASK: str = ""
+    APPSECRET_FOR_BIDASK: str = ""
     TRADE_ID_FOR_CANDLE: str = ""
     REDIS_HOST: str = ""
     REDIS_PORT: int
@@ -46,7 +52,6 @@ TORTOISE_ORM = {
     'timezone': 'Asia/Seoul'
 }
 
-
 pool = redis.ConnectionPool(
     host=settings.REDIS_HOST,
     port=settings.REDIS_PORT,
@@ -54,3 +59,25 @@ pool = redis.ConnectionPool(
     decode_responses=True
 )
 redis_session = redis.Redis(connection_pool=pool)
+
+
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+
+    async def send_personal_message(self, message: str, websocket: WebSocket):
+        await websocket.send_text(message)
+
+    async def broadcast(self, message: str):
+        for connection in self.active_connections:
+            await connection.send_text(message)
+
+
+manager = ConnectionManager()
