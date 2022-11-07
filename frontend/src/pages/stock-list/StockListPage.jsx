@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useDispatch } from 'react-redux';
 import { setShowNav } from "../../stores/navSlice";
+import { fontSize } from "@mui/system";
 
 const style = {
   position: "absolute",
@@ -625,21 +626,29 @@ function StockListPage() {
       const profitColor = profitCheck();
       return (
         <div>
-          <span id={stock.code} onClick={goToDetail}>{stock.name}</span>
-          <span style={{ color: profitColor }}>{stock.profit}</span>
-          <span>{stock.price}</span>
+          <div className={classes.lists}>
+            <div id={stock.code} onClick={goToDetail}>{stock.name}</div>
+            <div className={classes.nowpr}>
+              <div style={{ color: profitColor, fontSize: 16 }}>{stock.profit}%</div>
+              <div>{stock.price}원</div>
+            </div>
+          </div>
+          <div className={classes.hrline}></div>
         </div>
       );
     } else {
       //수정중일때
       return (
         <div>
-          <span>{stock.name}</span>
-          <img
-            onClick={handleDeleteModalOpen}
-            src={`${process.env.PUBLIC_URL}/stock-list/wishListDelete.svg`}
-            alt=""
-          />
+          <div className={classes.eleslists}>
+            <div>{stock.name}</div>
+            <img
+              onClick={handleDeleteModalOpen}
+              src={`${process.env.PUBLIC_URL}/stock-list/wishListDelete.svg`}
+              alt=""
+            />
+          </div>
+          <div className={classes.hrline}></div>
         </div>
       );
     }
@@ -655,8 +664,8 @@ function StockListPage() {
           src={`${process.env.PUBLIC_URL}/stock-list/waitingListIcon.svg`}
           alt=""
         />
-        <span>대기중인 주식 목록</span>
-        <span>{orderMany}건</span>
+        <div>대기중인 주식 목록</div>
+        <div>{orderMany}건</div>
         <img src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
       </div>
     )
@@ -666,23 +675,32 @@ function StockListPage() {
     return (
       <div>
         <div onClick={GoToOrderListPage} className={classes.limitOrderCard}>
-          <img
-            src={`${process.env.PUBLIC_URL}/stock-list/waitingListIcon.svg`}
-            alt=""
-          />
-          <span>대기중인 주식 목록</span>
-          <span>{orderMany}건</span>
-          <img src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
+          <div className={classes.nametag}>
+            <img
+              className={classes.imgs}
+              src={`${process.env.PUBLIC_URL}/stock-list/waitingListIcon.svg`}
+              alt=""
+            />
+            <div>대기중인 주식 목록</div>
+          </div>
+          <div className={classes.nametag}>
+            <div>{orderMany}건</div>
+            <img className={classes.arrow} src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
+          </div>
         </div>
         <div onClick={GoToQuizPage} className={classes.limitOrderCard}>
-          <img
-            src={`${process.env.PUBLIC_URL}/wallet/coin.svg`}
-            style={{ width: 20, height: 20 }}
-            alt=""
-          />
-          <span>오늘의퀴즈</span>
-          <span>200,000원</span>
-          <img src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
+          <div className={classes.nametag}>
+            <img
+              className={classes.imgs}
+              src={`${process.env.PUBLIC_URL}/wallet/coin.svg`}
+              alt=""
+            />
+            <div>오늘의퀴즈</div>
+          </div>
+          <div className={classes.nametag}>
+            <div>200,000원</div>
+            <img className={classes.arrow} src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
+          </div>
         </div>
       </div>
     )
@@ -691,14 +709,16 @@ function StockListPage() {
 
   function MyStockList() {
     return (
-      <div style={{ backgroundColor: "white", paddingTop: 20 }}>
-        <div>
-          <span>관심주식</span>
-          <img src={`${process.env.PUBLIC_URL}/stock-list/myStar.svg`} alt="" />
+      <div className={classes.listbox}>
+        <div className={classes.editbox}>
+          <div className={classes.favorite}>
+            <div>관심주식</div>
+            <img className={classes.star} src={`${process.env.PUBLIC_URL}/stock-list/myStar.svg`} alt="" />
+          </div>
           {myListEdit ? (
-            <span onClick={editFinish}>완료</span>
+            <div onClick={editFinish}>완료</div>
           ) : (
-            <span onClick={editStart}>편집</span>
+            <div onClick={editStart}>편집</div>
           )}
         </div>
         {myListData.map((stock) => (
@@ -717,15 +737,21 @@ function StockListPage() {
   return (
     <>
       <div style={{ backgroundColor: "#EAF0EF" }}>
-        <img
-          onClick={GoToSearch}
-          src={`${process.env.PUBLIC_URL}/stock-list/stockListSearchIcon.svg`}
-          alt=""
-          />
-        {isSolved ? (<LimitOrder/>):(<QuizAndLimitOrder/>)}
+        <div className={classes.header}>
+          <img className={classes.logo} src={`${process.env.PUBLIC_URL}/stock-list/motoologo.png`} alt="" />
+          <img
+            onClick={GoToSearch}
+            src={`${process.env.PUBLIC_URL}/stock-list/stockListSearchIcon.svg`}
+            alt=""
+            />
+        </div>
+        <div className={classes.bodybox} >
+          {isSolved ? (<LimitOrder/>):(<QuizAndLimitOrder/>)}
+        </div>
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 0, borderColor: "divider" }}>
             <Tabs
+              className={classes.tabs}
               value={value}
               onChange={handleChange}
               aria-label="basic tabs example"
