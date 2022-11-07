@@ -1,6 +1,7 @@
 package com.motoo.api.controller;
 
 import com.motoo.api.dto.kakao.KakaoProfile;
+import com.motoo.api.dto.user.AccountStockInfo;
 import com.motoo.api.dto.user.BaseUserInfo;
 import com.motoo.api.request.LikeStockReq;
 import com.motoo.api.request.UpdateUserProfileReq;
@@ -10,10 +11,7 @@ import com.motoo.api.service.FavoriteStockService;
 import com.motoo.api.service.KakaoService;
 import com.motoo.api.service.UserService;
 import com.motoo.common.model.response.BaseResponseBody;
-import com.motoo.db.entity.Account;
-import com.motoo.db.entity.FavoriteStock;
-import com.motoo.db.entity.Stock;
-import com.motoo.db.entity.User;
+import com.motoo.db.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -32,24 +30,6 @@ public class UserController {
     private final FavoriteStockService favoriteStockService;
     private final AccountService accountService;
 
-    @GetMapping("/test/test")
-    private Account abc(Authentication authentication, Long accountId) {
-        Long userId = userService.getUserIdByToken(authentication);
-        try {
-            Account account = accountService.getAccount(accountId, userId);
-            return account;
-        } catch (Exception e) {
-            return null;
-        }
-
-    }
-
-    @GetMapping("/test")
-    private String test(Authentication authentication, @RequestBody UpdateUserProfileReq updateUserProfileReq) {
-        Long userId = userService.getUserIdByToken(authentication);
-        userService.updateNickname(userId, updateUserProfileReq.getNickname());
-        return "hi";
-    }
 
     /**유저 정보 받아오기
      *
