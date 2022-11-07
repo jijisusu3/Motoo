@@ -3,12 +3,18 @@ package com.motoo.api.service;
 import com.motoo.api.dto.user.AccountStockInfo;
 import com.motoo.api.request.UpdateUserPutReq;
 import com.motoo.common.auth.AppUserDetails;
+import com.motoo.db.entity.FavoriteStock;
+import com.motoo.db.entity.School;
+import com.motoo.db.entity.Stock;
+import com.motoo.db.entity.User;
+import com.motoo.db.repository.SchoolRepository;
 import com.motoo.db.entity.*;
 import com.motoo.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -18,7 +24,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+
+    private final SchoolRepository schoolRepository;
+
     private final AccountService accountService;
+
 
 
 
@@ -81,6 +91,22 @@ public class UserServiceImpl implements UserService {
         user.updateNickname(nickname);
         userRepository.save(user);
         return user.getUserId();
+    }
+
+    @Override
+    public Long updateQuizDay(Long id, Date quizday) {
+        User user = getByUserId(id).orElseGet(() -> new User());
+        user.updateQuizDay(quizday);
+        userRepository.save(user);
+        return user.getUserId();
+    }
+
+    @Override
+    public void updateSchool(Long id, Long schoolId) {
+        User user = getByUserId(id).orElseGet(() -> new User());
+        School school = schoolRepository.findById(schoolId).get();
+        user.updateSchool(school);
+        userRepository.save(user);
     }
 
     @Override

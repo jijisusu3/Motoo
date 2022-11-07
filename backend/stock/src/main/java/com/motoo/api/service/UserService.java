@@ -6,6 +6,7 @@ import com.motoo.db.entity.AccountStock;
 import com.motoo.db.entity.User;
 import org.springframework.security.core.Authentication;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,10 @@ public interface UserService {
     void deleteUser(Long id);
 
     Long updateNickname(Long id, String nickname);
+
+    Long updateQuizDay(Long id, Date quizday);
+
+    void updateSchool(Long id, Long schoolId);
 
     int updateUser(User user, UpdateUserPutReq updateUserPutReq);
 
