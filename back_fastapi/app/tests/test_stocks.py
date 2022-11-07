@@ -27,10 +27,16 @@ class TestStockDetail:
             close_price=6000,
             fluctuation_rate=-10,
             fluctuation_price=-600,
+            minimum=1,
+            maximum=10,
+            capital=123,
+            trading_value=100,
             volume=1000,
             m_capital=54000000,
             issued=10000,
-            category_id=1
+            category_id=category_tmp.pk,
+            keyword=[],
+            sentiment=[]
         )
         res = await client.get("/stocks/detail/999999")
         res_data = res.json()
@@ -46,26 +52,27 @@ class TestStockDetail:
 
     async def test_stock_exist_with_chart_data(self, client: AsyncClient):
         # 종목 TMPCORP에 대한 차트용 데이터
+        stock = await Stock.get(ticker="999999")
         for k in range(37):
-            await candle_map[1].create(
+            await candle_map[stock.category_id].create(
                 time=f'{(9+k//6)//10}{(9+k//6)%10}{k%6}000',
                 price=1000+10*k,
                 volume=100+k,
                 open_price=1000,
                 min_price=990,
                 max_price=1000+10*k,
-                stock_id=1,
+                stock_id=stock.pk,
                 date=datetime.date.today()
             )
         for k in range(8):
-            await day_map[1].create(
+            await day_map[stock.category_id].create(
                 date=datetime.date.today()+datetime.timedelta(k-7),
                 volume=100+k,
                 open_price=1000+10*k,
                 close_price=1100+10*k,
                 min_price=980+10*k,
                 max_price=1100+10*k,
-                stock_id=1,
+                stock_id=stock.pk,
             )
         res = await client.get("/stocks/detail/999999")
         res_data = res.json()
@@ -105,13 +112,13 @@ class TestShortStock:
         assert res_data["message"] == "failed"
         assert len(dict(res_data).keys()) == 1
 
-    @pytest.mark.anyio
-    async def test_stock_exist(self, client: AsyncClient):
-        assert True
-
-    @pytest.mark.anyio
-    async def test_stock_exist_but_some_null(self, client: AsyncClient):
-        assert True
+    # @pytest.mark.anyio
+    # async def test_stock_exist(self, client: AsyncClient):
+    #     assert True
+    #
+    # @pytest.mark.anyio
+    # async def test_stock_exist_but_some_null(self, client: AsyncClient):
+    #     assert True
 
 # @pytest.mark.anyio
 # async def test_signup_success(client: AsyncClient):
