@@ -36,7 +36,7 @@ function App() {
         <Route path="/quiz-result" element={<QuizResultPage />} />
         <Route path="/stock/search" element={<StockSearchPage />} />
         <Route path="/stock/limit-order" element={<LimitOrderPage />} />
-        <Route path="/stock/industry" element={<IndustryPage />} />
+        <Route path="/stock/industry/:id" element={<IndustryPage />} />
         <Route path="/wallet" element={<MyPage />} />
         <Route path="/school" element={<SchoolMainPage />} />
         <Route path="/menu" element={<MenuPage />} />`
