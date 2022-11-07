@@ -1,10 +1,9 @@
 package com.motoo.api.service;
 
+import com.motoo.api.dto.user.AccountStockInfo;
 import com.motoo.api.request.UpdateUserPutReq;
 import com.motoo.common.auth.AppUserDetails;
-import com.motoo.db.entity.FavoriteStock;
-import com.motoo.db.entity.Stock;
-import com.motoo.db.entity.User;
+import com.motoo.db.entity.*;
 import com.motoo.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -19,6 +18,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final AccountService accountService;
+
+
 
     @Override
     public Long getUserIdByToken(Authentication authentication) {
@@ -94,6 +96,36 @@ public class UserServiceImpl implements UserService {
             return stock.getTicker();
         }).collect(Collectors.toList());
         return stockCode;
+    }
+    @Override
+    public int getAccountSeed(Optional<User> user) {
+        Long userId = user.get().getUserId();
+        int current = user.get().getCurrent();
+        Long accountId = Long.valueOf(current);
+        Account account = accountService.getAccount(accountId, userId);
+        int seed = account.getSeed();
+        return seed;
+    }
+
+    @Override
+    public List<AccountStockInfo> getStockInfo(Optional<User> user) {
+        Long userId = user.get().getUserId();
+        int current = user.get().getCurrent();
+        Long accountId = Long.valueOf(current);
+        Account account = accountService.getAccount(accountId, userId);
+        List<AccountStock> accountStocks = account.getAccountStocks();
+
+        List<AccountStockInfo> accountStockInfoList = accountStocks.stream().map(accountStock -> {
+            Long stockId = accountStock.getStock().getStockId();
+            String ticker = accountStock.getStock().getTicker();
+            int amount = accountStock.getAmount();
+            AccountStockInfo accountStockInfo = new AccountStockInfo();
+            accountStockInfo.setStockId(stockId);
+            accountStockInfo.setTicker(ticker);
+            accountStockInfo.setAmount(amount);
+            return accountStockInfo;
+        }).collect(Collectors.toList());
+        return accountStockInfoList;
     }
 
 }
