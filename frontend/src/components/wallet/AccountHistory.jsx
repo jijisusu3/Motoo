@@ -189,6 +189,7 @@ function AccountHistory() {
         </form>
         <div>
           <img
+            className={classes.imgs}
             onClick={dateRefresh}
             src={`${process.env.PUBLIC_URL}/wallet/dateRefresh.svg`}
             alt=""
