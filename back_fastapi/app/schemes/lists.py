@@ -15,8 +15,8 @@ class Favorite(BaseModel):
   stocks: List[StockList]
 
 
-class GetFavoriteStockList(Favorite, CommonResponse):
+class GetFavoriteStockListResponse(Favorite, CommonResponse):
   pass
 
-class GetTopStockList(StockList, CommonResponse):
-  pass
+class GetTopStockListResponse(CommonResponse):
+  stocks: List[StockList]
