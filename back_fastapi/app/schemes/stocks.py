@@ -90,3 +90,8 @@ class BidAskResponse(CommonResponse):
     bid: List[str] = []
     ask: List[str] = []
 
+
+class SchoolHotStockResponse(CommonResponse):
+    stock_id: Union[int, None] = None
+    stock_name: Union[str, None] = None
+    stock_ticker: Union[str, None] = None
