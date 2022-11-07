@@ -9,6 +9,7 @@ import com.motoo.db.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,8 +29,13 @@ public class BaseUserInfo {
     //관심 주식 종목코드
     private List<String> favoriteStockCode;
 
-    //퀴즈 풀었는지 여부
-    private boolean todayQuiz;
+    //주계좌의 시드머니
+    private int seed;
+
+    //마지막으로 퀴즈 푼 날짜
+    private Date quizDay;
+
+    private List<AccountStockInfo> stockInfo;
 
 
     public static BaseUserInfo of(Optional<User> user) {
@@ -38,6 +44,7 @@ public class BaseUserInfo {
         userinfo.setEmail(user.get().getEmail());
         userinfo.setNickname(user.get().getNickname());
         userinfo.setCurrent(user.get().getCurrent());
+        userinfo.setQuizDay(user.get().getQuizDay());
 
         return userinfo;
     }

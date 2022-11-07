@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.motoo.api.dto.kakao.KakaoProfile;
 import com.motoo.api.dto.kakao.OauthToken;
+import com.motoo.api.dto.user.AccountStockInfo;
 import com.motoo.api.dto.user.BaseUserInfo;
 import com.motoo.api.response.LoginResponse;
 import com.motoo.common.util.JwtTokenUtil;
@@ -140,7 +141,17 @@ public class KakaoService {
 
         //토큰과 유저객체 반환
         BaseUserInfo baseUserInfo = BaseUserInfo.of(DBUser);
+
+        //관심 주식 종목 코드 세팅
         List<String> favoriteStockCode = userService.getFavoriteStockCode(DBUser);
+
+        //주 계좌 시드머니 세팅
+        int seed = userService.getAccountSeed(DBUser);
+        baseUserInfo.setSeed(seed);
+        //주 계좌 보유 주식 정보 세팅
+        List<AccountStockInfo> stockInfo = userService.getStockInfo(DBUser);
+        baseUserInfo.setStockInfo(stockInfo);
+
         baseUserInfo.setFavoriteStockCode(favoriteStockCode);
         LoginResponse response = LoginResponse.of(token, baseUserInfo);
 
