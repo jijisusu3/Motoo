@@ -481,11 +481,20 @@ function StockListPage() {
     }
     const profitColor = profitCheck();
     return (
-      <div style={{height: 'auto', width: 'auto', border: '1px solid black' }}>
-        <div id={stock.code} onClick={goToDetail} >{stock.name}</div>
-        <div style={{ color: profitColor }}>{stock.profit}</div>
-        <div >{stock.price}</div>
+      <div>
+        <div className={classes.lists}>
+          <div className={classes.listcard}>
+            <div className={classes.rank}>{stock.ranking}</div>
+            <div id={stock.code} onClick={goToDetail} >{stock.name}</div>
+          </div>
+          <div className={classes.nowpr}>
+            <div style={{ color: profitColor, fontSize: 16  }}>{stock.profit}%</div>
+            <div >{stock.price}원</div>
+          </div>
+        </div>
+        <div className={classes.hrline}></div>
       </div>
+
     );
   }
 
@@ -493,118 +502,121 @@ function StockListPage() {
     const selectedString = ["soaring", "drop", "price", "marketCap", "tradingVolume"]
     const selectedRealtimeData = realtimeData[realtimeValue][selectedString[realtimeValue]]
     return (
-      <div style={{ backgroundColor: "white", paddingTop: 20 }}>
+      <div className={classes.listbox} style={{ backgroundColor: "white", paddingTop: 20 }}>
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 0, borderColor: "divider" }}>
-            <Tabs
-              value={realtimeValue}
-              onChange={realtimeListHandleChange}
-              aria-label="basic tabs example"
-              sx={{ "& .MuiTabs-indicator": { bgcolor: "#FEBF45", height: 3 } }}
-            >
-              <Tab
-                label={
-                  <Typography
-                    fontSize="4vw"
-                    fontWeight="600"
-                    color={realtimeValue === 0 ? "#000" : "#929E9E"}
-                    fontFamily="Pretendard"
-                  >
-                    급상승
-                  </Typography>
-                }
-                sx={{
-                  "&.Mui-selected": {
-                    color: "rgba(0, 0, 0, 0)",
-                  },
-                  paddingX: '3%',
-                  minWidth: '12%'
-                }}
-              />
-              <Tab
-                label={
-                  <Typography
-                    fontSize="4vw"
-                    fontWeight="600"
-                    color={realtimeValue === 1 ? "#000" : "#929E9E"}
-                    fontFamily="Pretendard"
-                  >
-                    급하락
-                  </Typography>
-                }
-                sx={{
-                  "&.Mui-selected": {
-                    color: "rgba(0, 0, 0, 0)",
-                  },
-                  paddingX: '3%',
-                  minWidth: '12%'
-                }}
-              />
-              <Tab
-                label={
-                  <Typography
-                    fontSize="4vw"
-                    fontWeight="600"
-                    color={realtimeValue === 2 ? "#000" : "#929E9E"}
-                    fontFamily="Pretendard"
-                  >
-                    가격순
-                  </Typography>
-                }
-                sx={{
-                  "&.Mui-selected": {
-                    color: "rgba(0, 0, 0, 0)",
-                  },
-                  paddingX: '3%',
-                  minWidth: '12%'
-                }}
-              />
-              <Tab
-                label={
-                  <Typography
-                    fontSize="4vw"
-                    fontWeight="600"
-                    color={realtimeValue === 3 ? "#000" : "#929E9E"}
-                    fontFamily="Pretendard"
-                  >
-                    시가총액
-                  </Typography>
-                }
-                sx={{
-                  "&.Mui-selected": {
-                    color: "rgba(0, 0, 0, 0)",
-                  },
-                  paddingX: '3%',
-                  minWidth: '12%'
-                }}
-              />
-              <Tab
-                label={
-                  <Typography
-                    fontSize="4vw"
-                    fontWeight="600"
-                    color={realtimeValue === 4 ? "#000" : "#929E9E"}
-                    fontFamily="Pretendard"
-                  >
-                    거래량
-                  </Typography>
-                }
-                sx={{
-                  "&.Mui-selected": {
-                    color: "rgba(0, 0, 0, 0)",
-                  },
-                  paddingX: '3%',
-                  minWidth: '12%'
-                }}
-              />
-            </Tabs>
+            <div className={classes.tabbox}>
+              <Tabs
+                value={realtimeValue}
+                onChange={realtimeListHandleChange}
+                aria-label="basic tabs example"
+                sx={{ "& .MuiTabs-indicator": { bgcolor: "#FEBF45", height: 3 } }}
+              >
+                <Tab
+                  label={
+                    <Typography
+                      fontSize="4vw"
+                      fontWeight="600"
+                      color={realtimeValue === 0 ? "#000" : "#929E9E"}
+                      fontFamily="Pretendard"
+                    >
+                      급상승
+                    </Typography>
+                  }
+                  sx={{
+                    "&.Mui-selected": {
+                      color: "rgba(0, 0, 0, 0)",
+                    },
+                    // paddingX: '3%',
+                    minWidth: '10%'
+                  }}
+                />
+                <Tab
+                  label={
+                    <Typography
+                      fontSize="4vw"
+                      fontWeight="600"
+                      color={realtimeValue === 1 ? "#000" : "#929E9E"}
+                      fontFamily="Pretendard"
+                    >
+                      급하락
+                    </Typography>
+                  }
+                  sx={{
+                    "&.Mui-selected": {
+                      color: "rgba(0, 0, 0, 0)",
+                    },
+                    // paddingX: '3%',
+                    minWidth: '10%'
+                  }}
+                />
+                <Tab
+                  label={
+                    <Typography
+                      fontSize="4vw"
+                      fontWeight="600"
+                      color={realtimeValue === 2 ? "#000" : "#929E9E"}
+                      fontFamily="Pretendard"
+                    >
+                      가격순
+                    </Typography>
+                  }
+                  sx={{
+                    "&.Mui-selected": {
+                      color: "rgba(0, 0, 0, 0)",
+                    },
+                    // paddingX: '3%',
+                    minWidth: '10%'
+                  }}
+                />
+                <Tab
+                  label={
+                    <Typography
+                      fontSize="4vw"
+                      fontWeight="600"
+                      color={realtimeValue === 3 ? "#000" : "#929E9E"}
+                      fontFamily="Pretendard"
+                    >
+                      시가총액
+                    </Typography>
+                  }
+                  sx={{
+                    "&.Mui-selected": {
+                      color: "rgba(0, 0, 0, 0)",
+                    },
+                    // paddingX: '3%',
+                    minWidth: '10%'
+                  }}
+                />
+                <Tab
+                  label={
+                    <Typography
+                      fontSize="4vw"
+                      fontWeight="600"
+                      color={realtimeValue === 4 ? "#000" : "#929E9E"}
+                      fontFamily="Pretendard"
+                    >
+                      거래량
+                    </Typography>
+                  }
+                  sx={{
+                    "&.Mui-selected": {
+                      color: "rgba(0, 0, 0, 0)",
+                    },
+                    // paddingX: '3%',
+                    minWidth: '10%'
+                  }}
+                />
+              </Tabs>
+            </div>
           </Box>
         </Box>
-        {selectedRealtimeData.map((stock) => (
+        {selectedRealtimeData.map((stock, index) => (
           <RealtimeCard
             key={stock.code}
             name={stock.name}
             code={stock.code}
+            ranking={index+1}
             profit={stock.profit}
             price={stock.price}
           />
