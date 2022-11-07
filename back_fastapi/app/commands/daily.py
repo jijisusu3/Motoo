@@ -23,7 +23,7 @@ async def insert_daily_and_close_price():
     print("start")
     ctgr_dict = defaultdict(list)
     for stck in stocks:
-        df = stock.get_market_ohlcv(today, today, stck.ticker, adjusted=False)
+        df = stock.get_market_ohlcv(yesterday, yesterday, stck.ticker, adjusted=False)
         new_df = df.to_dict()
         for k in new_df['시가'].keys():
             res = day_map[stck.category_id](
@@ -45,6 +45,44 @@ async def insert_daily_and_close_price():
     print(end-start)
 
 
+async def daily_all():
+    yesterday = (date.today() - timedelta(days=1)).strftime("%Y%m%d")
+    today = date.today().strftime("%Y%m%d")
+    ctgr_list = await Category.all().values('id')
+    stocks = await Stock.all()
+    start = time.time()
+    print("start")
+    ctgr_dict = defaultdict(list)
+
+    df = stock.get_market_ohlcv(yesterday)
+    new_df = df.to_dict()
+    print(df.loc['005930'])
+    # for stck in stocks:
+    #     for k in new_df['시가'].keys():
+    #         res = day_map[stck.category_id](
+    #             stock_id=stck.pk,
+    #             date=k.date(),
+    #             close_price=new_df.get('종가')[k],
+    #             volume=new_df.get('거래량')[k],
+    #             open_price=new_df.get('시가')[k],
+    #             max_price=new_df.get('고가')[k],
+    #             min_price=new_df.get('저가')[k],
+    #         )
+    #         ctgr_dict[stck.category_id].append(res)
+    #         stck.close_price = new_df.get('종가')[k]
+    #     time.sleep(0.2)
+    # for ctgr in range(1, len(ctgr_list)+1):
+    #     await day_map[ctgr].bulk_create(ctgr_dict[ctgr])
+    # await Stock.bulk_update(stocks, fields=('close_price',))
+    end = time.time()
+    print(end-start)
+
+
+@app.command()
+def get_test():
+    asyncio.run(daily_all())
+
+
 async def update_stock_info():
     print('시작')
     initial_start = time.time()
@@ -52,9 +90,10 @@ async def update_stock_info():
     if access_token is None:
         save_token()
         access_token = redis_session.get("update_stock")
+    header = get_header('FHKST01010100')
     header["authorization"] = "Bearer " + access_token
     stocks = await Stock.all()
-    async with aiohttp.ClientSession(headers=get_header('FHKST01010100')) as session:
+    async with aiohttp.ClientSession(headers=header) as session:
         for r in range(len(stocks)//20):
             start = time.time()
             for stck in stocks[20*r:20*(r+1)]:

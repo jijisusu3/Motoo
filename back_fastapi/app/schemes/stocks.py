@@ -84,3 +84,9 @@ class GetShortStockResponse(ShortStockData, CommonResponse):
 
 class GetAllStocks(CommonResponse):
     stocks: List[EntireStockData] = []
+
+
+class BidAskResponse(CommonResponse):
+    bid: List[str] = []
+    ask: List[str] = []
+

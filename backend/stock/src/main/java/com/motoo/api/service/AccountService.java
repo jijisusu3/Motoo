@@ -32,11 +32,11 @@ public interface AccountService {
 
 
     //accounts Stock 관련
-    AccountStock addAccountStock(AccountStockAddPostReq accountStockAddPostReq);
+
 
 //    AccountStock getAccountStockByAccountId(Long accountId);
 
-    AccountStock getAccountStockByAccountIdAndAccountStockId(Long accountId, Long accountStockId);
+
 
 
 
@@ -49,7 +49,6 @@ public interface AccountService {
     List<AccountStock> getAccountStockByAccountId(Long accountId);
 
     List<AccountStock> listAccountStock(Long accountId);
-
 
 
 
