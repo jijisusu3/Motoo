@@ -11,14 +11,7 @@ candle_url = settings.OPEN_API_DOMAIN + settings.CANDLE_API_URL
 appkey = settings.APPKEY_FOR_CANDLE
 appsecret = settings.APPSECRET_FOR_CANDLE
 tr_id_candle = settings.TRADE_ID_FOR_CANDLE
-header = {
-    "content-type": "application/json; charset=utf-8",
-    "authorization": "",
-    "appkey": appkey,
-    "appsecret": appsecret,
-    "tr_id": "FHKST03010200",
-    "custtype": "P"
-}
+
 parameter = {
     "fid_cond_mrkt_div_code": "J",
 }
@@ -85,8 +78,15 @@ def parameter_setter(ticker: str = None, req_time: str = None):
     return parameter
 
 
-def get_header(tr_id: str = 'FHKST01010100'):
-    header["tr_id"] = tr_id
+def get_header(
+        tr_id: str = 'FHKST01010100',
+        is_content: bool = True,
+        app_key: str = appkey,
+        app_secret: str = appsecret
+):
+    header = {"authorization": "", "appkey": app_key, "appsecret": app_secret, "tr_id": tr_id, "custtype": "P"}
+    if is_content:
+        header["content-type"] = "application/json; charset=utf-8"
     return header
 
 
@@ -107,7 +107,11 @@ def get_auth_token(key, secret):
 
 
 def save_token(token_use: str = 'update_stock'):
-    res = get_auth_token(settings.APPKEY_FOR_CANDLE, settings.APPSECRET_FOR_CANDLE)
+    res = None
+    if token_use == 'update_stock':
+        res = get_auth_token(settings.APPKEY_FOR_CANDLE, settings.APPSECRET_FOR_CANDLE)
+    elif token_use == 'get_bidask':
+        res = get_auth_token(settings.APPKEY_FOR_BIDASK, settings.APPSECRET_FOR_BIDASK)
     if res is not None:
         redis_session.set(token_use, res, ex=43200)
         print('save_token complete!')

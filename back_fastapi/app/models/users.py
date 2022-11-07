@@ -7,6 +7,7 @@ class User(Model):
     role = fields.CharField(max_length=30, null=True)
     school_id = fields.IntField(null=True)
     current = fields.IntField()
+    quiz_day = fields.DateField(null=True)
     my_stock = fields.ManyToManyField('b204.Stock', through='favoritestock', related_name='stock_user')
 
 
@@ -20,7 +21,7 @@ class School(Model):
     sigungu = fields.ForeignKeyField('b204.SiGunGu', related_name='schools')
 
 
-class Event(Model):
+class Events(Model):
     open_date = fields.DatetimeField()
     close_date = fields.DatetimeField()
-    hall_of_fame = fields.JSONField(null=True)
+    hall_of_fame = fields.TextField(null=True)
