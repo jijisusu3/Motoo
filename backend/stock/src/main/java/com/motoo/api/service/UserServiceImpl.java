@@ -3,8 +3,10 @@ package com.motoo.api.service;
 import com.motoo.api.request.UpdateUserPutReq;
 import com.motoo.common.auth.AppUserDetails;
 import com.motoo.db.entity.FavoriteStock;
+import com.motoo.db.entity.School;
 import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.User;
+import com.motoo.db.repository.SchoolRepository;
 import com.motoo.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final SchoolRepository schoolRepository;
 
     @Override
     public Long getUserIdByToken(Authentication authentication) {
@@ -88,6 +91,14 @@ public class UserServiceImpl implements UserService {
         user.updateQuizDay(quizday);
         userRepository.save(user);
         return user.getUserId();
+    }
+
+    @Override
+    public void updateSchool(Long id, Long schoolId) {
+        User user = getByUserId(id).orElseGet(() -> new User());
+        School school = schoolRepository.findById(schoolId).get();
+        user.updateSchool(school);
+        userRepository.save(user);
     }
 
     @Override

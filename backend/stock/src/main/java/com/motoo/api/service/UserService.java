@@ -35,6 +35,8 @@ public interface UserService {
 
     Long updateQuizDay(Long id, Date quizday);
 
+    void updateSchool(Long id, Long schoolId);
+
     int updateUser(User user, UpdateUserPutReq updateUserPutReq);
 
     List<String> getFavoriteStockCode(Optional<User> user);

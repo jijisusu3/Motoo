@@ -28,20 +28,14 @@ public class User {
     @Column(name="id")
     private Long userId;
 
-    //스쿨이랑 일대일
-//    @OneToOne
-//    private School school;
-
-    //계좌랑 일대다
-
     @Builder.Default
     @JsonIgnore
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Account> account = new ArrayList<>();
 
-    private Long school_id;
-//    @OneToMany(mappedBy = "user")
-//    private List<School> schools = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "school_id")
+    private School school;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<FavoriteStock> favoriteStocks = new ArrayList<>();
@@ -79,6 +73,7 @@ public class User {
         this.nickname = nickname;
     }
 
+    public void updateSchool(School school) { this.school = school; }
 
 
 }

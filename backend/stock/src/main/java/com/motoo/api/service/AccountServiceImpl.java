@@ -41,6 +41,19 @@ public class AccountServiceImpl implements AccountService{
 
     }
 
+    @Override
+    public Long createSchoolAccount(Long userId) {
+        Account account = new Account();
+        User user = userRepository.findByUserId(userId).get();
+        account.createSchoolAccount(user);
+        account.updateSeed(20000000);
+        accountRepository.save(account);
+        return account.getAccountId();
+
+    }
+
+
+
 
     //계정목록 조회
     @Override

@@ -49,9 +49,17 @@ public class Account {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account",orphanRemoval = true)
     private List<Trading> tradings = new ArrayList<>();
 
+    private boolean school;
+
     public void createAccount(User user, String name){
         this.user = user;
         this.name = name;
+    }
+
+    public void createSchoolAccount(User user){
+        this.user = user;
+        this.name = "학교대항전";
+        this.school = true;
     }
 
     public void updateAccountName(String name){

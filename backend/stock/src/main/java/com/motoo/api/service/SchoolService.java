@@ -23,4 +23,5 @@ public class SchoolService {
                 .collect(Collectors.toList());
         return schools;
     }
+
     }
