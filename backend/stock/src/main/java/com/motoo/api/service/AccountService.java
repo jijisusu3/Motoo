@@ -12,6 +12,8 @@ public interface AccountService {
 
     Long createAccount(Long userId, String name);
 
+    Long createSchoolAccount(Long userId);
+
     List<Account> listAccount(Long userId);
 
     List<Account> getListByAccountIdUserId(Long accountId, Long userId);
