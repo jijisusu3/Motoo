@@ -45,7 +45,8 @@ public class AccountStock {
         this.amount = amount;
     }
 
-    public void updateAccountStock(Stock stock){
-        this.stock = stock;
+    public void updateAccountStockAmountPrice(int amount, int price){
+        this.amount = amount;
+        this.price = price;
     }
 }

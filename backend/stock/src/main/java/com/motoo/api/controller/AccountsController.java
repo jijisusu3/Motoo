@@ -1,8 +1,6 @@
 package com.motoo.api.controller;
 
-import com.motoo.api.request.MakeAccountPostReq;
-import com.motoo.api.request.UpdateAccountNameReq;
-import com.motoo.api.request.UpdateSeedPostReq;
+import com.motoo.api.request.*;
 import com.motoo.api.response.AccountListRes;
 import com.motoo.api.response.AccountsListRes;
 import com.motoo.api.response.AccountStockListRes;
@@ -12,13 +10,16 @@ import com.motoo.api.service.UserService;
 import com.motoo.common.model.response.BaseResponseBody;
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
+import com.motoo.db.entity.User;
 import com.motoo.db.repository.AccountStockRepository;
 import com.motoo.db.repository.UserRepository;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNullApi;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -36,7 +37,11 @@ public class AccountsController {
 
     private final AccountService accountService;
     private final UserService userService;
-    //    private final AccountsServiceImpl accountsService;
+    private final AccountStockService accountStockService;
+
+
+
+
     //계좌 생성
     @ApiOperation(value = "계좌 생성", notes = "(token) 계좌를 생성한다.")
     @ApiResponses({@ApiResponse(code = 200, message = "계좌 생성 성공", response = BaseResponseBody.class), @ApiResponse(code = 401, message = "계좌 생성 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
@@ -138,11 +143,58 @@ public class AccountsController {
     }
 
     //계좌에 주식 추가
+    /**관심종목 등록/삭제
+     *
+     */
+    @PostMapping("/add")
+    @ApiResponses({@ApiResponse(code = 200, message = "(token) 주식 추가 성공", response = BaseResponseBody.class), @ApiResponse(code = 401, message = "계좌에 주식 추가 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
+    @ApiOperation(value = "계좌에 주식 추가", notes = "계좌에 주식 추가한다.")
+    public ResponseEntity<? extends BaseResponseBody> addStockToAccount(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "주식번호", required = true) @Valid AccountStockAddPostReq accountStockAddPostReq) {
+        Long userId = userService.getUserIdByToken(authentication);
+        User user = userService.getByUserId(userId).orElseGet(() -> new User());
+        Account account  = accountService.getAccount(accountStockAddPostReq.getAccountId(), userId);
 
-//    @GetMapping(/detail/{stock_id})
-//    public ResponseEntity<Acc>
-//
+        List<Long> stockList = accountStockService.getAccountStockIdList(account);
+        //계좌 주식 리스트에 해당 주식이 있으면 주식 평단가 수정
 
+
+
+        if (stockList.contains(accountStockAddPostReq.getStockId())) {
+//            accountStockService.deleteStockInAccount(userId, accountStockAddPostReq.getAccountId(), accountStockAddPostReq.getStockId());
+            List<AccountStock> accountStocks = accountService.getAccountStockByUserIdAccountId(accountStockAddPostReq.getAccountId(),userId);
+            Long accountStockId = accountStockService.getAccountStockIdByStockId(accountStockAddPostReq.getStockId());
+
+//            accountStocks.
+//            Long accountStockId = accountStocks.get(1).getAccountStockId();
+//            Long accountStockId = null;
+//            System.out.println(accountStocks);
+//            for (int root =0; root < accountStocks.size(); root++){
+//                if (accountStocks.get(root).getAccountStockId() == accountStockAddPostReq.getStockId()){
+//                    accountStockId = accountStocks.get(root).getAccountStockId();
+//                    break;
+//                }
+//                System.out.println(accountStocks.get(root).getAccountStockId());
+//            }
+
+            AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
+            int currentAmount = accountStock.getAmount();
+            int currentPrice = accountStock.getPrice();
+            System.out.println(currentAmount);
+            System.out.println(currentPrice);
+            //이동평균법에 의한 새로운 가격
+            int newPrice = (currentPrice*currentAmount + accountStockAddPostReq.getPrice()*accountStockAddPostReq.getAmount())/(currentAmount+accountStockAddPostReq.getAmount());
+            int newAmount = currentAmount + accountStockAddPostReq.getAmount();
+            System.out.println(newAmount);
+            System.out.println(newPrice);
+
+            accountStockService.updateAmountPrice(accountStock, newAmount, newPrice);
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌에 이동평균가격 적용"));
+        }
+        //계좌 주식 리스트에 해당 주식이 없으면 주식 등록
+        System.out.println(accountStockAddPostReq.getAmount());
+        accountStockService.addStockToAccount(userId, accountStockAddPostReq.getAccountId(), accountStockAddPostReq.getStockId(), accountStockAddPostReq.getPrice(), accountStockAddPostReq.getAmount());
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌에 등록함"));
+    }
 
 
 }
