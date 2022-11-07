@@ -71,12 +71,11 @@ function StockSearchPage() {
       renderResults = arr.map((item) => {
         return (
           <div
-            onClick={() => goToDetail(item.code)}
+            onClick={() => goToDetail(item.ticker)}
             // className={`search-preview ${item.index === 0 ? "start" : ""}`}
           >
             <div className="first">
               <p className="name">{item.name}</p>
-              {/* <p className="code">{item.code}</p> */}
             </div>
           </div>
         );

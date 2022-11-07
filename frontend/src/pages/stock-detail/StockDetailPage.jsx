@@ -5,11 +5,28 @@ import ReactApexChart from "react-apexcharts";
 import ko from "apexcharts/dist/locales/ko.json";
 import classes from "./StockDetailPage.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setShowNav, setActiveNav } from "../../stores/navSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setShowNav } from "../../stores/navSlice";
+import { stockDetailGet } from "../../stores/stockSlice";
+
 
 function StockDetailPage() {
+  const params = useParams();
+  const id = params.id;
+  const [showCandleGraph, setShowCandleGraph] = useState(false);
   const navigate = useNavigate();
+  const stockData = useSelector(state=> {
+    return state.setStock.detail
+  })
+  const shortStockData = useSelector(state => {
+    return state.setStock.shortStockData
+  })
+  const haveList = useSelector(state => {
+    return state.setUser.user.haveList
+  })
+  const likeList = useSelector(state => {
+    return state.setUser.user.likeList
+  })
   function backTo() {
     navigate(-1);
   }
@@ -17,8 +34,18 @@ function StockDetailPage() {
   useEffect(() => {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
-    dispatch(setActiveNav(1));
-  });
+    dispatch(stockDetailGet(id));
+    if (!haveList.includes(stockData.id)){
+      setShowSellButton(false)
+    } else {
+      setShowSellButton(true)
+    }
+    if (likeList.includes(stockData.id)){
+      setisWatchlist(false)
+    } else {
+      setisWatchlist(true)
+    }
+  },[]);
 
   useEffect(() => {
     const wss = new WebSocket("wss://k7b204.p.ssafy.io:443/api1/socket/ws");
@@ -30,14 +57,13 @@ function StockDetailPage() {
     };
   });
 
-  const params = useParams();
-  const id = params.id;
-  const [showCandleGraph, setShowCandleGraph] = useState(false);
 
   // useEffect로 데이터 받아오고 구매주식목록에 있으면 true, 없으면 false 그대로
-  const [showSellButton, setShowSellButton] = useState(true);
+  const [showSellButton, setShowSellButton] = useState();
   // useEffect로 데이터 받아오고 관심목록에 있으면 true, 없으면 false 그대로
-  const [isWatchlist, setisWatchlist] = useState(true);
+  const [isWatchlist, setisWatchlist] = useState();
+
+
   function changeToCandle() {
     setShowCandleGraph(true);
   }
