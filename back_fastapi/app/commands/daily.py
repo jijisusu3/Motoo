@@ -23,7 +23,7 @@ async def insert_daily_and_close_price():
     print("start")
     ctgr_dict = defaultdict(list)
     for stck in stocks:
-        df = stock.get_market_ohlcv(yesterday, yesterday, stck.ticker, adjusted=False)
+        df = stock.get_market_ohlcv(today, today, stck.ticker, adjusted=False)
         new_df = df.to_dict()
         for k in new_df['시가'].keys():
             res = day_map[stck.category_id](
