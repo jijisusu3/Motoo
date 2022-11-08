@@ -30,6 +30,9 @@ public interface TradingService {
     void updateOrder(Trading trading, int tr_price, int tr_amount);
 
 
+    //주문 타입 수정정
+    @Transactional
+    void updateType(Trading trading, int tr_type);
     //주문 삭제
     int deleteOrder(Long userId, Long tradeId );
 

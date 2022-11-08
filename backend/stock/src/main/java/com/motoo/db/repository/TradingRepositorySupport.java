@@ -34,8 +34,12 @@ public class TradingRepositorySupport {
     }
 
     public List<Trading> findAllTrading(){
-        return jpaQueryFactory.select(qTrading).from(qTrading)
+         List<Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
                 .where(qTrading.tr_type.eq(3).or(qTrading.tr_type.eq(4)))
                 .fetch();
+
+         if (tradings==null) return null;
+         else return tradings;
     }
 }

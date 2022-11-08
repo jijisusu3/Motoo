@@ -6,12 +6,16 @@ import com.motoo.api.response.AccountsListRes;
 import com.motoo.api.response.AccountStockListRes;
 import com.motoo.api.service.AccountService;
 import com.motoo.api.service.AccountStockService;
+import com.motoo.api.service.StockService;
 import com.motoo.api.service.UserService;
 import com.motoo.common.model.response.BaseResponseBody;
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
+import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.User;
 import com.motoo.db.repository.AccountStockRepository;
+import com.motoo.db.repository.StockRepository;
+import com.motoo.db.repository.StockRepositorySupport;
 import com.motoo.db.repository.UserRepository;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -39,8 +43,8 @@ public class AccountsController {
     private final UserService userService;
     private final AccountStockService accountStockService;
 
-
-
+    private final StockService stockService;
+    private final StockRepositorySupport stockRepositorySupport;
 
     //계좌 생성
     @ApiOperation(value = "계좌 생성", notes = "(token) 계좌를 생성한다.")
@@ -145,42 +149,54 @@ public class AccountsController {
         Long userId = userService.getUserIdByToken(authentication);
         Account account  = accountService.getAccount(accountStockAddPostReq.getAccountId(), userId);
         List<Long> stockList = accountStockService.getAccountStockIdList(account);
-        
+//        Stock stock = stockService.getStock(accountStockAddPostReq.getStockId());
+
+        //지금 주식 가격이랑 내 주문량, 가격이랑 비교용도의 주식객체
+        Stock stock = stockRepositorySupport.findStockByAStockId(accountStockAddPostReq.getStockId());
         //시드머니 조회하여 구매가격이 시드머니보다 높으면 구매불가
         if (account.getSeed() > accountStockAddPostReq.getPrice()*accountStockAddPostReq.getAmount()) {
-            //계좌 주식 리스트에 해당 주식이 있으면 주식 평단가 수정
-            if (stockList.contains(accountStockAddPostReq.getStockId())) {
+
+            //구매할 금액*양이 현재 주식가격*양 보다 낮을경우 구매불가
+            if(accountStockAddPostReq.getAmount()*accountStockAddPostReq.getPrice() > accountStockAddPostReq.getAmount()*stock.getPrice()) {
+                //계좌 주식 리스트에 해당 주식이 있으면 주식 평단가 수정
+                if (stockList.contains(accountStockAddPostReq.getStockId())) {
 //            accountStockService.deleteStockInAccount(userId, accountStockAddPostReq.getAccountId(), accountStockAddPostReq.getStockId());
-                List<AccountStock> accountStocks = accountService.getAccountStockByUserIdAccountId(accountStockAddPostReq.getAccountId(), userId);
-                Long accountStockId = accountStockService.getAccountStockIdByStockId(account.getAccountId(), accountStockAddPostReq.getStockId());
-                AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
+                    List<AccountStock> accountStocks = accountService.getAccountStockByUserIdAccountId(accountStockAddPostReq.getAccountId(), userId);
+                    Long accountStockId = accountStockService.getAccountStockIdByStockId(account.getAccountId(), accountStockAddPostReq.getStockId());
+                    AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
 
 
-                int currentAmount = accountStock.getAmount();
-                int currentPrice = accountStock.getPrice();
-                System.out.println(currentAmount);
-                System.out.println(currentPrice);
-                //이동평균법에 의한 새로운 가격
-                int newPrice = (currentPrice * currentAmount + accountStockAddPostReq.getPrice() * accountStockAddPostReq.getAmount()) / (currentAmount + accountStockAddPostReq.getAmount());
-                int newAmount = currentAmount + accountStockAddPostReq.getAmount();
-                System.out.println(newAmount);
-                System.out.println(newPrice);
+                    int currentAmount = accountStock.getAmount();
+                    int currentPrice = accountStock.getPrice();
+                    System.out.println(currentAmount);
+                    System.out.println(currentPrice);
+                    //이동평균법에 의한 새로운 가격
+                    int newPrice = (currentPrice * currentAmount + accountStockAddPostReq.getPrice() * accountStockAddPostReq.getAmount()) / (currentAmount + accountStockAddPostReq.getAmount());
+                    int newAmount = currentAmount + accountStockAddPostReq.getAmount();
+                    System.out.println(newAmount);
+                    System.out.println(newPrice);
+
+                    //시드머니 변경
+                    accountService.updateSeed(account, -(newAmount * newPrice));
+                    //해당 보유주식 가격, 수량 변경
+                    accountStockService.updateAmountPrice(accountStock, newAmount, newPrice);
+                    return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌에 이동평균가격 적용"));
+                }
+                //계좌 주식 리스트에 해당 주식이 없으면 주식 등록
+                System.out.println(accountStockAddPostReq.getAmount());
 
                 //시드머니 변경
-                accountService.updateSeed(account, -(newAmount * newPrice));
-                //해당 보유주식 가격, 수량 변경
-                accountStockService.updateAmountPrice(accountStock, newAmount, newPrice);
-                return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌에 이동평균가격 적용"));
+                accountService.updateSeed(account, -(accountStockAddPostReq.getPrice() * accountStockAddPostReq.getAmount()));
+                accountStockService.addStockToAccount(userId, accountStockAddPostReq.getAccountId(), accountStockAddPostReq.getStockId(), accountStockAddPostReq.getPrice(), accountStockAddPostReq.getAmount());
+                return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌에 구매 했습니다."));
+            } else {
+                return ResponseEntity.status(200).body(BaseResponseBody.of(400, "구매할 수 없는 금액입니다."));
             }
-            //계좌 주식 리스트에 해당 주식이 없으면 주식 등록
-            System.out.println(accountStockAddPostReq.getAmount());
-            accountStockService.addStockToAccount(userId, accountStockAddPostReq.getAccountId(), accountStockAddPostReq.getStockId(), accountStockAddPostReq.getPrice(), accountStockAddPostReq.getAmount());
-            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌에 구매 했습니다."));
         }else {
             return ResponseEntity.status(200).body(BaseResponseBody.of(400, "시드머니가 부족합니다."));
         }
     }
-
+    //판매 유효성 검사해야됌
 
     //계좌에 주식 판매
     @PostMapping("/sell")
@@ -192,16 +208,19 @@ public class AccountsController {
         List<Long> stockList = accountStockService.getAccountStockIdList(account);
         Long accountStockId = accountStockService.getAccountStockIdByStockId(account.getAccountId(),accountStockAddPostReq.getStockId());
         AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
-
+        Stock stock = stockRepositorySupport.findStockByAStockId(accountStockAddPostReq.getStockId());
             //주식 소유여부 분기
             if (stockList.contains(accountStockAddPostReq.getStockId())) {
-
+                //판매할 금액이 현재 주식가격보다 높을경우 판매불가
+                if(accountStockAddPostReq.getPrice() > accountStockAddPostReq.getAmount()*stock.getPrice()){
+                    return ResponseEntity.status(200).body(BaseResponseBody.of(200, "판매가격이 시장가보다 높습니다."));
+                }else{
                 //해당 보유한 주식의 양분기
                 if( accountStock.getAmount()<accountStockAddPostReq.getAmount()){
                     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌에 해당 주식의 양이 없습니다."));
                 }else {
 //                accountStockService.deleteStockInAccount(userId, accountStockAddPostReq.getAccountId(), accountStockAddPostReq.getStockId());
-                List<AccountStock> accountStocks = accountService.getAccountStockByUserIdAccountId(accountStockAddPostReq.getAccountId(),userId);
+//                List<AccountStock> accountStocks = accountService.getAccountStockByUserIdAccountId(accountStockAddPostReq.getAccountId(),userId);
 
 
                 int currentAmount = accountStock.getAmount();
@@ -214,7 +233,7 @@ public class AccountsController {
 
 
                 //시드머니 변경
-                accountService.updateSeed(account, + (newAmount * newPrice));
+                accountService.updateSeed(account, + (accountStockAddPostReq.getAmount() * newPrice));
 
                 //해당 보유주식 가격, 수량 변경
                 accountStockService.updateAmountPrice(accountStock, newAmount, currentPrice);
@@ -224,7 +243,11 @@ public class AccountsController {
                     accountStockService.deleteStockInAccount(userId, accountId, accountStockAddPostReq.getStockId());
                 }
                 return ResponseEntity.status(200).body(BaseResponseBody.of(200, "해당 주식 판매완료"));
-         }}
+         }
+
+                }
+
+            }
             else  {
                    //계좌 주식 리스트에 해당 주식이 없으면 판매 불가능
                 return ResponseEntity.status(401).body(BaseResponseBody.of(200, "계좌에 해당 주식이 없습니다."));

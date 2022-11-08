@@ -70,9 +70,11 @@ public class AccountStockRepositorySupport {
     }
 
     public Long findAccountIdByStockId(Long accountId ,Long stockId){
-        return jpaQueryFactory.select(qAccountStock).from(qAccountStock)
+        Long getAccountId =  jpaQueryFactory.select(qAccountStock).from(qAccountStock)
                 .where(qAccountStock.stock.stockId.eq(stockId))
                 .where(qAccountStock.account.accountId.eq(accountId))
                 .fetchOne().getAccountStockId();
+        if (getAccountId==null) return null;
+        else return getAccountId;
     }
 }

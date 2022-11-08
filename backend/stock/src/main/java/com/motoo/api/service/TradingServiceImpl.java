@@ -83,4 +83,10 @@ public class TradingServiceImpl implements TradingService{
     public Trading getTrading(Long userId, Long tradeId){
         return tradingRepositorySupport.findTradingByUserIdAccountId(userId, tradeId);
     }
+
+    //주문 타입 바꾸기
+    @Override
+    public void updateType(Trading trading, int tr_type){
+        trading.updateType(tr_type);
+    }
 }
