@@ -3,12 +3,8 @@ package com.motoo.api.service;
 import com.motoo.api.dto.user.AccountStockInfo;
 import com.motoo.api.request.UpdateUserPutReq;
 import com.motoo.common.auth.AppUserDetails;
-import com.motoo.db.entity.FavoriteStock;
-import com.motoo.db.entity.School;
-import com.motoo.db.entity.Stock;
-import com.motoo.db.entity.User;
-import com.motoo.db.repository.SchoolRepository;
 import com.motoo.db.entity.*;
+import com.motoo.db.repository.SchoolRepository;
 import com.motoo.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -17,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service

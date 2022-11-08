@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Cascade;
-import java.util.Date;
 
 
 /**
@@ -20,6 +18,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Table(name="user")
 public class User {
 
@@ -49,6 +48,11 @@ public class User {
     private int current;
 
     private Date quizDay;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<Trading> tradings  = new ArrayList<>();
+
 
     public void createUser(String email, String nickname){
         this.email = email;

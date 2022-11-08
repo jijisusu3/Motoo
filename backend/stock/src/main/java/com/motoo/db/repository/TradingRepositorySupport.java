@@ -1,9 +1,7 @@
 package com.motoo.db.repository;
 
-import com.motoo.db.entity.Account;
-import com.motoo.db.entity.QTrading;
 import com.motoo.db.entity.Trading;
-import com.querydsl.jpa.impl.JPAQuery;
+import com.motoo.db.entity.QTrading;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -31,5 +29,11 @@ public class TradingRepositorySupport {
                 .where(qTrading.account.user.userId.eq(userId))
                 .where(qTrading.tradeId.eq(tradeId))
                 .fetchOne();
+    }
+
+    public List<Trading> findAllTrading(){
+        return jpaQueryFactory.select(qTrading).from(qTrading)
+                .where(qTrading.tr_type.eq(3).or(qTrading.tr_type.eq(4)))
+                .fetch();
     }
 }

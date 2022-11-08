@@ -1,17 +1,13 @@
 package com.motoo.api.controller;
 
 
-import com.motoo.api.request.MakeAccountPostReq;
 import com.motoo.api.request.MakeOrderPostReq;
-import com.motoo.api.request.UpdateAccountNameReq;
 import com.motoo.api.request.UpdateOrderReq;
 import com.motoo.api.response.AccountListRes;
-import com.motoo.api.response.AccountsListRes;
 import com.motoo.api.response.TradingListRes;
 import com.motoo.api.service.TradingService;
 import com.motoo.api.service.UserService;
 import com.motoo.common.model.response.BaseResponseBody;
-import com.motoo.db.entity.Account;
 import com.motoo.db.entity.Trading;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -65,11 +61,7 @@ public class TradingController {
     public ResponseEntity<TradingListRes> listTradings(@ApiIgnore Authentication authentication){
         Long userId =  userService.getUserIdByToken(authentication);
         List<Trading> tradings= tradingService.tradingList(userId);
-
-        System.out.println("트레이딩 조회");
-
         return ResponseEntity.status(200).body(TradingListRes.of(tradings, 200, "주문 목록조회에 성공하였습니다."));
-
     }
 
     //주문 삭제

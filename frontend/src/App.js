@@ -27,8 +27,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<PrivateOutlet />} >
-        <Route name="buy" path="stock/buy" element={<BuyStockPage />} />
-        <Route name="sell" path="stock/sell" element={<SellStockPage />} />
+        <Route name="buy" path="stock/buy/:id" element={<BuyStockPage />} />
+        <Route name="sell" path="stock/sell/:id" element={<SellStockPage />} />
         <Route path="/stock/limit-order/buy" element={<BuyOrderEditPage />} />
         <Route path="/stock/limit-order/sell" element={<SellOrderEditPage />} />
 `       <Route path="/" element={<StockListPage />} />

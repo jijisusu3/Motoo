@@ -1,7 +1,6 @@
 package com.motoo.api.response;
 
 import com.motoo.db.entity.School;
-import com.motoo.db.entity.Sigungu;
 import lombok.*;
 
 

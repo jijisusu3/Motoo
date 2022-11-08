@@ -2,6 +2,7 @@ package com.motoo.db.repository;
 
 
 
+import com.motoo.db.entity.AccountStock;
 import com.motoo.db.entity.*;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -9,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+
 
 
 @Repository
@@ -20,8 +21,6 @@ public class AccountStockRepositorySupport {
     private final JPAQueryFactory jpaQueryFactory;
 
     QAccountStock qAccountStock = QAccountStock.accountStock;
-    //QAccount qAccount = QAccount.account;
-
 
     public AccountStock findAccountStockByUserIdAccountId(Long userId, Long accountId){
         AccountStock accountStock = jpaQueryFactory
@@ -71,9 +70,10 @@ public class AccountStockRepositorySupport {
                 .fetchOne();
     }
 
-    public Long findAccountIdByStockId(Long stockId){
+    public Long findAccountIdByStockId(Long accountId ,Long stockId){
         return jpaQueryFactory.select(qAccountStock).from(qAccountStock)
                 .where(qAccountStock.stock.stockId.eq(stockId))
+                .where(qAccountStock.account.accountId.eq(accountId))
                 .fetchOne().getAccountStockId();
     }
 }

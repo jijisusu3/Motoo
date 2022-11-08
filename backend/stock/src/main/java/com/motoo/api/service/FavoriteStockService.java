@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -25,6 +24,12 @@ public class FavoriteStockService {
         List<Long> favoriteStockIdList = user.getFavoriteStocks().stream().map(favoriteStock ->
                 favoriteStock.getStock().getStockId()).collect(Collectors.toList());
         return favoriteStockIdList;
+    }
+
+    public List<String> getFavoriteStockCodeList(User user) {
+        List<String> favoriteStockCodeList = user.getFavoriteStocks().stream().map(favoriteStock ->
+                favoriteStock.getStock().getTicker()).collect(Collectors.toList());
+        return favoriteStockCodeList;
     }
 
     public void registerStock(Long userId, Long stockId) {
