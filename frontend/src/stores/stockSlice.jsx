@@ -11,6 +11,7 @@ const initialState = {
 };
 
 const categoryGet = createAsyncThunk("stock-detail/categoryGet", async (id) => {
+  console.log("여기는오나?")
   return axios({
     method: "get",
     url: `${api1}category/${id}`,
