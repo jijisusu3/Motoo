@@ -3,9 +3,9 @@ package com.motoo.api.service;
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.Trading;
+import com.motoo.db.entity.User;
 import com.motoo.db.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,12 +34,11 @@ public class TradingServiceImpl implements TradingService{
         Account account = accountRepositorySupport.findAccountByAccountIdAndUserId(accountId, userId);
         Stock stock =stockRepositorySupport.findStockByAStockId(stockId);
         Trading trade = new Trading();
-
+        User user = userRepository.findByUserId(userId).get();
         String ticker = stock.getTicker();
         String ticker_name = stock.getName();
-        System.out.println("티커!!!!!!!!!!!!!!!!!!--------------------");
         System.out.println( ticker);
-        trade.writeOrder(account,ticker, ticker_name,tr_type, tr_price, tr_amount);
+        trade.writeOrder(account, user, ticker, ticker_name,tr_type, tr_price, tr_amount);
         tradingRepository.save(trade);
     }
 
@@ -63,9 +62,7 @@ public class TradingServiceImpl implements TradingService{
     @Transactional
     public void updateOrder(Trading trading, int tr_price, int tr_amount) {
         trading.updateTrading(tr_price, tr_amount);
-
     }
-
     //주문삭제
     @Override
     public int deleteOrder(Long userId, Long tradeId) {
@@ -81,7 +78,6 @@ public class TradingServiceImpl implements TradingService{
         tradingRepository.deleteByTradeId(tradeNo);
         return 1;
     }
-
     //주문 객체 조회
     @Override
     public Trading getTrading(Long userId, Long tradeId){

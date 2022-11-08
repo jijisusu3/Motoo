@@ -13,6 +13,7 @@ import com.motoo.api.service.UserService;
 import com.motoo.common.model.response.BaseResponseBody;
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.Trading;
+import com.motoo.db.entity.User;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -65,11 +66,7 @@ public class TradingController {
     public ResponseEntity<TradingListRes> listTradings(@ApiIgnore Authentication authentication){
         Long userId =  userService.getUserIdByToken(authentication);
         List<Trading> tradings= tradingService.tradingList(userId);
-
-        System.out.println("트레이딩 조회");
-
         return ResponseEntity.status(200).body(TradingListRes.of(tradings, 200, "주문 목록조회에 성공하였습니다."));
-
     }
 
     //주문 삭제

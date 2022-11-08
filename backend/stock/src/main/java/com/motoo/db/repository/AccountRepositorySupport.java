@@ -3,6 +3,7 @@ package com.motoo.db.repository;
 
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.QAccount;
+import com.motoo.db.entity.Trading;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -42,4 +43,6 @@ public class AccountRepositorySupport {
         return jpaQueryFactory.select(qAccount).from(qAccount)
                 .where(qAccount.user.userId.eq(userId)).fetchOne();
     }
+
+
 }

@@ -46,7 +46,14 @@ public class Trading {
     private Account account;
 
 
-    public void writeOrder(Account account, String ticker, String ticker_name, int tr_type, int tr_price, int tr_amount ){
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
+
+
+    public void writeOrder(Account account, User user, String ticker, String ticker_name, int tr_type, int tr_price, int tr_amount ){
+        this.user = user;
         this.account =account;
         this.ticker = ticker;
         this.ticker_name = ticker_name;
