@@ -185,9 +185,11 @@ function MyPage() {
           <img
             onClick={handleOnKeyPress}
             src={`${process.env.PUBLIC_URL}/wallet/mypageIcon.svg`}
+            style={{marginRight: "10px"}}
             alt=""
           />
           <input
+            style={{ height: "40px"}}
             type="text"
             maxLength={8}
             className={classes.editname}
@@ -196,6 +198,7 @@ function MyPage() {
             onKeyPress={handleOnKeyPress}
           />
           <img
+            style={{marginRight: "5px", width:"30px", height: "30px"}}
             onClick={handleOnKeyPress}
             src={`${process.env.PUBLIC_URL}/wallet/editIcon.svg`}
             alt=""
@@ -208,14 +211,16 @@ function MyPage() {
         <img
           onClick={handleOnKeyPress}
           src={`${process.env.PUBLIC_URL}/wallet/mypageIcon.svg`}
+          style={{marginRight: "10px"}}
           alt=""
         />
         <div className={classes.accountname}>
-          {nickname}
+          <p style={{fontWeight: "700"}}>{nickname}</p>
           <div className={classes.mini}>님의 지갑</div>
           <div>
             <img
               onClick={editOpen}
+              style={{marginLeft: "5px", width:"30px", height: "30px"}}
               src={`${process.env.PUBLIC_URL}/wallet/mypageEdit.svg`}
               alt=""
               />
@@ -286,75 +291,76 @@ function MyPage() {
     }
   }
   return (
-    <div className={classes.mainbox}>
-      <h1>마이페이지임니다</h1>
-      <EditShow />
-      <div className={classes.centerbox}>
-        <AllAssets />
-        {data.assets.map((asset, index) => (
-          <WalletAssetCard
-            key={asset.accounts_pk}
-            name={asset.name}
-            accountId={asset.accounts_pk}
-            seed={asset.seed}
-            isSchool={asset.isSchool}
-            open={asset.open}
-            num={index}
-          />
-        ))}
-      </div>
-      <Modal open={openCreateModal} onClose={handleCreateModalClose}>
-        <Box className={classes.createbox} sx={style}>
-          <div className={classes.make}>계좌 만들기</div>
-          <div>
-            <div className={classes.ipttag}>
-              계좌 이름{" "}
-              <input className={classes.ipt} type="text" name="assetName" onChange={onChangeInfo} />
+    <div className={classes.mypageBG}>
+      <div className={classes.mypageCtn}>
+        <EditShow />
+        <div className={classes.centerbox}>
+          <AllAssets />
+          {data.assets.map((asset, index) => (
+            <WalletAssetCard
+              key={asset.accounts_pk}
+              name={asset.name}
+              accountId={asset.accounts_pk}
+              seed={asset.seed}
+              isSchool={asset.isSchool}
+              open={asset.open}
+              num={index}
+            />
+          ))}
+        </div>
+        <Modal open={openCreateModal} onClose={handleCreateModalClose}>
+          <Box className={classes.createbox} sx={style}>
+            <div className={classes.make}>계좌 만들기</div>
+            <div>
+              <div className={classes.ipttag}>
+                계좌 이름{" "}
+                <input className={classes.ipt} type="text" name="assetName" onChange={onChangeInfo} />
+              </div>
+              <div className={classes.ipttag}>
+                개설 사유{" "}
+                <input className={classes.ipt} type="text" name="openReason" onChange={onChangeInfo} />
+              </div>
             </div>
-            <div className={classes.ipttag}>
-              개설 사유{" "}
-              <input className={classes.ipt} type="text" name="openReason" onChange={onChangeInfo} />
-            </div>
-          </div>
-          {warningEffect ? (
-            <div className={classes.vibration}>
+            {warningEffect ? (
+              <div className={classes.vibration}>
+                <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} alt="" />
+                <div>
+                  <p>최대 계좌 개수는 학교대항전 외 3개 이하이며</p>
+                  <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
+                </div>
+              </div>
+            ):(
+              <div className={classes.notice}>
               <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} alt="" />
               <div>
                 <p>최대 계좌 개수는 학교대항전 외 3개 이하이며</p>
                 <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
               </div>
             </div>
-          ):(
-            <div className={classes.notice}>
-            <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} alt="" />
-            <div>
-              <p>최대 계좌 개수는 학교대항전 외 3개 이하이며</p>
-              <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
-            </div>
-          </div>
+            )}
+            {!(canStartDay==="") && (
+              <p style={{color:'#DD4956'}}>{canStartDay} 부터 계좌를 열 수 있어요</p>
+            )}
+            <div className={classes.createbtn} onClick={createSubmit}>개설</div>
+          </Box>
+        </Modal>
+        <Modal open={openChangeModal} onClose={handleChangeModalClose}>
+          <Box sx={style}>
+            <div>정말 변경하시겠습니까?</div>
+            <div>계좌를 변경하면 ~~~되어요!</div>
+            <button onClick={changeSubmit}>변경하기</button>
+          </Box>
+        </Modal>
+        <div className={classes.addbtn}>
+          {canAddNum && (
+            <img
+              className={classes.addbtn}
+              onClick={handleCreateModalOpen}
+              src={`${process.env.PUBLIC_URL}/wallet/createAssets.svg`}
+              alt=""
+            />
           )}
-          {!(canStartDay==="") && (
-            <p style={{color:'#DD4956'}}>{canStartDay} 부터 계좌를 열 수 있어요</p>
-          )}
-          <div className={classes.createbtn} onClick={createSubmit}>개설</div>
-        </Box>
-      </Modal>
-      <Modal open={openChangeModal} onClose={handleChangeModalClose}>
-        <Box sx={style}>
-          <div>정말 변경하시겠습니까?</div>
-          <div>계좌를 변경하면 ~~~되어요!</div>
-          <button onClick={changeSubmit}>변경하기</button>
-        </Box>
-      </Modal>
-      <div className={classes.addbtn}>
-        {canAddNum && (
-          <img
-            className={classes.addbtn}
-            onClick={handleCreateModalOpen}
-            src={`${process.env.PUBLIC_URL}/wallet/createAssets.svg`}
-            alt=""
-          />
-        )}
+        </div>
       </div>
     </div>
   );

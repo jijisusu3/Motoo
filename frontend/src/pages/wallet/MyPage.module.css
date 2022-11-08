@@ -147,8 +147,17 @@
   align-items: center;
   padding: 24px;
 }
-.mainbox{
-  background: linear-gradient(180deg, #FBF7F0 0%, #F2FFF8 100%);
+.mypageBG{
+  width: 100vw; 
+  height: 100vh;
+  padding-top: 80px;
+  background: linear-gradient(180deg, #FFF8ED 0%, #E9F5F4 100%);
+
+}
+.mypageCtn {
+  max-width: 600px;
+  width: 90%;
+  margin: auto;
 }
 .rowbox{
   display: flex;
@@ -174,7 +183,7 @@
 .addbtn{
   display: flex;
   justify-content: center;
-  margin-bottom: 3rem;
+  /* margin-bottom: 3rem; */
 }
 .editname{
   margin-left: 0.5rem;

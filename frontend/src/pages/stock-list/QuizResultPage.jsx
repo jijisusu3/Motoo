@@ -7,7 +7,7 @@ import classes from './QuizPage.module.css'
 function QuizResultPage() {
   const dispatch = useDispatch()
   // 데이터 전역으로 저장해두기
-  const quizResult = false
+  const quizResult = true
   const quizData = {
     question: "지수 폭락일을 나타내는 보통명사로 사용되는 용어다. 역사적으로는 1987년 10월 19일 뉴욕 증시가 개장 초반부터 대량의 팔자 주문이 쏟아지면서 그날 하루 22.6%가 폭락한것으로 부터 유래했는데, 이 용어는 무엇인가?",
     example: ["내가 어떻게 알까", "그거입니다", "저거입니다", "ㅎㅎㅎㅎㅎ"],
