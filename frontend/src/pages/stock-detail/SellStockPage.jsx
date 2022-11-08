@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import classes from "./SellStockPage.module.css";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import ReactApexChart from "react-apexcharts";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
-import { setShowNav } from "../../stores/navSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { shortStockGet } from "../../stores/stockSlice";
 
 
 const style = {
@@ -24,11 +24,21 @@ const style = {
 
 
 function SellStockPage() {
+  const params = useParams()
+  const id = params.id
   const myStock = 600;
-  const location = useLocation();
-  const tradeData = location.state?.data;
+  const tradeData = useSelector(state=> {
+    return state.setStock.shortStockData
+  })
+  const user = useSelector(state=> {
+    return state.persistedReducer.setUser.user
+  })
+  
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(shortStockGet(id))
+  }, [])
   const [isMarketPrice, setMarketPrice] = useState(true);
-  const [nowPrice, setNowPrice] = useState(tradeData.nowPrice);
   const [wantedPrice, setWantedPrice] = useState("");
   const [wantedMany, setWantedMany] = useState("");
   const [writePrice, setWritePrice] = useState(false);
@@ -42,12 +52,6 @@ function SellStockPage() {
   function backTo() {
     navigate(-1);
   }
-  const dispatch = useDispatch()
-  useEffect(() => {
-    const now = window.location.pathname
-    dispatch(setShowNav(now))
-  })
-
   const handleOpen = () => setShowAskingPrice(true);
   const handleClose = () => setShowAskingPrice(false);
   function AskingGraphModal() {
@@ -260,14 +264,14 @@ function SellStockPage() {
         if (isMarketPrice) {
           return;
         }
-        if (tempPrice > nowPrice * 1.3) {
+        if (tempPrice > (tradeData.price * 1.3)) {
           // 상한가보다 클때
           setIsTooHigh(true);
           setTimeout(() => {
             setIsTooHigh(false);
           }, 1000);
           return;
-        } else if (tempPrice < nowPrice * 0.7) {
+        } else if (tempPrice < (tradeData.price * 0.7)) {
           // 하한가보다 낮을때
           setIsTooLow(true);
         }
@@ -276,7 +280,7 @@ function SellStockPage() {
         if (wantedPrice !== "") {
           const tmp = wantedPrice.slice(0, -1);
           const tmpNum = Number(tmp);
-          if (tmpNum < nowPrice * 0.7) {
+          if (tmpNum < ((tradeData.price * 0.7))) {
             // 하한가보다 낮을때
             setIsTooLow(true);
           }
@@ -328,7 +332,7 @@ function SellStockPage() {
   function PriceInput() {
     // 시장가로 즉시판매하겠다고 했을 때,
     if (isMarketPrice) {
-      return <h1 onClick={priceClickHandler}>{nowPrice}원</h1>;
+      return <h1 onClick={priceClickHandler}>{tradeData.price}원</h1>;
     } else {
       // 직접입력하겠다고 할 때,
       if (wantedPrice === "") {

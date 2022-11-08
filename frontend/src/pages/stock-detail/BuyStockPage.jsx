@@ -6,8 +6,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import ReactApexChart from "react-apexcharts";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
-import { setShowNav } from "../../stores/navSlice";
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const style = {
@@ -23,10 +22,12 @@ const style = {
 };
 function BuyStockPage() {
   const mySeed = 10000000;
-  const location = useLocation();
-  const tradeData = location.state?.data;
+  const tradeData = useSelector(state => {
+    return state.setStock.shortStockData
+  })
+  console.log(tradeData)
   const [isMarketPrice, setMarketPrice] = useState(true);
-  const [nowPrice, setNowPrice] = useState(tradeData.nowPrice);
+  const [nowPrice, setNowPrice] = useState(tradeData.price);
   const [wantedPrice, setWantedPrice] = useState("");
   const [wantedMany, setWantedMany] = useState("");
   const [writePrice, setWritePrice] = useState(false);
@@ -37,10 +38,6 @@ function BuyStockPage() {
   const [showAskingPrice, setShowAskingPrice] = useState(false);
 
   const dispatch = useDispatch()
-  useEffect(() => {
-    const now = window.location.pathname
-    dispatch(setShowNav(now))
-  })
 
   const navigate = useNavigate();
   function backTo() {
@@ -418,7 +415,7 @@ function BuyStockPage() {
   return (
     <div>
       <img onClick={backTo} src={`${process.env.PUBLIC_URL}/grayBack.svg`} alt="" />
-      <div>{tradeData.name}</div>
+      <div>{tradeData.id}</div>
       {isMarketPrice ? (
         <div>
           <img

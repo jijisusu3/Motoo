@@ -15,6 +15,11 @@ import { useLocation } from "react-router-dom";
 import BottomNav from "./components/common/BottomNav";
 import FooterBar from "./components/common/FooterBar";
 
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+
+let persistor = persistStore(store);
+
 export default function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -26,12 +31,14 @@ export default function ScrollToTop() {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <ScrollToTop />
-      <BottomNav />
-      <App />
-      <FooterBar />
-    </BrowserRouter>
+    <PersistGate persistor={persistor}>
+      <BrowserRouter>
+        <ScrollToTop />
+        <BottomNav />
+        <App />
+        <FooterBar />
+      </BrowserRouter>
+    </PersistGate>
   </Provider>
 );
 
