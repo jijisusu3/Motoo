@@ -20,6 +20,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Table(name="user")
 public class User {
 
