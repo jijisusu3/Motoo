@@ -16,17 +16,17 @@ function StockDetailPage() {
   const [showCandleGraph, setShowCandleGraph] = useState(false);
   const navigate = useNavigate();
   const stockData = useSelector(state=> {
-    return state.setStock.detail
+    return state.setStock.shortStockData
   })
   const shortStockData = useSelector(state => {
     return state.setStock.shortStockData
   })
-  const haveList = useSelector(state => {
-    return state.setUser.user.haveList
-  })
-  const likeList = useSelector(state => {
-    return state.setUser.user.likeList
-  })
+  // const haveList = useSelector(state => {
+  //   return state.setUser.user.haveList
+  // })
+  // const likeList = useSelector(state => {
+  //   return state.setUser.user.likeList
+  // })
   function backTo() {
     navigate(-1);
   }
@@ -35,16 +35,16 @@ function StockDetailPage() {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
     dispatch(stockDetailGet(id));
-    if (!haveList.includes(stockData.id)){
-      setShowSellButton(false)
-    } else {
-      setShowSellButton(true)
-    }
-    if (likeList.includes(stockData.id)){
-      setisWatchlist(false)
-    } else {
-      setisWatchlist(true)
-    }
+    // if (!haveList.includes(stockData.id)){
+    //   setShowSellButton(false)
+    // } else {
+    //   setShowSellButton(true)
+    // }
+    // if (likeList.includes(stockData.id)){
+    //   setisWatchlist(false)
+    // } else {
+    //   setisWatchlist(true)
+    // }
   },[]);
 
   useEffect(() => {
@@ -59,9 +59,9 @@ function StockDetailPage() {
 
 
   // useEffect로 데이터 받아오고 구매주식목록에 있으면 true, 없으면 false 그대로
-  const [showSellButton, setShowSellButton] = useState();
+  const [showSellButton, setShowSellButton] = useState(true);
   // useEffect로 데이터 받아오고 관심목록에 있으면 true, 없으면 false 그대로
-  const [isWatchlist, setisWatchlist] = useState();
+  const [isWatchlist, setisWatchlist] = useState(true);
 
 
   function changeToCandle() {
@@ -493,26 +493,21 @@ function StockDetailPage() {
   };
 
   // 가격업데이트 될 때, 해당 데이터도 업데이트
-  const [tradeData, setTradeData] = useState({
-    name: "삼성전자",
-    code: id,
-    nowPrice: 92440,
-  });
   function BuySellButton() {
     if (showSellButton) {
       return (
         <>
-          <Link to="/stock/sell" state={{ data: tradeData }}>
+          <Link to={`/stock/sell/${id}`}>
             <button>팔래요</button>
           </Link>
-          <Link to="/stock/buy" state={{ data: tradeData }}>
+          <Link to={`/stock/buy/${id}`}>
             <button>살래요</button>
           </Link>
         </>
       );
     }
     return (
-      <Link to="/stock/buy" state={{ data: tradeData }}>
+      <Link to="/stock/buy" state={{ data: shortStockData }}>
         <button>살래요</button>
       </Link>
     );
@@ -559,7 +554,8 @@ function StockDetailPage() {
   }
   return (
     <div>
-      <h1>{id}</h1>
+      <h1>{stockData.name}</h1>
+      <h1>머지</h1>
 
       <img
         onClick={backTo}

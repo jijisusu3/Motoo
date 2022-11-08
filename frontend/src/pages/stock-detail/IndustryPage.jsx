@@ -10,12 +10,15 @@ function IndustryPage() {
   const id = params.id;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+  const industryData = useSelector(state => {
+    return state.setStock.category
+  })
+  console.log(industryData)
   useEffect(() => {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
     dispatch(categoryGet(Number(id)));
-  })
+  }, [])
 
   return (
     <div>
