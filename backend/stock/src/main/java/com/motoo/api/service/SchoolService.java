@@ -2,7 +2,6 @@ package com.motoo.api.service;
 
 import com.motoo.api.response.SchoolResponse;
 import com.motoo.db.repository.SchoolRepository;
-import com.motoo.db.repository.SigunguRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

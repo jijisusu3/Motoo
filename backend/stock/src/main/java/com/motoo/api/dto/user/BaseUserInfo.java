@@ -1,10 +1,6 @@
 package com.motoo.api.dto.user;
 
 
-import com.motoo.api.service.UserService;
-import com.motoo.api.service.UserServiceImpl;
-import com.motoo.db.entity.FavoriteStock;
-import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +8,6 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Setter @Getter

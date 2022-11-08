@@ -2,11 +2,8 @@ package com.motoo.api.response;
 
 import com.motoo.common.model.response.BaseResponseBody;
 import com.motoo.db.entity.Account;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Date;
 
 @Getter @Setter
 public class AccountListRes extends BaseResponseBody{

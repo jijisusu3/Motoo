@@ -1,9 +1,7 @@
 package com.motoo.api.service;
 
-import com.motoo.api.request.AccountStockAddPostReq;
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
