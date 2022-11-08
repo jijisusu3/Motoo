@@ -1,10 +1,10 @@
 package com.motoo.api.controller;
 
 import com.motoo.api.dto.kakao.KakaoProfile;
-import com.motoo.api.dto.user.AccountStockInfo;
 import com.motoo.api.dto.user.BaseUserInfo;
 import com.motoo.api.request.LikeStockReq;
 import com.motoo.api.request.UpdateUserProfileReq;
+import com.motoo.api.response.FavoriteStockRes;
 import com.motoo.api.response.LoginResponse;
 import com.motoo.api.service.AccountService;
 import com.motoo.api.service.FavoriteStockService;
@@ -17,9 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +29,7 @@ public class UserController {
     private final KakaoService kakaoService;
     private final FavoriteStockService favoriteStockService;
     private final AccountService accountService;
+    private final EntityManager entityManager;
 
 
     /**유저 정보 받아오기
@@ -66,6 +67,7 @@ public class UserController {
         userService.updateNickname(id, updateUserProfileReq.getNickname());
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "닉네임이 변경되었습니다."));
     }
+
     /**유저 주계좌 변경
      *
      */
@@ -80,8 +82,8 @@ public class UserController {
         }
         userService.updateCurrent(userId, updateUserProfileReq.getCurrent());
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌가 변경되었습니다."));
-
     }
+
     /**관심종목 등록/삭제
      *
      */
@@ -94,13 +96,24 @@ public class UserController {
         //관심종목 리스트에 해당 주식이 있으면 관심종목 해제
         if (idList.contains(likeStockReq.getStockId())) {
             favoriteStockService.delistStock(userId, likeStockReq.getStockId());
-            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "관심종목에서 해제함"));
+
+            // 변경된 데이터를 반영하기 위해 cache 초기화 후 다시 조회
+            entityManager.clear();
+            User changedUser = userService.getByUserId(userId).orElseGet(() -> new User());
+            List<String> favoriteStockCodeList = favoriteStockService.getFavoriteStockCodeList(changedUser);
+
+            return ResponseEntity.status(200).body(FavoriteStockRes.of(favoriteStockCodeList,200, "관심종목에서 해제함"));
         }
         //관심종목 리스트에 해당 주식이 없으면 관심종목 등록
         favoriteStockService.registerStock(userId, likeStockReq.getStockId());
-        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "관심종목으로 등록함"));
-    }
 
+        // 변경된 데이터를 반영하기 위해 cache 초기화 후 다시 조회
+        entityManager.clear();
+        User changedUser = userService.getByUserId(userId).orElseGet(() -> new User());
+        List<String> favoriteStockCodeList = favoriteStockService.getFavoriteStockCodeList(changedUser);
+
+        return ResponseEntity.status(200).body(FavoriteStockRes.of(favoriteStockCodeList,200, "관심종목에 등록함"));
+    }
 
     /**소셜로그인
      *
@@ -116,5 +129,4 @@ public class UserController {
 
         return loginResponse;
     }
-
 }

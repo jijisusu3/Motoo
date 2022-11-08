@@ -27,6 +27,12 @@ public class FavoriteStockService {
         return favoriteStockIdList;
     }
 
+    public List<String> getFavoriteStockCodeList(User user) {
+        List<String> favoriteStockCodeList = user.getFavoriteStocks().stream().map(favoriteStock ->
+                favoriteStock.getStock().getTicker()).collect(Collectors.toList());
+        return favoriteStockCodeList;
+    }
+
     public void registerStock(Long userId, Long stockId) {
         User user = userRepository.findByUserId(userId).orElseGet(() -> new User());
         Stock stock = stockRepository.findById(stockId).orElseGet(() -> new Stock());
