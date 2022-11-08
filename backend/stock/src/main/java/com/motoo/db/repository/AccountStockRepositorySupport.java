@@ -2,6 +2,7 @@ package com.motoo.db.repository;
 
 
 
+import com.motoo.db.entity.AccountStock;
 import com.motoo.db.entity.*;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;

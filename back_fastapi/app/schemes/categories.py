@@ -9,6 +9,7 @@ class Category(BaseModel):
     keyword: Union[List[str], None] = Field(default=[], description="업종키워드")
     info: Union[str, None] = Field(description="업종정보")
     sentiment: Union[List[float], None] = Field(default=[], description="업종감정분석")
+    represent: Union[List[str], None] = Field(default=[], description="대표종목")
 
 
 class GetCategoryDetailResponse(Category, CommonResponse):

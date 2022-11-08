@@ -1,7 +1,6 @@
 package com.motoo.api.response;
 
 import com.motoo.common.model.response.BaseResponseBody;
-import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
 import lombok.Getter;
 import lombok.Setter;

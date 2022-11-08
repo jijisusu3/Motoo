@@ -11,6 +11,7 @@ const initialState = {
 };
 
 const categoryGet = createAsyncThunk("stock-detail/categoryGet", async (id) => {
+  console.log("여기는오나?")
   return axios({
     method: "get",
     url: `${api1}category/${id}`,
@@ -21,9 +22,17 @@ const categoryGet = createAsyncThunk("stock-detail/categoryGet", async (id) => {
 });
 
 const stockDetailGet = createAsyncThunk("stock-detail", async (num) => {
-  return axios.get(`${api1}stocks/detail/${num}`,
-    ).then((response) => {
-    return response.data
+  return axios.get(`${api1}stocks/detail/${num}`).then((response) => {
+    return response.data;
+  });
+});
+
+const shortStockGet = createAsyncThunk("stock-detail/short", async (num) => {
+  return axios.get(`${api1}stocks/short/${num}`).then((response) => {
+    console.log('여기맞나');
+    console.log(response.data)
+    console.log('맞지');
+    return response.data;
   });
 });
 
@@ -33,22 +42,27 @@ export const stockSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(categoryGet.fulfilled, (state, action) => {
-      state.category = action.payload
+      state.category = action.payload;
     });
     builder.addCase(stockDetailGet.fulfilled, (state, action) => {
-      console.log(action.payload)
-      state.detail = action.payload
+      console.log(action.payload);
+      state.detail = action.payload;
       const tmp = {
         price: action.payload.price,
         volumn: action.payload.volumn,
         fluctuation_price: action.payload.fluctuation_price,
         fluctuation_rate: action.payload.fluctuation_rate,
-        trading_value : action.payload.trading_value,
-        daily: action.payload.daily
-      }
-      state.shortStockData = tmp
-    })
+        trading_value: action.payload.trading_value,
+        daily: action.payload.daily,
+        name: action.payload.name,
+      };
+      state.shortStockData = tmp;
+    });
+    builder.addCase(shortStockGet.fulfilled, (state, action) => {
+      state.shortStockData = action.payload;
+      // console.log(action.payload)
+    });
   },
 });
 
-export { categoryGet, stockDetailGet };
+export { categoryGet, stockDetailGet, shortStockGet };

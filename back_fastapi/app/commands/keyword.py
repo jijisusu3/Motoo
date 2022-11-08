@@ -1,7 +1,9 @@
 import time
-import requests
+import typer
+import asyncio
 import pandas as pd
 import re
+import requests
 
 import torch
 import torch.nn as nn
@@ -11,9 +13,8 @@ from tqdm import tqdm
 from app.config import settings
 from app.models.stocks import Category, Keyword
 
-from fastapi import APIRouter
+app = typer.Typer()
 
-router = APIRouter(prefix="/keyword_back")
 
 tokenizer = AutoTokenizer.from_pretrained("snunlp/KR-FinBert-SC")
 model = AutoModelForSequenceClassification.from_pretrained("snunlp/KR-FinBert-SC")
@@ -58,7 +59,6 @@ def clean(x):
         x = re.sub(f"{category_lst[s]}","",x)
     return x
 
-@router.get("/category")
 async def get_category_keyword():
     tm = time.time()
     for i in range(len(category_lst)):
@@ -87,13 +87,12 @@ async def get_category_keyword():
         top_lst = a.value_counts().iloc[:10]
         result = top_lst.index.tolist()
         now = time.time()
+        print(now-tm)
         category.keyword = result
         await category.save(update_fields=('keyword',))
-        print(now-tm)
     return None
 
 
-@router.get("/category/sentiment")
 async def get_category_sentiment():
     tm = time.time()
     for i in range(len(category_lst)):
@@ -147,7 +146,6 @@ async def get_category_sentiment():
     return None
 
 
-@router.get("/company")
 async def get_company_keyword():
     tm = time.time()
     for i in range(len(company_lst)):
@@ -177,13 +175,12 @@ async def get_company_keyword():
         result = top_lst.index.tolist()
 
         now = time.time()
+        print(now-tm)
         keyword.keyword = result
         await keyword.save(update_fields=('keyword',))
-        print(now-tm)
     return None
 
 
-@router.get("/company/sentiment")
 async def get_company_sentiment():
     tm = time.time()
     for i in range(len(company_lst)):
@@ -235,3 +232,23 @@ async def get_company_sentiment():
         now = time.time()
         print(now-tm)
     return None
+
+@app.command()
+def category_key():
+  asyncio.run(get_category_keyword())
+
+@app.command()
+def category_sent():
+  asyncio.run(get_category_sentiment())
+
+@app.command()
+def company_key():
+  asyncio.run(get_company_keyword())
+
+@app.command()
+def company_sent():
+  asyncio.run(get_company_sentiment())
+
+
+if __name__ == "__main__":
+    app()

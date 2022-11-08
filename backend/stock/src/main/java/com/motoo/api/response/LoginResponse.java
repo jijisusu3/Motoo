@@ -1,11 +1,8 @@
 package com.motoo.api.response;
 
 import com.motoo.api.dto.user.BaseUserInfo;
-import com.motoo.db.entity.User;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Optional;
 
 @Getter @Setter
 public class LoginResponse {

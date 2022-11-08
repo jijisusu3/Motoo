@@ -1,11 +1,7 @@
 package com.motoo.api.service;
 
 
-import com.motoo.db.entity.Account;
 import com.motoo.db.entity.Trading;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

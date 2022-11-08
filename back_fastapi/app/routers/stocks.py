@@ -17,11 +17,10 @@ router = APIRouter(prefix="/stocks")
 
 @router.get("/detail/{ticker}",
             description="주식 상세 조회",
-            response_model=GetStockDetailResponse,
-            response_model_exclude_none=True)
+            response_model=GetStockDetailResponse)
 async def get_stock_detail(ticker: str, response: Response):
     try:
-        stock = await Stock.get(ticker=ticker).select_related('keywords')
+        stock = await Stock.get(ticker=ticker).select_related('keywords').select_related('category')
         keywords = await stock.keywords
     except tortoise.exceptions.DoesNotExist:
         response.status_code = 404
@@ -39,18 +38,18 @@ async def get_stock_detail(ticker: str, response: Response):
         date__gte=date.today()-timedelta(365)
     ).order_by('-id'))[::5][::-1]
     return GetStockDetailResponse(**dict(stock),
+                                  category_name=stock.category.name,
                                   daily=daily,
                                   weekly=weekly,
                                   monthly=monthly,
                                   yearly=yearly,
-                                  keyword=keywords.keyword,
-                                  sentiment=keywords.sentiment,
+                                  keyword=keywords.keyword if keywords else None,
+                                  sentiment=keywords.sentiment if keywords else None,
                                   )
 
 
 @router.get("/short/{ticker}", description="주식 간단 조회",
-            response_model=GetShortStockResponse,
-            response_model_exclude_none=True)
+            response_model=GetShortStockResponse)
 async def get_stock_short(ticker: str, response: Response):
     try:
         stock = await Stock.get(ticker=ticker)
@@ -113,4 +112,3 @@ async def get_school_hot_list(user_id: int, response: Response):
         response.status_code = 404
         return SchoolHotStockResponse(message="failed")
     return SchoolHotStockResponse(stock_id=hot_stock.pk, stock_name=hot_stock.name, stock_ticker=hot_stock.ticker)
-

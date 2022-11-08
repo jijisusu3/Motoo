@@ -1,12 +1,13 @@
 package com.motoo.api.service;
 
 
-import com.motoo.api.request.AccountStockAddPostReq;
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
-import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.User;
-import com.motoo.db.repository.*;
+import com.motoo.db.repository.AccountRepository;
+import com.motoo.db.repository.AccountRepositorySupport;
+import com.motoo.db.repository.AccountStockRepositorySupport;
+import com.motoo.db.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

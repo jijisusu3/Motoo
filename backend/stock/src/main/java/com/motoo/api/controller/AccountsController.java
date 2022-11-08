@@ -11,24 +11,22 @@ import com.motoo.api.service.UserService;
 import com.motoo.common.model.response.BaseResponseBody;
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
+
 import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.User;
 import com.motoo.db.repository.AccountStockRepository;
 import com.motoo.db.repository.StockRepository;
 import com.motoo.db.repository.StockRepositorySupport;
 import com.motoo.db.repository.UserRepository;
+
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNullApi;
 import org.springframework.security.core.Authentication;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 @Api(value = "계좌 API", tags = {"Account"})

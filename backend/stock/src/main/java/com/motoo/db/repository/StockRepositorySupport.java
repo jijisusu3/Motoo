@@ -1,15 +1,11 @@
 package com.motoo.db.repository;
 
 
-import com.motoo.db.entity.AccountStock;
-import com.motoo.db.entity.QAccountStock;
-import com.motoo.db.entity.QStock;
 import com.motoo.db.entity.Stock;
+import com.motoo.db.entity.QStock;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor

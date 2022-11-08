@@ -1,19 +1,14 @@
 package com.motoo.api.controller;
 
 
-import com.motoo.api.request.MakeAccountPostReq;
 import com.motoo.api.request.MakeOrderPostReq;
-import com.motoo.api.request.UpdateAccountNameReq;
 import com.motoo.api.request.UpdateOrderReq;
 import com.motoo.api.response.AccountListRes;
-import com.motoo.api.response.AccountsListRes;
 import com.motoo.api.response.TradingListRes;
 import com.motoo.api.service.TradingService;
 import com.motoo.api.service.UserService;
 import com.motoo.common.model.response.BaseResponseBody;
-import com.motoo.db.entity.Account;
 import com.motoo.db.entity.Trading;
-import com.motoo.db.entity.User;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

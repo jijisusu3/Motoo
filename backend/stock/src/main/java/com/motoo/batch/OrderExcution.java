@@ -11,8 +11,10 @@ import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.Trading;
 import com.motoo.db.repository.StockRepositorySupport;
 import com.motoo.db.repository.TradingRepositorySupport;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

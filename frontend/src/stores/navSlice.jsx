@@ -19,11 +19,11 @@ export const navSlice = createSlice({
       var id = mylocation.substring(mylocation.lastIndexOf("/") + 1);
       const tmpList = [
         `/stock/detail/${id}`,
-        "/stock/limit-order/buy",
-        "/stock/limit-order/sell",
-        "/stock/buy",
-        "/stock/sell",
-        "/stock/industry",
+        `/stock/limit-order/buy/${id}`,
+        `/stock/limit-order/sell/${id}`,
+        `/stock/buy/${id}`,
+        `/stock/sell/${id}`,
+        `/stock/industry/${id}`,
         "/login"
       ];
       if (tmpList.includes(mylocation)) {
