@@ -32,4 +32,10 @@ public class TradingRepositorySupport {
                 .where(qTrading.tradeId.eq(tradeId))
                 .fetchOne();
     }
+
+    public List<Trading> findAllTrading(){
+        return jpaQueryFactory.select(qTrading).from(qTrading)
+                .where(qTrading.tr_type.eq(3).or(qTrading.tr_type.eq(4)))
+                .fetch();
+    }
 }

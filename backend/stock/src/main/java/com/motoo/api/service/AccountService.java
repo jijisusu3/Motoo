@@ -51,5 +51,4 @@ public interface AccountService {
     List<AccountStock> listAccountStock(Long accountId);
 
 
-
 }

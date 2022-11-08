@@ -22,6 +22,13 @@ public class StockRepositorySupport {
         return jpaQueryFactory.selectFrom(qStock).where(qStock.stockId.eq(stockId)).fetchOne();
     }
 
+    public Long findStockIdByTicker(String tiker){
+        Stock stock = jpaQueryFactory.selectFrom(qStock).where(qStock.ticker.eq(tiker)).fetchOne();
+        return stock.getStockId();
+    }
+
+
+
 //
 //    public long CountByAccountsId(Long accountsId){
 //        return jpaQueryFactory.selectFrom(qAccountStock)
