@@ -200,7 +200,6 @@ public class AccountsController {
                 if( accountStock.getAmount()<accountStockAddPostReq.getAmount()){
                     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌에 해당 주식의 양이 없습니다."));
                 }else {
-
 //                accountStockService.deleteStockInAccount(userId, accountStockAddPostReq.getAccountId(), accountStockAddPostReq.getStockId());
                 List<AccountStock> accountStocks = accountService.getAccountStockByUserIdAccountId(accountStockAddPostReq.getAccountId(),userId);
 

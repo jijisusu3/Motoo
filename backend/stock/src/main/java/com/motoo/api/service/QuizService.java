@@ -40,7 +40,7 @@ public class QuizService {
         if (req.getAnswer() == quiz.getAnswer()) {
             accountService.updateSeed(account, 2000000);
             Trading trade = new Trading();
-            trade.writeOrder(account, null, "퀴즈", 5, 2000000, 0);
+//            trade.writeOrder(account, null, "퀴즈", 5, 2000000, 0);
             tradingRepository.save(trade);
             String result = "정답";
             return result;
