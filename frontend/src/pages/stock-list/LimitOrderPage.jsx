@@ -103,40 +103,41 @@ function LimitOrderPage() {
     }
     const differLabel = differCheck();
     return (
-      <Link style={{textDecoration: 'none'}} to={`/stock/limit-order/${go}`} state={{data: stock}}>
-        <div className={classes.myLimitOrderCard}>
-          <p>{stock.name}</p>
-          <p>
-            <span>
-              {stock.price}
-            </span>
-          </p>
-          <div
-            style={{
-              width: 33,
-              height: 17,
-              borderRadius: 5,
-              backgroundColor: differLabel,
-            }}
-          >
-            <p style={{ color: "white", fontSize: 10, fontWeight: 700 }}>
-              {differText}
-            </p>
+      <div className={classes.listbox}>
+        <Link style={{textDecoration: 'none'}} to={`/stock/limit-order/${go}`} state={{data: stock}}>
+          <div className={classes.myLimitOrderCard}>
+            <div className={classes.rowbox}>
+              <div className={classes.label}
+                style={{
+                  backgroundColor: differLabel,
+                }}
+              >
+                <div style={{ color: "white", fontSize: 10, fontWeight: 700 }}>
+                  {differText}
+                </div>
+              </div>
+              <div>{stock.name}</div>
+            </div>
+            <div className={classes.pr}>{stock.price}원</div>
           </div>
-        </div>
-      </Link>
+          <div className={classes.hrline}></div>
+        </Link>
+      </div>
     );
   }
   return (
     <div>
-      <div>
+      <div className={classes.info}>
         <img
+          className={classes.pd}
           src={`${process.env.PUBLIC_URL}/grayBack.svg`}
           alt=""
           onClick={backToStockList}
         />
         <div>매일 15:30에 리셋</div>
       </div>
+        <div className={classes.hrline}></div>
+        <div className={classes.title}>대기중인 주문</div>
       {data.map((stock) => (
         <MyRealizedCard 
           key={stock.code}

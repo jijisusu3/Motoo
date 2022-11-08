@@ -50,6 +50,11 @@ public class User {
 
     private Date quizDay;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<Trading> tradings  = new ArrayList<>();
+
+
     public void createUser(String email, String nickname){
         this.email = email;
         this.nickname = nickname;

@@ -25,50 +25,49 @@ public class Stock {
     private String name;
 
 
-
+    @JsonIgnore
     @Column(name="m_capital")
     private BigInteger m_capital;
-
+    @JsonIgnore
     @Column(name="issued")
     private BigInteger issued;
-
+    @JsonIgnore
     @Column(name="trading_value")
     private BigInteger trading_value;
 
-
     @Column(name="price")
     private Integer price;
-
+    @JsonIgnore
     @Column(name="close_price")
     private Integer close_price;
-
+    @JsonIgnore
     @Column(name="fluctuation_price")
     private Integer fluctuation_price;
-
+    @JsonIgnore
     @Column(name="volume")
     private Integer volume;
-
+    @JsonIgnore
     @Column(name="maximum")
     private Integer maximum;
-
+    @JsonIgnore
     @Column(name="minimum")
     private Integer minimum;
-
+    @JsonIgnore
     @Column(name="per")
     private Short per;
-
+    @JsonIgnore
     @Column(name="fluctuation_rate")
     private Short fluctuation_rate;
-
+    @JsonIgnore
     @Column(name="capital")
     private Integer capital;
-
+    @JsonIgnore
     @Column(name="open_price")
     private Integer open_price;
-
+    @JsonIgnore
     @Column(name="category_id")
     private Integer category_id;
-
+    @JsonIgnore
     @Column(name="eps")
     private Short eps; //DOUBL
 

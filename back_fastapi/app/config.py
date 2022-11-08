@@ -55,7 +55,7 @@ TORTOISE_ORM = {
 pool = redis.ConnectionPool(
     host=settings.REDIS_HOST,
     port=settings.REDIS_PORT,
-    # password=configs.REDIS_PASSWORD,
+    password=settings.ROOT_PASSWORD,
     decode_responses=True
 )
 redis_session = redis.Redis(connection_pool=pool)

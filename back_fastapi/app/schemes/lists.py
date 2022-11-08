@@ -19,4 +19,8 @@ class GetFavoriteStockListResponse(Favorite, CommonResponse):
   pass
 
 class GetTopStockListResponse(CommonResponse):
-  stocks: List[StockList]
+  stocks1: List[StockList]
+  stocks2: List[StockList]
+  stocks3: List[StockList]
+  stocks4: List[StockList]
+  stocks5: List[StockList]

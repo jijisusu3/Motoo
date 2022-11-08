@@ -18,8 +18,12 @@ public class AccountStockServiceImpl implements AccountStockService{
 
     private final AccountStockRepository accountStockRepository;
     private final StockRepository stockRepository;
+
+    private final StockRepositorySupport stockRepositorySupport;
     private final AccountRepositorySupport accountRepositorySupport;
     private final AccountStockRepositorySupport accountStockRepositorySupport;
+
+
 
     @Override
     public void addStockToAccount(Long userId, Long accountId, Long stockId) {
@@ -60,9 +64,9 @@ public class AccountStockServiceImpl implements AccountStockService{
     }
 
     @Override
-    public Long getAccountStockIdByStockId(Long stockId){
-        Long accountId  = accountStockRepositorySupport.findAccountIdByStockId(stockId);
-        return accountId;
+    public Long getAccountStockIdByStockId(Long accountId ,Long stockId){
+        Long accountStockId  = accountStockRepositorySupport.findAccountIdByStockId(accountId ,stockId);
+        return accountStockId;
     }
     @Override
     @Transactional
@@ -70,7 +74,12 @@ public class AccountStockServiceImpl implements AccountStockService{
         accountStock.updateAccountStockAmountPrice(amount, price);
 
     }
+    @Override
+    public Long getStockIdByTicker(String ticker){
+        Long stockId = stockRepositorySupport.findStockIdByTicker(ticker);
 
+        return stockId;
+    }
     /**
      * public void registerStock(Long userId, Long stockId) {
      *         User user = userRepository.findByUserId(userId).orElseGet(() -> new User());

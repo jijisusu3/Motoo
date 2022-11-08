@@ -1,4 +1,5 @@
 import itemData from "../../data/item-name-code.json";
+import classes from "./StockListPage.module.css";
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
@@ -74,9 +75,8 @@ function StockSearchPage() {
             onClick={() => goToDetail(item.ticker)}
             // className={`search-preview ${item.index === 0 ? "start" : ""}`}
           >
-            <div className="first">
-              <p className="name">{item.name}</p>
-            </div>
+            <div className={classes.first}>{item.name}</div>
+            <div className={classes.hrline}></div>
           </div>
         );
       });
@@ -84,15 +84,18 @@ function StockSearchPage() {
     return renderResults;
   }
   return (
-    <div>
-      <InputContainer>
+    <div className={classes.bar}>
+      <div className={classes.iptbox}>
         <input
+          className={classes.ipt}
           type="text"
           value={keyword || ""}
           onChange={(e) => updateField("keyword", e.target.value)}
+          placeholder='검색할 주식을 입력해주세요.'
         />
-      </InputContainer>
-      <SearchBar />
+        <img className={classes.dot} src={`${process.env.PUBLIC_URL}/stock-list/dotbogi.svg`} alt="" />
+      </div>
+      <SearchBar/>
     </div>
   );
 }

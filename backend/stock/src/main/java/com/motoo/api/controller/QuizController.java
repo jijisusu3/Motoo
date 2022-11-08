@@ -35,7 +35,6 @@ public class QuizController {
         userService.updateQuizDay(id, now);
         String result = quizService.solveQuiz(id, quizReq);
 
-
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, result));
     }
 

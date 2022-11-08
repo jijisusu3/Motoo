@@ -1,12 +1,16 @@
+import datetime
 from datetime import date, timedelta
-
+from collections import defaultdict
 import tortoise
 from fastapi import APIRouter, Response, WebSocket, WebSocketDisconnect
 
 from app.config import manager
 from app.const import *
+from app.models.accounts import Trading, Account
 from app.models.stocks import Stock
-from app.schemes.stocks import GetStockDetailResponse, GetShortStockResponse, BidAskResponse
+from app.models.users import User, School
+from app.schemes.common import CommonResponse
+from app.schemes.stocks import GetStockDetailResponse, GetShortStockResponse, BidAskResponse, SchoolHotStockResponse
 
 router = APIRouter(prefix="/stocks")
 
@@ -17,30 +21,37 @@ router = APIRouter(prefix="/stocks")
             response_model_exclude_none=True)
 async def get_stock_detail(ticker: str, response: Response):
     try:
-        stock = await Stock.get(ticker=ticker)
+        stock = await Stock.get(ticker=ticker).select_related('keywords')
+        keywords = await stock.keywords
     except tortoise.exceptions.DoesNotExist:
         response.status_code = 404
         return GetStockDetailResponse(message="failed")
     today = date.today().strftime("%Y-%m-%d")
     # 차트 데이터
-    daily = await candle_map[stock.category_id].filter(stock=stock.pk, date=today)
+    daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
     weekly = (await candle_map[stock.category_id].filter(
-        stock=stock.pk,
+        stock_id=stock.pk,
         date__gte=date.today()-timedelta(7)
     ).order_by('-id'))[::6][::-1]
-    monthly = await day_map[stock.category_id].filter(stock=stock.pk, date__gte=date.today()-timedelta(31))
+    monthly = await day_map[stock.category_id].filter(stock_id=stock.pk, date__gte=date.today()-timedelta(31))
     yearly = (await day_map[stock.category_id].filter(
-        stock=stock.pk,
+        stock_id=stock.pk,
         date__gte=date.today()-timedelta(365)
     ).order_by('-id'))[::5][::-1]
-    return GetStockDetailResponse(**dict(stock), daily=daily, weekly=weekly, monthly=monthly, yearly=yearly)
+    return GetStockDetailResponse(**dict(stock),
+                                  daily=daily,
+                                  weekly=weekly,
+                                  monthly=monthly,
+                                  yearly=yearly,
+                                  keyword=keywords.keyword,
+                                  sentiment=keywords.sentiment,
+                                  )
 
 
 @router.get("/short/{ticker}", description="주식 간단 조회",
             response_model=GetShortStockResponse,
-            response_model_exclude_none=True,
-            response_model_exclude={'name', 'id', 'ticker'})
-async def get_stock_detail(ticker: str, response: Response):
+            response_model_exclude_none=True)
+async def get_stock_short(ticker: str, response: Response):
     try:
         stock = await Stock.get(ticker=ticker)
     except tortoise.exceptions.DoesNotExist:
@@ -48,7 +59,7 @@ async def get_stock_detail(ticker: str, response: Response):
         return GetStockDetailResponse(message="failed")
     today = date.today().strftime("%Y-%m-%d")
     # 차트 데이터
-    daily = await candle_map[stock.category_id].filter(stock=stock.pk, date=today)
+    daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
     return GetShortStockResponse(**dict(stock), daily=daily)
 
 
@@ -78,3 +89,28 @@ async def get_bidask_list(ticker: str):
             bid = sorted(redis_session.lrange('bid' + ticker, 0, 9), reverse=True)[:5]
             ask = sorted(redis_session.lrange('ask' + ticker, 0, 9))[:5]
     return BidAskResponse(bid=bid, ask=ask)
+
+
+@router.get("/school-hot/{user_id}", description="교내 핫 종목", response_model=SchoolHotStockResponse)
+async def get_school_hot_list(user_id: int, response: Response):
+    try:
+        user = await User.get(id=user_id)
+        users_in_school = await User.filter(school_id=user.school_id).values_list('id', flat=True)
+        accounts = await Account.filter(school=True, user_id__in=users_in_school).values_list('id', flat=True)
+        not_finished = await Trading.filter(tr_date__isnull=True, account_id__in=accounts)
+        finished = await Trading.filter(tr_date__gte=datetime.datetime.today()-datetime.timedelta(7),
+                                        account_id__in=accounts)
+        tr_amounts = defaultdict(int)
+        for tr_yet in not_finished:
+            tr_amounts[tr_yet.ticker] += int(tr_yet.tr_amount)
+        for trd in finished:
+            tr_amounts[trd] += int(trd.tr_amount)
+        hot_item = None
+        if tr_amounts.values():
+            hot_item = max(tr_amounts, key=tr_amounts.get)
+        hot_stock = await Stock.get(ticker=hot_item)
+    except tortoise.exceptions.DoesNotExist:
+        response.status_code = 404
+        return SchoolHotStockResponse(message="failed")
+    return SchoolHotStockResponse(stock_id=hot_stock.pk, stock_name=hot_stock.name, stock_ticker=hot_stock.ticker)
+

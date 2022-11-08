@@ -21,13 +21,13 @@ public interface AccountStockService {
     AccountStock getAccountStockByUserIdAccountStockId(Long userId, Long AccountStockId);
 
     //accountStockId 반환
-    Long getAccountStockIdByStockId(Long stockId);
+    Long getAccountStockIdByStockId(Long accountId ,Long stockId);
 
     //이동평균법 적용한 새로운 amount, price
     @Transactional
     void updateAmountPrice(AccountStock accountStock, int amount, int price);
 
-
+    Long getStockIdByTicker(String ticker);
 }
 
 
