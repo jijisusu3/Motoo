@@ -34,7 +34,7 @@ async def update_and_insert_stock_list(update_time: str = None):
     category_dict = defaultdict(list)
     stocks = await Stock.all()
     async with aiohttp.ClientSession(headers=header) as session:
-        for r in range(len(stocks)//20):
+        for r in range(1+len(stocks)//20):
             start = time.time()
             for stck in stocks[20*r:20*(r+1)]:
                 async with session.get(candle_url, params=parameter_setter(stck.ticker, input_time)) as response:
@@ -56,6 +56,7 @@ async def update_and_insert_stock_list(update_time: str = None):
                         min_price=min([int(item['stck_lwpr']) for item in items]),
                     )
                     category_dict[stck.category_id].append(res)
+                stck.name = data['output1']['hts_kor_isnm']
                 stck.price = data['output1']['stck_prpr']
                 stck.fluctuation_rate = data['output1']['prdy_ctrt']
                 stck.fluctuation_price = data['output1']['prdy_vrss']
@@ -68,8 +69,10 @@ async def update_and_insert_stock_list(update_time: str = None):
         print('update')
         for category in category_dict.keys():
             await candle_map[category].bulk_create(category_dict[category])
-    await Stock.bulk_update(stocks,
-                            fields=('price', 'fluctuation_rate', 'fluctuation_price', 'trading_value', 'volume',))
+    await Stock.bulk_update(
+        stocks,
+        fields=('name', 'price', 'fluctuation_rate', 'fluctuation_price', 'trading_value', 'volume',)
+    )
     finished = time.time()
     print(f'{finished - initial_start}s 종료')
     return None
@@ -88,6 +91,12 @@ def get_item(my_ticker: str ='005930'):
 @app.command()
 def update_stocks(time_now: str = None):
     asyncio.run(update_and_insert_stock_list(time_now))
+
+
+@app.command()
+def update_stocks_with_time():
+    input_time = datetime.datetime.now().strftime('%H%M00')
+    asyncio.run(update_and_insert_stock_list(input_time))
 
 
 if __name__ == "__main__":
