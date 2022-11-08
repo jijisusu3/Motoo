@@ -6,7 +6,7 @@ const initialState = {
     isLoggin: false,
     token: "",
     quizDay: "2022-11-04",
-    likeList: [],
+    likeList: [],                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
     haveList: [],
     data: {},
   },
@@ -18,6 +18,7 @@ export const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     setLogin: (state, action) => {
+      console.log(action.payload)
       state.user.isLoggin = true;
       state.user.token = action.payload.token;
       state.user.likeList = action.payload.user.favoriteStockCode;
