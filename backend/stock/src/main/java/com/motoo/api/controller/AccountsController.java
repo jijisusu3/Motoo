@@ -212,7 +212,7 @@ public class AccountsController {
             //주식 소유여부 분기
             if (stockList.contains(accountStockAddPostReq.getStockId())) {
                 //판매할 금액이 현재 주식가격보다 높을경우 판매불가
-                if(accountStockAddPostReq.getPrice() > accountStockAddPostReq.getAmount()*stock.getPrice()){
+                if(accountStockAddPostReq.getAmount()*accountStockAddPostReq.getPrice() > accountStockAddPostReq.getAmount()*stock.getPrice()){
                     return ResponseEntity.status(200).body(BaseResponseBody.of(200, "판매가격이 시장가보다 높습니다."));
                 }else{
                 //해당 보유한 주식의 양분기

@@ -23,7 +23,7 @@ public class TradingRepositorySupport {
     public List<Trading> findAllTradingListByUserId(Long userId){
         return jpaQueryFactory.select(qTrading).from(qTrading)
                 .where(qTrading.account.user.userId.eq(userId))
-                .orderBy(qTrading.tr_amount.asc()).fetch();
+                .orderBy(qTrading.tr_date.desc()).fetch();
     }
 
     public Trading findTradingByUserIdAccountId(Long userId, Long tradeId){
