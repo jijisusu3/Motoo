@@ -5,7 +5,8 @@ import com.motoo.db.entity.Account;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 public class AccountListRes extends BaseResponseBody{
     long accountId;
 
@@ -13,8 +14,10 @@ public class AccountListRes extends BaseResponseBody{
 
     int seed;
 
+
     public static AccountListRes of (Account account, Integer statusCode, String message){
         AccountListRes res = new AccountListRes();
+
         res.setAccountId(account.getAccountId());
         res.setName(account.getName());
         res.setSeed(account.getSeed());

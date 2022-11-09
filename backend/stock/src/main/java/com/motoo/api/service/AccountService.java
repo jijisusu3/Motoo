@@ -2,6 +2,7 @@ package com.motoo.api.service;
 
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
+import com.motoo.db.entity.Stock;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface AccountService {
 
     long[] getAccountCount(List<Account> accounts);
 
-
+//    List<Stock> getStockList(Long userId, Long accountId);
     //accounts Stock 관련
 
 

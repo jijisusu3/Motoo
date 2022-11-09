@@ -80,12 +80,32 @@ public class TradingServiceImpl implements TradingService{
     //주문 객체 조회
     @Override
     public Trading getTrading(Long userId, Long tradeId){
-        return tradingRepositorySupport.findTradingByUserIdAccountId(userId, tradeId);
+        return tradingRepositorySupport.findTradingByUserIdTradeId(userId, tradeId);
     }
-
+    //주문 객체 조회
+    @Override
+    public Trading getTradingByUserIdAccountId(Long userId, Long accountId){
+        return tradingRepositorySupport.findTradingByUserIdAccountId(userId, accountId);
+    }
     //주문 타입 바꾸기
     @Override
     public void updateType(Trading trading, int tr_type){
         trading.updateType(tr_type);
     }
+
+    @Override
+    public List <Trading> tradingList1Or2(Long userId, Long accountId){
+        return tradingRepositorySupport.find1Or2ByUserIdAccountId(userId, accountId);
+    }
+
+    @Override
+    public List<Trading> tradingListAccount(Long userId, Long accountId){
+        return tradingRepositorySupport.findAllTradingsByUserIdAccountId(userId, accountId);
+    }
+
+    @Override
+    public void writeAvg(Trading trading, int tr_avg){
+        return;
+    }
+
 }
