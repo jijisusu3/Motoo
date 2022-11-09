@@ -14,9 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+import java.util.HashMap;
+
 
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,14 +69,25 @@ public class AccountsController {
         Long userId = userService.getUserIdByToken(authentication);
         List<Account> account = accountService.listAccount(userId);
         int seeds=0;
+
+        ArrayList pitches = new ArrayList();
+
+//        HashMap<Integer, Integer> pitches = new HashMap<Integer, Integer>();
         for (int i=0; i<account.size(); i++){
             seeds+= account.get(i).getSeed();
+            int accountAsset=0;
+            System.out.println(account.get(i).getSeed());
+            accountAsset+= account.get(i).getSeed();
+
+
             for (int a=0; a<account.get(i).getAccountStocks().size(); a++){
                  seeds+=account.get(i).getAccountStocks().get(a).getAmount()*account.get(i).getAccountStocks().get(a).getPrice();
+                accountAsset+=account.get(i).getAccountStocks().get(a).getAmount()*account.get(i).getAccountStocks().get(a).getPrice();
+                 pitches.add(accountAsset);
             }
         }
 
-        return ResponseEntity.status(200).body(AccountsListRes.of(account,seeds, 200, "계좌 목록조회에 성공하였습니다."));
+        return ResponseEntity.status(200).body(AccountsListRes.of(account,  pitches, seeds,200, "계좌 목록조회에 성공하였습니다."));
     }
 
     //계좌 이름 수정
