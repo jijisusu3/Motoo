@@ -28,21 +28,29 @@ async def get_stock_detail(ticker: str, response: Response):
     today = date.today().strftime("%Y-%m-%d")
     # 차트 데이터
     daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
-    weekly = (await candle_map[stock.category_id].filter(
+    weekly = await candle_map[stock.category_id].filter(
         stock_id=stock.pk,
         date__gte=date.today()-timedelta(7)
-    ).order_by('-id'))[::6][::-1]
+    ).order_by('-id')
     monthly = await day_map[stock.category_id].filter(stock_id=stock.pk, date__gte=date.today()-timedelta(31))
-    yearly = (await day_map[stock.category_id].filter(
+    yearly = await day_map[stock.category_id].filter(
         stock_id=stock.pk,
         date__gte=date.today()-timedelta(365)
-    ).order_by('-id'))[::5][::-1]
+    ).order_by('-id')
+    weekly_data = weekly[::6][::-1]
+    yearly_data = yearly[::5][::-1]
     return GetStockDetailResponse(**dict(stock),
                                   category_name=stock.category.name,
                                   daily=daily,
-                                  weekly=weekly,
+                                  weekly=weekly_data,
                                   monthly=monthly,
-                                  yearly=yearly,
+                                  yearly=yearly_data,
+                                  weekly_min=min(weekly_data, key=lambda x: x.min_price),
+                                  weekly_max=max(weekly_data, key=lambda x: x.max_price),
+                                  monthly_min=min(monthly, key=lambda x: x.min_price),
+                                  monthly_max=max(monthly, key=lambda x: x.max_price),
+                                  yearly_min=min(yearly, key=lambda x: x.min_price),
+                                  yearly_max=max(yearly, key=lambda x: x.max_price),
                                   keyword=keywords.keyword if keywords else None,
                                   sentiment=keywords.sentiment if keywords else None,
                                   )

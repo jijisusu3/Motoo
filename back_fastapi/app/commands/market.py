@@ -62,9 +62,10 @@ async def update_and_insert_stock_list(update_time: str = None):
                 stck.fluctuation_price = data['output1']['prdy_vrss']
                 stck.trading_value = data['output1']['acml_tr_pbmn']
                 stck.volume = data['output1']['acml_vol']
-            time.sleep(0.7)
             end_s = time.time()
-            print(f'{min(20 * (r + 1), len(stocks))}개 {end_s - start}s')
+            time.sleep(min(abs(1.1-end_s+start), 1.02))
+            end_t = time.time()
+            print(f'{min(20 * (r + 1), len(stocks))}개 {end_t - start}s')
     if update_time is not None:
         print('update')
         for category in category_dict.keys():
