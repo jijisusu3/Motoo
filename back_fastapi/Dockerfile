@@ -3,10 +3,6 @@ WORKDIR /var/jenkins_home/workspace/motoo/BACK_FASTAPI
 ENV APP_MODULE app.app:app
 COPY ./requirements.txt ./
 
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends apt-utils
-RUN apt-get install cron
-
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 COPY . . 

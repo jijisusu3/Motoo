@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = ""
     ALGORITHM: str = ""
     ACCESS_TOKEN_EXPIRE_MINUTES: int = ""
+    JWT_ISSUER: str = ""
     OPEN_API_DOMAIN: str = ""
     CANDLE_API_URL: str = ""
     PRICE_API_URL: str = ""
