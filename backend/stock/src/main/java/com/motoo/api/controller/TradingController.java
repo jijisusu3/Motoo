@@ -44,7 +44,8 @@ public class TradingController {
                     makeOrderPostReq.getStockId(),
                     makeOrderPostReq.getTr_type(),
                     makeOrderPostReq.getPrice(),
-                    makeOrderPostReq.getAmount());
+                    makeOrderPostReq.getAmount(),
+                    null);
         } catch(
                 Exception e)
         {

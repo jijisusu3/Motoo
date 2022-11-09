@@ -12,7 +12,7 @@ public interface TradingService {
 
 
     //주문하기
-    void writeOrder(Long userId, Long accountId, Long stockId, int tr_type, int price, int amount);
+    void writeOrder(Long userId, Long accountId, Long stockId, int tr_type, int price, int amount, Integer tr_avg);
 
     //주문목록조회
     List<Trading> tradingList(Long userId);

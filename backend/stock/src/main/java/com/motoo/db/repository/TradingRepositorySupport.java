@@ -53,7 +53,7 @@ public class TradingRepositorySupport {
     public List<Trading> find1Or2ByUserIdAccountId(Long userId, Long accountId){
         List <Trading> tradings =
                 jpaQueryFactory.select(qTrading).from(qTrading)
-                        .where(qTrading.tr_type.eq(1).or(qTrading.tr_type.eq(2)))
+                        .where(qTrading.tr_type.eq(1).or(qTrading.tr_type.eq(2).or(qTrading.tr_type.eq(5))))
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
