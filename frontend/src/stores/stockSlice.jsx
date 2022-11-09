@@ -8,10 +8,11 @@ const initialState = {
   detail: {},
   category: {},
   shortStockData: {},
+  quizData: {},
+  realtime: {},
 };
 
 const categoryGet = createAsyncThunk("stock-detail/categoryGet", async (id) => {
-  console.log("여기는오나?")
   return axios({
     method: "get",
     url: `${api1}category/${id}`,
@@ -29,12 +30,32 @@ const stockDetailGet = createAsyncThunk("stock-detail", async (num) => {
 
 const shortStockGet = createAsyncThunk("stock-detail/short", async (num) => {
   return axios.get(`${api1}stocks/short/${num}`).then((response) => {
-    console.log('여기맞나');
-    console.log(response.data)
-    console.log('맞지');
     return response.data;
   });
 });
+
+const realtimeGet = createAsyncThunk("stock-list/realtime", async (num) => {
+  return axios.get(`${api1}list/top`).then((response) => {
+    console.log(response.data)
+  })
+})
+
+const quizGet = createAsyncThunk(
+  "stockList/quizGet",
+  async (data) => {
+    console.log(data)
+    const config = {
+      headers: {
+        Authorization: `Bearer ${data}`,
+      },
+    };
+    return axios
+    .get(`${api2}quiz`, config)
+    .then((response) => {
+      return response.data
+    })
+  }
+)
 
 export const stockSlice = createSlice({
   name: "stockSlice",
@@ -62,7 +83,13 @@ export const stockSlice = createSlice({
       state.shortStockData = action.payload;
       // console.log(action.payload)
     });
+    builder.addCase(quizGet.fulfilled, (state, action) => {
+      state.quizData = action.payload
+    });
+    builder.addCase(realtimeGet.fulfilled, (state, action) => {
+      console.log('realtime thunk')
+    });
   },
 });
 
-export { categoryGet, stockDetailGet, shortStockGet };
+export { categoryGet, stockDetailGet, shortStockGet, quizGet, realtimeGet };
