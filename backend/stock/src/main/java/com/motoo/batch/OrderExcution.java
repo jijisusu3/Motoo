@@ -44,7 +44,7 @@ public class OrderExcution {
 
     //매일 9시-16시 사이에 2분간격으로 조회
 //    @Scheduled(cron = " * 0/2 9,16 * * * ")
-//    @Scheduled(cron = " * * * * * * ")
+//    @Scheduled(cron = " 0/2 * * * * * ")
     public void timeSchedule() {
 
         //3판매예약,  4구매예약 인 거래계좌 리스트
@@ -86,6 +86,11 @@ public class OrderExcution {
 
                     //트레이딩 타입 바꿔줄 트레이딩의 객체
                     Trading trading = tradingService.getTrading(userId, tradeId);
+                    //accountStockId 가져오기
+                    Long accountStockId = accountStockService.getAccountStockIdByStockId(accountId, stockId);
+
+                    //accountStock 객체 가져오기
+                    AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
                     //accountStockId
 //                    Long accountStockId = accountStockService.getAccountStockIdByStockId(accountId, stockId);
 //                    AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
@@ -104,13 +109,11 @@ public class OrderExcution {
 //                        System.out.println("account Id : "+ accountId);
 //                        System.out.println("stockId : "+ stockId);
                         //문제의 그곳 ..
-                        System.out.println("==================================문제의 그곳=======================");
-//                        Long accountStockId = accountStockService.getAccountStockIdByStockId(accountId, stockId);
-                        Long accountStockId = accountStockRepositorySupport.findAccountIdByStockId(accountId,stockId);
-                        System.out.println(accountStockId);
-                        System.out.println("==================================문제의 그곳=======================");
-                        //accountStock 객체 가져오기
-                        AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
+
+
+//                        Long accountStockId = accountStockRepositorySupport.findAccountIdByStockId(accountId,stockId);
+
+
 
 
                         //주식 소유여부 분기
@@ -171,11 +174,10 @@ public class OrderExcution {
                             //계좌 주식 리스트에 해당 주식이 있으면 주식 평단가 수정
                             if (stockList.contains(stockId)){
 
-                                //accountStockId 가져오기
-                                Long accountStockId = accountStockService.getAccountStockIdByStockId(account.getAccountId(), stockId);
+
 
                                 //accountStock 객체 가져오기
-                                AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
+//                                AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
 
                                 //이동평균법에 의한 새로운 가격 계산하는 로직
                                 int currentAmount = accountStock.getAmount();
