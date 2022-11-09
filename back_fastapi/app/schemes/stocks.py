@@ -60,7 +60,7 @@ class EntireStockData(ShortStockData, OpenPrice, ClosePrice):
     ticker: Union[str, None]
     category_id: Union[int, None] = Field(description="업종 id")
     category_name: Union[str, None] = Field(default=None, description="업종 이름")
-    minimum : Union[int, None] = Field(description="하한가")
+    minimum: Union[int, None] = Field(description="하한가")
     maximum: Union[int, None] = Field(description="상한가")
     per: Union[float, None] = Field(default=None, description="주가수익률")
     eps: Union[float, None] = Field(default=None, description="주당순이익")
@@ -70,8 +70,14 @@ class EntireStockData(ShortStockData, OpenPrice, ClosePrice):
     sentiment: Union[List[float], None] = Field(description="종목감정분석")
     capital: Union[int, None] = Field(default=None, description="자본금")
     weekly: Union[List[CandleData], None] = Field(default=None, description="주간 60분봉")
+    weekly_min: Union[CandleData, None] = None
+    weekly_max: Union[CandleData, None] = None
     monthly: Union[List[DayChartData], None] = Field(default=None, description="월간 10분봉")
+    monthly_min: Union[DayChartData, None] = None
+    monthly_max: Union[DayChartData, None] = None
     yearly: Union[List[DayChartData], None] = Field(default=None, description="연간 10분봉")
+    yearly_min: Union[DayChartData, None] = None
+    yearly_max: Union[DayChartData, None] = None
 
 
 class GetStockDetailResponse(EntireStockData, CommonResponse):
