@@ -11,8 +11,8 @@ class StockList(BaseModel):
 
 
 class Favorite(BaseModel):
-  # user_id: int
-  stocks: List[StockList]
+  user_id: int
+  stocks: Union[List[StockList], None] = None
 
 
 class Top(BaseModel):

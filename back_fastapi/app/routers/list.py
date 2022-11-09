@@ -23,14 +23,13 @@ async def get_top_list(response: Response):
         return GetTopStockListResponse(message="failed")
     return GetTopStockListResponse(result=top)
 
-@router.get("/{user_id}",
+@router.get("/favorite",
             description="관심 종목 리스트",
             response_model=GetFavoriteStockListResponse)
-async def get_favorite_list(user_id: int, response: Response):
+async def get_favorite_list(response: Response, user: User = Depends(get_current_user)):
     try:
-        user = await User.get(id=user_id)
         stock = await user.my_stock
     except tortoise.exceptions.DoesNotExist:
         response.status_code = 404
         return GetFavoriteStockListResponse(message="failed")
-    return GetFavoriteStockListResponse(user_id=user_id, stocks=stock)
+    return GetFavoriteStockListResponse(user_id=user.pk, stocks=stock)
