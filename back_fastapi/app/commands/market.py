@@ -5,7 +5,6 @@ from collections import defaultdict
 import aiohttp
 import typer
 
-from app.config import redis_session
 from app.const import *
 from app.models.stocks import Stock
 
@@ -62,9 +61,10 @@ async def update_and_insert_stock_list(update_time: str = None):
                 stck.fluctuation_price = data['output1']['prdy_vrss']
                 stck.trading_value = data['output1']['acml_tr_pbmn']
                 stck.volume = data['output1']['acml_vol']
-            time.sleep(0.7)
             end_s = time.time()
-            print(f'{min(20 * (r + 1), len(stocks))}개 {end_s - start}s')
+            time.sleep(min(abs(1.1-end_s+start), 1.02))
+            end_t = time.time()
+            print(f'{min(20 * (r + 1), len(stocks))}개 {end_t - start}s')
     if update_time is not None:
         print('update')
         for category in category_dict.keys():
@@ -76,16 +76,6 @@ async def update_and_insert_stock_list(update_time: str = None):
     finished = time.time()
     print(f'{finished - initial_start}s 종료')
     return None
-
-
-@app.command()
-def get_item(my_ticker: str ='005930'):
-    access_token = redis_session.get("update_stock")
-    header = get_header()
-    header["authorization"] = "Bearer " + access_token
-    res = requests.get(candle_url, params=parameter_setter(my_ticker, "093109"), headers=header)
-    if res.status_code == 200:
-        print(res.json())
 
 
 @app.command()
@@ -101,4 +91,3 @@ def update_stocks_with_time():
 
 if __name__ == "__main__":
     app()
-

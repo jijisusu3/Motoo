@@ -7,7 +7,6 @@ from tortoise import connections
 import asyncio
 app = typer.Typer()
 
-# app.add_typer(ex1.app, name="ex")
 app.add_typer(daily.app, name="daily")
 app.add_typer(market.app, name="market")
 app.add_typer(keyword.app, name="keyword")

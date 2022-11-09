@@ -110,7 +110,6 @@ class TestShortStock:
         res_data = res.json()
         assert res.status_code == 404
         assert res_data["message"] == "failed"
-        assert len(dict(res_data).keys()) == 1
 
     # @pytest.mark.anyio
     # async def test_stock_exist(self, client: AsyncClient):
