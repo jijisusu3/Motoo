@@ -119,4 +119,3 @@ class DayTelecommunication(base_model):
 
 class DayChemistry(base_model):
     stock = fields.ForeignKeyField('b204.Stock', related_name=f'{categories[22]}_daychart')
-

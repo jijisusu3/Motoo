@@ -54,6 +54,8 @@ class ShortStockData(Volume, Price):
     fluctuation_price: Union[int, None] = Field(description="등락가")
     trading_value: Union[int, None] = Field(default=None, description="거래대금")
     daily: Union[List[CandleData], None] = Field(default=None, description="당일 10분봉")
+    daily_min: Union[CandleData, None] = None
+    daily_man: Union[CandleData, None] = None
 
 
 class EntireStockData(ShortStockData, OpenPrice, ClosePrice):
@@ -72,10 +74,10 @@ class EntireStockData(ShortStockData, OpenPrice, ClosePrice):
     weekly: Union[List[CandleData], None] = Field(default=None, description="주간 60분봉")
     weekly_min: Union[CandleData, None] = None
     weekly_max: Union[CandleData, None] = None
-    monthly: Union[List[DayChartData], None] = Field(default=None, description="월간 10분봉")
+    monthly: Union[List[DayChartData], None] = Field(default=None, description="월간 일봉")
     monthly_min: Union[DayChartData, None] = None
     monthly_max: Union[DayChartData, None] = None
-    yearly: Union[List[DayChartData], None] = Field(default=None, description="연간 10분봉")
+    yearly: Union[List[DayChartData], None] = Field(default=None, description="연간 7일봉")
     yearly_min: Union[DayChartData, None] = None
     yearly_max: Union[DayChartData, None] = None
 
