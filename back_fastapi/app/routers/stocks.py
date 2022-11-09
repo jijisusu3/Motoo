@@ -2,13 +2,14 @@ import datetime
 from datetime import date, timedelta
 from collections import defaultdict
 import tortoise
-from fastapi import APIRouter, Response, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Response, Depends, WebSocket, WebSocketDisconnect
 
 from app.config import manager
 from app.const import *
 from app.models.accounts import Trading, Account
 from app.models.stocks import Stock
 from app.models.users import User, School
+from app.routers.authentication import get_current_user
 from app.schemes.common import CommonResponse
 from app.schemes.stocks import GetStockDetailResponse, GetShortStockResponse, BidAskResponse, SchoolHotStockResponse
 
@@ -28,25 +29,25 @@ async def get_stock_detail(ticker: str, response: Response):
     today = date.today().strftime("%Y-%m-%d")
     # 차트 데이터
     daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
-    weekly = await candle_map[stock.category_id].filter(
+    weekly = (await candle_map[stock.category_id].filter(
         stock_id=stock.pk,
         date__gte=date.today()-timedelta(7)
-    ).order_by('-id')
+    ).order_by('-id'))[::6][::-1]
     monthly = await day_map[stock.category_id].filter(stock_id=stock.pk, date__gte=date.today()-timedelta(31))
-    yearly = await day_map[stock.category_id].filter(
+    yearly = (await day_map[stock.category_id].filter(
         stock_id=stock.pk,
         date__gte=date.today()-timedelta(365)
-    ).order_by('-id')
-    weekly_data = weekly[::6][::-1]
-    yearly_data = yearly[::5][::-1]
+    ).order_by('-id'))[::5][::-1]
     return GetStockDetailResponse(**dict(stock),
                                   category_name=stock.category.name,
                                   daily=daily,
-                                  weekly=weekly_data,
+                                  weekly=weekly,
                                   monthly=monthly,
-                                  yearly=yearly_data,
-                                  weekly_min=min(weekly_data, key=lambda x: x.min_price),
-                                  weekly_max=max(weekly_data, key=lambda x: x.max_price),
+                                  yearly=yearly,
+                                  daily_min=min(daily, key=lambda x: x.min_price),
+                                  daily_max=max(daily, key=lambda x: x.max_price),
+                                  weekly_min=min(weekly, key=lambda x: x.min_price),
+                                  weekly_max=max(weekly, key=lambda x: x.max_price),
                                   monthly_min=min(monthly, key=lambda x: x.min_price),
                                   monthly_max=max(monthly, key=lambda x: x.max_price),
                                   yearly_min=min(yearly, key=lambda x: x.min_price),
@@ -67,7 +68,10 @@ async def get_stock_short(ticker: str, response: Response):
     today = date.today().strftime("%Y-%m-%d")
     # 차트 데이터
     daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
-    return GetShortStockResponse(**dict(stock), daily=daily)
+    return GetShortStockResponse(**dict(stock),
+                                 daily=daily,
+                                 daily_min=min(daily, key=lambda x: x.min_price),
+                                 daily_max=max(daily, key=lambda x: x.max_price))
 
 
 @router.get("/bidask/{ticker}", description="매수매도호가 조회", response_model=BidAskResponse)
@@ -98,10 +102,9 @@ async def get_bidask_list(ticker: str):
     return BidAskResponse(bid=bid, ask=ask)
 
 
-@router.get("/school-hot/{user_id}", description="교내 핫 종목", response_model=SchoolHotStockResponse)
-async def get_school_hot_list(user_id: int, response: Response):
+@router.get("/school-hot", description="교내 핫 종목", response_model=SchoolHotStockResponse)
+async def get_school_hot_list(response: Response, user: User = Depends(get_current_user)):
     try:
-        user = await User.get(id=user_id)
         users_in_school = await User.filter(school_id=user.school_id).values_list('id', flat=True)
         accounts = await Account.filter(school=True, user_id__in=users_in_school).values_list('id', flat=True)
         not_finished = await Trading.filter(tr_date__isnull=True, account_id__in=accounts)
