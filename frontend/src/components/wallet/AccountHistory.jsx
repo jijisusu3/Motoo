@@ -10,6 +10,7 @@ import isBetween from "dayjs/plugin/isBetween";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
 datejs.extend(isBetween);
 
 function AccountHistory() {
@@ -150,6 +151,7 @@ function AccountHistory() {
       <div className={classes.calender}>
         <div>
           <img
+            style={{ marginLeft:'12px', marginRight: '6px', marginBottom: '2px', boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px;'}}
             className={classes.imgs}
             src={`${process.env.PUBLIC_URL}/wallet/calendar.svg`}
             alt=""
@@ -168,8 +170,8 @@ function AccountHistory() {
                 endDate={endDate}
               />
             </div>
-            <div>-</div>
-            <div className={classes.wrap}>
+            <div style={{ color: "#929E9E", marginLeft: "2.5px"}} >-</div>
+            <div className={classes.wrap} style={{marginLeft: '5px', marginRight: '5px'}}>
               <DatePicker
                 className={classes.tag}
                 required
@@ -185,16 +187,17 @@ function AccountHistory() {
             <div className="section">
               <button className={classes.search}>찾기</button>
             </div>
+            <div>
+              <img
+                style={{ marginTop: '2px', marginLeft: '10px', width: '16px', boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px;'}}
+                className={classes.imgs}
+                onClick={dateRefresh}
+                src={`${process.env.PUBLIC_URL}/wallet/dateRefresh.svg`}
+                alt=""
+              />
+            </div>
           </div>
         </form>
-        <div>
-          <img
-            className={classes.imgs}
-            onClick={dateRefresh}
-            src={`${process.env.PUBLIC_URL}/wallet/dateRefresh.svg`}
-            alt=""
-          />
-        </div>
       </div>
     );
   }
@@ -255,6 +258,7 @@ function AccountHistory() {
           </div>
           <div className={classes.pricebox}>
             {" "}
+            <img src={`${process.env.PUBLIC_URL}/wallet/coin.svg`} style={{ width: 12, height: 12, marginRight: '8px' }} alt="" />
             {profitLabel}
             {stock.profit}
           </div>
@@ -264,8 +268,9 @@ function AccountHistory() {
 
     return (
       <>
-        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+        <FormControl sx={{ m: 1, minWidth: 120, marginTop: '30px', margin: '0px' }} size="small" focused={0}>
           <Select
+            className={classes.sltbox}
             labelId="demo-select-small"
             id="demo-select-small"
             value={value}
@@ -276,9 +281,11 @@ function AccountHistory() {
               ".MuiOutlinedInput-notchedOutline": { border: 0 },
             }}
           >
-            <MenuItem value={"1"}>보유가격순</MenuItem>
-            <MenuItem value={"2"}>수익률높은순</MenuItem>
-            <MenuItem value={"3"}>수익률낮은순</MenuItem>
+            <MenuItem value={'1'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">전체</Typography></MenuItem>
+            <MenuItem value={'2'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">구매</Typography></MenuItem>
+            <MenuItem value={'3'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">판매</Typography></MenuItem>
+            <MenuItem value={'4'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">주식거래</Typography></MenuItem>
+            <MenuItem value={'5'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">주식거래외</Typography></MenuItem>
           </Select>
         </FormControl>
         <div className={classes.listbox}>

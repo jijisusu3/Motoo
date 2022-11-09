@@ -7,6 +7,7 @@ import Modal from "@mui/material/Modal";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
+import { fontSize } from "@mui/system";
 
 const style = {
   position: "absolute",
@@ -91,7 +92,7 @@ function MyPage() {
 
   const [data, setData] = useState({
     all: {
-      all_asset: 602520021,
+      all_asset: '602,520,021',
       profit: -13,
     },
     assets: [
@@ -151,7 +152,7 @@ function MyPage() {
           </div>
         </div>
         <div>
-          <div>수익률</div>
+          <div style={{ marginLeft: '10px'}}>수익률</div>
           <div className={classes.rev}
             style={{
               color: profitColor,
@@ -189,7 +190,7 @@ function MyPage() {
             alt=""
           />
           <input
-            style={{ height: "40px"}}
+            style={{ height: "40px", padding: "10px", color: "#242424"}}
             type="text"
             maxLength={8}
             className={classes.editname}
@@ -198,7 +199,7 @@ function MyPage() {
             onKeyPress={handleOnKeyPress}
           />
           <img
-            style={{marginRight: "5px", width:"30px", height: "30px"}}
+            style={{marginRight: "5px", width:"32px", height: "32px", marginTop: "1px"}}
             onClick={handleOnKeyPress}
             src={`${process.env.PUBLIC_URL}/wallet/editIcon.svg`}
             alt=""
@@ -261,7 +262,7 @@ function MyPage() {
       return (
         <div id={tmpId} onClick={goToDetail} className={classes.firstAssetCard}>
           {asset.isSchool && (
-            <img src={`${process.env.PUBLIC_URL}/wallet/school.svg`} alt="" />
+            <img src={`${process.env.PUBLIC_URL}/wallet/school.svg`} alt="" style={{ marginRight: '10px'}}/>
           )}
           <div id={tmpId}>{asset.name}</div>
           <div className={classes.select}>
@@ -276,7 +277,7 @@ function MyPage() {
         <div id={tmpId} onClick={goToDetail} className={classes.otherAssetCard}>
           <div className={classes.rowbox}>
             {asset.isSchool && (
-              <img src={`${process.env.PUBLIC_URL}/wallet/school.svg`} alt="" />
+              <img src={`${process.env.PUBLIC_URL}/wallet/school.svg`} alt="" style={{ marginRight: '10px'}}/>
             )}
             <div id={tmpId}>{asset.name}</div>
           </div>
@@ -323,23 +324,24 @@ function MyPage() {
             </div>
             {warningEffect ? (
               <div className={classes.vibration}>
-                <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} alt="" />
+                <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} style={{marginRight: "15px"}} alt="" />
                 <div>
-                  <p>최대 계좌 개수는 학교대항전 외 3개 이하이며</p>
+                  
+                  <p>최대 계좌 개수는 학교대항전 외 <span style={{ fontWeight: "600", color: "#36938E"}}>3개 이하</span>이며</p>
                   <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
                 </div>
               </div>
             ):(
               <div className={classes.notice}>
-              <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} alt="" />
+              <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} style={{marginRight: "15px"}} alt="" />
               <div>
-                <p>최대 계좌 개수는 학교대항전 외 3개 이하이며</p>
+                <p>최대 계좌 개수는 학교대항전 외 <span style={{ fontWeight: "600", color: "#36938E"}}>3개 이하</span>이며</p>
                 <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
               </div>
             </div>
             )}
             {!(canStartDay==="") && (
-              <p style={{color:'#DD4956'}}>{canStartDay} 부터 계좌를 열 수 있어요</p>
+              <p style={{color:'#DD4956', fontSize: '12px', marginBottom: '10px'}}>{canStartDay} 부터 계좌를 열 수 있어요</p>
             )}
             <div className={classes.createbtn} onClick={createSubmit}>개설</div>
           </Box>
