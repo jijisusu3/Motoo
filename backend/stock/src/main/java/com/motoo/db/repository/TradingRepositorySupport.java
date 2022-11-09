@@ -50,6 +50,7 @@ public class TradingRepositorySupport {
 
 
     //개인 특정계좌 판매됨,구매됨 조회
+
     public List<Trading> find1Or2ByUserIdAccountId(Long userId, Long accountId){
         List <Trading> tradings =
                 jpaQueryFactory.select(qTrading).from(qTrading)
@@ -59,7 +60,6 @@ public class TradingRepositorySupport {
                         .fetch();
         if (tradings==null) {return null;}
         else {return tradings;}
-
     }
 
     public List<Trading> find1Or2Or5ByUserIdAccountId(Long userId, Long accountId){

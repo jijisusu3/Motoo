@@ -38,6 +38,7 @@ public class AccountsController {
     private final EntityManager em;
 
     private final TradingService tradingService;
+    private final AccountAssetService accountAssetService;
     //계좌 생성
     @ApiOperation(value = "계좌 생성", notes = "(token) 계좌를 생성한다.")
     @ApiResponses({@ApiResponse(code = 200, message = "계좌 생성 성공", response = BaseResponseBody.class), @ApiResponse(code = 401, message = "계좌 생성 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
@@ -64,8 +65,15 @@ public class AccountsController {
     public ResponseEntity<AccountsListRes> listAccounts(@ApiIgnore Authentication authentication) {
         Long userId = userService.getUserIdByToken(authentication);
         List<Account> account = accountService.listAccount(userId);
+        int seeds=0;
+        for (int i=0; i<account.size(); i++){
+            seeds+= account.get(i).getSeed();
+            for (int a=0; a<account.get(i).getAccountStocks().size(); a++){
+                 seeds+=account.get(i).getAccountStocks().get(a).getAmount()*account.get(i).getAccountStocks().get(a).getPrice();
+            }
+        }
 
-        return ResponseEntity.status(200).body(AccountsListRes.of(account, 200, "계좌 목록조회에 성공하였습니다."));
+        return ResponseEntity.status(200).body(AccountsListRes.of(account,seeds, 200, "계좌 목록조회에 성공하였습니다."));
     }
 
     //계좌 이름 수정
