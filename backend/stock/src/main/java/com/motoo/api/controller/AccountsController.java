@@ -139,6 +139,8 @@ public class AccountsController {
 //        Stock stock = stockService.getStock(accountStockAddPostReq.getStockId());
         int postPrice = accountStockAddPostReq.getPrice();
         int postAmount = accountStockAddPostReq.getAmount();
+        Long accountId = account.getAccountId();
+
         //지금 주식 가격이랑 내 주문량, 가격이랑 비교용도의 주식객체
         Stock stock = stockRepositorySupport.findStockByAStockId(accountStockAddPostReq.getStockId());
         //시드머니 조회하여 구매가격이 시드머니보다 높으면 구매불가
@@ -152,7 +154,7 @@ public class AccountsController {
                     List<AccountStock> accountStocks = accountService.getAccountStockByUserIdAccountId(accountStockAddPostReq.getAccountId(), userId);
                     Long accountStockId = accountStockService.getAccountStockIdByStockId(account.getAccountId(), accountStockAddPostReq.getStockId());
                     AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
-
+                    System.out.println("accountStockId" + accountStockId);
 
                     int currentAmount = accountStock.getAmount();
                     int currentPrice = accountStock.getPrice();
@@ -167,7 +169,7 @@ public class AccountsController {
                     accountService.updateSeed(account, -(postPrice * postAmount));
                     //해당 보유주식 가격, 수량 변경
                     accountStockService.updateAmountPrice(accountStock, newAmount, newPrice);
-
+                    tradingService.writeOrder(userId,accountId,accountStockAddPostReq.getStockId(),2 ,postPrice,postAmount, null);
                     //변경된 stockList
                     em.clear();//캐시초기회
 
@@ -179,6 +181,7 @@ public class AccountsController {
                 //시드머니 변경
                 accountService.updateSeed(account, -(postPrice * postAmount));
                 accountStockService.addStockToAccount(userId, accountStockAddPostReq.getAccountId(), accountStockAddPostReq.getStockId(), accountStockAddPostReq.getPrice(), accountStockAddPostReq.getAmount());
+                tradingService.writeOrder(userId,accountId,accountStockAddPostReq.getStockId(),2 ,postPrice,postAmount, null);
 
                 //변경된 stockList
                 em.clear();//캐시초기회
@@ -255,7 +258,10 @@ public class AccountsController {
                     }
 
                     //판매 거래내역에 추가
-                    tradingService.writeOrder(userId,accountId,stockId,1 ,accountStockAddPostReq.getPrice(),accountStockAddPostReq.getAmount());
+                    int original = accountStock.getPrice();
+                    Integer converted = Integer.valueOf(original);
+
+                    tradingService.writeOrder(userId,accountId,stockId,1 ,accountStockAddPostReq.getPrice(),accountStockAddPostReq.getAmount(), converted);
                     //판매 평단가 저장
 
                     //변경된 stockList
@@ -274,7 +280,7 @@ public class AccountsController {
     }
 
     //보유한 계좌 리스트 조회
-//    @PostMapping("/check/{accountId}")
+    @PostMapping("/check/{accountId}")
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 주식 조회 성공", response = BaseResponseBody.class), @ApiResponse(code = 401, message = "보유한 주식id 조회 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @ApiOperation(value = "보유한 주식id 조회", notes = "보유한 주식id 조회한다.")
     public ResponseEntity<? extends BaseResponseBody> checkStockList(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "주식번호", required = true) @Valid AccountStockAddPostReq accountStockAddPostReq) {
@@ -282,6 +288,7 @@ public class AccountsController {
         Account account = accountService.getAccount(accountStockAddPostReq.getAccountId(), userId);
         List<Long> stockList = accountStockService.getAccountStockIdList(account);
         Long accountStockId = accountStockService.getAccountStockIdByStockId(account.getAccountId(), accountStockAddPostReq.getStockId());
+        System.out.println("accountStockId" + accountStockId);
         AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
         Stock stock = stockRepositorySupport.findStockByAStockId(accountStockAddPostReq.getStockId());
         return ResponseEntity.status(200).body(StockListRes.of(account, stockList, 200, "보유지식 리스트 조회에 성공하였습니다."));
