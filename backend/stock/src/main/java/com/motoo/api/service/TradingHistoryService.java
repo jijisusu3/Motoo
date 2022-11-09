@@ -9,11 +9,10 @@ public interface TradingHistoryService {
     /**
      * 거래내역
      */
-    TradingHistory getTradingHistory();
-    List<HistoryItem> getAllTradingHistory();
-    List<HistoryItem> getStockTradingHistory();
-    List<HistoryItem> getSellTradingHistory();
-    List<HistoryItem> getBuyTradingHistory();
-    List<HistoryItem> getCashHistory();
-    HistoryItem getHistoryItem();
+    TradingHistory getTradingHistory(Long userId, Long accountId);
+    List<HistoryItem> getAllTradingHistory(Long userId, Long accountId);
+    List<HistoryItem> getStockTradingHistory(Long userId, Long accountId);
+    List<HistoryItem> getSellTradingHistory(Long userId, Long accountId);
+    List<HistoryItem> getBuyTradingHistory(Long userId, Long accountId);
+    List<HistoryItem> getCashHistory(Long userId, Long accountId);
 }
