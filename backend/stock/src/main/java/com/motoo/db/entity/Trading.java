@@ -66,6 +66,7 @@ public class Trading {
         this.tr_amount = tr_amount;
         this.tr_avg = tr_avg;
 
+
     }
 //    public void setAccounts(Account accounts) {
 //        this.account = accounts;
