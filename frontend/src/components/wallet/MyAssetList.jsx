@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import classes from "./MyAssetList.module.css";
+import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -157,7 +158,7 @@ function MyAssetList() {
                 </div>
                 <div className={classes.section} style={{ color: profitColor }}>{stock.profit}</div>
               </div>
-              <div className={classes.rowbox}>
+              <div className={classes.rowbox} style={{ marginTop: '4px'}}>
                 <div className={classes.rowbox}>
                   <img src={`${process.env.PUBLIC_URL}/wallet/chart.svg`} style={{ width: 12, height: 12 }} alt="" />
                   <div className={classes.result}>
@@ -199,7 +200,7 @@ function MyAssetList() {
   }
   return (
     <>
-      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      <FormControl sx={{ m: 1, minWidth: 120, marginTop: '30px', marginBottom: '15px'}} size="small" focused={0}>
         <Select
           labelId="demo-select-small"
           id="demo-select-small"
@@ -211,9 +212,10 @@ function MyAssetList() {
             ".MuiOutlinedInput-notchedOutline": { border: 0 },
           }}
         >
-          <MenuItem value={'1'}>보유가격순</MenuItem>
-          <MenuItem value={'2'}>수익률높은순</MenuItem>
-          <MenuItem value={'3'}>수익률낮은순</MenuItem>
+          
+          <MenuItem value={'1'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">보유가격순</Typography></MenuItem>
+          <MenuItem value={'2'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">수익률높은순</Typography></MenuItem>
+          <MenuItem value={'3'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">수익률낮은순</Typography></MenuItem>
         </Select>
       </FormControl>
       <div className={classes.listbox}>

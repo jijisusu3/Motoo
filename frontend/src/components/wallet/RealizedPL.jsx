@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./RealizedPL.module.css";
 // import RealizedList from "./RealizedList";
 import classes from "./RealizedPL.module.css";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import datejs from "dayjs";
@@ -186,6 +188,7 @@ function RealizedPL() {
       <div className={classes.calender}>
         <div>
           <img
+            style={{ marginLeft:'12px', marginRight: '6px', marginBottom: '2px', boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px;'}}
             className={classes.imgs}
             src={`${process.env.PUBLIC_URL}/wallet/calendar.svg`}
             alt=""
@@ -204,8 +207,8 @@ function RealizedPL() {
                 endDate={endDate}
               />
             </div>
-            <div>-</div>
-            <div className={classes.wrap}>
+            <div style={{ color: "#929E9E", marginLeft: "2.5px"}}>-</div>
+            <div className={classes.wrap} style={{marginLeft: '5px', marginRight: '5px'}}>
               <DatePicker
                 className={classes.tag}
                 required
@@ -216,21 +219,23 @@ function RealizedPL() {
                 endDate={endDate}
                 minDate={startDate}
                 maxDate={new Date()}
+
               />
             </div>
             <div>
               <button className={classes.search}>찾기</button>
             </div>
+            <div>
+              <img
+                style={{ marginTop: '2px', marginLeft: '10px', width: '16px', boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px;'}}
+                className={classes.imgs}
+                onClick={dateRefresh}
+                src={`${process.env.PUBLIC_URL}/wallet/dateRefresh.svg`}
+                alt=""
+              />
+            </div>
           </div>
         </form>
-        <div>
-          <img
-            className={classes.imgs}
-            onClick={dateRefresh}
-            src={`${process.env.PUBLIC_URL}/wallet/dateRefresh.svg`}
-            alt=""
-          />
-        </div>
       </div>
     );
   }
@@ -321,7 +326,7 @@ function RealizedPL() {
   
     return (
       <>
-      <FormControl sx={{ minWidth: 120 }} size="small">
+      <FormControl sx={{ minWidth: 120, marginTop: '30px' }} size="small" focused={0}>
         <Select
           className={classes.sltbox}
           labelId="demo-select-small"
@@ -334,9 +339,9 @@ function RealizedPL() {
             ".MuiOutlinedInput-notchedOutline": { border: 0 },
           }}
         >
-          <MenuItem sx={{ background: "#fff" }} value={'1'}>보유가격순</MenuItem>
-          <MenuItem value={'2'}>수익률높은순</MenuItem>
-          <MenuItem value={'3'}>수익률낮은순</MenuItem>
+          <MenuItem value={'1'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">보유가격순</Typography></MenuItem>
+          <MenuItem value={'2'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">수익률높은순</Typography></MenuItem>
+          <MenuItem value={'3'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">수익률낮은순</Typography></MenuItem>
         </Select>
       </FormControl>
       <div className={classes.listbox}>
@@ -358,7 +363,10 @@ function RealizedPL() {
   }
   return (
     <>
-      <GetCalenderData />
+      <div className={classes.cldbox}>
+        <GetCalenderData />
+
+      </div>
       <RealizedList/>
     </>
   );

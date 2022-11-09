@@ -3,6 +3,7 @@ import { setLogout } from "../stores/userSlice";
 import { useEffect } from "react";
 import { setActiveNav  } from "../stores/navSlice";
 
+
 function MenuPage() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -14,7 +15,9 @@ function MenuPage() {
   return (
     <div>
       <button onClick={logoutClick}>로그아웃 되나 볼거야</button>
+
     </div>
+    
   );
 }
 
