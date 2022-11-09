@@ -8,7 +8,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { fontSize } from "@mui/system";
 
@@ -57,7 +57,6 @@ function a11yProps(index) {
   };
 }
 
-
 function StockListPage() {
   const [value, setValue] = useState(0);
   const [orderMany, setOrderMany] = useState(8);
@@ -67,25 +66,48 @@ function StockListPage() {
   const handleDeleteModalOpen = () => {
     setDeleteModalOpen(true);
   };
+
+  const userToken = useSelector((state) => {
+    return state.persistedReducer.setUser.user.token;
+  });
+
+  const userQuiz = useSelector((state) => {
+    return state.persistedReducer.setUser.user.quizDay;
+  });
+  
+  const [isSolved, setIsSolved] = useState(false);
+
+  useEffect(() => {
+    let date = new Date();
+    const now = `${date.getFullYear()}-${("00" + (date.getMonth() + 1))
+      .toString()
+      .slice(-2)}-${("00" + date.getDate()).toString().slice(-2)}`;
+    if (now === userQuiz) {
+      setIsSolved(true)
+    }
+  }, [userQuiz])
+
   const handleDeleteModalClose = () => setDeleteModalOpen(false);
 
   const goToDetail = (e) => {
-    const isPk = e.target.id
+    const isPk = e.target.id;
     if (Boolean(isPk)) {
-      navigate(`/stock/detail/${isPk}`)
+      navigate(`/stock/detail/${isPk}`);
     }
-  }
+  };
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
-    const now = window.location.pathname
-    dispatch(setShowNav(now))
-  })
+    const now = window.location.pathname;
+    dispatch(setShowNav(now));
+  });
+
   // 삭제버튼 누르면 해당함수 실행,
   // BE에 삭제요청 보내고, 해당페이지재구성하고,
   // 유저정보 관심주식리스트 업데이트 되어야함
   function deleteSubmit() {
-    handleDeleteModalClose(false);
+    // eventTarget으로 어떤 아이디 클릭된건지 인식해야함
+    // const data = { token: userToken, id: id };
   }
   const [myListData, setMyListData] = useState([
     {
@@ -485,24 +507,37 @@ function StockListPage() {
         <div className={classes.lists}>
           <div className={classes.listcard}>
             <div className={classes.rank}>{stock.ranking}</div>
-            <div id={stock.code} onClick={goToDetail} >{stock.name}</div>
+            <div id={stock.code} onClick={goToDetail}>
+              {stock.name}
+            </div>
           </div>
           <div className={classes.nowpr}>
-            <div style={{ color: profitColor, fontSize: 16  }}>{stock.profit}%</div>
-            <div >{stock.price}원</div>
+            <div style={{ color: profitColor, fontSize: 16 }}>
+              {stock.profit}%
+            </div>
+            <div>{stock.price}원</div>
           </div>
         </div>
         <div className={classes.hrline}></div>
       </div>
-
     );
   }
 
   function RealtimeLists() {
-    const selectedString = ["soaring", "drop", "price", "marketCap", "tradingVolume"]
-    const selectedRealtimeData = realtimeData[realtimeValue][selectedString[realtimeValue]]
+    const selectedString = [
+      "soaring",
+      "drop",
+      "price",
+      "marketCap",
+      "tradingVolume",
+    ];
+    const selectedRealtimeData =
+      realtimeData[realtimeValue][selectedString[realtimeValue]];
     return (
-      <div className={classes.listbox} style={{ backgroundColor: "white", paddingTop: 20 }}>
+      <div
+        className={classes.listbox}
+        style={{ backgroundColor: "white", paddingTop: 20 }}
+      >
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 0, borderColor: "divider" }}>
             <div className={classes.tabbox}>
@@ -510,7 +545,9 @@ function StockListPage() {
                 value={realtimeValue}
                 onChange={realtimeListHandleChange}
                 aria-label="basic tabs example"
-                sx={{ "& .MuiTabs-indicator": { bgcolor: "#FEBF45", height: 3 } }}
+                sx={{
+                  "& .MuiTabs-indicator": { bgcolor: "#FEBF45", height: 3 },
+                }}
               >
                 <Tab
                   label={
@@ -528,7 +565,7 @@ function StockListPage() {
                       color: "rgba(0, 0, 0, 0)",
                     },
                     // paddingX: '3%',
-                    minWidth: '10%'
+                    minWidth: "10%",
                   }}
                 />
                 <Tab
@@ -547,7 +584,7 @@ function StockListPage() {
                       color: "rgba(0, 0, 0, 0)",
                     },
                     // paddingX: '3%',
-                    minWidth: '10%'
+                    minWidth: "10%",
                   }}
                 />
                 <Tab
@@ -566,7 +603,7 @@ function StockListPage() {
                       color: "rgba(0, 0, 0, 0)",
                     },
                     // paddingX: '3%',
-                    minWidth: '10%'
+                    minWidth: "10%",
                   }}
                 />
                 <Tab
@@ -585,7 +622,7 @@ function StockListPage() {
                       color: "rgba(0, 0, 0, 0)",
                     },
                     // paddingX: '3%',
-                    minWidth: '10%'
+                    minWidth: "10%",
                   }}
                 />
                 <Tab
@@ -604,7 +641,7 @@ function StockListPage() {
                       color: "rgba(0, 0, 0, 0)",
                     },
                     // paddingX: '3%',
-                    minWidth: '10%'
+                    minWidth: "10%",
                   }}
                 />
               </Tabs>
@@ -616,11 +653,11 @@ function StockListPage() {
             key={stock.code}
             name={stock.name}
             code={stock.code}
-            ranking={index+1}
+            ranking={index + 1}
             profit={stock.profit}
             price={stock.price}
           />
-        ))} 
+        ))}
       </div>
     );
   }
@@ -639,9 +676,13 @@ function StockListPage() {
       return (
         <div>
           <div className={classes.lists}>
-            <div id={stock.code} onClick={goToDetail}>{stock.name}</div>
+            <div id={stock.code} onClick={goToDetail}>
+              {stock.name}
+            </div>
             <div className={classes.nowpr}>
-              <div style={{ color: profitColor, fontSize: 16 }}>{stock.profit}%</div>
+              <div style={{ color: profitColor, fontSize: 16 }}>
+                {stock.profit}%
+              </div>
               <div>{stock.price}원</div>
             </div>
           </div>
@@ -666,9 +707,6 @@ function StockListPage() {
     }
   }
 
-  
-
-  const [isSolved, setIsSolved] = useState(false)
   function LimitOrder() {
     return (
       <div onClick={GoToOrderListPage} className={classes.limitOrderCard}>
@@ -680,8 +718,7 @@ function StockListPage() {
         <div>{orderMany}건</div>
         <img src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
       </div>
-    )
-    
+    );
   }
   function QuizAndLimitOrder() {
     return (
@@ -697,7 +734,11 @@ function StockListPage() {
           </div>
           <div className={classes.nametag}>
             <div>{orderMany}건</div>
-            <img className={classes.arrow} src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
+            <img
+              className={classes.arrow}
+              src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`}
+              alt=""
+            />
           </div>
         </div>
         <div onClick={GoToQuizPage} className={classes.limitOrderCard}>
@@ -711,12 +752,15 @@ function StockListPage() {
           </div>
           <div className={classes.nametag}>
             <div>200,000원</div>
-            <img className={classes.arrow} src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
+            <img
+              className={classes.arrow}
+              src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`}
+              alt=""
+            />
           </div>
         </div>
       </div>
-    )
-    
+    );
   }
 
   function MyStockList() {
@@ -725,7 +769,11 @@ function StockListPage() {
         <div className={classes.editbox}>
           <div className={classes.favorite}>
             <div>관심주식</div>
-            <img className={classes.star} src={`${process.env.PUBLIC_URL}/stock-list/myStar.svg`} alt="" />
+            <img
+              className={classes.star}
+              src={`${process.env.PUBLIC_URL}/stock-list/myStar.svg`}
+              alt=""
+            />
           </div>
           {myListEdit ? (
             <div onClick={editFinish}>완료</div>
@@ -750,15 +798,19 @@ function StockListPage() {
     <>
       <div style={{ backgroundColor: "#EAF0EF" }}>
         <div className={classes.header}>
-          <img className={classes.logo} src={`${process.env.PUBLIC_URL}/stock-list/motoologo.png`} alt="" />
+          <img
+            className={classes.logo}
+            src={`${process.env.PUBLIC_URL}/stock-list/motoologo.png`}
+            alt=""
+          />
           <img
             onClick={GoToSearch}
             src={`${process.env.PUBLIC_URL}/stock-list/stockListSearchIcon.svg`}
             alt=""
-            />
+          />
         </div>
-        <div className={classes.bodybox} >
-          {isSolved ? (<LimitOrder/>):(<QuizAndLimitOrder/>)}
+        <div className={classes.bodybox}>
+          {isSolved ? <LimitOrder /> : <QuizAndLimitOrder />}
         </div>
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 0, borderColor: "divider" }}>

@@ -45,7 +45,7 @@ public class Account {
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", orphanRemoval = true)
     private List<AccountStock> accountStocks = new ArrayList<>();
-
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account",orphanRemoval = true)
     private List<Trading> tradings = new ArrayList<>();
 

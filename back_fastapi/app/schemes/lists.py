@@ -19,8 +19,8 @@ class GetFavoriteStockListResponse(Favorite, CommonResponse):
   pass
 
 class GetTopStockListResponse(CommonResponse):
-  stocks1: List[StockList]
-  stocks2: List[StockList]
-  stocks3: List[StockList]
-  stocks4: List[StockList]
-  stocks5: List[StockList]
+  rate_up: List[StockList]
+  rate_down: List[StockList]
+  price_up: List[StockList]
+  capital_up: List[StockList]
+  volume_up: List[StockList]

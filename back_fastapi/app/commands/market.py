@@ -5,7 +5,6 @@ from collections import defaultdict
 import aiohttp
 import typer
 
-from app.config import redis_session
 from app.const import *
 from app.models.stocks import Stock
 
@@ -34,7 +33,7 @@ async def update_and_insert_stock_list(update_time: str = None):
     category_dict = defaultdict(list)
     stocks = await Stock.all()
     async with aiohttp.ClientSession(headers=header) as session:
-        for r in range(len(stocks)//20):
+        for r in range(1+len(stocks)//20):
             start = time.time()
             for stck in stocks[20*r:20*(r+1)]:
                 async with session.get(candle_url, params=parameter_setter(stck.ticker, input_time)) as response:
@@ -56,33 +55,27 @@ async def update_and_insert_stock_list(update_time: str = None):
                         min_price=min([int(item['stck_lwpr']) for item in items]),
                     )
                     category_dict[stck.category_id].append(res)
+                stck.name = data['output1']['hts_kor_isnm']
                 stck.price = data['output1']['stck_prpr']
                 stck.fluctuation_rate = data['output1']['prdy_ctrt']
                 stck.fluctuation_price = data['output1']['prdy_vrss']
                 stck.trading_value = data['output1']['acml_tr_pbmn']
                 stck.volume = data['output1']['acml_vol']
-            time.sleep(0.7)
             end_s = time.time()
-            print(f'{min(20 * (r + 1), len(stocks))}개 {end_s - start}s')
+            time.sleep(min(abs(1.1-end_s+start), 1.02))
+            end_t = time.time()
+            print(f'{min(20 * (r + 1), len(stocks))}개 {end_t - start}s')
     if update_time is not None:
         print('update')
         for category in category_dict.keys():
             await candle_map[category].bulk_create(category_dict[category])
-    await Stock.bulk_update(stocks,
-                            fields=('price', 'fluctuation_rate', 'fluctuation_price', 'trading_value', 'volume',))
+    await Stock.bulk_update(
+        stocks,
+        fields=('name', 'price', 'fluctuation_rate', 'fluctuation_price', 'trading_value', 'volume',)
+    )
     finished = time.time()
     print(f'{finished - initial_start}s 종료')
     return None
-
-
-@app.command()
-def get_item(my_ticker: str ='005930'):
-    access_token = redis_session.get("update_stock")
-    header = get_header()
-    header["authorization"] = "Bearer " + access_token
-    res = requests.get(candle_url, params=parameter_setter(my_ticker, "093109"), headers=header)
-    if res.status_code == 200:
-        print(res.json())
 
 
 @app.command()
@@ -90,6 +83,11 @@ def update_stocks(time_now: str = None):
     asyncio.run(update_and_insert_stock_list(time_now))
 
 
+@app.command()
+def update_stocks_with_time():
+    input_time = datetime.datetime.now().strftime('%H%M00')
+    asyncio.run(update_and_insert_stock_list(input_time))
+
+
 if __name__ == "__main__":
     app()
-

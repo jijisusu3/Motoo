@@ -7,7 +7,6 @@ import aiohttp
 import typer
 from pykrx import stock
 
-from app.config import redis_session
 from app.const import *
 from app.models.stocks import Stock, Category
 
@@ -23,7 +22,7 @@ async def insert_daily_and_close_price():
     print("start")
     ctgr_dict = defaultdict(list)
     for stck in stocks:
-        df = stock.get_market_ohlcv(yesterday, yesterday, stck.ticker, adjusted=False)
+        df = stock.get_market_ohlcv(today, today, stck.ticker, adjusted=False)
         new_df = df.to_dict()
         for k in new_df['시가'].keys():
             res = day_map[stck.category_id](
@@ -45,45 +44,9 @@ async def insert_daily_and_close_price():
     print(end-start)
 
 
-async def daily_all():
+async def update_stock_info():
     yesterday = (date.today() - timedelta(days=1)).strftime("%Y%m%d")
     today = date.today().strftime("%Y%m%d")
-    ctgr_list = await Category.all().values('id')
-    stocks = await Stock.all()
-    start = time.time()
-    print("start")
-    ctgr_dict = defaultdict(list)
-
-    df = stock.get_market_ohlcv(yesterday)
-    new_df = df.to_dict()
-    print(df.loc['005930'])
-    # for stck in stocks:
-    #     for k in new_df['시가'].keys():
-    #         res = day_map[stck.category_id](
-    #             stock_id=stck.pk,
-    #             date=k.date(),
-    #             close_price=new_df.get('종가')[k],
-    #             volume=new_df.get('거래량')[k],
-    #             open_price=new_df.get('시가')[k],
-    #             max_price=new_df.get('고가')[k],
-    #             min_price=new_df.get('저가')[k],
-    #         )
-    #         ctgr_dict[stck.category_id].append(res)
-    #         stck.close_price = new_df.get('종가')[k]
-    #     time.sleep(0.2)
-    # for ctgr in range(1, len(ctgr_list)+1):
-    #     await day_map[ctgr].bulk_create(ctgr_dict[ctgr])
-    # await Stock.bulk_update(stocks, fields=('close_price',))
-    end = time.time()
-    print(end-start)
-
-
-@app.command()
-def get_test():
-    asyncio.run(daily_all())
-
-
-async def update_stock_info():
     print('시작')
     initial_start = time.time()
     access_token = redis_session.get("update_stock")
@@ -92,13 +55,39 @@ async def update_stock_info():
         access_token = redis_session.get("update_stock")
     header = get_header('FHKST01010100')
     header["authorization"] = "Bearer " + access_token
-    stocks = await Stock.all()
+    df = stock.get_market_ohlcv(today)
+    tickers = df.index.values
+    stocks = []
+    new_stocks = []
     async with aiohttp.ClientSession(headers=header) as session:
-        for r in range(len(stocks)//20):
+        for r in range(1+len(tickers)//20):
             start = time.time()
-            for stck in stocks[20*r:20*(r+1)]:
-                async with session.get(price_url, params=parameter_setter(stck.ticker)) as response:
+            for tckr in tickers[20*r:20*(r+1)]:
+                async with session.get(price_url, params=parameter_setter(tckr)) as response:
                     data = await response.json()
+                flag = 0
+                stck = await Stock.get_or_none(ticker=tckr)
+                if stck is None:
+                    flag = 1
+                    info = df.loc[tckr]
+                    ctgr = await Category.filter(
+                        name__contains=data['output']["bstp_kor_isnm"][:2]
+                    ).filter(
+                        name__contains=data['output']["bstp_kor_isnm"][-2:]
+                    )
+                    stck = Stock(
+                        ticker=tckr,
+                        category_id=ctgr[0].pk,
+                        name=f'{tckr}_noname',
+                        open_price=int(info['시가']),
+                        close_price=int(info['종가']),
+                        volume=int(info['거래량']),
+                        fluctuation_rate=info['등락률'],
+                        keyword=[1],
+                        sentiment=[0,0,0],
+                        price=100
+                    )
+                stck.issued = data['output']['lstn_stcn']
                 stck.price = data['output']['stck_prpr']
                 stck.fluctuation_rate = data['output']['prdy_ctrt']
                 stck.fluctuation_price = data['output']['prdy_vrss']
@@ -111,10 +100,15 @@ async def update_stock_info():
                 stck.minimum = data['output']['stck_llam']
                 stck.capital = data['output']['cpfn']
                 stck.m_capital = data['output']['hts_avls']
+                if flag == 0:
+                    stocks.append(stck)
+                else:
+                    new_stocks.append(stck)
             check_end = time.time()
-            time.sleep(0.75)
             end_s = time.time()
-            print(f'{min(20*(r+1), len(stocks))}개 {end_s-start}s')
+            time.sleep(min(abs(1.1 - end_s + start), 1.02))
+            end_t = time.time()
+            print(f'{min(20*(r+1), len(stocks))}개 {end_t-start}s')
     await Stock.bulk_update(
         stocks,
         fields=('price',
@@ -131,6 +125,7 @@ async def update_stock_info():
                 'm_capital',
                 )
     )
+    await Stock.bulk_create(new_stocks)
     finished = time.time()
     print(f'{finished-initial_start}s 종료')
     return None
@@ -149,12 +144,6 @@ def daily_insert():
 @app.command()
 def get_token(token_use: str = 'update_stock'):
     save_token(token_use)
-
-
-@app.command()
-def save_any(any_word: str):
-    redis_session.set(any_word, 'success')
-    print('saved!')
 
 
 @app.command()

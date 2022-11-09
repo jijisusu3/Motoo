@@ -87,9 +87,9 @@ async def get_category_keyword():
         top_lst = a.value_counts().iloc[:10]
         result = top_lst.index.tolist()
         now = time.time()
-        print(now-tm)
         category.keyword = result
         await category.save(update_fields=('keyword',))
+        print(now-tm)
     return None
 
 
@@ -177,9 +177,9 @@ async def get_company_keyword():
         result = top_lst.index.tolist()
 
         now = time.time()
-        print(now-tm)
         keyword.keyword = result
         await keyword.save(update_fields=('keyword',))
+        print(now-tm)
     return None
 
 

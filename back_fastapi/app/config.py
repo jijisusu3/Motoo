@@ -7,7 +7,12 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     DB_URL: str = ""
+    SEC_DB_URL: str = ""
     ROOT_PASSWORD: str = ""
+    SECRET_KEY: str = ""
+    ALGORITHM: str = ""
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = ""
+    JWT_ISSUER: str = ""
     OPEN_API_DOMAIN: str = ""
     CANDLE_API_URL: str = ""
     PRICE_API_URL: str = ""
@@ -33,6 +38,7 @@ settings = Settings()
 TORTOISE_ORM = {
     'connections': {
         'default': settings.DB_URL,
+        'second': settings.SEC_DB_URL,
     },
     'apps': {
         'b204': {
@@ -46,11 +52,12 @@ TORTOISE_ORM = {
                 'app.models.candles',
             ],
             'default_connection': 'default',
-        }
+        },
     },
     'use_tz': False,
     'timezone': 'Asia/Seoul'
 }
+
 
 pool = redis.ConnectionPool(
     host=settings.REDIS_HOST,

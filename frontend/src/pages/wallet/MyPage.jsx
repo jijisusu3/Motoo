@@ -5,9 +5,11 @@ import classes from "./MyPage.module.css";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { fontSize } from "@mui/system";
+import { nicknamePut } from "../../stores/userSlice";
+
 
 const style = {
   position: "absolute",
@@ -34,7 +36,9 @@ function MyPage() {
   const [canStartDay, setCanStartDay] = useState("")
   
   const [haveShool, setHaveSchool] = useState(false);
-  
+  const userData = useSelector((state) => {
+    return state.persistedReducer.setUser.user
+  })
   const dispatch = useDispatch();
   useEffect(() => {
     const now = window.location.pathname;
@@ -170,15 +174,25 @@ function MyPage() {
   }
 
   function EditShow() {
-    const [nickname, setNickname] = useState("유저가설정한계좌");
+    const [nickname, setNickname] = useState(userData.data.nickname)
     const handleInputChange = (event) => {
       setNickname(event.target.value);
+      // console.log(nickname)
     };
     // 수정했을때, 이 함수 안에서 POST 요청 들어가야함.
     const handleOnKeyPress = (event) => {
-
-        setNowEdit(false);
-
+      const data = {
+        config: {
+          headers: {
+            Authorization: `Bearer ${userData.token}`
+          }
+        },
+        editname: {
+          nickname: nickname
+        }
+      }
+      dispatch(nicknamePut(data))
+      setNowEdit(false);
     };
     if (nowEdit) {
       return (
@@ -292,9 +306,10 @@ function MyPage() {
     }
   }
   return (
+
     <div className={classes.mypageBG}>
       <div className={classes.mypageCtn}>
-        <EditShow />
+      {userData && <EditShow />}
         <div className={classes.centerbox}>
           <AllAssets />
           {data.assets.map((asset, index) => (
@@ -321,6 +336,7 @@ function MyPage() {
                 개설 사유{" "}
                 <input className={classes.ipt} type="text" name="openReason" onChange={onChangeInfo} />
               </div>
+
             </div>
             {warningEffect ? (
               <div className={classes.vibration}>

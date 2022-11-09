@@ -33,7 +33,7 @@ function App() {
         <Route path="/stock/limit-order/sell" element={<SellOrderEditPage />} />
 `       <Route path="/" element={<StockListPage />} />
         <Route path="/quiz" element={<QuizPage />} />
-        <Route path="/quiz-result" element={<QuizResultPage />} />
+        <Route path="/quiz-result/:result" element={<QuizResultPage />} />
         <Route path="/stock/search" element={<StockSearchPage />} />
         <Route path="/stock/limit-order" element={<LimitOrderPage />} />
         <Route path="/stock/industry/:id" element={<IndustryPage />} />

@@ -2,14 +2,12 @@ import datetime
 from datetime import date, timedelta
 from collections import defaultdict
 import tortoise
-from fastapi import APIRouter, Response, WebSocket, WebSocketDisconnect
-
-from app.config import manager
+from fastapi import APIRouter, Response, Depends
 from app.const import *
 from app.models.accounts import Trading, Account
 from app.models.stocks import Stock
-from app.models.users import User, School
-from app.schemes.common import CommonResponse
+from app.models.users import User
+from app.routers.authentication import get_current_user
 from app.schemes.stocks import GetStockDetailResponse, GetShortStockResponse, BidAskResponse, SchoolHotStockResponse
 
 router = APIRouter(prefix="/stocks")
@@ -17,11 +15,10 @@ router = APIRouter(prefix="/stocks")
 
 @router.get("/detail/{ticker}",
             description="주식 상세 조회",
-            response_model=GetStockDetailResponse,
-            response_model_exclude_none=True)
+            response_model=GetStockDetailResponse)
 async def get_stock_detail(ticker: str, response: Response):
     try:
-        stock = await Stock.get(ticker=ticker).select_related('keywords')
+        stock = await Stock.get(ticker=ticker).select_related('keywords').select_related('category')
         keywords = await stock.keywords
     except tortoise.exceptions.DoesNotExist:
         response.status_code = 404
@@ -39,18 +36,26 @@ async def get_stock_detail(ticker: str, response: Response):
         date__gte=date.today()-timedelta(365)
     ).order_by('-id'))[::5][::-1]
     return GetStockDetailResponse(**dict(stock),
+                                  category_name=stock.category.name,
                                   daily=daily,
                                   weekly=weekly,
                                   monthly=monthly,
                                   yearly=yearly,
-                                  keyword=keywords.keyword,
-                                  sentiment=keywords.sentiment,
+                                  daily_min=min(daily, key=lambda x: x.min_price),
+                                  daily_max=max(daily, key=lambda x: x.max_price),
+                                  weekly_min=min(weekly, key=lambda x: x.min_price),
+                                  weekly_max=max(weekly, key=lambda x: x.max_price),
+                                  monthly_min=min(monthly, key=lambda x: x.min_price),
+                                  monthly_max=max(monthly, key=lambda x: x.max_price),
+                                  yearly_min=min(yearly, key=lambda x: x.min_price),
+                                  yearly_max=max(yearly, key=lambda x: x.max_price),
+                                  keyword=keywords.keyword if keywords else None,
+                                  sentiment=keywords.sentiment if keywords else None,
                                   )
 
 
 @router.get("/short/{ticker}", description="주식 간단 조회",
-            response_model=GetShortStockResponse,
-            response_model_exclude_none=True)
+            response_model=GetShortStockResponse)
 async def get_stock_short(ticker: str, response: Response):
     try:
         stock = await Stock.get(ticker=ticker)
@@ -60,7 +65,10 @@ async def get_stock_short(ticker: str, response: Response):
     today = date.today().strftime("%Y-%m-%d")
     # 차트 데이터
     daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
-    return GetShortStockResponse(**dict(stock), daily=daily)
+    return GetShortStockResponse(**dict(stock),
+                                 daily=daily,
+                                 daily_min=min(daily, key=lambda x: x.min_price),
+                                 daily_max=max(daily, key=lambda x: x.max_price))
 
 
 @router.get("/bidask/{ticker}", description="매수매도호가 조회", response_model=BidAskResponse)
@@ -91,10 +99,9 @@ async def get_bidask_list(ticker: str):
     return BidAskResponse(bid=bid, ask=ask)
 
 
-@router.get("/school-hot/{user_id}", description="교내 핫 종목", response_model=SchoolHotStockResponse)
-async def get_school_hot_list(user_id: int, response: Response):
+@router.get("/school-hot", description="교내 핫 종목", response_model=SchoolHotStockResponse)
+async def get_school_hot_list(response: Response, user: User = Depends(get_current_user)):
     try:
-        user = await User.get(id=user_id)
         users_in_school = await User.filter(school_id=user.school_id).values_list('id', flat=True)
         accounts = await Account.filter(school=True, user_id__in=users_in_school).values_list('id', flat=True)
         not_finished = await Trading.filter(tr_date__isnull=True, account_id__in=accounts)
@@ -113,4 +120,3 @@ async def get_school_hot_list(user_id: int, response: Response):
         response.status_code = 404
         return SchoolHotStockResponse(message="failed")
     return SchoolHotStockResponse(stock_id=hot_stock.pk, stock_name=hot_stock.name, stock_ticker=hot_stock.ticker)
-
