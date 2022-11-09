@@ -21,7 +21,7 @@ public class TradingRepositorySupport {
     public List<Trading> findAllTradingListByUserId(Long userId){
         return jpaQueryFactory.select(qTrading).from(qTrading)
                 .where(qTrading.account.user.userId.eq(userId))
-                .orderBy(qTrading.tr_amount.asc()).fetch();
+                .orderBy(qTrading.tr_date.desc()).fetch();
     }
 
     public Trading findTradingByUserIdAccountId(Long userId, Long tradeId){
@@ -32,8 +32,12 @@ public class TradingRepositorySupport {
     }
 
     public List<Trading> findAllTrading(){
-        return jpaQueryFactory.select(qTrading).from(qTrading)
+         List<Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
                 .where(qTrading.tr_type.eq(3).or(qTrading.tr_type.eq(4)))
                 .fetch();
+
+         if (tradings==null) return null;
+         else return tradings;
     }
 }
