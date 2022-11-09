@@ -24,10 +24,17 @@ public class TradingRepositorySupport {
                 .orderBy(qTrading.tr_date.desc()).fetch();
     }
 
-    public Trading findTradingByUserIdAccountId(Long userId, Long tradeId){
+    public Trading findTradingByUserIdTradeId(Long userId, Long tradeId){
         return jpaQueryFactory.select(qTrading).from(qTrading)
                 .where(qTrading.account.user.userId.eq(userId))
                 .where(qTrading.tradeId.eq(tradeId))
+                .fetchOne();
+    }
+
+    public Trading findTradingByUserIdAccountId(Long userId, Long accountId){
+        return jpaQueryFactory.select(qTrading).from(qTrading)
+                .where(qTrading.account.user.userId.eq(userId))
+                .where(qTrading.account.accountId.eq(accountId))
                 .fetchOne();
     }
 
@@ -39,5 +46,30 @@ public class TradingRepositorySupport {
 
          if (tradings==null) return null;
          else return tradings;
+    }
+
+
+    //개인 특정계좌 판매됨,구매됨 조회
+    public List<Trading> find1Or2ByUserIdAccountId(Long userId, Long accountId){
+        List <Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
+                        .where(qTrading.tr_type.eq(1).or(qTrading.tr_type.eq(2)))
+                        .where(qTrading.account.accountId.eq(accountId))
+                        .where(qTrading.user.userId.eq(userId))
+                        .fetch();
+        if (tradings==null) {return null;}
+        else {return tradings;}
+
+    }
+    //개인 특정계좌 전부 조회
+    public List<Trading> findAllTradingsByUserIdAccountId(Long userId, Long accountId){
+        List<Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
+                        .where(qTrading.account.accountId.eq(accountId))
+                        .where(qTrading.user.userId.eq(userId))
+                        .fetch();
+
+        if (tradings==null) {return null;}
+        else {return tradings;}
     }
 }

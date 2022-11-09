@@ -13,6 +13,7 @@ import java.util.List;
 public class AccountStockListRes extends BaseResponseBody {
 
     List<AccountStock> accountStock;
+    int asset;
 
     public static AccountStockListRes of(List<AccountStock> accountStock, Integer statusCode, String message){
         AccountStockListRes res = new AccountStockListRes();
