@@ -119,9 +119,10 @@ async def update_stock_info():
                 else:
                     new_stocks.append(stck)
             check_end = time.time()
-            time.sleep(0.46)
             end_s = time.time()
-            print(f'{min(20*(r+1), len(stocks))}개 {end_s-start}s')
+            time.sleep(min(abs(1.1 - end_s + start), 1.02))
+            end_t = time.time()
+            print(f'{min(20*(r+1), len(stocks))}개 {end_t-start}s')
     await Stock.bulk_update(
         stocks,
         fields=('price',
