@@ -2,15 +2,12 @@ import datetime
 from datetime import date, timedelta
 from collections import defaultdict
 import tortoise
-from fastapi import APIRouter, Response, Depends, WebSocket, WebSocketDisconnect
-
-from app.config import manager
+from fastapi import APIRouter, Response, Depends
 from app.const import *
 from app.models.accounts import Trading, Account
 from app.models.stocks import Stock
-from app.models.users import User, School
+from app.models.users import User
 from app.routers.authentication import get_current_user
-from app.schemes.common import CommonResponse
 from app.schemes.stocks import GetStockDetailResponse, GetShortStockResponse, BidAskResponse, SchoolHotStockResponse
 
 router = APIRouter(prefix="/stocks")

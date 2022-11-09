@@ -7,7 +7,6 @@ import aiohttp
 import typer
 from pykrx import stock
 
-from app.config import redis_session
 from app.const import *
 from app.models.stocks import Stock, Category
 
@@ -43,19 +42,6 @@ async def insert_daily_and_close_price():
     await Stock.bulk_update(stocks, fields=('close_price',))
     end = time.time()
     print(end-start)
-
-
-async def daily_all():
-    yesterday = (date.today() - timedelta(days=1)).strftime("%Y%m%d")
-    today = date.today().strftime("%Y%m%d")
-    df = stock.get_market_ohlcv(today)
-    tickers = df.index.values
-    print(df.loc['005930']['시가'])
-
-
-@app.command()
-def get_test():
-    asyncio.run(daily_all())
 
 
 async def update_stock_info():
@@ -158,12 +144,6 @@ def daily_insert():
 @app.command()
 def get_token(token_use: str = 'update_stock'):
     save_token(token_use)
-
-
-@app.command()
-def save_any(any_word: str):
-    redis_session.set(any_word, 'success')
-    print('saved!')
 
 
 @app.command()

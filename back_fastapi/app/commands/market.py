@@ -5,7 +5,6 @@ from collections import defaultdict
 import aiohttp
 import typer
 
-from app.config import redis_session
 from app.const import *
 from app.models.stocks import Stock
 
@@ -80,16 +79,6 @@ async def update_and_insert_stock_list(update_time: str = None):
 
 
 @app.command()
-def get_item(my_ticker: str ='005930'):
-    access_token = redis_session.get("update_stock")
-    header = get_header()
-    header["authorization"] = "Bearer " + access_token
-    res = requests.get(candle_url, params=parameter_setter(my_ticker, "093109"), headers=header)
-    if res.status_code == 200:
-        print(res.json())
-
-
-@app.command()
 def update_stocks(time_now: str = None):
     asyncio.run(update_and_insert_stock_list(time_now))
 
@@ -102,4 +91,3 @@ def update_stocks_with_time():
 
 if __name__ == "__main__":
     app()
-
