@@ -1,7 +1,6 @@
 package com.motoo.api.service;
 
 import com.motoo.api.dto.user.AccountStockInfo;
-import com.motoo.api.request.UpdateUserCurrentAccountPutReq;
 import com.motoo.common.auth.AppUserDetails;
 import com.motoo.db.entity.*;
 import com.motoo.db.repository.SchoolRepository;
@@ -130,6 +129,24 @@ public class UserServiceImpl implements UserService {
         Long userId = user.get().getUserId();
         int current = user.get().getCurrent();
         Long accountId = Long.valueOf(current);
+        Account account = accountService.getAccount(accountId, userId);
+        List<AccountStock> accountStocks = account.getAccountStocks();
+
+        List<AccountStockInfo> accountStockInfoList = accountStocks.stream().map(accountStock -> {
+            Long stockId = accountStock.getStock().getStockId();
+            String ticker = accountStock.getStock().getTicker();
+            int amount = accountStock.getAmount();
+            AccountStockInfo accountStockInfo = new AccountStockInfo();
+            accountStockInfo.setStockId(stockId);
+            accountStockInfo.setTicker(ticker);
+            accountStockInfo.setAmount(amount);
+            return accountStockInfo;
+        }).collect(Collectors.toList());
+        return accountStockInfoList;
+    }
+
+    @Override
+    public List<AccountStockInfo> getStockInfoByAccountId(Long userId, Long accountId) {
         Account account = accountService.getAccount(accountId, userId);
         List<AccountStock> accountStocks = account.getAccountStocks();
 
