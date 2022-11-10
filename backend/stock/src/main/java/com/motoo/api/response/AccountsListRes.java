@@ -6,6 +6,7 @@ import com.motoo.db.entity.Account;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -13,11 +14,11 @@ import java.util.List;
 public class AccountsListRes extends BaseResponseBody {
     List<Account> account;
     int asset;
+    List<Integer> pitches;
 
-
-    public static AccountsListRes of(List<Account> account, int seeds, Integer statusCode, String message){
+    public static AccountsListRes of(List<Account> account, List<Integer> pitches, int seeds, Integer statusCode, String message){
         AccountsListRes res = new AccountsListRes();
-
+        res.setPitches(pitches);
 
 
         res.setAsset(seeds);

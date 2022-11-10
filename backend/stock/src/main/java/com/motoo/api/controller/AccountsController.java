@@ -14,9 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
+import java.util.HashMap;
+
 
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,16 +67,34 @@ public class AccountsController {
     @ApiOperation(value = "계좌 목록 조회", notes = "계좌 목록을 조회한다.")
     public ResponseEntity<AccountsListRes> listAccounts(@ApiIgnore Authentication authentication) {
         Long userId = userService.getUserIdByToken(authentication);
+        Optional<User> user = userService.getByUserId(userId);
+        int currentAccount = user.get().getCurrent();
         List<Account> account = accountService.listAccount(userId);
         int seeds=0;
-        for (int i=0; i<account.size(); i++){
-            seeds+= account.get(i).getSeed();
-            for (int a=0; a<account.get(i).getAccountStocks().size(); a++){
-                 seeds+=account.get(i).getAccountStocks().get(a).getAmount()*account.get(i).getAccountStocks().get(a).getPrice();
-            }
-        }
 
-        return ResponseEntity.status(200).body(AccountsListRes.of(account,seeds, 200, "계좌 목록조회에 성공하였습니다."));
+//        boolean myBoolean = user.get().getSchool();
+//        int myInt = myBoolean ? 1 : 0;
+
+        List<Integer> pitches = new ArrayList<>();
+//        account.stream().map(value -> {return value.getSeed();}).reduce((x,value) -> {
+//            x += value.getSeed();
+//
+//            System.out.println(value.getSeed());
+//            accountAsset += value.getSeed();
+//            System.out.println("어카운트 어셋 더하기전  " + accountAsset);
+//        })
+//        HashMap<Integer, Integer> pitches = new HashMap<Integer, Integer>();
+        for (Account value : account) {
+            int accountAsset=0;
+            seeds+=value.getSeed();
+            accountAsset+=value.getSeed();
+            for (int a = 0; a < value.getAccountStocks().size(); a++) {
+                seeds += value.getAccountStocks().get(a).getAmount() * value.getAccountStocks().get(a).getPrice();
+                accountAsset += value.getAccountStocks().get(a).getAmount() * value.getAccountStocks().get(a).getPrice();
+            }
+            pitches.add(accountAsset);
+        }
+        return ResponseEntity.status(200).body(AccountsListRes.of(account, pitches, seeds,200, "계좌 목록조회에 성공하였습니다."));
     }
 
     //계좌 이름 수정
