@@ -1,7 +1,7 @@
 package com.motoo.api.service;
 
 import com.motoo.api.dto.user.AccountStockInfo;
-import com.motoo.api.request.UpdateUserPutReq;
+import com.motoo.api.request.UpdateUserCurrentAccountPutReq;
 import com.motoo.common.auth.AppUserDetails;
 import com.motoo.db.entity.*;
 import com.motoo.db.repository.SchoolRepository;
@@ -104,10 +104,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    @Override
-    public int updateUser(User user, UpdateUserPutReq updateUserPutReq) {
-        return 0;
-    }
+
 
     @Override
     public List<String> getFavoriteStockCode(Optional<User> user) {
