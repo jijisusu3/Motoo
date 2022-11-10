@@ -56,7 +56,7 @@ public class Trading {
     private User user;
 
 
-    public void writeOrder(Account account, User user, String ticker, String ticker_name, int tr_type, int tr_price, int tr_amount ){
+    public void writeOrder(Account account, User user, String ticker, String ticker_name, int tr_type, int tr_price, int tr_amount, Integer tr_avg){
         this.user = user;
         this.account =account;
         this.ticker = ticker;
@@ -64,6 +64,8 @@ public class Trading {
         this.tr_type = tr_type;
         this.tr_price = tr_price;
         this.tr_amount = tr_amount;
+        this.tr_avg = tr_avg;
+
 
     }
 //    public void setAccounts(Account accounts) {

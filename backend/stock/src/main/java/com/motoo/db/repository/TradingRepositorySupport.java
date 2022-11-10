@@ -50,6 +50,7 @@ public class TradingRepositorySupport {
 
 
     //개인 특정계좌 판매됨,구매됨 조회
+
     public List<Trading> find1Or2ByUserIdAccountId(Long userId, Long accountId){
         List <Trading> tradings =
                 jpaQueryFactory.select(qTrading).from(qTrading)
@@ -59,8 +60,20 @@ public class TradingRepositorySupport {
                         .fetch();
         if (tradings==null) {return null;}
         else {return tradings;}
+    }
+
+    public List<Trading> find1Or2Or5ByUserIdAccountId(Long userId, Long accountId){
+        List <Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
+                        .where(qTrading.tr_type.eq(1).or(qTrading.tr_type.eq(2).or(qTrading.tr_type.eq(5))))
+                        .where(qTrading.account.accountId.eq(accountId))
+                        .where(qTrading.user.userId.eq(userId))
+                        .fetch();
+        if (tradings==null) {return null;}
+        else {return tradings;}
 
     }
+
     //개인 특정계좌 전부 조회
     public List<Trading> findAllTradingsByUserIdAccountId(Long userId, Long accountId){
         List<Trading> tradings =
@@ -69,6 +82,39 @@ public class TradingRepositorySupport {
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
 
+        if (tradings==null) {return null;}
+        else {return tradings;}
+    }
+
+    public List<Trading> find1ByUserIdAccountId(Long userId, Long accountId){
+        List <Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
+                        .where(qTrading.tr_type.eq(1))
+                        .where(qTrading.account.accountId.eq(accountId))
+                        .where(qTrading.user.userId.eq(userId))
+                        .fetch();
+        if (tradings==null) {return null;}
+        else {return tradings;}
+    }
+
+    public List<Trading> find2ByUserIdAccountId(Long userId, Long accountId){
+        List <Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
+                        .where(qTrading.tr_type.eq(2))
+                        .where(qTrading.account.accountId.eq(accountId))
+                        .where(qTrading.user.userId.eq(userId))
+                        .fetch();
+        if (tradings==null) {return null;}
+        else {return tradings;}
+    }
+
+    public List<Trading> find5ByUserIdAccountId(Long userId, Long accountId){
+        List <Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
+                        .where(qTrading.tr_type.eq(5))
+                        .where(qTrading.account.accountId.eq(accountId))
+                        .where(qTrading.user.userId.eq(userId))
+                        .fetch();
         if (tradings==null) {return null;}
         else {return tradings;}
     }

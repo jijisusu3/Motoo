@@ -14,6 +14,8 @@ public class AccountListRes extends BaseResponseBody{
 
     int seed;
 
+    int asset;
+
 
     public static AccountListRes of (Account account, Integer statusCode, String message){
         AccountListRes res = new AccountListRes();

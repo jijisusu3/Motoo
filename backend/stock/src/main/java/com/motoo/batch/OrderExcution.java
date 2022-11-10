@@ -4,15 +4,14 @@ package com.motoo.batch;
 import com.motoo.api.service.AccountService;
 import com.motoo.api.service.AccountStockService;
 import com.motoo.api.service.TradingService;
-import com.motoo.common.model.response.BaseResponseBody;
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
 import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.Trading;
+import com.motoo.db.repository.AccountStockRepositorySupport;
 import com.motoo.db.repository.StockRepositorySupport;
 import com.motoo.db.repository.TradingRepositorySupport;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import org.springframework.stereotype.Component;
@@ -32,16 +31,20 @@ public class OrderExcution {
 
     private final TradingService tradingService;
 
-    public OrderExcution(TradingRepositorySupport tradingRepositorySupport, AccountService accountService, AccountStockService accountStockService, StockRepositorySupport stockRepositorySupport, TradingService tradingService) {
+    private final AccountStockRepositorySupport accountStockRepositorySupport;
+
+    public OrderExcution(TradingRepositorySupport tradingRepositorySupport, AccountService accountService, AccountStockService accountStockService, StockRepositorySupport stockRepositorySupport, TradingService tradingService, AccountStockRepositorySupport accountStockRepositorySupport) {
         this.tradingRepositorySupport = tradingRepositorySupport;
         this.accountService = accountService;
         this.accountStockService = accountStockService;
         this.stockRepositorySupport = stockRepositorySupport;
         this.tradingService = tradingService;
+        this.accountStockRepositorySupport = accountStockRepositorySupport;
     }
 
     //매일 9시-16시 사이에 2분간격으로 조회
 //    @Scheduled(cron = " * 0/2 9,16 * * * ")
+//    @Scheduled(cron = " 0/2 * * * * * ")
     public void timeSchedule() {
 
         //3판매예약,  4구매예약 인 거래계좌 리스트
@@ -83,14 +86,34 @@ public class OrderExcution {
 
                     //트레이딩 타입 바꿔줄 트레이딩의 객체
                     Trading trading = tradingService.getTrading(userId, tradeId);
+                    //accountStockId 가져오기
+                    Long accountStockId = accountStockService.getAccountStockIdByStockId(accountId, stockId);
 
+                    //accountStock 객체 가져오기
+                    AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
+                    //accountStockId
+//                    Long accountStockId = accountStockService.getAccountStockIdByStockId(accountId, stockId);
+//                    AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
+//
+//                    //판매 거래내역에 추가
+//                    int original = accountStock.getPrice();
+//                    Integer converted = Integer.valueOf(original);
+//
+//                    trading.setAvg(converted);
 
                     //판매예약 조회
                     if (tradingList.get(i).getTr_type() == 3) {
+
+
                         //accountStockId 가져오기
-                        Long accountStockId = accountStockService.getAccountStockIdByStockId(account.getAccountId(), stockId);
-                        //accountStock 객체 가져오기
-                        AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
+//                        System.out.println("account Id : "+ accountId);
+//                        System.out.println("stockId : "+ stockId);
+                        //문제의 그곳 ..
+
+
+//                        Long accountStockId = accountStockRepositorySupport.findAccountIdByStockId(accountId,stockId);
+
+
 
 
                         //주식 소유여부 분기
@@ -123,8 +146,10 @@ public class OrderExcution {
                                 //해당 보유주식 가격, 수량 변경
                                 accountStockService.updateAmountPrice(accountStock, newAmount, currentPrice);
                                 trading.updateType(1);
+                                trading.setAvg(accountStock.getPrice());
                                 //보유주식이 0으로 떨어지면 보유계좌에서 삭제
                                     if (accountStock.getAmount() <=0){
+                                        System.out.println("==========삭제쿼리============");
                                         accountStockService.deleteStockInAccount(userId, SellAccountId, stockId);
                                     }
                                     System.out.println("해당 주식 판매완료");
@@ -149,11 +174,10 @@ public class OrderExcution {
                             //계좌 주식 리스트에 해당 주식이 있으면 주식 평단가 수정
                             if (stockList.contains(stockId)){
 
-                                //accountStockId 가져오기
-                                Long accountStockId = accountStockService.getAccountStockIdByStockId(account.getAccountId(), stockId);
+
 
                                 //accountStock 객체 가져오기
-                                AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
+//                                AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
 
                                 //이동평균법에 의한 새로운 가격 계산하는 로직
                                 int currentAmount = accountStock.getAmount();
