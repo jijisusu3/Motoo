@@ -2,6 +2,7 @@ package com.motoo.api.service;
 
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
+import com.motoo.db.entity.Stock;
 
 import java.util.List;
 
@@ -28,7 +29,10 @@ public interface AccountService {
 
     long[] getAccountCount(List<Account> accounts);
 
+    //메인함수인지 로직
+    void updateMainAccount(Account account, boolean main);
 
+//    List<Stock> getStockList(Long userId, Long accountId);
     //accounts Stock 관련
 
 

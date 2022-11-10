@@ -17,11 +17,11 @@ public class MakeOrderPostReq {
 
 
     @NotNull
-    @ApiModelProperty(name = "계좌 id", example = "계좌 id 입니다.")
+    @ApiModelProperty(name = "계좌_id", example = "계좌 id 입니다.")
     Long accountId;
 
     @NotNull
-    @ApiModelProperty(name = "주식 id", example = "주식 id 입니다.")
+    @ApiModelProperty(name = "주식_id", example = "주식 id 입니다.")
     Long stockId;
 //    int tr_type, int price, int amount
 

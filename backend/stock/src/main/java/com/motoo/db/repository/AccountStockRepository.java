@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface AccountStockRepository  extends JpaRepository<AccountStock, Long> {
 
+
     List<AccountStock> findByAccountStockId(Long accountStockId);
 
 

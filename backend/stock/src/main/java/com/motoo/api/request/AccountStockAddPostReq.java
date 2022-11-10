@@ -19,7 +19,7 @@ public class AccountStockAddPostReq {
 
     //주식 id
     @NotNull
-    @ApiModelProperty(name = "주식_id 입니다", example = "1")
+    @ApiModelProperty(name = "주식_id", example = "1")
     Long stockId;
 
     @NotNull

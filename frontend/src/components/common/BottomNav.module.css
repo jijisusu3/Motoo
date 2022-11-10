@@ -1,6 +1,7 @@
 nav {
   overflow: hidden;
   box-shadow: 0 -1px 5px rgb(235, 232, 232);
+  z-index: 1;
 }
 /* nav태그 아래의 div태그들을 수평정렬 및 세로길이 설정 */
 nav > div {

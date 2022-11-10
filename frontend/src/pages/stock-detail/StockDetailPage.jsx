@@ -8,44 +8,59 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { stockDetailGet } from "../../stores/stockSlice";
-
+import { likeStockPost } from "../../stores/userSlice";
 
 function StockDetailPage() {
   const params = useParams();
   const id = params.id;
   const [showCandleGraph, setShowCandleGraph] = useState(false);
   const navigate = useNavigate();
-  const stockData = useSelector(state=> {
-    return state.setStock.shortStockData
-  })
-  const shortStockData = useSelector(state => {
-    return state.setStock.shortStockData
-  })
-  // const haveList = useSelector(state => {
-  //   return state.setUser.user.haveList
-  // })
-  // const likeList = useSelector(state => {
-  //   return state.setUser.user.likeList
-  // })
+  // useEffect로 데이터 받아오고 구매주식목록에 있으면 true, 없으면 false 그대로
+  const [showSellButton, setShowSellButton] = useState(true);
+  // useEffect로 데이터 받아오고 관심목록에 있으면 true, 없으면 false 그대로
+  const [isWatchlist, setisWatchlist] = useState(true);
+  const stockData = useSelector((state) => {
+    return state.setStock.detail;
+  });
+  const shortStockData = useSelector((state) => {
+    return state.setStock.shortStockData;
+  });
+  const userToken = useSelector((state) => {
+    return state.persistedReducer.setUser.user.token;
+  });
+  const haveList = useSelector((state) => {
+    return state.persistedReducer.setUser.user.haveList;
+  });
+  const likeList = useSelector((state) => {
+    return state.persistedReducer.setUser.user.likeList;
+  });
   function backTo() {
     navigate(-1);
   }
   const dispatch = useDispatch();
+
+  function goToIndustry() {
+    navigate(`/stock/industry/${stockData.category_id}`);
+  }
+
   useEffect(() => {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
     dispatch(stockDetailGet(id));
-    // if (!haveList.includes(stockData.id)){
-    //   setShowSellButton(false)
-    // } else {
-    //   setShowSellButton(true)
-    // }
-    // if (likeList.includes(stockData.id)){
-    //   setisWatchlist(false)
-    // } else {
-    //   setisWatchlist(true)
-    // }
-  },[]);
+  }, []);
+
+  useEffect(() => {
+    if (!haveList.includes(id)) {
+      setShowSellButton(false);
+    } else {
+      setShowSellButton(true);
+    }
+    if (!likeList.includes(id)) {
+      setisWatchlist(false);
+    } else {
+      setisWatchlist(true);
+    }
+  }, [haveList, likeList]);
 
   useEffect(() => {
     const wss = new WebSocket("wss://k7b204.p.ssafy.io:443/api1/socket/ws");
@@ -56,13 +71,6 @@ function StockDetailPage() {
       console.log(`받았다 니 데이터 : ${event.data}`);
     };
   });
-
-
-  // useEffect로 데이터 받아오고 구매주식목록에 있으면 true, 없으면 false 그대로
-  const [showSellButton, setShowSellButton] = useState(true);
-  // useEffect로 데이터 받아오고 관심목록에 있으면 true, 없으면 false 그대로
-  const [isWatchlist, setisWatchlist] = useState(true);
-
 
   function changeToCandle() {
     setShowCandleGraph(true);
@@ -228,6 +236,9 @@ function StockDetailPage() {
         },
       },
       chart: {
+        animations: {
+          enabled: false,
+        },
         type: "candlestick",
         height: 350,
         locales: [ko],
@@ -337,6 +348,9 @@ function StockDetailPage() {
     options: {
       colors: ["#DC6031", "#449431"],
       chart: {
+        animations: {
+          enabled: false,
+        },
         height: 350,
         type: "line",
         locales: [ko],
@@ -465,6 +479,7 @@ function StockDetailPage() {
       },
     },
   });
+
   function StockDetailGraph() {
     if (showCandleGraph) {
       return (
@@ -487,11 +502,69 @@ function StockDetailPage() {
       />
     );
   }
+
   const handleTimeChange = (event) => {
     console.log(event.target.value);
     // data 변경해주기
   };
-
+  function WeatherCard(sen) {
+    let border = "1px solid #C4CECE";
+    // 나쁨일때
+    if (sen.thisIndex === 0) {
+      if (sen.thisIndex === sen.maxIndex) {
+        border = "2px solid #DD4956";
+      }
+      return (
+        <div style={{ border: border }}>
+          <img src={`${process.env.PUBLIC_URL}/stock-detail/rain.svg`} alt="" />
+        </div>
+      );
+    } else if (sen.thisIndex === 1) {
+      // 보통일때
+      if (sen.thisIndex === sen.maxIndex) {
+        border = "2px solid #FEBF45";
+      }
+      return (
+        <div style={{ border: border }}>
+          <img
+            src={`${process.env.PUBLIC_URL}/stock-detail/cloudy.svg`}
+            alt=""
+          />
+        </div>
+      );
+    } else {
+      if (sen.thisIndex === sen.maxIndex) {
+        border = "2px solid #B1CC33";
+      }
+      return (
+        <div style={{ border: border }}>
+          <img src={`${process.env.PUBLIC_URL}/stock-detail/sun.svg`} alt="" />
+        </div>
+      );
+    }
+  }
+  function WeatherCards() {
+    const sentiments = stockData.sentiment;
+    const max_num = Math.max(...sentiments);
+    let max_index = 0;
+    sentiments.forEach((element, index) => {
+      if (element === max_num) {
+        max_index = index;
+      }
+    });
+    return (
+      <div>
+        {sentiments.map((sentiment, index) => (
+          <WeatherCard
+            key={index}
+            sen={sentiment}
+            maxIndex={max_index}
+            thisIndex={index}
+          />
+        ))}
+      </div>
+    );
+  }
   // 가격업데이트 될 때, 해당 데이터도 업데이트
   function BuySellButton() {
     if (showSellButton) {
@@ -507,17 +580,18 @@ function StockDetailPage() {
       );
     }
     return (
-      <Link to="/stock/buy" state={{ data: shortStockData }}>
+      <Link to={`/stock/buy/${id}`} state={{ data: shortStockData }}>
         <button>살래요</button>
       </Link>
     );
   }
   function WishListIcon() {
-    const like = () => {
-      setisWatchlist(true);
-    };
-    const disLike = () => {
-      setisWatchlist(false);
+    let data = {};
+    if (userToken) {
+      data = { token: userToken, id: stockData.id };
+    }
+    const heartClick = () => {
+      dispatch(likeStockPost(data));
     };
     if (isWatchlist) {
       return (
@@ -527,7 +601,7 @@ function StockDetailPage() {
           viewBox="0 0 23 20"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          onClick={disLike}
+          onClick={heartClick}
         >
           <path
             d="M20.6386 1.36753C18.1922 -0.717255 14.5539 -0.342262 12.3084 1.97466L11.4289 2.88089L10.5495 1.97466C8.30843 -0.342262 4.66564 -0.717255 2.21926 1.36753C-0.584263 3.76034 -0.731582 8.05491 1.7773 10.6486L10.4155 19.5681C10.9736 20.144 11.8798 20.144 12.4378 19.5681L21.0761 10.6486C23.5894 8.05491 23.4421 3.76034 20.6386 1.36753Z"
@@ -543,7 +617,7 @@ function StockDetailPage() {
         viewBox="0 0 23 20"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        onClick={like}
+        onClick={heartClick}
       >
         <path
           d="M20.6386 1.36753C18.1922 -0.717255 14.5539 -0.342262 12.3084 1.97466L11.4289 2.88089L10.5495 1.97466C8.30843 -0.342262 4.66564 -0.717255 2.21926 1.36753C-0.584263 3.76034 -0.731582 8.05491 1.7773 10.6486L10.4155 19.5681C10.9736 20.144 11.8798 20.144 12.4378 19.5681L21.0761 10.6486C23.5894 8.05491 23.4421 3.76034 20.6386 1.36753Z"
@@ -552,18 +626,64 @@ function StockDetailPage() {
       </svg>
     );
   }
+  function AnalyzedData() {
+    if (stockData.keyword === null) {
+      return;
+    }
+    return (
+      <div>
+        <div>
+          <div>오늘 {stockData.name} 날씨는?</div>
+          <img
+            src={`${process.env.PUBLIC_URL}/stock-detail/newspaper.svg`}
+            alt=""
+          />
+        </div>
+        <div>{stockData.sentiment && <WeatherCards />}</div>
+        <div>
+          <div>{stockData.name} 이렇게 표현되고 있어요</div>
+          <img
+            src={`${process.env.PUBLIC_URL}/stock-detail/keyword.svg`}
+            alt=""
+          />
+          <div>
+            {stockData.keyword &&
+              stockData.keyword.map((word) => <div>{word}</div>)}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  function CompareText() {
+    if (stockData.fluctuation_rate > 0) {
+      return (
+        <div>
+          어제보다 {stockData.fluctuation_price}원 올랐어요 (+
+          {stockData.fluctuation_rate}%)
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          어제보다 {stockData.fluctuation_price}원 떨어졌어요 (
+          {stockData.fluctuation_rate}%)
+        </div>
+      );
+    }
+  }
   return (
     <div>
-      <h1>{stockData.name}</h1>
-      <h1>머지</h1>
-
       <img
         onClick={backTo}
         src={`${process.env.PUBLIC_URL}/stock-detail/back.svg`}
         alt=""
       />
       <WishListIcon />
-
+      <hr />
+      <div>{id} / KOSPI</div>
+      <h1>{stockData.name}</h1>
+      <h1>{shortStockData.price}원</h1>
+      {stockData && <CompareText />}
       <StockDetailGraph />
       <label>
         <input
@@ -614,6 +734,28 @@ function StockDetailPage() {
           />
         </div>
       )}
+      <div style={{ border: "2px solid blue" }}>
+        <img src={`${process.env.PUBLIC_URL}/stock-detail/cal.svg`} alt="" />
+        <div>이 주식은 오늘 ?</div>
+        <img src={`${process.env.PUBLIC_URL}/Q.svg`} alt="" />
+      </div>
+      <div>
+        {stockData && (
+          <div style={{ border: "2px solid red" }}>
+            <div>
+              아무리 올라도 <span>{stockData.maximum}원</span>
+            </div>
+            <div>
+              아무리 떨어져도 <span>{stockData.maximum}원</span>
+            </div>
+          </div>
+        )}
+      </div>
+      <div onClick={goToIndustry}>
+        <div>{stockData.category_name} 업종 키워드 보러가기</div>
+        <img src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
+      </div>
+      <AnalyzedData />
       <BuySellButton />
     </div>
   );

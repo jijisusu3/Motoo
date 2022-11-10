@@ -1,8 +1,11 @@
 package com.motoo.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,7 +22,17 @@ public class School {
 
     private String schoolname;
 
+    private Integer rank;
+
+    private Float average;
+
+    private String today;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="sigungu_id")
     private Sigungu sigungu;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "school",orphanRemoval = true)
+    private List<User> users = new ArrayList<>();
 }

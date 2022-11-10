@@ -15,7 +15,8 @@ public class StockRepositorySupport {
 
     QStock qStock = QStock.stock;
     public Stock findStockByAStockId(Long stockId){
-        return jpaQueryFactory.selectFrom(qStock).where(qStock.stockId.eq(stockId)).fetchOne();
+        Stock stock = jpaQueryFactory.select(qStock).from(qStock).where(qStock.stockId.eq(stockId)).fetchOne();
+        return stock;
     }
 
     public Long findStockIdByTicker(String tiker){
