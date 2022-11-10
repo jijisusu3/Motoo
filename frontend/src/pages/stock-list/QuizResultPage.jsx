@@ -7,13 +7,11 @@ import { useParams } from "react-router-dom";
 
 function QuizResultPage() {
   const dispatch = useDispatch()
-  // 데이터 전역으로 저장해두기
-
   const params = useParams();
   const id = params.result;
   const [quizResult, setQuizResult] = useState(true)
   const quizData = useSelector((state) => {
-    return state.setStock.quizData
+    return state.persistedReducer.setUser.quizData
   })
   var examples = []
   if (quizData.examples) {

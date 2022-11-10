@@ -15,7 +15,6 @@ function MenuPage() {
   return (
     <div>
       <button onClick={logoutClick}>로그아웃 되나 볼거야</button>
-
     </div>
     
   );

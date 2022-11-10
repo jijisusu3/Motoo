@@ -7,6 +7,7 @@ import Modal from "@mui/material/Modal";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
+import { accountsListGet } from "../../stores/accountSlice";
 import { fontSize } from "@mui/system";
 import { nicknamePut } from "../../stores/userSlice";
 
@@ -29,7 +30,6 @@ function MyPage() {
   const now = dayjs().format("YYYY-MM-DD");
   const standard = dayjs().add(-4, "week").format("YYYY-MM-DD");
   const [nowEdit, setNowEdit] = useState(false);
-  // + 버튼 넣어줄지 판단 인덱스로
   const [canAddNum, setCanAddNum] = useState(true);
   const [canAddDate, setCanAddDate] = useState(true);
   const [warningEffect, setWarningEffect] = useState(false);
@@ -39,16 +39,25 @@ function MyPage() {
   const userData = useSelector((state) => {
     return state.persistedReducer.setUser.user
   })
+  const userToken = useSelector((state) => {
+    return state.persistedReducer.setUser.user.token;
+  });
   const dispatch = useDispatch();
   useEffect(() => {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
-  });
-  
+  }, []);
+  useEffect(() => {
+    const data = {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    }
+    dispatch(accountsListGet(data))
+  }, [userToken])
   const [openCreateModal, setCreateModalOpen] = useState(false);
   const handleCreateModalOpen = () => {
     setCreateModalOpen(true);
-    // setShowSettings(false);
   };
   const handleCreateModalClose = () => setCreateModalOpen(false);
   
