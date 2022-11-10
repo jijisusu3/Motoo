@@ -27,6 +27,7 @@ class Stock(Model):
     m_capital = fields.BigIntField(null=True)
     issued = fields.BigIntField(null=True)
     capital = fields.IntField(null=True)
+    div_yield = fields.FloatField(null=True)
     user = fields.ManyToManyField('b204.User', through='favoritestock', related_name='user_stock')
 
 
