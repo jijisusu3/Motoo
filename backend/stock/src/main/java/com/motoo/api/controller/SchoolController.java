@@ -48,4 +48,10 @@ public class SchoolController {
         accountService.createSchoolAccount(id);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "학교 대항전 등록 및 학교 계좌 발급이 완료되었습니다."));
     }
+
+    @GetMapping("/api2/schoolpage")
+    public ResponseEntity<?> ReadSchoolPage(Authentication authentication) {
+        Long id = userService.getUserIdByToken(authentication);
+        return ResponseEntity.ok(schoolService.getSchoolPage(id));
+    }
 }

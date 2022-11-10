@@ -16,14 +16,13 @@ import java.util.Date;
 public class EventsResponse {
     private Long eventsId;
 
-    private Date start_date;
+    private Date open_date;
 
     private Date close_date;
 
     private String hall_of_fame;
 
     public static EventsResponse response(Events events){
-        System.out.println(events.getHall_of_fame().getClass().getName());
         return new EventsResponse(events.getEventsId(), events.getOpen_date(), events.getClose_date(), events.getHall_of_fame());
     }
 }

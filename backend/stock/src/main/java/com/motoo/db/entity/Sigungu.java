@@ -22,6 +22,10 @@ public class Sigungu {
 
     private String sido;
 
+    private String group;
+
+    private String personal;
+
     @OneToMany(mappedBy = "sigungu")
     private List<School> school = new ArrayList<>();
 }
