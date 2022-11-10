@@ -98,10 +98,11 @@ public class UserController {
     @PutMapping("/current")
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 계좌가 변경되었습니다.", response = AccountListRes.class), @ApiResponse(code = 401, message = "계좌 변경에 실패하였습니다.", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @ApiOperation(value = "주계좌 변경 ", notes = "주계좌를 변경한다.")
-    public ResponseEntity changeCurrent(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "변경할 주계좌", required = true) @Valid UpdateUserCurrentAccountPutReq updateUserProfileReq) {
+    public ResponseEntity changeCurrent(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "변경할 주계좌", required = true) @Valid UpdateUserCurrentAccountPutReq updateUserCurrentAccountPutReq) {
         Long userId = userService.getUserIdByToken(authentication);
         // 변경요청이 온 계좌 id를, 해당 유저가 소유하고 있는지 체크
-        Long accountId = Long.valueOf(updateUserProfileReq.getCurrent());
+        int current = updateUserCurrentAccountPutReq.getCurrent();
+        Long accountId = Long.valueOf(current);
         Account account = accountService.getAccount(accountId, userId);
         List<Account> accountList = accountService.listAccount(userId);
 
@@ -115,7 +116,7 @@ public class UserController {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌 변경에 실패하였습니다."));
         }
         account.updateIsMain(true);
-        userService.updateCurrent(userId, updateUserProfileReq.getCurrent());
+        userService.updateCurrent(userId, updateUserCurrentAccountPutReq.getCurrent());
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌가 변경되었습니다."));
     }
 

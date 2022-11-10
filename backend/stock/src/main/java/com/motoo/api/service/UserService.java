@@ -44,4 +44,6 @@ public interface UserService {
     int getAccountSeed(Optional<User> user);
 
     List<AccountStockInfo> getStockInfo(Optional<User> user);
+//    Optional<User> user,
+    List<AccountStockInfo> getStockInfoByAccountId(Long userId ,Long accountId);
 }

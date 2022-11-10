@@ -94,11 +94,8 @@ public class OrderExcution {
                     //트레이딩 타입 바꿔줄 트레이딩의 객체
                     Trading trading = tradingService.getTrading(userId, tradeId);
 
-                    //accountStockId 가져오기
-                    Long accountStockId = accountStockService.getAccountStockIdByStockId(accountId, stockId);
 
-                    //accountStock 객체 가져오기
-                    AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
+
                     //accountStockId
 //                    Long accountStockId = accountStockService.getAccountStockIdByStockId(accountId, stockId);
 //                    AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
@@ -127,6 +124,10 @@ public class OrderExcution {
                         //주식 소유여부 분기
                         if (stockList.contains(stockId)){
                             //판매할 금액이 현재 주식가격보다 높을경우 판매불가
+                            //accountStockId 가져오기
+                            Long accountStockId = accountStockService.getAccountStockIdByStockId(accountId, stockId);
+                            //accountStock 객체 가져오기
+                            AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
                             if(amount*price > amount*stock.getPrice()){
                                 System.out.println("판매가격이 시장가보다 높습니다.");
                                 continue;
@@ -157,7 +158,6 @@ public class OrderExcution {
                                 trading.setAvg(accountStock.getPrice());
                                 //보유주식이 0으로 떨어지면 보유계좌에서 삭제
                                     if (accountStock.getAmount() <=0){
-                                        System.out.println("==========삭제쿼리============");
                                         accountStockService.deleteStockInAccount(userId, SellAccountId, stockId);
                                     }
                                     System.out.println("해당 주식 판매완료");
@@ -180,9 +180,12 @@ public class OrderExcution {
                             if(amount*price > amount*stock.getPrice()){
 
                             //계좌 주식 리스트에 해당 주식이 있으면 주식 평단가 수정
-                            if (stockList.contains(stockId)){
+                                if (stockList.contains(stockId)){
+                                    //accountStockId 가져오기
+                                    Long accountStockId = accountStockService.getAccountStockIdByStockId(accountId, stockId);
 
-
+                                    //accountStock 객체 가져오기
+                                    AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
 
                                 //accountStock 객체 가져오기
 //                                AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
