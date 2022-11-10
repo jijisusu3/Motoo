@@ -42,9 +42,10 @@ public class Account {
     @Column(name="name")
     private String name;
 
-
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", orphanRemoval = true)
     private List<AccountStock> accountStocks = new ArrayList<>();
+
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account",orphanRemoval = true)
     private List<Trading> tradings = new ArrayList<>();

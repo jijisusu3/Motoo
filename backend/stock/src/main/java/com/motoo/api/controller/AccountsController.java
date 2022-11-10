@@ -67,8 +67,13 @@ public class AccountsController {
     @ApiOperation(value = "계좌 목록 조회", notes = "계좌 목록을 조회한다.")
     public ResponseEntity<AccountsListRes> listAccounts(@ApiIgnore Authentication authentication) {
         Long userId = userService.getUserIdByToken(authentication);
+        Optional<User> user = userService.getByUserId(userId);
+        int currentAccount = user.get().getCurrent();
         List<Account> account = accountService.listAccount(userId);
         int seeds=0;
+
+//        boolean myBoolean = user.get().getSchool();
+//        int myInt = myBoolean ? 1 : 0;
 
         List<Integer> pitches = new ArrayList<>();
 //        account.stream().map(value -> {return value.getSeed();}).reduce((x,value) -> {
@@ -89,7 +94,7 @@ public class AccountsController {
             }
             pitches.add(accountAsset);
         }
-        return ResponseEntity.status(200).body(AccountsListRes.of(account,  pitches, seeds,200, "계좌 목록조회에 성공하였습니다."));
+        return ResponseEntity.status(200).body(AccountsListRes.of(account, pitches, seeds,200, "계좌 목록조회에 성공하였습니다."));
     }
 
     //계좌 이름 수정
