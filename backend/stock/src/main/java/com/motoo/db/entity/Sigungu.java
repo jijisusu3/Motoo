@@ -23,7 +23,7 @@ public class Sigungu {
 
     private String sido;
 
-    private String group;
+    private String school_ranks;
 
     private String personal;
 

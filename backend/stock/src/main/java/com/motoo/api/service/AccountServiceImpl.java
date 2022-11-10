@@ -74,6 +74,12 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
+    public Account getSchoolAccount(Long userId) {
+        return accountRepositorySupport.findAccountBySchoolAndUserId(userId);
+
+    }
+
+    @Override
     @Transactional
     public void updateAccount(Account account, String name) {
 

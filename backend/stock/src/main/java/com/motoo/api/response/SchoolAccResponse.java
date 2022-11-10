@@ -8,14 +8,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SchoolAccResponse {
-    private Integer seed;
+
 
     private Integer myRank;
 
+    private Integer asset;
+
     private Float myAvg;
 
-//    public static SchoolAccResponse response(){
-//
-//    }
+    public static SchoolAccResponse response(Integer r, Integer as, Float av){
+        return new SchoolAccResponse(r, as, av);
+    }
+    }
 
-}
