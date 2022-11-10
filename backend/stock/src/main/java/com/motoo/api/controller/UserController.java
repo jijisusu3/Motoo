@@ -1,9 +1,11 @@
 package com.motoo.api.controller;
 
 import com.motoo.api.dto.kakao.KakaoProfile;
+import com.motoo.api.dto.user.AccountStockInfo;
 import com.motoo.api.dto.user.BaseUserInfo;
 import com.motoo.api.request.LikeStockReq;
 import com.motoo.api.request.UpdateUserProfileReq;
+import com.motoo.api.response.AccountListRes;
 import com.motoo.api.response.FavoriteStockRes;
 import com.motoo.api.response.LoginResponse;
 import com.motoo.api.service.AccountService;
@@ -13,6 +15,9 @@ import com.motoo.api.service.UserService;
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.User;
 import com.motoo.common.model.response.BaseResponseBody;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -36,20 +41,33 @@ public class UserController {
     /**유저 정보 받아오기
      *
      */
-    @GetMapping
+    @GetMapping()
+    @ApiResponses({@ApiResponse(code = 200, message = "(token) 유저 정보 조회 성공", response = AccountListRes.class), @ApiResponse(code = 401, message = "유저 정보 조회 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
+    @ApiOperation(value = "유저 정보 조회", notes = "유저 정보를 조회한다.")
     public BaseUserInfo profile(Authentication authentication) {
         Long id = userService.getUserIdByToken(authentication);
         Optional<User> user = userService.getByUserId(id);
         BaseUserInfo baseUserInfo = BaseUserInfo.of(user);
+        //관심 주식 종목 코드 세팅
         List<String> favoriteStockCode = userService.getFavoriteStockCode(user);
         baseUserInfo.setFavoriteStockCode(favoriteStockCode);
+
+        //주 계좌 시드머니 세팅
+        int seed = userService.getAccountSeed(user);
+        baseUserInfo.setSeed(seed);
+
+        //주 계좌 보유 주식 정보 세팅
+        List<AccountStockInfo> stockInfo = userService.getStockInfo(user);
+        baseUserInfo.setStockInfo(stockInfo);
         return baseUserInfo;
     }
 
     /**회원 탈퇴
      *
      */
-    @DeleteMapping
+    @DeleteMapping()
+    @ApiResponses({@ApiResponse(code = 200, message = "(token) 탈퇴 성공", response = AccountListRes.class) })
+    @ApiOperation(value = "회원 탈퇴", notes = "회원 탈퇴를 한다.")
     public ResponseEntity deleteUser(Authentication authentication) {
         Long id = userService.getUserIdByToken(authentication);
         userService.deleteUser(id);
@@ -60,6 +78,8 @@ public class UserController {
      *
      */
     @PutMapping("/nickname")
+    @ApiResponses({@ApiResponse(code = 200, message = "(token) 닉네임이 변경되었습니다.", response = AccountListRes.class), @ApiResponse(code = 401, message = "닉네임 변경에 실패하였습니다.", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
+    @ApiOperation(value = "유저 닉네임 변경", notes = "유저 닉네임을 변경한다.")
     public ResponseEntity changeNickname(Authentication authentication, @RequestBody UpdateUserProfileReq updateUserProfileReq) {
         if (updateUserProfileReq.getNickname().length() == 0) {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "닉네임 변경에 실패하였습니다."));
@@ -73,14 +93,25 @@ public class UserController {
      *
      */
     @PutMapping("/current")
+    @ApiResponses({@ApiResponse(code = 200, message = "(token) 계좌가 변경되었습니다.", response = AccountListRes.class), @ApiResponse(code = 401, message = "계좌 변경에 실패하였습니다.", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
+    @ApiOperation(value = "주계좌 변경 ", notes = "주계좌를 변경한다.")
     public ResponseEntity changeCurrent(Authentication authentication, @RequestBody UpdateUserProfileReq updateUserProfileReq) {
         Long userId = userService.getUserIdByToken(authentication);
         // 변경요청이 온 계좌 id를, 해당 유저가 소유하고 있는지 체크
         Long accountId = Long.valueOf(updateUserProfileReq.getCurrent());
         Account account = accountService.getAccount(accountId, userId);
-        if (account==null) {
+        List<Account> accountList = accountService.listAccount(userId);
+
+        //모든 계좌를 주계좌가 아닌것으로 바꿈
+        for (Account value : accountList) {
+            value.updateIsMain(false);
+        }
+
+         if (account==null) {
+
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌 변경에 실패하였습니다."));
         }
+        account.updateIsMain(true);
         userService.updateCurrent(userId, updateUserProfileReq.getCurrent());
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌가 변경되었습니다."));
     }
@@ -89,6 +120,8 @@ public class UserController {
      *
      */
     @PostMapping("/like")
+    @ApiResponses({@ApiResponse(code = 200, message = "(token) 관심종목이 변경되었습니다.", response = AccountListRes.class), @ApiResponse(code = 401, message = "관심종목 변경에 실패하였습니다.", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
+    @ApiOperation(value = "관심종목 변경 ", notes = "관심종목을 변경한다.")
     public ResponseEntity likeStock(Authentication authentication, @RequestBody LikeStockReq likeStockReq) {
         Long userId = userService.getUserIdByToken(authentication);
         User user = userService.getByUserId(userId).orElseGet(() -> new User());

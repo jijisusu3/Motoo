@@ -5,6 +5,7 @@ import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.Trading;
 import com.motoo.db.entity.User;
 import com.motoo.db.repository.*;
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,17 +28,18 @@ public class TradingServiceImpl implements TradingService{
     private final StockRepository stockRepository;
     private final StockRepositorySupport stockRepositorySupport;
     private final AccountRepositorySupport accountRepositorySupport;
+
+    private final AccountStockRepositorySupport accountStockRepositorySupport;
     //주문하기
     @Override
-    public void writeOrder(Long userId, Long accountId, Long stockId ,int tr_type, int tr_price, int tr_amount) {
+    public void writeOrder(Long userId, Long accountId, Long stockId , int tr_type, int tr_price, int tr_amount, Integer tr_avg) {
         Account account = accountRepositorySupport.findAccountByAccountIdAndUserId(accountId, userId);
         Stock stock =stockRepositorySupport.findStockByAStockId(stockId);
         Trading trade = new Trading();
         User user = userRepository.findByUserId(userId).get();
         String ticker = stock.getTicker();
         String ticker_name = stock.getName();
-        System.out.println( ticker);
-        trade.writeOrder(account, user, ticker, ticker_name,tr_type, tr_price, tr_amount);
+        trade.writeOrder(account, user, ticker, ticker_name,tr_type, tr_price, tr_amount, tr_avg);
         tradingRepository.save(trade);
     }
 
@@ -80,6 +82,32 @@ public class TradingServiceImpl implements TradingService{
     //주문 객체 조회
     @Override
     public Trading getTrading(Long userId, Long tradeId){
-        return tradingRepositorySupport.findTradingByUserIdAccountId(userId, tradeId);
+        return tradingRepositorySupport.findTradingByUserIdTradeId(userId, tradeId);
     }
+    //주문 객체 조회
+    @Override
+    public Trading getTradingByUserIdAccountId(Long userId, Long accountId){
+        return tradingRepositorySupport.findTradingByUserIdAccountId(userId, accountId);
+    }
+    //주문 타입 바꾸기
+    @Override
+    public void updateType(Trading trading, int tr_type){
+        trading.updateType(tr_type);
+    }
+
+    @Override
+    public List <Trading> tradingList1Or2(Long userId, Long accountId){
+        return tradingRepositorySupport.find1Or2ByUserIdAccountId(userId, accountId);
+    }
+
+    @Override
+    public List<Trading> tradingListAccount(Long userId, Long accountId){
+        return tradingRepositorySupport.findAllTradingsByUserIdAccountId(userId, accountId);
+    }
+
+    @Override
+    public void writeAvg(Trading trading, int tr_avg){
+        return;
+    }
+
 }

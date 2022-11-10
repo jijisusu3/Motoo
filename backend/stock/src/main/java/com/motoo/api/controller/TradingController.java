@@ -44,7 +44,8 @@ public class TradingController {
                     makeOrderPostReq.getStockId(),
                     makeOrderPostReq.getTr_type(),
                     makeOrderPostReq.getPrice(),
-                    makeOrderPostReq.getAmount());
+                    makeOrderPostReq.getAmount(),
+                    null);
         } catch(
                 Exception e)
         {
@@ -55,12 +56,13 @@ public class TradingController {
                 body(BaseResponseBody.of(200, "주문이 생성되었습니다."));
     }
     //주문 리스트 조회
-    @GetMapping()
+    //상세계좌 조회
+    @GetMapping("/{accountId}")
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 주문 목록 조회 성공", response = AccountListRes.class), @ApiResponse(code = 401, message = "주문 목록 조회 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @ApiOperation(value = "주문 목록 조회", notes = "주문 목록을 조회한다.")
-    public ResponseEntity<TradingListRes> listTradings(@ApiIgnore Authentication authentication){
+    public ResponseEntity<TradingListRes> listTradings(@ApiIgnore Authentication authentication, @PathVariable @ApiParam(value = "상세번호", required = true) Long accountId){
         Long userId =  userService.getUserIdByToken(authentication);
-        List<Trading> tradings= tradingService.tradingList(userId);
+        List<Trading> tradings= tradingService.tradingListAccount(userId,accountId);
         return ResponseEntity.status(200).body(TradingListRes.of(tradings, 200, "주문 목록조회에 성공하였습니다."));
     }
 

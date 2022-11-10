@@ -17,6 +17,6 @@ public class UpdateAccountNameReq {
     Long accountId;
 
     @NotEmpty
-    @ApiModelProperty(name = "계좌 이름입니다.", example = "계좌 이름")
+    @ApiModelProperty(name = "계좌 이름", example = "김행의 계좌")
     String name;
 }

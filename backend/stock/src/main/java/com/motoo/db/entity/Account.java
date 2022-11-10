@@ -22,8 +22,8 @@ public class Account {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountId;
 
     //유저 다대일
@@ -42,10 +42,14 @@ public class Account {
     @Column(name="name")
     private String name;
 
+    @Column(name="is_main")
+    private boolean is_main;
+
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", orphanRemoval = true)
     private List<AccountStock> accountStocks = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account",orphanRemoval = true)
     private List<Trading> tradings = new ArrayList<>();
 
@@ -69,4 +73,6 @@ public class Account {
     public void updateSeed(int seed){
         this.seed = seed;
     }
+
+    public void updateIsMain(boolean main){this.is_main= main;}
 }

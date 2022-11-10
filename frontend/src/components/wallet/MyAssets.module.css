@@ -1,4 +1,6 @@
 .assetCard {
+  padding-top: 0.5rem;
+  padding-left: 0.5rem;
   width: 100%;
   height: 160px;
   border: none;
@@ -10,10 +12,12 @@
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 .acd{
+  height: 48px;
   background: linear-gradient(90deg, #43B8B1 4%, #FFC34D 94.15%, #FFC149 94.15%);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   color: #fff;
 }
+
 .cntbox{
   display: flex;
   align-items: center;
@@ -75,8 +79,12 @@
   align-items: baseline;
 }
 .ptfl{
-  font-size: 4vw;
+  font-size: 16px;
   font-weight: 600;
   margin-left: 0.5rem;
   color: #fff;
+}
+
+.Mui-expanded{
+  min-height: 50px;
 }

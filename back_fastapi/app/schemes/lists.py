@@ -12,15 +12,19 @@ class StockList(BaseModel):
 
 class Favorite(BaseModel):
   user_id: int
-  stocks: List[StockList]
+  stocks: Union[List[StockList], None] = None
+
+
+class Top(BaseModel):
+  rate_up: List[StockList] = None
+  rate_down: List[StockList] = None
+  capital_up: List[StockList] = None
+  volume_up: List[StockList] = None
 
 
 class GetFavoriteStockListResponse(Favorite, CommonResponse):
   pass
 
+
 class GetTopStockListResponse(CommonResponse):
-  rate_up: List[StockList]
-  rate_down: List[StockList]
-  price_up: List[StockList]
-  capital_up: List[StockList]
-  volume_up: List[StockList]
+  result: List[Top]

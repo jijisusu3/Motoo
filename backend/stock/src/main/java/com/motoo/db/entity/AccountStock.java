@@ -28,6 +28,8 @@ public class AccountStock {
     @Column(name="price")
     private int price;
 
+
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="account_id")

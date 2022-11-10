@@ -5,8 +5,12 @@ import classes from "./MyPage.module.css";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
+import { accountsListGet } from "../../stores/accountSlice";
+import { fontSize } from "@mui/system";
+import { nicknamePut } from "../../stores/userSlice";
+
 
 const style = {
   position: "absolute",
@@ -26,24 +30,34 @@ function MyPage() {
   const now = dayjs().format("YYYY-MM-DD");
   const standard = dayjs().add(-4, "week").format("YYYY-MM-DD");
   const [nowEdit, setNowEdit] = useState(false);
-  // + 버튼 넣어줄지 판단 인덱스로
   const [canAddNum, setCanAddNum] = useState(true);
   const [canAddDate, setCanAddDate] = useState(true);
   const [warningEffect, setWarningEffect] = useState(false);
   const [canStartDay, setCanStartDay] = useState("")
   
   const [haveShool, setHaveSchool] = useState(false);
-  
+  const userData = useSelector((state) => {
+    return state.persistedReducer.setUser.user
+  })
+  const userToken = useSelector((state) => {
+    return state.persistedReducer.setUser.user.token;
+  });
   const dispatch = useDispatch();
   useEffect(() => {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
-  });
-  
+  }, []);
+  useEffect(() => {
+    const data = {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    }
+    dispatch(accountsListGet(data))
+  }, [userToken])
   const [openCreateModal, setCreateModalOpen] = useState(false);
   const handleCreateModalOpen = () => {
     setCreateModalOpen(true);
-    // setShowSettings(false);
   };
   const handleCreateModalClose = () => setCreateModalOpen(false);
   
@@ -91,7 +105,7 @@ function MyPage() {
 
   const [data, setData] = useState({
     all: {
-      all_asset: 602520021,
+      all_asset: '602,520,021',
       profit: -13,
     },
     assets: [
@@ -151,7 +165,7 @@ function MyPage() {
           </div>
         </div>
         <div>
-          <div>수익률</div>
+          <div style={{ marginLeft: '10px'}}>수익률</div>
           <div className={classes.rev}
             style={{
               color: profitColor,
@@ -169,15 +183,25 @@ function MyPage() {
   }
 
   function EditShow() {
-    const [nickname, setNickname] = useState("유저가설정한계좌");
+    const [nickname, setNickname] = useState(userData.data.nickname)
     const handleInputChange = (event) => {
       setNickname(event.target.value);
+      // console.log(nickname)
     };
     // 수정했을때, 이 함수 안에서 POST 요청 들어가야함.
     const handleOnKeyPress = (event) => {
-
-        setNowEdit(false);
-
+      const data = {
+        config: {
+          headers: {
+            Authorization: `Bearer ${userData.token}`
+          }
+        },
+        editname: {
+          nickname: nickname
+        }
+      }
+      dispatch(nicknamePut(data))
+      setNowEdit(false);
     };
     if (nowEdit) {
       return (
@@ -185,9 +209,11 @@ function MyPage() {
           <img
             onClick={handleOnKeyPress}
             src={`${process.env.PUBLIC_URL}/wallet/mypageIcon.svg`}
+            style={{marginRight: "10px"}}
             alt=""
           />
           <input
+            style={{ height: "40px", padding: "10px", color: "#242424"}}
             type="text"
             maxLength={8}
             className={classes.editname}
@@ -196,6 +222,7 @@ function MyPage() {
             onKeyPress={handleOnKeyPress}
           />
           <img
+            style={{marginRight: "5px", width:"32px", height: "32px", marginTop: "1px"}}
             onClick={handleOnKeyPress}
             src={`${process.env.PUBLIC_URL}/wallet/editIcon.svg`}
             alt=""
@@ -208,14 +235,16 @@ function MyPage() {
         <img
           onClick={handleOnKeyPress}
           src={`${process.env.PUBLIC_URL}/wallet/mypageIcon.svg`}
+          style={{marginRight: "10px"}}
           alt=""
         />
         <div className={classes.accountname}>
-          {nickname}
+          <p style={{fontWeight: "700"}}>{nickname}</p>
           <div className={classes.mini}>님의 지갑</div>
           <div>
             <img
               onClick={editOpen}
+              style={{marginLeft: "5px", width:"30px", height: "30px"}}
               src={`${process.env.PUBLIC_URL}/wallet/mypageEdit.svg`}
               alt=""
               />
@@ -256,7 +285,7 @@ function MyPage() {
       return (
         <div id={tmpId} onClick={goToDetail} className={classes.firstAssetCard}>
           {asset.isSchool && (
-            <img src={`${process.env.PUBLIC_URL}/wallet/school.svg`} alt="" />
+            <img src={`${process.env.PUBLIC_URL}/wallet/school.svg`} alt="" style={{ marginRight: '10px'}}/>
           )}
           <div id={tmpId}>{asset.name}</div>
           <div className={classes.select}>
@@ -271,7 +300,7 @@ function MyPage() {
         <div id={tmpId} onClick={goToDetail} className={classes.otherAssetCard}>
           <div className={classes.rowbox}>
             {asset.isSchool && (
-              <img src={`${process.env.PUBLIC_URL}/wallet/school.svg`} alt="" />
+              <img src={`${process.env.PUBLIC_URL}/wallet/school.svg`} alt="" style={{ marginRight: '10px'}}/>
             )}
             <div id={tmpId}>{asset.name}</div>
           </div>
@@ -286,75 +315,79 @@ function MyPage() {
     }
   }
   return (
-    <div className={classes.mainbox}>
-      <h1>마이페이지임니다</h1>
-      <EditShow />
-      <div className={classes.centerbox}>
-        <AllAssets />
-        {data.assets.map((asset, index) => (
-          <WalletAssetCard
-            key={asset.accounts_pk}
-            name={asset.name}
-            accountId={asset.accounts_pk}
-            seed={asset.seed}
-            isSchool={asset.isSchool}
-            open={asset.open}
-            num={index}
-          />
-        ))}
-      </div>
-      <Modal open={openCreateModal} onClose={handleCreateModalClose}>
-        <Box className={classes.createbox} sx={style}>
-          <div className={classes.make}>계좌 만들기</div>
-          <div>
-            <div className={classes.ipttag}>
-              계좌 이름{" "}
-              <input className={classes.ipt} type="text" name="assetName" onChange={onChangeInfo} />
+
+    <div className={classes.mypageBG}>
+      <div className={classes.mypageCtn}>
+      {userData && <EditShow />}
+        <div className={classes.centerbox}>
+          <AllAssets />
+          {data.assets.map((asset, index) => (
+            <WalletAssetCard
+              key={asset.accounts_pk}
+              name={asset.name}
+              accountId={asset.accounts_pk}
+              seed={asset.seed}
+              isSchool={asset.isSchool}
+              open={asset.open}
+              num={index}
+            />
+          ))}
+        </div>
+        <Modal open={openCreateModal} onClose={handleCreateModalClose}>
+          <Box className={classes.createbox} sx={style}>
+            <div className={classes.make}>계좌 만들기</div>
+            <div>
+              <div className={classes.ipttag}>
+                계좌 이름{" "}
+                <input className={classes.ipt} type="text" name="assetName" onChange={onChangeInfo} />
+              </div>
+              <div className={classes.ipttag}>
+                개설 사유{" "}
+                <input className={classes.ipt} type="text" name="openReason" onChange={onChangeInfo} />
+              </div>
+
             </div>
-            <div className={classes.ipttag}>
-              개설 사유{" "}
-              <input className={classes.ipt} type="text" name="openReason" onChange={onChangeInfo} />
-            </div>
-          </div>
-          {warningEffect ? (
-            <div className={classes.vibration}>
-              <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} alt="" />
+            {warningEffect ? (
+              <div className={classes.vibration}>
+                <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} style={{marginRight: "15px"}} alt="" />
+                <div>
+                  
+                  <p>최대 계좌 개수는 학교대항전 외 <span style={{ fontWeight: "600", color: "#36938E"}}>3개 이하</span>이며</p>
+                  <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
+                </div>
+              </div>
+            ):(
+              <div className={classes.notice}>
+              <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} style={{marginRight: "15px"}} alt="" />
               <div>
-                <p>최대 계좌 개수는 학교대항전 외 3개 이하이며</p>
+                <p>최대 계좌 개수는 학교대항전 외 <span style={{ fontWeight: "600", color: "#36938E"}}>3개 이하</span>이며</p>
                 <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
               </div>
             </div>
-          ):(
-            <div className={classes.notice}>
-            <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} alt="" />
-            <div>
-              <p>최대 계좌 개수는 학교대항전 외 3개 이하이며</p>
-              <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
-            </div>
-          </div>
+            )}
+            {!(canStartDay==="") && (
+              <p style={{color:'#DD4956', fontSize: '12px', marginBottom: '10px'}}>{canStartDay} 부터 계좌를 열 수 있어요</p>
+            )}
+            <div className={classes.createbtn} onClick={createSubmit}>개설</div>
+          </Box>
+        </Modal>
+        <Modal open={openChangeModal} onClose={handleChangeModalClose}>
+          <Box sx={style}>
+            <div>정말 변경하시겠습니까?</div>
+            <div>계좌를 변경하면 ~~~되어요!</div>
+            <button onClick={changeSubmit}>변경하기</button>
+          </Box>
+        </Modal>
+        <div className={classes.addbtn}>
+          {canAddNum && (
+            <img
+              className={classes.addbtn}
+              onClick={handleCreateModalOpen}
+              src={`${process.env.PUBLIC_URL}/wallet/createAssets.svg`}
+              alt=""
+            />
           )}
-          {!(canStartDay==="") && (
-            <p style={{color:'#DD4956'}}>{canStartDay} 부터 계좌를 열 수 있어요</p>
-          )}
-          <div className={classes.createbtn} onClick={createSubmit}>개설</div>
-        </Box>
-      </Modal>
-      <Modal open={openChangeModal} onClose={handleChangeModalClose}>
-        <Box sx={style}>
-          <div>정말 변경하시겠습니까?</div>
-          <div>계좌를 변경하면 ~~~되어요!</div>
-          <button onClick={changeSubmit}>변경하기</button>
-        </Box>
-      </Modal>
-      <div className={classes.addbtn}>
-        {canAddNum && (
-          <img
-            className={classes.addbtn}
-            onClick={handleCreateModalOpen}
-            src={`${process.env.PUBLIC_URL}/wallet/createAssets.svg`}
-            alt=""
-          />
-        )}
+        </div>
       </div>
     </div>
   );

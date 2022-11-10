@@ -13,8 +13,7 @@ async def ticker_normalization():
     stocks = await Stock.all()
     for stock in stocks:
         stock.ticker = (6 - len(stock.ticker)) * '0' + stock.ticker
-        # await stock.save(update_fields=("ticker",))
-
+    await Stock.bulk_update(stocks, fields=('ticker', ))
     end = time.time()
     print(start-end)
     return stocks
