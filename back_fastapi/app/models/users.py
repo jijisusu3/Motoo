@@ -14,11 +14,16 @@ class User(Model):
 class SiGunGu(Model):
     sigungu_name = fields.CharField(max_length=24)
     sido = fields.CharField(max_length=24)
+    group = fields.TextField(null=True)
+    personal = fields.TextField(null=True)
 
 
 class School(Model):
     schoolname = fields.CharField(max_length=24)
     sigungu = fields.ForeignKeyField('b204.SiGunGu', related_name='schools')
+    today = fields.TextField(null=True)
+    rank = fields.IntField(null=True)
+    average = fields.FloatField(null=True)
 
 
 class Events(Model):

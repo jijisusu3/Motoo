@@ -67,10 +67,10 @@ class EntireStockData(ShortStockData, OpenPrice, ClosePrice):
     per: Union[float, None] = Field(default=None, description="주가수익률")
     eps: Union[float, None] = Field(default=None, description="주당순이익")
     m_capital: Union[int, None] = Field(description="시가총액")
-    issued: Union[int, None] = Field(description="발행주식수")
+    # issued: Union[int, None] = Field(description="발행주식수")
     keyword: Union[List[str], None] = Field(description="종목키워드")
     sentiment: Union[List[float], None] = Field(description="종목감정분석")
-    capital: Union[int, None] = Field(default=None, description="자본금")
+    # capital: Union[int, None] = Field(default=None, description="자본금")
     weekly: Union[List[CandleData], None] = Field(default=None, description="주간 60분봉")
     weekly_min: Union[CandleData, None] = None
     weekly_max: Union[CandleData, None] = None

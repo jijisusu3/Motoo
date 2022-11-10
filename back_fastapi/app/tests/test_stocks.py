@@ -29,11 +29,9 @@ class TestStockDetail:
             fluctuation_price=-600,
             minimum=1,
             maximum=10,
-            capital=123,
             trading_value=100,
             volume=1000,
             m_capital=54000000,
-            issued=10000,
             category_id=category_tmp.pk,
             keyword=[],
             sentiment=[]
