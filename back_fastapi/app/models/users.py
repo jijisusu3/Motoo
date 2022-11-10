@@ -9,6 +9,7 @@ class User(Model):
     current = fields.IntField()
     quiz_day = fields.DateField(null=True)
     my_stock = fields.ManyToManyField('b204.Stock', through='favoritestock', related_name='stock_user')
+    rank = fields.IntField(null=True)
 
 
 class SiGunGu(Model):
