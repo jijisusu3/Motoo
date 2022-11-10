@@ -23,7 +23,10 @@ async def get_stock_detail(ticker: str, response: Response):
     except tortoise.exceptions.DoesNotExist:
         response.status_code = 404
         return GetStockDetailResponse(message="failed")
-    today = date.today().strftime("%Y-%m-%d")
+    today = date.today()
+    if today.weekday() >= 5:
+        today = date.today()-timedelta(today.weekday()-4)
+    today = today.strftime("%Y-%m-%d")
     # 차트 데이터
     daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
     weekly = (await candle_map[stock.category_id].filter(
@@ -62,7 +65,10 @@ async def get_stock_short(ticker: str, response: Response):
     except tortoise.exceptions.DoesNotExist:
         response.status_code = 404
         return GetStockDetailResponse(message="failed")
-    today = date.today().strftime("%Y-%m-%d")
+    today = date.today()
+    if today.weekday() >= 5:
+        today = date.today()-timedelta(today.weekday()-4)
+    today = today.strftime("%Y-%m-%d")
     # 차트 데이터
     daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
     return GetShortStockResponse(**dict(stock),

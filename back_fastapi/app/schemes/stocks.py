@@ -55,7 +55,7 @@ class ShortStockData(Volume, Price):
     trading_value: Union[int, None] = Field(default=None, description="거래대금")
     daily: Union[List[CandleData], None] = Field(default=None, description="당일 10분봉")
     daily_min: Union[CandleData, None] = None
-    daily_man: Union[CandleData, None] = None
+    daily_max: Union[CandleData, None] = None
 
 
 class EntireStockData(ShortStockData, OpenPrice, ClosePrice):
