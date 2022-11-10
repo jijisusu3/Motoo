@@ -4,7 +4,8 @@ import com.motoo.api.dto.kakao.KakaoProfile;
 import com.motoo.api.dto.user.AccountStockInfo;
 import com.motoo.api.dto.user.BaseUserInfo;
 import com.motoo.api.request.LikeStockReq;
-import com.motoo.api.request.UpdateUserProfileReq;
+import com.motoo.api.request.UpdateUserNickNameReq;
+import com.motoo.api.request.UpdateUserCurrentAccountPutReq;
 import com.motoo.api.response.AccountListRes;
 import com.motoo.api.response.FavoriteStockRes;
 import com.motoo.api.response.LoginResponse;
@@ -15,18 +16,20 @@ import com.motoo.api.service.UserService;
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.User;
 import com.motoo.common.model.response.BaseResponseBody;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.EntityManager;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+
+@Api(value = "유저 API", tags = {"Users"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api2/users")
@@ -44,7 +47,7 @@ public class UserController {
     @GetMapping()
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 유저 정보 조회 성공", response = AccountListRes.class), @ApiResponse(code = 401, message = "유저 정보 조회 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @ApiOperation(value = "유저 정보 조회", notes = "유저 정보를 조회한다.")
-    public BaseUserInfo profile(Authentication authentication) {
+    public BaseUserInfo profile(@ApiIgnore Authentication authentication) {
         Long id = userService.getUserIdByToken(authentication);
         Optional<User> user = userService.getByUserId(id);
         BaseUserInfo baseUserInfo = BaseUserInfo.of(user);
@@ -68,7 +71,7 @@ public class UserController {
     @DeleteMapping()
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 탈퇴 성공", response = AccountListRes.class) })
     @ApiOperation(value = "회원 탈퇴", notes = "회원 탈퇴를 한다.")
-    public ResponseEntity deleteUser(Authentication authentication) {
+    public ResponseEntity deleteUser(@ApiIgnore Authentication authentication) {
         Long id = userService.getUserIdByToken(authentication);
         userService.deleteUser(id);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "회원 탈퇴 성공"));
@@ -80,12 +83,12 @@ public class UserController {
     @PutMapping("/nickname")
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 닉네임이 변경되었습니다.", response = AccountListRes.class), @ApiResponse(code = 401, message = "닉네임 변경에 실패하였습니다.", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @ApiOperation(value = "유저 닉네임 변경", notes = "유저 닉네임을 변경한다.")
-    public ResponseEntity changeNickname(Authentication authentication, @RequestBody UpdateUserProfileReq updateUserProfileReq) {
-        if (updateUserProfileReq.getNickname().length() == 0) {
+    public ResponseEntity changeNickname(@ApiIgnore Authentication authentication,  @RequestBody @ApiParam(value = "변경할 닉네임", required = true) @Valid UpdateUserNickNameReq updateUserNickNameReq) {
+        if (updateUserNickNameReq.getNickname().length() == 0) {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "닉네임 변경에 실패하였습니다."));
         }
         Long id = userService.getUserIdByToken(authentication);
-        userService.updateNickname(id, updateUserProfileReq.getNickname());
+        userService.updateNickname(id, updateUserNickNameReq.getNickname());
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "닉네임이 변경되었습니다."));
     }
 
@@ -95,10 +98,11 @@ public class UserController {
     @PutMapping("/current")
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 계좌가 변경되었습니다.", response = AccountListRes.class), @ApiResponse(code = 401, message = "계좌 변경에 실패하였습니다.", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @ApiOperation(value = "주계좌 변경 ", notes = "주계좌를 변경한다.")
-    public ResponseEntity changeCurrent(Authentication authentication, @RequestBody UpdateUserProfileReq updateUserProfileReq) {
+    public ResponseEntity changeCurrent(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "변경할 주계좌", required = true) @Valid UpdateUserCurrentAccountPutReq updateUserCurrentAccountPutReq) {
         Long userId = userService.getUserIdByToken(authentication);
         // 변경요청이 온 계좌 id를, 해당 유저가 소유하고 있는지 체크
-        Long accountId = Long.valueOf(updateUserProfileReq.getCurrent());
+        int current = updateUserCurrentAccountPutReq.getCurrent();
+        Long accountId = Long.valueOf(current);
         Account account = accountService.getAccount(accountId, userId);
         List<Account> accountList = accountService.listAccount(userId);
 
@@ -112,7 +116,7 @@ public class UserController {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌 변경에 실패하였습니다."));
         }
         account.updateIsMain(true);
-        userService.updateCurrent(userId, updateUserProfileReq.getCurrent());
+        userService.updateCurrent(userId, updateUserCurrentAccountPutReq.getCurrent());
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌가 변경되었습니다."));
     }
 
@@ -122,7 +126,7 @@ public class UserController {
     @PostMapping("/like")
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 관심종목이 변경되었습니다.", response = AccountListRes.class), @ApiResponse(code = 401, message = "관심종목 변경에 실패하였습니다.", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @ApiOperation(value = "관심종목 변경 ", notes = "관심종목을 변경한다.")
-    public ResponseEntity likeStock(Authentication authentication, @RequestBody LikeStockReq likeStockReq) {
+    public ResponseEntity likeStock(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "관심종목에 넣을 주식_id", required = true) @Valid LikeStockReq likeStockReq) {
         Long userId = userService.getUserIdByToken(authentication);
         User user = userService.getByUserId(userId).orElseGet(() -> new User());
         List<Long> idList = favoriteStockService.getFavoriteStockIdList(user);

@@ -80,6 +80,7 @@ public class TradingRepositorySupport {
                 jpaQueryFactory.select(qTrading).from(qTrading)
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
+                        .orderBy(qTrading.tr_date.desc())
                         .fetch();
 
         if (tradings==null) {return null;}

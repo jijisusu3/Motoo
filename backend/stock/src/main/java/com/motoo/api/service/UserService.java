@@ -1,7 +1,7 @@
 package com.motoo.api.service;
 
 import com.motoo.api.dto.user.AccountStockInfo;
-import com.motoo.api.request.UpdateUserPutReq;
+import com.motoo.api.request.UpdateUserCurrentAccountPutReq;
 import com.motoo.db.entity.User;
 import org.springframework.security.core.Authentication;
 
@@ -38,11 +38,12 @@ public interface UserService {
 
     void updateSchool(Long id, Long schoolId);
 
-    int updateUser(User user, UpdateUserPutReq updateUserPutReq);
 
     List<String> getFavoriteStockCode(Optional<User> user);
 
     int getAccountSeed(Optional<User> user);
 
     List<AccountStockInfo> getStockInfo(Optional<User> user);
+//    Optional<User> user,
+    List<AccountStockInfo> getStockInfoByAccountId(Long userId ,Long accountId);
 }

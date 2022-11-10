@@ -23,7 +23,10 @@ async def get_stock_detail(ticker: str, response: Response):
     except tortoise.exceptions.DoesNotExist:
         response.status_code = 404
         return GetStockDetailResponse(message="failed")
-    today = date.today().strftime("%Y-%m-%d")
+    today = date.today()
+    if today.weekday() >= 5:
+        today = date.today()-timedelta(today.weekday()-4)
+    today = today.strftime("%Y-%m-%d")
     # 차트 데이터
     daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
     weekly = (await candle_map[stock.category_id].filter(
@@ -41,14 +44,14 @@ async def get_stock_detail(ticker: str, response: Response):
                                   weekly=weekly,
                                   monthly=monthly,
                                   yearly=yearly,
-                                  daily_min=min(daily, key=lambda x: x.min_price),
-                                  daily_max=max(daily, key=lambda x: x.max_price),
-                                  weekly_min=min(weekly, key=lambda x: x.min_price),
-                                  weekly_max=max(weekly, key=lambda x: x.max_price),
-                                  monthly_min=min(monthly, key=lambda x: x.min_price),
-                                  monthly_max=max(monthly, key=lambda x: x.max_price),
-                                  yearly_min=min(yearly, key=lambda x: x.min_price),
-                                  yearly_max=max(yearly, key=lambda x: x.max_price),
+                                  daily_min=min(daily, key=lambda x: x.min_price, default=None),
+                                  daily_max=max(daily, key=lambda x: x.max_price, default=None),
+                                  weekly_min=min(weekly, key=lambda x: x.min_price, default=None),
+                                  weekly_max=max(weekly, key=lambda x: x.max_price, default=None),
+                                  monthly_min=min(monthly, key=lambda x: x.min_price, default=None),
+                                  monthly_max=max(monthly, key=lambda x: x.max_price, default=None),
+                                  yearly_min=min(yearly, key=lambda x: x.min_price, default=None),
+                                  yearly_max=max(yearly, key=lambda x: x.max_price, default=None),
                                   keyword=keywords.keyword if keywords else None,
                                   sentiment=keywords.sentiment if keywords else None,
                                   )
@@ -62,7 +65,10 @@ async def get_stock_short(ticker: str, response: Response):
     except tortoise.exceptions.DoesNotExist:
         response.status_code = 404
         return GetStockDetailResponse(message="failed")
-    today = date.today().strftime("%Y-%m-%d")
+    today = date.today()
+    if today.weekday() >= 5:
+        today = date.today()-timedelta(today.weekday()-4)
+    today = today.strftime("%Y-%m-%d")
     # 차트 데이터
     daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
     return GetShortStockResponse(**dict(stock),
@@ -116,6 +122,7 @@ async def get_school_hot_list(response: Response, user: User = Depends(get_curre
         if tr_amounts.values():
             hot_item = max(tr_amounts, key=tr_amounts.get)
         hot_stock = await Stock.get(ticker=hot_item)
+        print(users_in_school, accounts, not_finished, finished, hot_stock)
     except tortoise.exceptions.DoesNotExist:
         response.status_code = 404
         return SchoolHotStockResponse(message="failed")
