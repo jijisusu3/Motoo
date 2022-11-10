@@ -1,5 +1,6 @@
 package com.motoo.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +27,7 @@ public class Sigungu {
 
     private String personal;
 
-    @OneToMany(mappedBy = "sigungu")
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sigungu", orphanRemoval = true)
     private List<School> school = new ArrayList<>();
 }
