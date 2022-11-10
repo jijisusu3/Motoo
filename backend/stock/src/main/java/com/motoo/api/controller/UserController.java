@@ -1,6 +1,7 @@
 package com.motoo.api.controller;
 
 import com.motoo.api.dto.kakao.KakaoProfile;
+import com.motoo.api.dto.user.AccountStockInfo;
 import com.motoo.api.dto.user.BaseUserInfo;
 import com.motoo.api.request.LikeStockReq;
 import com.motoo.api.request.UpdateUserProfileReq;
@@ -47,8 +48,17 @@ public class UserController {
         Long id = userService.getUserIdByToken(authentication);
         Optional<User> user = userService.getByUserId(id);
         BaseUserInfo baseUserInfo = BaseUserInfo.of(user);
+        //관심 주식 종목 코드 세팅
         List<String> favoriteStockCode = userService.getFavoriteStockCode(user);
         baseUserInfo.setFavoriteStockCode(favoriteStockCode);
+
+        //주 계좌 시드머니 세팅
+        int seed = userService.getAccountSeed(user);
+        baseUserInfo.setSeed(seed);
+
+        //주 계좌 보유 주식 정보 세팅
+        List<AccountStockInfo> stockInfo = userService.getStockInfo(user);
+        baseUserInfo.setStockInfo(stockInfo);
         return baseUserInfo;
     }
 

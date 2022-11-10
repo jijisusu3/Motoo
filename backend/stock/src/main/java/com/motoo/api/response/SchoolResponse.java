@@ -19,6 +19,8 @@ public class SchoolResponse {
     private SigunguResponse sigunguResponse;
 
 
+
+
     public static SchoolResponse response(School school){
         return new SchoolResponse(school.getSchoolId(), school.getSchoolname(), SigunguResponse.response(school.getSigungu()));
     }
