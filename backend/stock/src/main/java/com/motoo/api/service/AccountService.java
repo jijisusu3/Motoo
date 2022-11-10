@@ -19,6 +19,8 @@ public interface AccountService {
 
     Account getAccount(Long accountId,Long userId );
 
+    Account getSchoolAccount(Long userId);
+
 
     void updateAccount(Account account, String name);
 
