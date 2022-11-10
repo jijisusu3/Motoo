@@ -4,6 +4,7 @@ import com.motoo.api.request.QuizReq;
 import com.motoo.api.service.QuizService;
 import com.motoo.api.service.UserService;
 import com.motoo.common.model.response.BaseResponseBody;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
-
+@Api(value = "퀴즈 API", tags = {"Quiz"})
 @RestController
 @RequiredArgsConstructor
 public class QuizController {
