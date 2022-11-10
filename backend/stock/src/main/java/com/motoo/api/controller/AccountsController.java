@@ -70,22 +70,11 @@ public class AccountsController {
     public ResponseEntity<AccountsListRes> listAccounts(@ApiIgnore Authentication authentication) {
         Long userId = userService.getUserIdByToken(authentication);
         Optional<User> user = userService.getByUserId(userId);
-        int currentAccount = user.get().getCurrent();
         List<Account> account = accountService.listAccount(userId);
         int seeds=0;
 
-//        boolean myBoolean = user.get().getSchool();
-//        int myInt = myBoolean ? 1 : 0;
-
         List<Integer> pitches = new ArrayList<>();
-//        account.stream().map(value -> {return value.getSeed();}).reduce((x,value) -> {
-//            x += value.getSeed();
 //
-//            System.out.println(value.getSeed());
-//            accountAsset += value.getSeed();
-//            System.out.println("어카운트 어셋 더하기전  " + accountAsset);
-//        })
-//        HashMap<Integer, Integer> pitches = new HashMap<Integer, Integer>();
         for (Account value : account) {
             int accountAsset=0;
             seeds+=value.getSeed();
@@ -175,19 +164,19 @@ public class AccountsController {
         //지금 주식 가격이랑 내 주문량, 가격이랑 비교용도의 주식객체
         Stock stock = stockRepositorySupport.findStockByAStockId(accountStockAddPostReq.getStockId());
         List<AccountStock> accountStocks = accountService.getAccountStockByUserIdAccountId(accountStockAddPostReq.getAccountId(), userId);
-        Long accountStockId = accountStockService.getAccountStockIdByStockId(account.getAccountId(), accountStockAddPostReq.getStockId());
-        AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
-        System.out.println("accountStockId" + accountStockId);
+
+
         //시드머니 조회하여 구매가격이 시드머니보다 높으면 구매불가
-        if (seed > postPrice * postAmount) {
+        if (seed >= postPrice * postAmount) {
 
             //구매할 금액*양이 현재 주식가격*양 보다 낮을경우 구매불가
-            if (postPrice *postAmount > postAmount * stock.getPrice()) {
+            if (postPrice *postAmount >= postAmount * stock.getPrice()) {
 
                 //계좌 주식 리스트에 해당 주식이 있으면 주식 평단가 수정
                 if (stockList.contains(accountStockAddPostReq.getStockId())) {
 //            accountStockService.deleteStockInAccount(userId, accountStockAddPostReq.getAccountId(), accountStockAddPostReq.getStockId());
-
+                    Long accountStockId = accountStockService.getAccountStockIdByStockId(account.getAccountId(), accountStockAddPostReq.getStockId());
+                    AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
                     int currentAmount = accountStock.getAmount();
                     int currentPrice = accountStock.getPrice();
 
@@ -216,11 +205,10 @@ public class AccountsController {
                 return ResponseEntity.status(200).body(SellOrBuyRes.of(stockList, seed, 200, "계좌에 구매 했습니다."));
             } else {
                 tradingService.writeOrder(userId,accountId,accountStockAddPostReq.getStockId(),2 ,postPrice,postAmount, null);
-                return ResponseEntity.status(401).body(SellOrBuyRes.of(stockList, seed, 401, "구매할 수 없는 금액입니다. 구매 요청을 보냅니다."));
+                return ResponseEntity.status(200).body(SellOrBuyRes.of(stockList, seed, 200, "구매할 수 없는 금액입니다. 구매 요청을 보냅니다."));
             }
         } else {
-            //변경된 stockList
-
+            em.clear();
             return ResponseEntity.status(401).body(SellOrBuyRes.of(stockList, seed, 401, "시드머니가 부족합니다."));
         }
     }
@@ -250,12 +238,12 @@ public class AccountsController {
         //주식 소유여부 분기
         if (stockList.contains(accountStockAddPostReq.getStockId())) {
             //판매할 금액이 현재 주식가격보다 높을경우 판매불가
-            if (accountStockAddPostReq.getAmount() * accountStockAddPostReq.getPrice() > accountStockAddPostReq.getAmount() * stock.getPrice()) {
+            if (accountStockAddPostReq.getAmount() * accountStockAddPostReq.getPrice() >= accountStockAddPostReq.getAmount() * stock.getPrice()) {
                 tradingService.writeOrder(userId,accountId,accountStockAddPostReq.getStockId(),3 ,postPrice,postAmount, null);
                 return ResponseEntity.status(401).body(SellOrBuyRes.of(stockList, seed, 401, "판매가격이 시장가보다 높습니다. 판매예약을 보냅니다."));
             } else {
                 //해당 보유한 주식의 양분기
-                if (accountStock.getAmount() < accountStockAddPostReq.getAmount()) {
+                if (accountStock.getAmount() <= accountStockAddPostReq.getAmount()) {
 
 
                     return ResponseEntity.status(401).body(SellOrBuyRes.of(stockList, seed, 401, "계좌에 해당 주식의 양이 없습니다."));
@@ -289,7 +277,6 @@ public class AccountsController {
                     tradingService.writeOrder(userId,accountId,stockId,1 ,accountStockAddPostReq.getPrice(),accountStockAddPostReq.getAmount(), converted);
                     //판매 평단가 저장
 
-
                     return ResponseEntity.status(200).body(SellOrBuyRes.of(stockList, seed, 200, "해당 주식 판매완료"));
                 }
             }
@@ -314,7 +301,7 @@ public class AccountsController {
         //주 계좌 시드머니 세팅
         int seed = userService.getAccountSeed(user);
 
-        List<AccountStockInfo> stockInfo = userService.getStockInfo(user);
+        List<AccountStockInfo> stockInfo = userService.getStockInfoByAccountId(userId,account_id);
 
         return ResponseEntity.status(200).body(StockListRes.of(account,stockInfo, 200, "보유주식 리스트 조회에 성공하였습니다."));
     }

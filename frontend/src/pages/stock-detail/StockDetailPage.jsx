@@ -503,7 +503,7 @@ function StockDetailPage() {
     );
   }
 
-  const handleTimeChange = (event) => {
+  const handleOptionChange = (event) => {
     console.log(event.target.value);
     // data 변경해주기
   };
@@ -685,7 +685,60 @@ function StockDetailPage() {
       <h1>{shortStockData.price}원</h1>
       {stockData && <CompareText />}
       <StockDetailGraph />
-      <label>
+      <ul id="filter" className={classes.radioUlClass}>
+        <div className={classes.radiobox}>
+        <li className={classes.radioLiClass}>
+          <input 
+            type="radio" 
+            name="filter" 
+            id="filter-1"
+            className={classes.radioClass} 
+            defaultChecked
+            onChange={handleOptionChange}
+          />
+          <label checked for="filter-1" className={classes.radioLabelClass}>
+            하루
+          </label>
+        </li>
+        <li className={classes.radioLiClass}>
+          <input 
+            type="radio" 
+            name="filter" 
+            id="filter-2" 
+            className={classes.radioClass}
+            onChange={handleOptionChange}
+          />
+          <label for="filter-2" className={classes.radioLabelClass}>
+            일주일
+          </label>
+        </li>
+        <li className={classes.radioLiClass}>
+          <input 
+            type="radio" 
+            name="filter" 
+            id="filter-3"
+            className={classes.radioClass}
+            onChange={handleOptionChange}
+          />
+          <label for="filter-3" className={classes.radioLabelClass}>
+            한 달
+          </label>
+        </li>
+        <li className={classes.radioLiClass}>
+          <input 
+            type="radio" 
+            name="filter" 
+            id="filter-4"
+            className={classes.radioClass}
+            onChange={handleOptionChange}
+          />
+          <label for="filter-4" className={classes.radioLabelClass}>
+            일 년
+          </label>
+        </li>
+        </div>
+      </ul>
+      {/* <label>
         <input
           name="graphTime"
           type="radio"
@@ -721,7 +774,7 @@ function StockDetailPage() {
           onChange={handleTimeChange}
         />
         일년
-      </label>
+      </label> */}
       {showCandleGraph ? (
         <div className={classes.chartChangeBtn} onClick={changeToLine}>
           <img src={`${process.env.PUBLIC_URL}/stock-detail/line.svg`} alt="" />

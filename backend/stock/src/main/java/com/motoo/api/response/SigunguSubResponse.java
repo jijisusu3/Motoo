@@ -13,12 +13,12 @@ public class SigunguSubResponse {
 
     private String sigungu_name;
 
-    private String group;
+    private String school_ranks;
 
     private String personal;
 
     public static SigunguSubResponse response(Sigungu sigungu){
-        return new SigunguSubResponse(sigungu.getSigunguId(), sigungu.getSigungu_name(), sigungu.getGroup(), sigungu.getPersonal());
+        return new SigunguSubResponse(sigungu.getSigunguId(), sigungu.getSigungu_name(), sigungu.getSchool_ranks(), sigungu.getPersonal());
     }
 
 

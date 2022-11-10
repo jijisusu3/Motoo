@@ -23,7 +23,7 @@ public class AccountStockAddPostReq {
     Long stockId;
 
     @NotNull
-    @ApiModelProperty(name = "주식 갯수", example = "200")
+    @ApiModelProperty(name = "주식 갯수", example = "2")
     int amount;
 
     @NotNull
