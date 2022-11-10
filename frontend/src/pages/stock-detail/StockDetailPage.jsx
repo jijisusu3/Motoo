@@ -320,13 +320,21 @@ function StockDetailPage() {
   const [lineGraphData, setLineGraphData] = useState({
     series: [
       {
-        name: "Points",
+        name: "Maximum",
         type: "scatter",
         data: [
-          { x: new Date(2019, 4, 1), y: 93, z: "최저가" },
-          { x: new Date(2019, 10, 1), y: 142, z: "최고가" },
+          { x: new Date(2019, 3, 1), y: 100, z: "최저가" },
+          { x: new Date(2019, 8, 1), y: 300, z: "최고가" },
         ],
       },
+      // {
+      //   name: "Minimum",
+      //   type: "scatter",
+      //   data: [
+      //     { x: new Date(2019, 3, 1), y: 100, z: "최저가" },
+      //     // { x: new Date(2019, 8, 1), y: 300, z: "최고가" },
+      //   ],
+      // },
       {
         name: "Line",
         data: [
@@ -346,7 +354,7 @@ function StockDetailPage() {
       },
     ],
     options: {
-      colors: ["#DC6031", "#449431"],
+      colors: ["#DC6031", "#DD4956"],
       chart: {
         animations: {
           enabled: false,
@@ -386,7 +394,22 @@ function StockDetailPage() {
         show: false,
       },
       dataLabels: {
-        enabled: false,
+        enabled: true,
+        textAnchor: "middle",
+        formatter: function (val, opt) {
+          if (opt.seriesIndex <= 0) {
+            return opt.w.globals.initialSeries[opt.seriesIndex].data[opt.dataPointIndex].z + " " + val;
+          }
+        },
+        style: {
+          colors: ["#fff"],
+        },
+        background: {
+          enabled: true,
+          foreColor: "#DD4956",
+          padding: 1,
+        },
+        offsetX: 0,
       },
       stroke: {
         width: [3, 3, 3],
@@ -401,7 +424,7 @@ function StockDetailPage() {
         hover: {
           sizeOffset: 2,
         },
-        colors: ["#DC6031", "#449431"],
+        colors: ["#DC6031", "#fff"],
       },
       xaxis: {
         type: "datetime",
@@ -482,25 +505,9 @@ function StockDetailPage() {
 
   function StockDetailGraph() {
     if (showCandleGraph) {
-      return (
-        <ReactApexChart
-          options={candleGraphData.options}
-          series={candleGraphData.series}
-          type="candlestick"
-          height={350}
-          width={310}
-        />
-      );
+      return <ReactApexChart options={candleGraphData.options} series={candleGraphData.series} type="candlestick" height={350} width={310} />;
     }
-    return (
-      <ReactApexChart
-        options={lineGraphData.options}
-        series={lineGraphData.series}
-        type="line"
-        height={350}
-        width={310}
-      />
-    );
+    return <ReactApexChart options={lineGraphData.options} series={lineGraphData.series} type="line" height={350} width={310} />;
   }
 
   const handleTimeChange = (event) => {
@@ -526,10 +533,7 @@ function StockDetailPage() {
       }
       return (
         <div style={{ border: border }}>
-          <img
-            src={`${process.env.PUBLIC_URL}/stock-detail/cloudy.svg`}
-            alt=""
-          />
+          <img src={`${process.env.PUBLIC_URL}/stock-detail/cloudy.svg`} alt="" />
         </div>
       );
     } else {
@@ -555,12 +559,7 @@ function StockDetailPage() {
     return (
       <div>
         {sentiments.map((sentiment, index) => (
-          <WeatherCard
-            key={index}
-            sen={sentiment}
-            maxIndex={max_index}
-            thisIndex={index}
-          />
+          <WeatherCard key={index} sen={sentiment} maxIndex={max_index} thisIndex={index} />
         ))}
       </div>
     );
@@ -595,14 +594,7 @@ function StockDetailPage() {
     };
     if (isWatchlist) {
       return (
-        <svg
-          width="23"
-          height="20"
-          viewBox="0 0 23 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          onClick={heartClick}
-        >
+        <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={heartClick}>
           <path
             d="M20.6386 1.36753C18.1922 -0.717255 14.5539 -0.342262 12.3084 1.97466L11.4289 2.88089L10.5495 1.97466C8.30843 -0.342262 4.66564 -0.717255 2.21926 1.36753C-0.584263 3.76034 -0.731582 8.05491 1.7773 10.6486L10.4155 19.5681C10.9736 20.144 11.8798 20.144 12.4378 19.5681L21.0761 10.6486C23.5894 8.05491 23.4421 3.76034 20.6386 1.36753Z"
             fill="#FE8289"
@@ -611,14 +603,7 @@ function StockDetailPage() {
       );
     }
     return (
-      <svg
-        width="23"
-        height="20"
-        viewBox="0 0 23 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        onClick={heartClick}
-      >
+      <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={heartClick}>
         <path
           d="M20.6386 1.36753C18.1922 -0.717255 14.5539 -0.342262 12.3084 1.97466L11.4289 2.88089L10.5495 1.97466C8.30843 -0.342262 4.66564 -0.717255 2.21926 1.36753C-0.584263 3.76034 -0.731582 8.05491 1.7773 10.6486L10.4155 19.5681C10.9736 20.144 11.8798 20.144 12.4378 19.5681L21.0761 10.6486C23.5894 8.05491 23.4421 3.76034 20.6386 1.36753Z"
           fill="#929E9E"
@@ -634,22 +619,13 @@ function StockDetailPage() {
       <div>
         <div>
           <div>오늘 {stockData.name} 날씨는?</div>
-          <img
-            src={`${process.env.PUBLIC_URL}/stock-detail/newspaper.svg`}
-            alt=""
-          />
+          <img src={`${process.env.PUBLIC_URL}/stock-detail/newspaper.svg`} alt="" />
         </div>
         <div>{stockData.sentiment && <WeatherCards />}</div>
         <div>
           <div>{stockData.name} 이렇게 표현되고 있어요</div>
-          <img
-            src={`${process.env.PUBLIC_URL}/stock-detail/keyword.svg`}
-            alt=""
-          />
-          <div>
-            {stockData.keyword &&
-              stockData.keyword.map((word) => <div>{word}</div>)}
-          </div>
+          <img src={`${process.env.PUBLIC_URL}/stock-detail/keyword.svg`} alt="" />
+          <div>{stockData.keyword && stockData.keyword.map((word) => <div>{word}</div>)}</div>
         </div>
       </div>
     );
@@ -665,19 +641,14 @@ function StockDetailPage() {
     } else {
       return (
         <div>
-          어제보다 {stockData.fluctuation_price}원 떨어졌어요 (
-          {stockData.fluctuation_rate}%)
+          어제보다 {stockData.fluctuation_price}원 떨어졌어요 ({stockData.fluctuation_rate}%)
         </div>
       );
     }
   }
   return (
     <div>
-      <img
-        onClick={backTo}
-        src={`${process.env.PUBLIC_URL}/stock-detail/back.svg`}
-        alt=""
-      />
+      <img onClick={backTo} src={`${process.env.PUBLIC_URL}/stock-detail/back.svg`} alt="" />
       <WishListIcon />
       <hr />
       <div>{id} / KOSPI</div>
@@ -686,40 +657,19 @@ function StockDetailPage() {
       {stockData && <CompareText />}
       <StockDetailGraph />
       <label>
-        <input
-          name="graphTime"
-          type="radio"
-          value="하루"
-          onChange={handleTimeChange}
-          checked
-        />
+        <input name="graphTime" type="radio" value="하루" onChange={handleTimeChange} checked />
         하루
       </label>
       <label>
-        <input
-          name="graphTime"
-          type="radio"
-          value="일주일"
-          onChange={handleTimeChange}
-        />
+        <input name="graphTime" type="radio" value="일주일" onChange={handleTimeChange} />
         일주일
       </label>
       <label>
-        <input
-          name="graphTime"
-          type="radio"
-          value="한달"
-          onChange={handleTimeChange}
-        />
+        <input name="graphTime" type="radio" value="한달" onChange={handleTimeChange} />
         한달
       </label>
       <label>
-        <input
-          name="graphTime"
-          type="radio"
-          value="일년"
-          onChange={handleTimeChange}
-        />
+        <input name="graphTime" type="radio" value="일년" onChange={handleTimeChange} />
         일년
       </label>
       {showCandleGraph ? (
@@ -728,10 +678,7 @@ function StockDetailPage() {
         </div>
       ) : (
         <div className={classes.chartChangeBtn} onClick={changeToCandle}>
-          <img
-            src={`${process.env.PUBLIC_URL}/stock-detail/candle.svg`}
-            alt=""
-          />
+          <img src={`${process.env.PUBLIC_URL}/stock-detail/candle.svg`} alt="" />
         </div>
       )}
       <div style={{ border: "2px solid blue" }}>
