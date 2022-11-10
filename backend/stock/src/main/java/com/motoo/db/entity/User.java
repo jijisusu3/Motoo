@@ -32,6 +32,7 @@ public class User {
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Account> account = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "school_id")
     private School school;
