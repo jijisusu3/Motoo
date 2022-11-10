@@ -87,7 +87,6 @@ async def update_stock_info():
                         sentiment=[0,0,0],
                         price=100
                     )
-                stck.issued = data['output']['lstn_stcn']
                 stck.price = data['output']['stck_prpr']
                 stck.fluctuation_rate = data['output']['prdy_ctrt']
                 stck.fluctuation_price = data['output']['prdy_vrss']
@@ -98,7 +97,6 @@ async def update_stock_info():
                 stck.open_price = data['output']['stck_oprc']
                 stck.maximum = data['output']['stck_mxpr']
                 stck.minimum = data['output']['stck_llam']
-                stck.capital = data['output']['cpfn']
                 stck.m_capital = data['output']['hts_avls']
                 if flag == 0:
                     stocks.append(stck)
@@ -121,7 +119,6 @@ async def update_stock_info():
                 'eps',
                 'maximum',
                 'minimum',
-                'capital',
                 'm_capital',
                 )
     )

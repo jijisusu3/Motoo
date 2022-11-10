@@ -29,7 +29,6 @@ class TestSchoolHot:
                  fluctuation_price=-600,
                  volume=1000,
                  m_capital=54000000,
-                 issued=10000,
                  category_id=category.pk),
             Stock(ticker='000001',
                   name='TMPCORP2',
@@ -39,11 +38,12 @@ class TestSchoolHot:
                   fluctuation_price=-600,
                   volume=1000,
                   m_capital=54000000,
-                  issued=10000,
                   category_id=category.pk)]
         )
         res = await client.get("/stocks/school-hot/1")
+        print(res)
         res_data = res.json()
+        print(res_data)
         assert res.status_code == 404
         assert res_data["message"] == "failed"
 
@@ -75,6 +75,7 @@ class TestSchoolHot:
         )
         res = await client.get("/stocks/school-hot/4")
         res_data = res.json()
+        print(res_data)
         assert res.status_code == 404
         assert res_data["message"] == "failed"
 
@@ -82,6 +83,7 @@ class TestSchoolHot:
     async def test_school_exist_but_no_tradings(self, client: AsyncClient):
         res = await client.get("/stocks/school-hot/5")
         res_data = res.json()
+        print(res_data)
         assert res.status_code == 404
         assert res_data["message"] == "failed"
         assert res_data["stock_id"] is None
@@ -178,6 +180,8 @@ class TestSchoolHot:
         res2 = await client.get("/stocks/school-hot/10")
         res_data1 = res1.json()
         res_data2 = res2.json()
+        print(res_data1)
+        print(res_data2)
         assert res1.status_code == 200
         assert res2.status_code == 200
         assert res_data1["message"] == "success"
