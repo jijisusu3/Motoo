@@ -1,6 +1,7 @@
 package com.motoo.api.dto.user;
 
 
+import com.motoo.db.entity.School;
 import com.motoo.db.entity.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +33,8 @@ public class BaseUserInfo {
 
     private List<AccountStockInfo> stockInfo;
 
+    private School schoolId;
+
 
     public static BaseUserInfo of(Optional<User> user) {
         BaseUserInfo userinfo = new BaseUserInfo();
@@ -40,6 +43,7 @@ public class BaseUserInfo {
         userinfo.setNickname(user.get().getNickname());
         userinfo.setCurrent(user.get().getCurrent());
         userinfo.setQuizDay(user.get().getQuizDay());
+        userinfo.setSchoolId(user.get().getSchool());
 
         return userinfo;
     }
