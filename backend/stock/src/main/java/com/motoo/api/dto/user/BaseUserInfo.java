@@ -25,7 +25,7 @@ public class BaseUserInfo {
     //마지막으로 퀴즈 푼 날짜
     private Date quizDay;
 
-    private School schoolId;
+    private Long schoolId;
 
     //주계좌의 시드머니 // 따로 넣어즘
     private int seed;
@@ -44,7 +44,11 @@ public class BaseUserInfo {
         userinfo.setNickname(user.get().getNickname());
         userinfo.setCurrent(user.get().getCurrent());
         userinfo.setQuizDay(user.get().getQuizDay());
-        userinfo.setSchoolId(user.get().getSchool());
+        try {
+            userinfo.setSchoolId(user.get().getSchool().getSchoolId());
+        }catch (Exception e) {
+            userinfo.setSchoolId(0L);
+        }
 
         return userinfo;
     }
