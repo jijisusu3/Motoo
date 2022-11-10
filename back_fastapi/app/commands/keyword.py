@@ -19,9 +19,6 @@ app = typer.Typer()
 tokenizer = AutoTokenizer.from_pretrained("snunlp/KR-FinBert-SC")
 model = AutoModelForSequenceClassification.from_pretrained("snunlp/KR-FinBert-SC")
 
-file = open('app/ignore.txt', 'r', encoding='UTF8')
-delete_word = file.read().splitlines()
-
 file = open('app/company_list.txt', 'r', encoding='UTF8')
 company_lst = file.read().splitlines()
 
@@ -61,6 +58,8 @@ def clean(x):
 
 async def get_category_keyword():
     tm = time.time()
+    file = open('app/ignore_category.txt', 'r', encoding='UTF8')
+    delete_word = file.read().splitlines()
     for i in range(len(category_lst)):
         category = await Category.get(id=i+1)
         url = settings.NAVER_API_DOMAIN + str(category_lst[i]) + '&display=100&start=1&sort=sim'
@@ -148,6 +147,8 @@ async def get_category_sentiment():
 
 async def get_company_keyword():
     tm = time.time()
+    file = open('app/ignore_company.txt', 'r', encoding='UTF8')
+    delete_word = file.read().splitlines()
     for i in range(len(company_lst)):
         keyword = await Keyword.get(id=i+1)
         url = settings.NAVER_API_DOMAIN + str(company_lst[i]) + '&display=100&start=1&sort=sim'
