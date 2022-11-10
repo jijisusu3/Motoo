@@ -10,20 +10,8 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
-import { fontSize } from "@mui/system";
+import { realtimeGet, likeListGet } from "../../stores/stockSlice";
 
-const style = {
-  position: "absolute",
-  top: "40%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 324,
-  height: 225,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: 5,
-};
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -61,20 +49,14 @@ function StockListPage() {
   const [value, setValue] = useState(0);
   const [orderMany, setOrderMany] = useState(8);
   const [myListEdit, setMyListEdit] = useState(false);
-  const [openDeleteModal, setDeleteModalOpen] = useState(false);
   const [realtimeValue, setRealtimeValue] = useState(0);
-  const handleDeleteModalOpen = () => {
-    setDeleteModalOpen(true);
-  };
 
   const userToken = useSelector((state) => {
     return state.persistedReducer.setUser.user.token;
   });
-
   const userQuiz = useSelector((state) => {
     return state.persistedReducer.setUser.user.quizDay;
   });
-  
   const [isSolved, setIsSolved] = useState(false);
 
   useEffect(() => {
@@ -82,12 +64,23 @@ function StockListPage() {
     const now = `${date.getFullYear()}-${("00" + (date.getMonth() + 1))
       .toString()
       .slice(-2)}-${("00" + date.getDate()).toString().slice(-2)}`;
-    if (now === userQuiz) {
+    let getDay = ""
+    if (userQuiz){
+      getDay = userQuiz.substr(0,10)
+    }
+    if (now === getDay) {
       setIsSolved(true)
     }
   }, [userQuiz])
-
-  const handleDeleteModalClose = () => setDeleteModalOpen(false);
+  useEffect(() => {
+    dispatch(realtimeGet())
+    const data = {
+      headers: {
+        Authorization: `Bearer ${userToken}`
+      }
+    }
+    dispatch(likeListGet(data))
+  }, [])
 
   const goToDetail = (e) => {
     const isPk = e.target.id;
@@ -96,11 +89,15 @@ function StockListPage() {
     }
   };
 
+  function disLike(id){
+    console.log(id)
+  }
+
   const dispatch = useDispatch();
   useEffect(() => {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
-  });
+  }, []);
 
   // 삭제버튼 누르면 해당함수 실행,
   // BE에 삭제요청 보내고, 해당페이지재구성하고,
@@ -109,360 +106,14 @@ function StockListPage() {
     // eventTarget으로 어떤 아이디 클릭된건지 인식해야함
     // const data = { token: userToken, id: id };
   }
-  const [myListData, setMyListData] = useState([
-    {
-      name: "LG에너지솔루션",
-      code: 192839,
-      profit: 3.2,
-      price: 293778,
-    },
-    {
-      name: "SK하이닉스",
-      code: 111839,
-      profit: -2.9,
-      price: 128270,
-    },
-    {
-      name: "삼성바이오로직스",
-      code: 100000,
-      profit: 4.3,
-      price: 2278,
-    },
-    {
-      name: "POSCO홀딩스",
-      code: 117239,
-      profit: -1.3,
-      price: 707800,
-    },
-    {
-      name: "하이브",
-      code: 200001,
-      profit: -1.3,
-      price: 200000,
-    },
-  ]);
-  const [realtimeData, SetRealtimeData] = useState([
-    {
-      soaring: [
-        {
-          name: "급상승",
-          code: 192839,
-          profit: 3.2,
-          price: 293778,
-        },
-        {
-          name: "SK하이닉스",
-          code: 111839,
-          profit: -2.9,
-          price: 128270,
-        },
-        {
-          name: "삼성바이오로직스",
-          code: 100000,
-          profit: 4.3,
-          price: 2278,
-        },
-        {
-          name: "POSCO홀딩스",
-          code: 117239,
-          profit: -1.3,
-          price: 707800,
-        },
-        {
-          name: "하이브",
-          code: 200001,
-          profit: -1.3,
-          price: 200000,
-        },
-        {
-          name: "LG에너지솔루션2",
-          code: 192833,
-          profit: 3.2,
-          price: 293778,
-        },
-        {
-          name: "SK하이닉스2",
-          code: 111819,
-          profit: -2.9,
-          price: 128270,
-        },
-        {
-          name: "삼성바이오로직스2",
-          code: 10000,
-          profit: 4.3,
-          price: 2278,
-        },
-        {
-          name: "POSCO홀딩스2",
-          code: 11239,
-          profit: -1.3,
-          price: 707800,
-        },
-        {
-          name: "하이브2",
-          code: 200081,
-          profit: -1.3,
-          price: 200000,
-        },
-      ],
-    },
-    {
-      drop: [
-        {
-          name: "급하락",
-          code: 192839,
-          profit: 3.2,
-          price: 293778,
-        },
-        {
-          name: "SK하이닉스",
-          code: 111839,
-          profit: -2.9,
-          price: 128270,
-        },
-        {
-          name: "삼성바이오로직스",
-          code: 100000,
-          profit: 4.3,
-          price: 2278,
-        },
-        {
-          name: "POSCO홀딩스",
-          code: 117209,
-          profit: -1.3,
-          price: 707800,
-        },
-        {
-          name: "하이브",
-          code: 200008,
-          profit: -1.3,
-          price: 200000,
-        },
-        {
-          name: "LG에너지솔루션2",
-          code: 192833,
-          profit: 3.2,
-          price: 293778,
-        },
-        {
-          name: "SK하이닉스2",
-          code: 111819,
-          profit: -2.9,
-          price: 128270,
-        },
-        {
-          name: "삼성바이오로직스2",
-          code: 10000,
-          profit: 4.3,
-          price: 2278,
-        },
-        {
-          name: "POSCO홀딩스2",
-          code: 117239,
-          profit: -1.3,
-          price: 707800,
-        },
-        {
-          name: "하이브2",
-          code: 200001,
-          profit: -1.3,
-          price: 200000,
-        },
-      ],
-    },
-    {
-      price: [
-        {
-          name: "가격순",
-          code: 192839,
-          profit: 3.2,
-          price: 293778,
-        },
-        {
-          name: "SK하이닉스",
-          code: 111839,
-          profit: -2.9,
-          price: 128270,
-        },
-        {
-          name: "삼성바이오로직스",
-          code: 100000,
-          profit: 4.3,
-          price: 2278,
-        },
-        {
-          name: "POSCO홀딩스",
-          code: 11729,
-          profit: -1.3,
-          price: 707800,
-        },
-        {
-          name: "하이브",
-          code: 20001,
-          profit: -1.3,
-          price: 200000,
-        },
-        {
-          name: "LG에너지솔루션2",
-          code: 192833,
-          profit: 3.2,
-          price: 293778,
-        },
-        {
-          name: "SK하이닉스2",
-          code: 111819,
-          profit: -2.9,
-          price: 128270,
-        },
-        {
-          name: "삼성바이오로직스2",
-          code: 10000,
-          profit: 4.3,
-          price: 2278,
-        },
-        {
-          name: "POSCO홀딩스2",
-          code: 117239,
-          profit: -1.3,
-          price: 707800,
-        },
-        {
-          name: "하이브2",
-          code: 200001,
-          profit: -1.3,
-          price: 250000,
-        },
-      ],
-    },
-    {
-      marketCap: [
-        {
-          name: "시가총액",
-          code: 192839,
-          profit: 3.2,
-          price: 293778,
-        },
-        {
-          name: "SK하이닉스",
-          code: 111839,
-          profit: -2.9,
-          price: 128270,
-        },
-        {
-          name: "삼성바이오로직스",
-          code: 100000,
-          profit: 4.3,
-          price: 2278,
-        },
-        {
-          name: "POSCO홀딩스",
-          code: 11239,
-          profit: -1.3,
-          price: 707800,
-        },
-        {
-          name: "하이브",
-          code: 20001,
-          profit: -1.3,
-          price: 200000,
-        },
-        {
-          name: "LG에너지솔루션2",
-          code: 192833,
-          profit: 3.2,
-          price: 293778,
-        },
-        {
-          name: "SK하이닉스2",
-          code: 111819,
-          profit: -2.9,
-          price: 128270,
-        },
-        {
-          name: "삼성바이오로직스2",
-          code: 10000,
-          profit: 4.3,
-          price: 2278,
-        },
-        {
-          name: "POSCO홀딩스2",
-          code: 117239,
-          profit: -1.3,
-          price: 707800,
-        },
-        {
-          name: "하이브2",
-          code: 200001,
-          profit: -1.3,
-          price: 200005,
-        },
-      ],
-    },
-    {
-      tradingVolume: [
-        {
-          name: "거래량",
-          code: 192839,
-          profit: 3.2,
-          price: 293778,
-        },
-        {
-          name: "SK하이닉스",
-          code: 111839,
-          profit: -2.9,
-          price: 128270,
-        },
-        {
-          name: "삼성바이오로직스",
-          code: 100000,
-          profit: 4.3,
-          price: 2278,
-        },
-        {
-          name: "POSCO홀딩스",
-          code: 11739,
-          profit: -1.3,
-          price: 707800,
-        },
-        {
-          name: "하이브",
-          code: 20005,
-          profit: -1.3,
-          price: 200000,
-        },
-        {
-          name: "LG에너지솔루션2",
-          code: 192833,
-          profit: 3.2,
-          price: 293778,
-        },
-        {
-          name: "SK하이닉스2",
-          code: 111819,
-          profit: -2.9,
-          price: 128270,
-        },
-        {
-          name: "삼성바이오로직스2",
-          code: 10000,
-          profit: 4.3,
-          price: 2278,
-        },
-        {
-          name: "POSCO홀딩스2",
-          code: 117239,
-          profit: -1.3,
-          price: 707800,
-        },
-        {
-          name: "하이브2",
-          code: 200001,
-          profit: -1.3,
-          price: 200000,
-        },
-      ],
-    },
-  ]);
+
+  const likeList = useSelector((state) => {
+    return state.setStock.likeList
+  })
+  
+  const realtimeData = useSelector((state) => {
+    return state.setStock.realtime
+  })
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -525,11 +176,10 @@ function StockListPage() {
 
   function RealtimeLists() {
     const selectedString = [
-      "soaring",
-      "drop",
-      "price",
-      "marketCap",
-      "tradingVolume",
+      "rate_up",
+      "rate_down",
+      "capital_up",
+      "volume_up",
     ];
     const selectedRealtimeData =
       realtimeData[realtimeValue][selectedString[realtimeValue]];
@@ -595,7 +245,7 @@ function StockListPage() {
                       color={realtimeValue === 2 ? "#000" : "#929E9E"}
                       fontFamily="Pretendard"
                     >
-                      가격순
+                      시가총액
                     </Typography>
                   }
                   sx={{
@@ -614,25 +264,6 @@ function StockListPage() {
                       color={realtimeValue === 3 ? "#000" : "#929E9E"}
                       fontFamily="Pretendard"
                     >
-                      시가총액
-                    </Typography>
-                  }
-                  sx={{
-                    "&.Mui-selected": {
-                      color: "rgba(0, 0, 0, 0)",
-                    },
-                    // paddingX: '3%',
-                    minWidth: "10%",
-                  }}
-                />
-                <Tab
-                  label={
-                    <Typography
-                      fontSize="4vw"
-                      fontWeight="600"
-                      color={realtimeValue === 4 ? "#000" : "#929E9E"}
-                      fontFamily="Pretendard"
-                    >
                       거래량
                     </Typography>
                   }
@@ -648,13 +279,13 @@ function StockListPage() {
             </div>
           </Box>
         </Box>
-        {selectedRealtimeData.map((stock, index) => (
+        {selectedRealtimeData && selectedRealtimeData.map((stock, index) => (
           <RealtimeCard
-            key={stock.code}
+            key={stock.ticker}
             name={stock.name}
-            code={stock.code}
+            code={stock.ticker}
             ranking={index + 1}
-            profit={stock.profit}
+            profit={stock.fluctuation_rate}
             price={stock.price}
           />
         ))}
@@ -676,7 +307,7 @@ function StockListPage() {
       return (
         <div>
           <div className={classes.lists}>
-            <div id={stock.code} onClick={goToDetail}>
+            <div id={stock.ticker} onClick={goToDetail}>
               {stock.name}
             </div>
             <div className={classes.nowpr}>
@@ -696,7 +327,7 @@ function StockListPage() {
           <div className={classes.eleslists}>
             <div>{stock.name}</div>
             <img
-              onClick={handleDeleteModalOpen}
+              onClick={() => disLike(stock.id)}
               src={`${process.env.PUBLIC_URL}/stock-list/wishListDelete.svg`}
               alt=""
             />
@@ -781,13 +412,14 @@ function StockListPage() {
             <div onClick={editStart}>편집</div>
           )}
         </div>
-        {myListData.map((stock) => (
+        {likeList && likeList.map((stock) => (
           <MyWishCard
-            key={stock.code}
+            key={stock.ticker}
             name={stock.name}
-            code={stock.code}
-            profit={stock.profit}
+            ticker={stock.ticker}
+            profit={stock.fluctuation_rate}
             price={stock.price}
+            id={stock.id}
           />
         ))}
       </div>
@@ -867,13 +499,6 @@ function StockListPage() {
           </TabPanel>
         </Box>
       </div>
-      <Modal open={openDeleteModal} onClose={handleDeleteModalClose}>
-        <Box sx={style}>
-          <p>정말 삭제하시겠습니까?</p>
-          <p>관심주식에서 제거하기</p>
-          <button onClick={deleteSubmit}>삭제하기</button>
-        </Box>
-      </Modal>
     </>
   );
 }

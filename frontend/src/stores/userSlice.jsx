@@ -12,6 +12,7 @@ const initialState = {
     haveList: [],
     data: {},
   },
+  quizData: {},
 };
 
 const nicknamePut = createAsyncThunk("user/edit-nickname", async (data) => {
@@ -46,6 +47,17 @@ const likeStockPost = createAsyncThunk(
   }
 );
 
+const quizGet = createAsyncThunk("stockList/quizGet", async (data) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${data}`,
+    },
+  };
+  return axios.get(`${api2}quiz`, config).then((response) => {
+    return response.data;
+  });
+});
+
 const quizPut = createAsyncThunk("stockList/quizResult", async (data) => {
   const config = data.config;
   const quizResult = data.quizResult;
@@ -65,6 +77,7 @@ export const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     setLogin: (state, action) => {
+      // console.log(action.payload)
       state.user.isLoggin = true;
       state.user.token = action.payload.token;
       state.user.likeList = action.payload.user.favoriteStockCode;
@@ -92,8 +105,11 @@ export const userSlice = createSlice({
     builder.addCase(nicknamePut.fulfilled, (state, action) => {
       state.user.data.nickname = action.payload;
     });
+    builder.addCase(quizGet.fulfilled, (state, action) => {
+      state.quizData = action.payload;
+    });
   },
 });
 
 export const { setLogin, setLogout } = userSlice.actions;
-export { likeStockPost, quizPut, nicknamePut };
+export { likeStockPost, quizPut, nicknamePut,  quizGet };

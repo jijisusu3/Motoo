@@ -580,7 +580,7 @@ function StockDetailPage() {
       );
     }
     return (
-      <Link to="/stock/buy" state={{ data: shortStockData }}>
+      <Link to={`/stock/buy/${id}`} state={{ data: shortStockData }}>
         <button>살래요</button>
       </Link>
     );
