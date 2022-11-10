@@ -42,7 +42,7 @@ public class SchoolController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "학교 정보가 변경되었습니다."));
     }
 
-    @PutMapping("/api2/school/")
+    @PutMapping("/api2/school")
     public ResponseEntity<?> RegisterSchool(Authentication authentication, @RequestBody SchoolReq schoolReq) {
         Long id = userService.getUserIdByToken(authentication);
         userService.updateSchool(id, schoolReq.getId());

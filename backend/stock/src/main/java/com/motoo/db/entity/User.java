@@ -50,6 +50,8 @@ public class User {
 
     private Date quizDay;
 
+    private Integer currentRank;
+
     @JsonIgnore
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Trading> tradings  = new ArrayList<>();

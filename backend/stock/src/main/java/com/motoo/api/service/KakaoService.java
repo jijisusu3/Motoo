@@ -9,6 +9,7 @@ import com.motoo.api.dto.user.AccountStockInfo;
 import com.motoo.api.dto.user.BaseUserInfo;
 import com.motoo.api.response.LoginResponse;
 import com.motoo.common.util.JwtTokenUtil;
+import com.motoo.db.entity.Account;
 import com.motoo.db.entity.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -131,7 +132,10 @@ public class KakaoService {
             //초기 계좌 개설 로직
             String newAccountName = kakaoNickname+"님의 계좌";
             Long accountId = accountService.createAccount(newUserId, newAccountName);
+
             int intAccountId = accountId.intValue();
+            Account account = accountService.getAccount(accountId, newUserId);
+            account.updateIsMain(true);
             userService.updateCurrent(newUserId, intAccountId);
 
         }
