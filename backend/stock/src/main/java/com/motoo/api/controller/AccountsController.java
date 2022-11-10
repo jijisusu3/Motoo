@@ -70,23 +70,25 @@ public class AccountsController {
         List<Account> account = accountService.listAccount(userId);
         int seeds=0;
 
-        ArrayList pitches = new ArrayList();
-
+        List<Integer> pitches = new ArrayList<>();
+//        account.stream().map(value -> {return value.getSeed();}).reduce((x,value) -> {
+//            x += value.getSeed();
+//
+//            System.out.println(value.getSeed());
+//            accountAsset += value.getSeed();
+//            System.out.println("어카운트 어셋 더하기전  " + accountAsset);
+//        })
 //        HashMap<Integer, Integer> pitches = new HashMap<Integer, Integer>();
-        for (int i=0; i<account.size(); i++){
-            seeds+= account.get(i).getSeed();
+        for (Account value : account) {
             int accountAsset=0;
-            System.out.println(account.get(i).getSeed());
-            accountAsset+= account.get(i).getSeed();
-
-
-            for (int a=0; a<account.get(i).getAccountStocks().size(); a++){
-                 seeds+=account.get(i).getAccountStocks().get(a).getAmount()*account.get(i).getAccountStocks().get(a).getPrice();
-                accountAsset+=account.get(i).getAccountStocks().get(a).getAmount()*account.get(i).getAccountStocks().get(a).getPrice();
-                 pitches.add(accountAsset);
+            seeds+=value.getSeed();
+            accountAsset+=value.getSeed();
+            for (int a = 0; a < value.getAccountStocks().size(); a++) {
+                seeds += value.getAccountStocks().get(a).getAmount() * value.getAccountStocks().get(a).getPrice();
+                accountAsset += value.getAccountStocks().get(a).getAmount() * value.getAccountStocks().get(a).getPrice();
             }
+            pitches.add(accountAsset);
         }
-
         return ResponseEntity.status(200).body(AccountsListRes.of(account,  pitches, seeds,200, "계좌 목록조회에 성공하였습니다."));
     }
 

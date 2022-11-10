@@ -14,9 +14,9 @@ import java.util.List;
 public class AccountsListRes extends BaseResponseBody {
     List<Account> account;
     int asset;
-    ArrayList pitches;
+    List<Integer> pitches;
 
-    public static AccountsListRes of(List<Account> account, ArrayList pitches, int seeds, Integer statusCode, String message){
+    public static AccountsListRes of(List<Account> account, List<Integer> pitches, int seeds, Integer statusCode, String message){
         AccountsListRes res = new AccountsListRes();
         res.setPitches(pitches);
 
