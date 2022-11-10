@@ -55,19 +55,26 @@ public class OrderExcution {
             System.out.println("예약중인 거래내역이 없습니다.");
             return;
         } else {
+
             for (int i = 0; i < tradingList.size(); i++) {
 
                 //3,4인 사람의 accountId
                 Long accountId = tradingList.get(i).getAccount().getAccountId();
+
                 if (accountId == null) {
                     System.out.println("예약중인 사람이 없습니다.");
                     break;
-                } else {
 
+                } else {
+                    //주문 유저 번호
                     Long userId = tradingList.get(i).getUser().getUserId();
+
                     //주문 주식 번호
                     String ticker = tradingList.get(i).getTicker();
+
+                    //주문 번호
                     Long tradeId = tradingList.get(i).getTradeId();
+
                     //주문 거래량, 가격
                     int amount = tradingList.get(i).getTr_amount();
                     int price = tradingList.get(i).getTr_price();
@@ -86,6 +93,7 @@ public class OrderExcution {
 
                     //트레이딩 타입 바꿔줄 트레이딩의 객체
                     Trading trading = tradingService.getTrading(userId, tradeId);
+
                     //accountStockId 가져오기
                     Long accountStockId = accountStockService.getAccountStockIdByStockId(accountId, stockId);
 

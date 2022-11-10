@@ -6,6 +6,7 @@ import com.motoo.api.service.EventService;
 import com.motoo.api.service.SchoolService;
 import com.motoo.api.service.UserService;
 import com.motoo.common.model.response.BaseResponseBody;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+@Api(value = "학교 API", tags = {"School"})
 @RestController
 @RequiredArgsConstructor
 public class SchoolController {

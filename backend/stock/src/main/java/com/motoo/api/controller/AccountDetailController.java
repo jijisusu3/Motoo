@@ -7,6 +7,7 @@ import com.motoo.api.service.*;
 import com.motoo.common.model.response.BaseResponseBody;
 import com.motoo.db.entity.AccountStock;
 import com.motoo.db.entity.Trading;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Api(value = "계좌 상세조회 API", tags = {"AccountDetail"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api2/detail")
