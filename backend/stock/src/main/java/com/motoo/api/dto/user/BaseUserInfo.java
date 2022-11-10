@@ -22,18 +22,19 @@ public class BaseUserInfo {
     // 현재 주계좌 번호
     private int current;
 
-    //관심 주식 종목코드
-    private List<String> favoriteStockCode;
-
-    //주계좌의 시드머니
-    private int seed;
-
     //마지막으로 퀴즈 푼 날짜
     private Date quizDay;
 
-    private List<AccountStockInfo> stockInfo;
-
     private School schoolId;
+
+    //주계좌의 시드머니 // 따로 넣어즘
+    private int seed;
+
+    //관심 주식 종목코드 // 따로 넣어줌
+    private List<String> favoriteStockCode;
+
+    // 주계좌 보유 주식 목록 //따로 넣어줌
+    private List<AccountStockInfo> stockInfo;
 
 
     public static BaseUserInfo of(Optional<User> user) {

@@ -144,10 +144,12 @@ public class KakaoService {
 
         //관심 주식 종목 코드 세팅
         List<String> favoriteStockCode = userService.getFavoriteStockCode(DBUser);
+        baseUserInfo.setFavoriteStockCode(favoriteStockCode);
 
         //주 계좌 시드머니 세팅
         int seed = userService.getAccountSeed(DBUser);
         baseUserInfo.setSeed(seed);
+
         //주 계좌 보유 주식 정보 세팅
         List<AccountStockInfo> stockInfo = userService.getStockInfo(DBUser);
         baseUserInfo.setStockInfo(stockInfo);
