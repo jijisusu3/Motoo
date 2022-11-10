@@ -29,6 +29,9 @@ public interface AccountService {
 
     long[] getAccountCount(List<Account> accounts);
 
+    //메인함수인지 로직
+    void updateMainAccount(Account account, boolean main);
+
 //    List<Stock> getStockList(Long userId, Long accountId);
     //accounts Stock 관련
 

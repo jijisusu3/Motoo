@@ -149,6 +149,13 @@ public class AccountServiceImpl implements AccountService{
         return detailCounts;
     }
 
+    @Override
+    public void updateMainAccount(Account account, boolean main){
+        account.updateIsMain(main);
 
+
+
+
+    }
 
 }
