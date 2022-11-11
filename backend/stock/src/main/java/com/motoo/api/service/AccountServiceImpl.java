@@ -4,10 +4,7 @@ package com.motoo.api.service;
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
 import com.motoo.db.entity.User;
-import com.motoo.db.repository.AccountRepository;
-import com.motoo.db.repository.AccountRepositorySupport;
-import com.motoo.db.repository.AccountStockRepositorySupport;
-import com.motoo.db.repository.UserRepository;
+import com.motoo.db.repository.*;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +24,8 @@ public class AccountServiceImpl implements AccountService{
 
     private final AccountStockRepositorySupport accountStockRepositorySupport;
 
+    private final TradingService tradingService;
+
 
     //계정생성
     @Override
@@ -35,10 +34,14 @@ public class AccountServiceImpl implements AccountService{
         User user = userRepository.findByUserId(userId).get();
         account.createAccount(user, name);
         account.updateSeed(20000000);
+        //5거래타입
 
         accountRepository.save(account);
+        Long accountId = account.getAccountId();
+        tradingService.writeOrder(userId, accountId, null,5,20000000,1,null);
+        System.out.println("어카운트 아이디 "+accountId);
 
-        return account.getAccountId();
+        return accountId;
 
     }
 
