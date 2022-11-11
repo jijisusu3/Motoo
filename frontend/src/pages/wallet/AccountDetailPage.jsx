@@ -7,15 +7,15 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import classes from "./AccountDetailPage.module.css";
 import Modal from "@mui/material/Modal";
 import RealizedPL from "../../components/wallet/RealizedPL";
 import AccountHistory from "../../components/wallet/AccountHistory";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { setShowNav, setActiveNav } from "../../stores/navSlice";
-import { borderBottom } from "@mui/system";
+import { accountDetailGet } from "../../stores/accountSlice";
 
 const style = {
   position: "absolute",
@@ -64,6 +64,11 @@ function a11yProps(index) {
 }
 
 function AccountDetailPage() {
+  const params = useParams();
+  const id = params.id;
+  const userToken = useSelector((state) => {
+    return state.persistedReducer.setUser.user.token;
+  })
   const [value, setValue] = useState(0);
   const [nowEdit, setNowEdit] = useState(false);
   const [openDeleteModal, setDeleteModalOpen] = useState(false);
@@ -77,10 +82,20 @@ function AccountDetailPage() {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
     dispatch(setActiveNav(2));
-  });
+  }, []);
 
-  const params = useParams();
-  const id = params.id;
+  const data = {
+    config: {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      }
+    },
+    id: id
+  }
+  useEffect(() => {
+    dispatch(accountDetailGet(data))
+  }, [userToken])
+
   const handleDeleteModalOpen = () => {
     setDeleteModalOpen(true);
     setShowSettings(false);

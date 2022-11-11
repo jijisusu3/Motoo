@@ -42,6 +42,10 @@ function MyPage() {
   const userToken = useSelector((state) => {
     return state.persistedReducer.setUser.user.token;
   });
+  const walletList = useSelector((state) => {
+    return state.setAccount.accountsList
+  })
+  console.log(walletList)
   const dispatch = useDispatch();
   useEffect(() => {
     const now = window.location.pathname;
@@ -105,7 +109,7 @@ function MyPage() {
 
   const [data, setData] = useState({
     all: {
-      all_asset: '602,520,021',
+      all_asset: 602520021,
       profit: -13,
     },
     assets: [
@@ -159,7 +163,9 @@ function MyPage() {
           <div className={classes.cntbox}>
             <img src={`${process.env.PUBLIC_URL}/wallet/money.svg`} style={{ width: 24, height: 24 }} alt="" />
             <div  className={classes.basebox}>
-              <div className={classes.count}>{data.all.all_asset}</div>
+              {walletList &&
+              <div className={classes.count}>{Number(walletList.asset).toLocaleString()}</div>
+              }
               <div>원</div>
             </div>
           </div>
@@ -255,10 +261,9 @@ function MyPage() {
   }
 
   function WalletAssetCard(asset) {
+    console.log("???????")
     setCanAddNum(true);
-    // setAssetNameList([...assetNameList, asset.name])
-    // console.log(assetNameList)
-    var openDate = dayjs(asset.open);
+    var openDate = dayjs(asset.open.slice(0,10));
     const tmpId = asset.accountId
     const dateAvailable = openDate.isBetween(
       `${now}`,
@@ -293,6 +298,7 @@ function MyPage() {
               now
             </div>
           </div>
+          <div>{walletList.pitches[asset.num].toLocaleString()}원</div>
         </div>
       );
     } else {
@@ -304,6 +310,7 @@ function MyPage() {
             )}
             <div id={tmpId}>{asset.name}</div>
           </div>
+          <div>{walletList.pitches[asset.num].toLocaleString()}원</div>
           <img
             onClick={handleChangeModalOpen}
             src={`${process.env.PUBLIC_URL}/wallet/change.svg`}
@@ -315,20 +322,18 @@ function MyPage() {
     }
   }
   return (
-
     <div className={classes.mypageBG}>
       <div className={classes.mypageCtn}>
       {userData && <EditShow />}
         <div className={classes.centerbox}>
           <AllAssets />
-          {data.assets.map((asset, index) => (
+          {walletList.account && walletList.account.map((asset, index) => (
             <WalletAssetCard
-              key={asset.accounts_pk}
+              key={asset.accountId}
               name={asset.name}
-              accountId={asset.accounts_pk}
-              seed={asset.seed}
-              isSchool={asset.isSchool}
-              open={asset.open}
+              accountId={asset.accountId}
+              isSchool={asset.school}
+              open={asset.created_at}
               num={index}
             />
           ))}

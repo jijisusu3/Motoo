@@ -31,13 +31,15 @@ public class KakaoService {
     private final String REDIRECT_URI;
     private final UserService userService;
     private final AccountService accountService;
+    private final TradingService tradingService;
 
     public KakaoService(@Value("${kakao.client_id}") String CLIENT_ID,
-                        @Value("${kakao.redirect_uri}") String REDIRECT_URI, UserService userService, AccountService accountService) {
+                        @Value("${kakao.redirect_uri}") String REDIRECT_URI, UserService userService, AccountService accountService, TradingService tradingService) {
         this.CLIENT_ID = CLIENT_ID;
         this.REDIRECT_URI = REDIRECT_URI;
         this.userService = userService;
         this.accountService = accountService;
+        this.tradingService = tradingService;
     }
 
     /**
@@ -134,6 +136,7 @@ public class KakaoService {
             Long accountId = accountService.createAccount(newUserId, newAccountName);
 
             int intAccountId = accountId.intValue();
+
             Account account = accountService.getAccount(accountId, newUserId);
             account.updateIsMain(true);
             userService.updateCurrent(newUserId, intAccountId);
