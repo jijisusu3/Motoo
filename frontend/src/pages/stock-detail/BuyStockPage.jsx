@@ -371,29 +371,34 @@ function BuyStockPage() {
       // 직접입력하겠다고 할 때,
       if (wantedPrice === "") {
         return (
-          <div onClick={priceClickHandler}>
+          
+          <span class={classes.buyNumber } onClick={priceClickHandler}>
+            
+
             {writePrice && (
+           
               <img
                 className={classes.blinking}
                 src={`${process.env.PUBLIC_URL}/stock-detail/inputIcon.svg`}
-                alt=""
+                alt="얼마에 사고싶나요?"
               />
             )}
-            <h1>얼마에 사고싶나요?</h1>
-          </div>
+            <span class={classes.howMuchWant }>얼마에 사고싶나요?</span>
+          </span>
         );
       } else {
         return (
           <>
-            <span onClick={priceClickHandler}>{wantedPrice}</span>
+            <span class={classes.buyNumber } onClick={priceClickHandler}>{wantedPrice}</span>
             {writePrice && (
+              // <input type="text" class="rq-form-element" autofocus/>
               <img
                 className={classes.blinking}
                 src={`${process.env.PUBLIC_URL}/stock-detail/inputIcon.svg`}
                 alt=""
               />
             )}
-            <span>원</span>
+            <span class={classes.zuOrwon }>원</span>
           </>
         );
       }
@@ -402,29 +407,31 @@ function BuyStockPage() {
   function ManyInput() {
     if (wantedMany === "") {
       return (
-        <div onClick={manyClickHandler}>
+        <div class={classes.buyNumber } onClick={manyClickHandler}>
           {!writePrice && (
+            // <input type="text" class="rq-form-element" placeholder="몇 주를 살건가요?" autofocus/>
             <img
               className={classes.blinking}
               src={`${process.env.PUBLIC_URL}/stock-detail/inputIcon.svg`}
               alt=""
             />
           )}
-          <h1>몇 주를 살건가요?</h1>
+          <span class={classes.howMuchWant }>몇 주를 살건가요?</span>
         </div>
       );
     } else {
       return (
         <>
-          <p onClick={manyClickHandler}>{wantedMany}</p>
+          <div class={classes.buyNumber } onClick={manyClickHandler}>{wantedMany}
           {!writePrice && (
+         
             <img
               className={classes.blinking}
               src={`${process.env.PUBLIC_URL}/stock-detail/inputIcon.svg`}
               alt=""
             />
           )}
-          <span>주</span>
+          <span class={classes.zuOrwon }>주</span></div>
         </>
       );
     }
@@ -518,16 +525,18 @@ function BuyStockPage() {
             &nbsp;
             <span>현재가로 주문</span>
           </div>
-          )}
+        )}
+        <button class={classes.hogaButton } onClick={handleOpen}>호가보기</button>
         </div>
 
       
-      <button class={classes.hogaButton } onClick={handleOpen}>호가보기</button>
+      
       <PriceInput />
       <ManyInput />
       {isTooHigh && <p>그렇게 비싸겐 못사요</p>}
       {isTooLow && <p>그렇게 싸겐 못사요</p>}
       {!isAvailable && <p>넌 그만큼 살 돈이 없어요</p>}
+      <div class={ classes.buyButtom}>
       <div class={classes.numberSection}>
         <div>
           <button value={1} class={classes.numberButton} onClick={numberClick}>
@@ -592,7 +601,8 @@ function BuyStockPage() {
         </button>
         </div>
        
-    </div>
+      </div>
+      </div>
 
   );
 }
