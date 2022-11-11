@@ -11,6 +11,8 @@ import java.util.List;
 public class AccountDetailDTO {
     String AccountName;
 
+    boolean School;
+
     List<Portfolio> PortfolioList;
 
     AccountAsset accountAsset;

@@ -93,6 +93,7 @@
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding-left: 1rem;
   padding-right: 1rem;
   font-weight: 600;
@@ -178,6 +179,7 @@
 }
 .rowbox{
   display: flex;
+  align-items: center;
 }
 .accountbox{
   display: flex;
