@@ -76,10 +76,16 @@ function SchoolMainPage() {
             onClick={() => clickMySchool(item.schoolId, item.schoolname)}
             // className={`search-preview ${item.index === 0 ? "start" : ""}`}
           >
-            <div className={classes.schoolList}>{item.schoolname}</div>
             <div className={classes.sidoList}>
-              {item.sigunguResponse.sido} {item.sigunguResponse.sigungu_name}
+              <div className={classes.sido}>
+                <p>{item.sigunguResponse.sido}</p>
+              </div>
+              <div className={classes.sigungu}>
+                <p>{item.sigunguResponse.sigungu_name}</p>
+              </div>
             </div>
+            <div className={classes.schoolList}>{item.schoolname}</div>
+
             <div
               style={{ width: "100%", backgroundColor: "#EAF0EF", height: 1 }}
             ></div>
@@ -213,12 +219,11 @@ function SchoolMainPage() {
                   <SearchBar />
                 </div>
                 {!isGetId && <div>학교를 선택하세요!</div>}
-                <div
+                <button className={classes.schoolBtn}
                   onClick={startClick}
-                  style={{ width: "50%", backgroundColor: "gray" }}
                 >
                   시작하기
-                </div>
+                </button>
             </Box>
           </Fade>
         </Modal>
