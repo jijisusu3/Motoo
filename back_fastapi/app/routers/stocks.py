@@ -8,8 +8,11 @@ from app.models.accounts import Trading, Account
 from app.models.stocks import Stock
 from app.models.users import User
 from app.routers.authentication import get_current_user
-from app.schemes.stocks import GetStockDetailResponse, GetShortStockResponse, BidAskResponse, SchoolHotStockResponse, \
-    GetTradingStockInfoResponse
+from app.schemes.stocks import (GetStockDetailResponse,
+                                GetShortStockResponse,
+                                BidAskResponse,
+                                SchoolHotStockResponse,
+                                GetTradingStockInfoResponse)
 
 router = APIRouter(prefix="/stocks")
 
@@ -26,18 +29,18 @@ async def get_stock_detail(ticker: str, response: Response):
         return GetStockDetailResponse(message="failed")
     today = date.today()
     if today.weekday() >= 5:
-        today = date.today()-timedelta(today.weekday()-4)
+        today = date.today() - timedelta(today.weekday() - 4)
     today = today.strftime("%Y-%m-%d")
     # 차트 데이터
     daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
     weekly = (await candle_map[stock.category_id].filter(
         stock_id=stock.pk,
-        date__gte=date.today()-timedelta(7)
+        date__gte=date.today() - timedelta(7)
     ).order_by('-id'))[::6][::-1]
-    monthly = await day_map[stock.category_id].filter(stock_id=stock.pk, date__gte=date.today()-timedelta(31))
+    monthly = await day_map[stock.category_id].filter(stock_id=stock.pk, date__gte=date.today() - timedelta(31))
     yearly = (await day_map[stock.category_id].filter(
         stock_id=stock.pk,
-        date__gte=date.today()-timedelta(365)
+        date__gte=date.today() - timedelta(365)
     ).order_by('-id'))[::5][::-1]
     return GetStockDetailResponse(**dict(stock),
                                   category_name=stock.category.name,
@@ -68,7 +71,7 @@ async def get_stock_short(ticker: str, response: Response):
         return GetStockDetailResponse(message="failed")
     today = date.today()
     if today.weekday() >= 5:
-        today = date.today()-timedelta(today.weekday()-4)
+        today = date.today() - timedelta(today.weekday() - 4)
     today = today.strftime("%Y-%m-%d")
     # 차트 데이터
     daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
@@ -107,9 +110,9 @@ async def get_bidask_list(ticker: str):
         if res.status_code == 200:
             data = res.json()['output1']
             for i in range(1, 11):
-                redis_session.rpush('ask'+ticker, data[f'askp{i}'])
-                redis_session.rpush('bid'+ticker, data[f'bidp{i}'])
-                redis_session.expire('ask'+ticker,60)
+                redis_session.rpush('ask' + ticker, data[f'askp{i}'])
+                redis_session.rpush('bid' + ticker, data[f'bidp{i}'])
+                redis_session.expire('ask' + ticker, 60)
                 redis_session.expire('bid' + ticker, 60)
             bid = sorted(redis_session.lrange('bid' + ticker, 0, 9), reverse=True)[:5]
             ask = sorted(redis_session.lrange('ask' + ticker, 0, 9))[:5]
@@ -122,7 +125,7 @@ async def get_school_hot_list(response: Response, user: User = Depends(get_curre
         users_in_school = await User.filter(school_id=user.school_id).values_list('id', flat=True)
         accounts = await Account.filter(school=True, user_id__in=users_in_school).values_list('id', flat=True)
         not_finished = await Trading.filter(tr_date__isnull=True, account_id__in=accounts)
-        finished = await Trading.filter(tr_date__gte=datetime.datetime.today()-datetime.timedelta(7),
+        finished = await Trading.filter(tr_date__gte=datetime.datetime.today() - datetime.timedelta(7),
                                         account_id__in=accounts)
         tr_amounts = defaultdict(int)
         for tr_yet in not_finished:

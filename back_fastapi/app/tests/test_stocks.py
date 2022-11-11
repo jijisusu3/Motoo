@@ -53,23 +53,23 @@ class TestStockDetail:
         stock = await Stock.get(ticker="999999")
         for k in range(37):
             await candle_map[stock.category_id].create(
-                time=f'{(9+k//6)//10}{(9+k//6)%10}{k%6}000',
-                price=1000+10*k,
-                volume=100+k,
+                time=f'{(9 + k // 6) // 10}{(9 + k // 6) % 10}{k % 6}000',
+                price=1000 + 10 * k,
+                volume=100 + k,
                 open_price=1000,
                 min_price=990,
-                max_price=1000+10*k,
+                max_price=1000 + 10 * k,
                 stock_id=stock.pk,
                 date=datetime.date.today()
             )
         for k in range(8):
             await day_map[stock.category_id].create(
-                date=datetime.date.today()+datetime.timedelta(k-7),
-                volume=100+k,
-                open_price=1000+10*k,
-                close_price=1100+10*k,
-                min_price=980+10*k,
-                max_price=1100+10*k,
+                date=datetime.date.today() + datetime.timedelta(k - 7),
+                volume=100 + k,
+                open_price=1000 + 10 * k,
+                close_price=1100 + 10 * k,
+                min_price=980 + 10 * k,
+                max_price=1100 + 10 * k,
                 stock_id=stock.pk,
             )
         res = await client.get("/stocks/detail/999999")
@@ -81,8 +81,8 @@ class TestStockDetail:
         assert res_data["daily"][-1]["time"] == "150000"
         assert res_data["daily"][5]["date"] == today.strftime("%Y-%m-%d")
         assert res_data["weekly"][-1]["time"] == "150000"
-        assert len(res_data['weekly']) == (5+37)//6
-        assert res_data["monthly"][0]["date"] == (today-datetime.timedelta(7)).strftime("%Y-%m-%d")
+        assert len(res_data['weekly']) == (5 + 37) // 6
+        assert res_data["monthly"][0]["date"] == (today - datetime.timedelta(7)).strftime("%Y-%m-%d")
         assert res_data["monthly"][7]["date"] == today.strftime("%Y-%m-%d")
         assert len(res_data["yearly"]) == 2
 
