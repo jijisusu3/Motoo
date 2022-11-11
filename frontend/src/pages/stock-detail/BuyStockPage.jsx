@@ -528,6 +528,7 @@ function BuyStockPage() {
       {isTooHigh && <p>그렇게 비싸겐 못사요</p>}
       {isTooLow && <p>그렇게 싸겐 못사요</p>}
       {!isAvailable && <p>넌 그만큼 살 돈이 없어요</p>}
+      <div class={ classes.buyButtom}>
       <div class={classes.numberSection}>
         <div>
           <button value={1} class={classes.numberButton} onClick={numberClick}>
@@ -592,7 +593,8 @@ function BuyStockPage() {
         </button>
         </div>
        
-    </div>
+      </div>
+      </div>
 
   );
 }
