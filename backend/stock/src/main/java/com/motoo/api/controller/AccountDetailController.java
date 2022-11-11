@@ -31,6 +31,7 @@ public class AccountDetailController {
     private final AccountAssetService accountAssetService;
     private final TradingProfitLossService tradingProfitLossService;
     private final TradingHistoryService tradingHistoryService;
+    private final AccountService accountService;
 
     @GetMapping
     @ApiOperation(value = "계좌 상세조회", notes = "(token) 계좌를 계좌 상세조회한다.")
@@ -39,6 +40,7 @@ public class AccountDetailController {
         Long userId = userService.getUserIdByToken(authentication);
 //        Long accountId = accountDetailReq.getAccountId();
         AccountDetailDTO detailBuild = AccountDetailDTO.builder()
+                .AccountName(accountService.getAccount(accountId, userId).getName())
                 .PortfolioList(portfolioService.getPortfolioListOrderByRatio(accountId, userId))
                 .accountAsset(accountAssetService.getAccountAsset(accountId, userId))
                 .tradingProfitLoss(tradingProfitLossService.getTradingProfitLoss(userId, accountId))
