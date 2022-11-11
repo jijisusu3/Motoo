@@ -5,6 +5,7 @@ from tortoise import Tortoise, BaseDBAsyncClient
 from tortoise import connections
 
 import asyncio
+
 app = typer.Typer()
 
 app.add_typer(daily.app, name="daily")

@@ -7,6 +7,7 @@ from app.schemes.lists import Top
 from fastapi import APIRouter, Response, Depends
 from app.routers.authentication import get_current_user
 from app.schemes.lists import GetFavoriteStockListResponse, GetTopStockListResponse
+
 router = APIRouter(prefix="/list")
 
 
@@ -22,6 +23,7 @@ async def get_top_list(response: Response):
         response.status_code = 404
         return GetTopStockListResponse(message="failed")
     return GetTopStockListResponse(result=top)
+
 
 @router.get("/favorite",
             description="관심 종목 리스트",

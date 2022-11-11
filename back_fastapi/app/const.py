@@ -91,7 +91,7 @@ def get_header(
 
 
 def get_auth_token(key, secret):
-    url = settings.OPEN_API_DOMAIN+'/oauth2/tokenP'
+    url = settings.OPEN_API_DOMAIN + '/oauth2/tokenP'
     request_body = {
         "grant_type": "client_credentials",
         "appkey": key,
