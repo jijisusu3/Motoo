@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Api(value = "계좌 API", tags = {"Account"})
 @CrossOrigin("*")
@@ -85,7 +86,20 @@ public class AccountsController {
             }
             pitches.add(accountAsset);
         }
-        return ResponseEntity.status(200).body(AccountsListRes.of(account, pitches, seeds,200, "계좌 목록조회에 성공하였습니다."));
+        List<AccountStock> accountStockList = accountService.getAccountStockByUserId(userId);
+        List<Integer> investList = accountStockList.stream().map(accountStock ->
+                accountStock.getPrice() * accountStock.getAmount()).collect(Collectors.toList());
+
+        List<Integer> resultList = accountStockList.stream().map(accountStock ->
+                accountStock.getStock().getPrice() * accountStock.getAmount()).collect(Collectors.toList());
+
+        int investSum = investList.stream().mapToInt(Integer::intValue).sum();
+        int resultSum = resultList.stream().mapToInt(Integer::intValue).sum();
+
+
+        float earningRaito = (float) (resultSum - investSum) / (float) investSum * 100;
+
+        return ResponseEntity.status(200).body(AccountsListRes.of(account, pitches, seeds, earningRaito,200, "계좌 목록조회에 성공하였습니다."));
     }
 
     //계좌 이름 수정
@@ -300,6 +314,7 @@ public class AccountsController {
 
         //주 계좌 시드머니 세팅
         int seed = userService.getAccountSeed(user);
+
 
         List<AccountStockInfo> stockInfo = userService.getStockInfoByAccountId(userId,account_id);
 

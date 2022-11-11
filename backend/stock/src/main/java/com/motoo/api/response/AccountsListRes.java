@@ -23,10 +23,15 @@ public class AccountsListRes extends BaseResponseBody {
     @ApiModelProperty(name = "각 계좌 자산")
     List<Integer> pitches;
 
-    public static AccountsListRes of(List<Account> account, List<Integer> pitches, int seeds, Integer statusCode, String message){
+
+    @ApiModelProperty(name = "수익률")
+    float earningRaito;
+
+
+    public static AccountsListRes of(List<Account> account, List<Integer> pitches, int seeds, float earningRaito, Integer statusCode, String message){
         AccountsListRes res = new AccountsListRes();
         res.setPitches(pitches);
-
+        res.setEarningRaito(earningRaito);
         res.setAsset(seeds);
         res.setAccount(account);
         res.setStatusCode(statusCode);
