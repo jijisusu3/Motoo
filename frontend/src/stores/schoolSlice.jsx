@@ -14,8 +14,7 @@ const schoolGet = createAsyncThunk("school/listGet", async (data) => {
   })
 });
 const schoolPut = createAsyncThunk("school/schoolPut", async (data) => {
-  return axios.put(`${api2}school/`, data.config, data.result).then((response) => {
-    console.log(response)
+  return axios.put(`${api2}school/`, data.result, data.config).then((response) => {
     return response.data
   })
 });

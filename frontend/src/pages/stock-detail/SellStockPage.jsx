@@ -6,9 +6,9 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import ReactApexChart from "react-apexcharts";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
-import { shortStockGet } from "../../stores/stockSlice";
-
+import { useDispatch, useSelector } from "react-redux";
+import { shortStockGet, stockSellPost } from "../../stores/stockSlice";
+import { stockTradingPost } from "../../stores/userSlice";
 
 const style = {
   position: "absolute",
@@ -22,22 +22,25 @@ const style = {
   p: 1,
 };
 
-
 function SellStockPage() {
-  const params = useParams()
-  const id = params.id
-  const myStock = 600;
-  const tradeData = useSelector(state=> {
-    return state.setStock.shortStockData
-  })
-  const user = useSelector(state=> {
-    return state.persistedReducer.setUser.user
-  })
-  
+  const params = useParams();
+  const id = params.id;
+  let myStock = 0;
+  const tradeData = useSelector((state) => {
+    return state.setStock.shortStockData;
+  });
+  const userData = useSelector((state) => {
+    return state.persistedReducer.setUser.user;
+  });
+  userData.haveList.forEach((element) => {
+    if (element.ticker === id) {
+      myStock = element.amount;
+    }
+  });
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(shortStockGet(id))
-  }, [])
+    dispatch(shortStockGet(id));
+  }, []);
   const [isMarketPrice, setMarketPrice] = useState(true);
   const [wantedPrice, setWantedPrice] = useState("");
   const [wantedMany, setWantedMany] = useState("");
@@ -47,7 +50,7 @@ function SellStockPage() {
   const [isTooLow, setIsTooLow] = useState(false);
   const [total, setTotal] = useState(0);
   const [showAskingPrice, setShowAskingPrice] = useState(false);
-  
+
   const navigate = useNavigate();
   function backTo() {
     navigate(-1);
@@ -264,14 +267,14 @@ function SellStockPage() {
         if (isMarketPrice) {
           return;
         }
-        if (tempPrice > (tradeData.price * 1.3)) {
+        if (tempPrice > tradeData.maximum) {
           // 상한가보다 클때
           setIsTooHigh(true);
           setTimeout(() => {
             setIsTooHigh(false);
           }, 1000);
           return;
-        } else if (tempPrice < (tradeData.price * 0.7)) {
+        } else if (tempPrice < tradeData.minimum) {
           // 하한가보다 낮을때
           setIsTooLow(true);
         }
@@ -280,7 +283,7 @@ function SellStockPage() {
         if (wantedPrice !== "") {
           const tmp = wantedPrice.slice(0, -1);
           const tmpNum = Number(tmp);
-          if (tmpNum < ((tradeData.price * 0.7))) {
+          if (tmpNum < tradeData.price * 0.7) {
             // 하한가보다 낮을때
             setIsTooLow(true);
           }
@@ -395,10 +398,50 @@ function SellStockPage() {
       );
     }
   }
+  function submitOrder() {
+    if (isMarketPrice && Boolean(wantedMany)) {
+      const data = {
+        config: {
+          headers: {
+            Authorization: `Bearer ${userData.token}`,
+          },
+        },
+        result: {
+          accountId: Number(userData.data.current),
+          amount: Number(wantedMany),
+          price: Number(tradeData.price),
+          stockId: Number(tradeData.id),
+        },
+      };
+      dispatch(stockSellPost(data))
+    } else if (!isMarketPrice && Boolean(wantedMany) && !isTooLow) {
+      const data = {
+        config: {
+          headers: {
+            Authorization: `Bearer ${userData.token}`,
+          },
+        },
+        result: {
+          accountId: String(userData.data.current),
+          amount: Number(wantedMany),
+          price: tradeData.price,
+          stockId: String(tradeData.id),
+          tr_type: "3",
+        },
+      };
+      dispatch(stockTradingPost(data))
+    }
+  }
   return (
     <div>
-      <img onClick={backTo} src={`${process.env.PUBLIC_URL}/grayBack.svg`} alt="" />
-      <h1>{tradeData.name}</h1>
+      <img
+        onClick={backTo}
+        src={`${process.env.PUBLIC_URL}/grayBack.svg`}
+        alt=""
+      />
+      <div>{tradeData.name}</div>
+      <div>{tradeData.price}</div>
+      <div>{tradeData.fluctuation_rate}</div>
       {isMarketPrice ? (
         <div>
           <img
@@ -463,6 +506,7 @@ function SellStockPage() {
           />
         </button>
       </div>
+      <div onClick={submitOrder}>팔래요</div>
       <AskingGraphModal />
     </div>
   );

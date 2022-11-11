@@ -33,9 +33,9 @@ async def update_and_insert_stock_list(update_time: str = None):
     category_dict = defaultdict(list)
     stocks = await Stock.all()
     async with aiohttp.ClientSession(headers=header) as session:
-        for r in range(1+len(stocks)//20):
+        for r in range(1 + len(stocks) // 20):
             start = time.time()
-            for stck in stocks[20*r:20*(r+1)]:
+            for stck in stocks[20 * r:20 * (r + 1)]:
                 async with session.get(candle_url, params=parameter_setter(stck.ticker, input_time)) as response:
                     data = await response.json()
                 latest = data['output2'][0]
@@ -62,7 +62,7 @@ async def update_and_insert_stock_list(update_time: str = None):
                 stck.trading_value = data['output1']['acml_tr_pbmn']
                 stck.volume = data['output1']['acml_vol']
             end_s = time.time()
-            time.sleep(min(abs(1.1-end_s+start), 1.02))
+            time.sleep(min(abs(1.1 - end_s + start), 1.02))
             end_t = time.time()
             print(f'{min(20 * (r + 1), len(stocks))}개 {end_t - start}s')
     if update_time is not None:

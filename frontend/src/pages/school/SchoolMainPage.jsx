@@ -7,6 +7,7 @@ import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
+import classes from "./SchoolMainPage.module.css";
 
 const style = {
   position: "absolute",
@@ -156,52 +157,54 @@ function SchoolMainPage() {
   }
 
   return (
-    <div>
-      <img src={`${process.env.PUBLIC_URL}/school/schoolmain.svg`} alt="" />
-      <div onClick={onClickHandler} style={{ border: "1px solid blue" }}>
-        학교 등록하고 참여하기 ▶
+    <div className={classes.schoolOutDiv}>
+      <div className={classes.schoolMainDiv} >
+        <img src={`${process.env.PUBLIC_URL}/school/schoolmain.svg`} alt="" />
+        <button onClick={onClickHandler} className={classes.schoolRegisterButton}>
+          학교 등록하고 참여하기 ▶
+        </button>
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={open}
+          onClose={handleClose}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={open}>
+            <Box sx={style}>
+              <div>학교 등록하기</div>
+              <input
+                type="text"
+                autoFocus
+                value={keyword || ""}
+                onChange={(e) => updateField("keyword", e.target.value)}
+                placeholder="학교이름을 입력해주세요."
+              />
+              <div
+                style={{
+                  overflow: "auto",
+                  width: "80%",
+                  height: "60%",
+                  border: "1px solid red",
+                }}
+              >
+                <SearchBar />
+              </div>
+              {!isGetId && <div>학교를 선택하세요!</div>}
+              <div
+                onClick={startClick}
+                style={{ width: "50%", backgroundColor: "gray" }}
+              >
+                시작하기
+              </div>
+            </Box>
+          </Fade>
+        </Modal>
       </div>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
-          <Box sx={style}>
-            <div>학교 등록하기</div>
-            <input
-              type="text"
-              autoFocus
-              value={keyword || ""}
-              onChange={(e) => updateField("keyword", e.target.value)}
-              placeholder="학교이름을 입력해주세요."
-            />
-            <div
-              style={{
-                overflow: "auto",
-                width: "80%",
-                height: "60%",
-                border: "1px solid red",
-              }}
-            >
-              <SearchBar />
-            </div>
-            {!isGetId && <div>학교를 선택하세요!</div>}
-            <div
-              onClick={startClick}
-              style={{ width: "50%", backgroundColor: "gray" }}
-            >
-              시작하기
-            </div>
-          </Box>
-        </Fade>
-      </Modal>
     </div>
   );
 }

@@ -13,6 +13,7 @@ function QuizResultPage() {
   const quizData = useSelector((state) => {
     return state.persistedReducer.setUser.quizData
   })
+  console.log(quizData.question)
   var examples = []
   if (quizData.examples) {
     examples = quizData.examples.split(':');
@@ -73,7 +74,7 @@ function QuizResultPage() {
             </div>
           )}
         </div>
-        {quizData.answer && (
+        {quizData && (
           <div className={classes.quizresbox}>
             <div style={{ fontSize: "13px",  color: "#929E9E", marginBottom: "20px" }}>{quizData.question}</div>
             <div className={classes.quizans}>{examples[quizData.answer]}</div>

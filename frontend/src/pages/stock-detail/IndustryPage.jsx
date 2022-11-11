@@ -147,7 +147,7 @@ function IndustryPage() {
       <div className={classes.weather}>{industryData.sentiment && <WeatherCards />}</div>
       <div className={classes.hrline}></div>
       <div className={classes.rowbox}>
-      <div className={classes.today}>이 업종 최신 키워드</div>
+      <div className={classes.today}>{industryData.name} 업종 최신 키워드</div>
         <img
           src={`${process.env.PUBLIC_URL}/stock-detail/keyword.svg`}
           alt=""
@@ -169,7 +169,7 @@ function IndustryPage() {
       </div>
       <div className={classes.hrline}></div>
       <div className={classes.rowbox}>
-        <div className={classes.today}>{industryData.name} 대표 종목</div>
+        <div className={classes.today}>{industryData.name} 업종 대표 종목</div>
         <img src={`${process.env.PUBLIC_URL}/stock-detail/cart.svg`} alt="" />
       </div>
         {industryData.represent && (

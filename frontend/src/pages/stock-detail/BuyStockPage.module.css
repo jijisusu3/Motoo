@@ -18,3 +18,164 @@
   0% {opacity: 0;}
   100% {opacity: 1;}
 }
+
+.chartChangeBtn{
+  background-color: #EAF0EF;
+  width: 32px;
+  height: 28px;
+  border-radius: 5px;
+}
+
+.radioUlClass label {
+  cursor: pointer;
+}
+.radioLiClass input:checked + label {
+  color: inherit;
+}
+.radioLiClass input:not(:checked) + label {
+  --bg-opacity: 0;
+  box-shadow: none;
+}
+
+.radioUlClass {
+  display:inline-flex;
+  padding:.25rem;
+  font-weight:600;
+  border-radius:15px;
+  --bg-opacity:1;background-color:#EAF0EF;background-color:rgba(234, 240, 239,var(--bg-opacity));
+  --text-opacity:1;color:#ffffff;color:rgba(255,255,255,var(--text-opacity));
+  margin-top:1rem;margin-bottom:1rem;
+
+  width: 300px;
+}
+
+.radioLiClass {
+  display:flex;
+}
+
+.radioClass {
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border-width:0;
+}
+
+.radioLabelClass {
+  width: 60px;
+  padding-top:.25rem;
+  padding-bottom:.25rem;
+  padding-left:.5rem;
+  padding-right:.5rem;
+  font-size:.875rem;
+  line-height:1.5rem;
+  --text-opacity:1;color:#718096;color:rgba(113,128,150,var(--text-opacity));
+  --bg-opacity:1;background-color:#276E6A;background-color:rgba(39, 110, 106,var(--bg-opacity));
+  border-radius:50px;
+  box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06);
+}
+.radioLabelClass:hover {
+  --text-opacity:1;color:#2d3748;color:rgba(45,55,72,var(--text-opacity))
+}
+
+.radiobox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  text-align: center;
+
+}
+
+.numberSection {
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  margin:0 auto; 
+  width: 80%;
+  height: 80%;
+  margin-top: 140px;
+
+}
+
+.numberButton {
+  width: 60px;
+  height: 80px;
+  background-color: #ffffff;
+  color:#718096;
+  border: 0px;
+  outline: 0px;
+  font-size: 36px;
+  margin-inline: 22px;
+  
+
+}
+
+#lastNumber{
+  color: white;
+  
+}
+
+.buyButtonDiv{
+  
+  
+  
+  margin:0 auto; 
+  text-align: center;
+  align-items: center;
+}
+.buyButton{
+  width:80%;
+  height: 45px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 19px;
+  background: #FFFFFF;
+  border: 1px solid #000000;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+
+
+.info{
+  display: flex;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  justify-content: center;
+  font-weight: 600;
+  text-align: center;
+}
+.pd{
+  position: absolute;
+  left: 5%;
+}
+
+.hogaButton{
+  position: absolute;
+  background: #EAF0EF;
+  border-radius: 15px;
+  left: 68.53%;
+  right: 7.73%;
+  top: 16.26%;
+  bottom: 79.43%;
+  border: 0;
+  outline: 0;
+}
+
+.realPriceRadio{
+ 
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 15px;
+  color: #4E5E5E;
+  margin-left: 10px;
+  margin-top: 15px;
+}

@@ -1,4 +1,4 @@
-import { useState , useEffect} from "react";
+import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 // import isBetween from "dayjs/plugin/isBetween";
 import classes from "./MyPage.module.css";
@@ -10,7 +10,6 @@ import { setShowNav } from "../../stores/navSlice";
 import { accountsListGet } from "../../stores/accountSlice";
 import { fontSize } from "@mui/system";
 import { nicknamePut } from "../../stores/userSlice";
-
 
 const style = {
   position: "absolute",
@@ -25,7 +24,6 @@ const style = {
   borderRadius: 5,
 };
 
-
 function MyPage() {
   const now = dayjs().format("YYYY-MM-DD");
   const standard = dayjs().add(-4, "week").format("YYYY-MM-DD");
@@ -33,15 +31,19 @@ function MyPage() {
   const [canAddNum, setCanAddNum] = useState(true);
   const [canAddDate, setCanAddDate] = useState(true);
   const [warningEffect, setWarningEffect] = useState(false);
-  const [canStartDay, setCanStartDay] = useState("")
-  
+  const [canStartDay, setCanStartDay] = useState("");
+
   const [haveShool, setHaveSchool] = useState(false);
   const userData = useSelector((state) => {
-    return state.persistedReducer.setUser.user
-  })
+    return state.persistedReducer.setUser.user;
+  });
   const userToken = useSelector((state) => {
     return state.persistedReducer.setUser.user.token;
   });
+  const walletList = useSelector((state) => {
+    return state.setAccount.accountsList;
+  });
+  console.log(walletList);
   const dispatch = useDispatch();
   useEffect(() => {
     const now = window.location.pathname;
@@ -52,15 +54,15 @@ function MyPage() {
       headers: {
         Authorization: `Bearer ${userToken}`,
       },
-    }
-    dispatch(accountsListGet(data))
-  }, [userToken])
+    };
+    dispatch(accountsListGet(data));
+  }, [userToken]);
   const [openCreateModal, setCreateModalOpen] = useState(false);
   const handleCreateModalOpen = () => {
     setCreateModalOpen(true);
   };
   const handleCreateModalClose = () => setCreateModalOpen(false);
-  
+
   const [assetInfo, setAssetInfo] = useState({
     assetName: "",
     openReason: "",
@@ -72,22 +74,21 @@ function MyPage() {
       [e.target.name]: e.target.value,
     });
   };
-  
-  const navigate = useNavigate()
-  const goToDetail = (e) => {
-    const isPk = e.target.id
-    if (Boolean(isPk)) {
-      navigate(`/wallet/detail/${isPk}`)
-    }
-  }
 
+  const navigate = useNavigate();
+  const goToDetail = (e) => {
+    const isPk = e.target.id;
+    if (Boolean(isPk)) {
+      navigate(`/wallet/detail/${isPk}`);
+    }
+  };
 
   function createSubmit() {
     if (!canAddDate) {
       setWarningEffect(true);
-      setTimeout(function(){
-        setWarningEffect(false)
-      }, 400)
+      setTimeout(function () {
+        setWarningEffect(false);
+      }, 400);
       return;
     }
     handleCreateModalClose(false);
@@ -105,7 +106,7 @@ function MyPage() {
 
   const [data, setData] = useState({
     all: {
-      all_asset: '602,520,021',
+      all_asset: 602520021,
       profit: -13,
     },
     assets: [
@@ -145,11 +146,13 @@ function MyPage() {
 
   function AllAssets() {
     function profitCheck() {
-      if (data.all.profit < 0) {
-        return "#4D97ED";
-      } else {
-        return "#DD4956";
-      }
+      try{
+        if (walletList.earningRaito < 0) {
+          return "#4D97ED";
+        } else {
+          return "#DD4956";
+        }
+      } catch{}
     }
     const profitColor = profitCheck();
     return (
@@ -157,22 +160,31 @@ function MyPage() {
         <div>
           <div>총 보유자산</div>
           <div className={classes.cntbox}>
-            <img src={`${process.env.PUBLIC_URL}/wallet/money.svg`} style={{ width: 24, height: 24 }} alt="" />
-            <div  className={classes.basebox}>
-              <div className={classes.count}>{data.all.all_asset}</div>
+            <img
+              src={`${process.env.PUBLIC_URL}/wallet/money.svg`}
+              style={{ width: 24, height: 24 }}
+              alt=""
+            />
+            <div className={classes.basebox}>
+              {walletList && (
+                <div className={classes.count}>
+                  {Number(walletList.asset).toLocaleString()}
+                </div>
+              )}
               <div>원</div>
             </div>
           </div>
         </div>
         <div>
-          <div style={{ marginLeft: '10px'}}>수익률</div>
-          <div className={classes.rev}
+          <div style={{ marginLeft: "10px" }}>수익률</div>
+          {walletList.earningRaito && <div
+            className={classes.rev}
             style={{
               color: profitColor,
             }}
           >
-            {data.all.profit}%
-          </div>
+            {walletList.earningRaito.toFixed(2)}%
+          </div>}
         </div>
       </div>
     );
@@ -183,7 +195,7 @@ function MyPage() {
   }
 
   function EditShow() {
-    const [nickname, setNickname] = useState(userData.data.nickname)
+    const [nickname, setNickname] = useState(userData.data.nickname);
     const handleInputChange = (event) => {
       setNickname(event.target.value);
       // console.log(nickname)
@@ -193,14 +205,14 @@ function MyPage() {
       const data = {
         config: {
           headers: {
-            Authorization: `Bearer ${userData.token}`
-          }
+            Authorization: `Bearer ${userData.token}`,
+          },
         },
         editname: {
-          nickname: nickname
-        }
-      }
-      dispatch(nicknamePut(data))
+          nickname: nickname,
+        },
+      };
+      dispatch(nicknamePut(data));
       setNowEdit(false);
     };
     if (nowEdit) {
@@ -209,11 +221,11 @@ function MyPage() {
           <img
             onClick={handleOnKeyPress}
             src={`${process.env.PUBLIC_URL}/wallet/mypageIcon.svg`}
-            style={{marginRight: "10px"}}
+            style={{ marginRight: "10px" }}
             alt=""
           />
           <input
-            style={{ height: "40px", padding: "10px", color: "#242424"}}
+            style={{ height: "40px", padding: "10px", color: "#242424" }}
             type="text"
             maxLength={8}
             className={classes.editname}
@@ -222,7 +234,12 @@ function MyPage() {
             onKeyPress={handleOnKeyPress}
           />
           <img
-            style={{marginRight: "5px", width:"32px", height: "32px", marginTop: "1px"}}
+            style={{
+              marginRight: "5px",
+              width: "32px",
+              height: "32px",
+              marginTop: "1px",
+            }}
             onClick={handleOnKeyPress}
             src={`${process.env.PUBLIC_URL}/wallet/editIcon.svg`}
             alt=""
@@ -235,19 +252,19 @@ function MyPage() {
         <img
           onClick={handleOnKeyPress}
           src={`${process.env.PUBLIC_URL}/wallet/mypageIcon.svg`}
-          style={{marginRight: "10px"}}
+          style={{ marginRight: "10px" }}
           alt=""
         />
         <div className={classes.accountname}>
-          <p style={{fontWeight: "700"}}>{nickname}</p>
+          <p style={{ fontWeight: "700" }}>{nickname}</p>
           <div className={classes.mini}>님의 지갑</div>
           <div>
             <img
               onClick={editOpen}
-              style={{marginLeft: "5px", width:"30px", height: "30px"}}
+              style={{ marginLeft: "5px", width: "30px", height: "30px" }}
               src={`${process.env.PUBLIC_URL}/wallet/mypageEdit.svg`}
               alt=""
-              />
+            />
           </div>
         </div>
       </div>
@@ -255,11 +272,10 @@ function MyPage() {
   }
 
   function WalletAssetCard(asset) {
+    console.log("???????");
     setCanAddNum(true);
-    // setAssetNameList([...assetNameList, asset.name])
-    // console.log(assetNameList)
-    var openDate = dayjs(asset.open);
-    const tmpId = asset.accountId
+    var openDate = dayjs(asset.open.slice(0, 10));
+    const tmpId = asset.accountId;
     const dateAvailable = openDate.isBetween(
       `${now}`,
       `${standard}`,
@@ -269,7 +285,7 @@ function MyPage() {
     if (dateAvailable) {
       setCanAddDate(false);
       const tempStandard = openDate.add(4, "week").format("YYYY-MM-DD");
-      setCanStartDay(tempStandard)
+      setCanStartDay(tempStandard);
     }
     if (asset.isSchool) {
       setHaveSchool(true);
@@ -285,7 +301,11 @@ function MyPage() {
       return (
         <div id={tmpId} onClick={goToDetail} className={classes.firstAssetCard}>
           {asset.isSchool && (
-            <img src={`${process.env.PUBLIC_URL}/wallet/school.svg`} alt="" style={{ marginRight: '10px'}}/>
+            <img
+              src={`${process.env.PUBLIC_URL}/wallet/school.svg`}
+              alt=""
+              style={{ marginRight: "10px" }}
+            />
           )}
           <div id={tmpId}>{asset.name}</div>
           <div className={classes.select}>
@@ -293,6 +313,7 @@ function MyPage() {
               now
             </div>
           </div>
+          <div>{walletList.pitches[asset.num].toLocaleString()}원</div>
         </div>
       );
     } else {
@@ -300,38 +321,42 @@ function MyPage() {
         <div id={tmpId} onClick={goToDetail} className={classes.otherAssetCard}>
           <div className={classes.rowbox}>
             {asset.isSchool && (
-              <img src={`${process.env.PUBLIC_URL}/wallet/school.svg`} alt="" style={{ marginRight: '10px'}}/>
+              <img
+                src={`${process.env.PUBLIC_URL}/wallet/school.svg`}
+                alt=""
+                style={{ marginRight: "10px" }}
+              />
             )}
             <div id={tmpId}>{asset.name}</div>
           </div>
+          <div>{walletList.pitches[asset.num].toLocaleString()}원</div>
           <img
             onClick={handleChangeModalOpen}
             src={`${process.env.PUBLIC_URL}/wallet/change.svg`}
             alt=""
-            style={{zIndex:3}}
+            style={{ zIndex: 3 }}
           />
         </div>
       );
     }
   }
   return (
-
     <div className={classes.mypageBG}>
       <div className={classes.mypageCtn}>
-      {userData && <EditShow />}
+        {userData && <EditShow />}
         <div className={classes.centerbox}>
           <AllAssets />
-          {data.assets.map((asset, index) => (
-            <WalletAssetCard
-              key={asset.accounts_pk}
-              name={asset.name}
-              accountId={asset.accounts_pk}
-              seed={asset.seed}
-              isSchool={asset.isSchool}
-              open={asset.open}
-              num={index}
-            />
-          ))}
+          {walletList.account &&
+            walletList.account.map((asset, index) => (
+              <WalletAssetCard
+                key={asset.accountId}
+                name={asset.name}
+                accountId={asset.accountId}
+                isSchool={asset.school}
+                open={asset.created_at}
+                num={index}
+              />
+            ))}
         </div>
         <Modal open={openCreateModal} onClose={handleCreateModalClose}>
           <Box className={classes.createbox} sx={style}>
@@ -339,36 +364,74 @@ function MyPage() {
             <div>
               <div className={classes.ipttag}>
                 계좌 이름{" "}
-                <input className={classes.ipt} type="text" name="assetName" onChange={onChangeInfo} />
+                <input
+                  className={classes.ipt}
+                  type="text"
+                  name="assetName"
+                  onChange={onChangeInfo}
+                />
               </div>
               <div className={classes.ipttag}>
                 개설 사유{" "}
-                <input className={classes.ipt} type="text" name="openReason" onChange={onChangeInfo} />
+                <input
+                  className={classes.ipt}
+                  type="text"
+                  name="openReason"
+                  onChange={onChangeInfo}
+                />
               </div>
-
             </div>
             {warningEffect ? (
               <div className={classes.vibration}>
-                <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} style={{marginRight: "15px"}} alt="" />
+                <img
+                  src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`}
+                  style={{ marginRight: "15px" }}
+                  alt=""
+                />
                 <div>
-                  
-                  <p>최대 계좌 개수는 학교대항전 외 <span style={{ fontWeight: "600", color: "#36938E"}}>3개 이하</span>이며</p>
+                  <p>
+                    최대 계좌 개수는 학교대항전 외{" "}
+                    <span style={{ fontWeight: "600", color: "#36938E" }}>
+                      3개 이하
+                    </span>
+                    이며
+                  </p>
                   <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
                 </div>
               </div>
-            ):(
+            ) : (
               <div className={classes.notice}>
-              <img src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`} style={{marginRight: "15px"}} alt="" />
-              <div>
-                <p>최대 계좌 개수는 학교대항전 외 <span style={{ fontWeight: "600", color: "#36938E"}}>3개 이하</span>이며</p>
-                <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
+                <img
+                  src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`}
+                  style={{ marginRight: "15px" }}
+                  alt=""
+                />
+                <div>
+                  <p>
+                    최대 계좌 개수는 학교대항전 외{" "}
+                    <span style={{ fontWeight: "600", color: "#36938E" }}>
+                      3개 이하
+                    </span>
+                    이며
+                  </p>
+                  <p>신규 계좌 개설은 20영업일(주말 제외)동안 제한됩니다.</p>
+                </div>
               </div>
+            )}
+            {!(canStartDay === "") && (
+              <p
+                style={{
+                  color: "#DD4956",
+                  fontSize: "12px",
+                  marginBottom: "10px",
+                }}
+              >
+                {canStartDay} 부터 계좌를 열 수 있어요
+              </p>
+            )}
+            <div className={classes.createbtn} onClick={createSubmit}>
+              개설
             </div>
-            )}
-            {!(canStartDay==="") && (
-              <p style={{color:'#DD4956', fontSize: '12px', marginBottom: '10px'}}>{canStartDay} 부터 계좌를 열 수 있어요</p>
-            )}
-            <div className={classes.createbtn} onClick={createSubmit}>개설</div>
           </Box>
         </Modal>
         <Modal open={openChangeModal} onClose={handleChangeModalClose}>

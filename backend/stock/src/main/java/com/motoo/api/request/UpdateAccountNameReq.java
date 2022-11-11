@@ -6,17 +6,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @ApiModel("UpdateAccountNameRequest")
 public class UpdateAccountNameReq {
 
-    @NotEmpty
+    @NotNull
     @ApiModelProperty(name = "계좌_id", example = "1")
     Long accountId;
 
-    @NotEmpty
+    @NotNull
     @ApiModelProperty(name = "계좌 이름", example = "김행의 계좌")
     String name;
 }

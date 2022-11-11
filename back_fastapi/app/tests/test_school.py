@@ -21,15 +21,15 @@ class TestSchoolHot:
             represent=[]
         )
         await Stock.bulk_create([
-           Stock(ticker='111111',
-                 name='TMPCORP',
-                 price=5400,
-                 close_price=6000,
-                 fluctuation_rate=-10,
-                 fluctuation_price=-600,
-                 volume=1000,
-                 m_capital=54000000,
-                 category_id=category.pk),
+            Stock(ticker='111111',
+                  name='TMPCORP',
+                  price=5400,
+                  close_price=6000,
+                  fluctuation_rate=-10,
+                  fluctuation_price=-600,
+                  volume=1000,
+                  m_capital=54000000,
+                  category_id=category.pk),
             Stock(ticker='000001',
                   name='TMPCORP2',
                   price=5400,
@@ -57,7 +57,7 @@ class TestSchoolHot:
             [
                 School(
                     schoolname=f"{k}학교",
-                    sigungu_id=k+1
+                    sigungu_id=k + 1
                 )
                 for k in range(2)
             ]
@@ -68,7 +68,7 @@ class TestSchoolHot:
                     email=f"test_user{k}@user.com",
                     nickname=f"user{k}",
                     current=1,
-                    school_id=k//4 if k > 3 else None
+                    school_id=k // 4 if k > 3 else None
                 )
                 for k in range(12)
             ]
