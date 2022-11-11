@@ -47,7 +47,7 @@ public class OrderExcution {
 
     //매일 9시-16시 사이에 2분간격으로 조회
 //    @Scheduled(cron = " * 0/2 9,16 * * * ")
-    @Scheduled(cron = " * * * * * * ")
+//    @Scheduled(cron = " * * * * * * ")
     public void timeSchedule() {
 
         //3판매예약,  4구매예약 인 거래계좌 리스트
