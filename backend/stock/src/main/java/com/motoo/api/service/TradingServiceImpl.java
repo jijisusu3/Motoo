@@ -118,10 +118,17 @@ public class TradingServiceImpl implements TradingService{
     public List<Trading> tradingListAccount(Long userId, Long accountId){
         return tradingRepositorySupport.findAllTradingsByUserIdAccountId(userId, accountId);
     }
+    @Override
+    public List<Trading> tradingList3Or4(Long userId, Long accountId){
+        return tradingRepositorySupport.find3Or4ByUserIdAccountId(userId, accountId);
+    }
+
 
     @Override
     public void writeAvg(Trading trading, int tr_avg){
         return;
     }
+
+
 
 }

@@ -109,6 +109,18 @@ public class TradingRepositorySupport {
         else {return tradings;}
     }
 
+    public List<Trading> find3Or4ByUserIdAccountId(Long userId, Long accountId){
+        List<Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
+                        .where(qTrading.tr_type.eq(3).or(qTrading.tr_type.eq(4)))
+                        .where(qTrading.account.accountId.eq(accountId))
+                        .where(qTrading.user.userId.eq(userId))
+                        .fetch();
+        if (tradings ==null) {return null;}
+        else {return tradings;}
+    }
+
+
     public List<Trading> find5ByUserIdAccountId(Long userId, Long accountId){
         List <Trading> tradings =
                 jpaQueryFactory.select(qTrading).from(qTrading)
