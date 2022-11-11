@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { stockDetailGet } from "../../stores/stockSlice";
 import { likeStockPost } from "../../stores/userSlice";
+import { Scatter } from "react-chartjs-2";
 
 function StockDetailPage() {
   const params = useParams();
@@ -316,38 +317,36 @@ function StockDetailPage() {
       },
     },
   });
-
+  const my_values = {
+    name: "Extreme min",
+    data: [
+      { x: new Date(2019, 4, 1), y: 30000, z: "최저가" },
+      { x: new Date(2019, 8, 1), y: 80000, z: "최고가" },
+    ],
+  };
   const [lineGraphData, setLineGraphData] = useState({
     series: [
       {
-        name: "Maximum",
+        name: "Extreme min",
         type: "scatter",
         data: [
-          { x: new Date(2019, 3, 1), y: 100, z: "최저가" },
-          { x: new Date(2019, 8, 1), y: 300, z: "최고가" },
+          { x: new Date(2019, 4, 1), y: 30000, z: "최저가" },
+          { x: new Date(2019, 8, 1), y: 150000, z: "최고가" },
         ],
       },
-      // {
-      //   name: "Minimum",
-      //   type: "scatter",
-      //   data: [
-      //     { x: new Date(2019, 3, 1), y: 100, z: "최저가" },
-      //     // { x: new Date(2019, 8, 1), y: 300, z: "최고가" },
-      //   ],
-      // },
       {
         name: "Line",
         data: [
-          { x: new Date("01-01-2019"), y: 200 },
-          { x: "02-05-2019", y: 250 },
-          { x: new Date(2019, 2, 1), y: 150 },
-          { x: new Date(2019, 3, 1), y: 100 },
-          { x: new Date(2019, 4, 1), y: 300 },
-          { x: new Date(2019, 5, 1), y: 220 },
-          { x: new Date(2019, 6, 1), y: 200 },
-          { x: new Date(2019, 7, 1), y: 250 },
-          { x: new Date(2019, 8, 1), y: 300 },
-          { x: new Date(2019, 9, 1), y: null },
+          { x: new Date("01-01-2019"), y: 60000 },
+          { x: "02-05-2019", y: 70000 },
+          { x: new Date(2019, 2, 1), y: 60000 },
+          { x: new Date(2019, 3, 1), y: 50000 },
+          { x: new Date(2019, 4, 1), y: 30000 },
+          { x: new Date(2019, 5, 1), y: 40000 },
+          { x: new Date(2019, 6, 1), y: 50000 },
+          { x: new Date(2019, 7, 1), y: 60000 },
+          { x: new Date(2019, 8, 1), y: 80000 },
+          { x: new Date(2019, 9, 1), y: 70000 },
           { x: new Date(2019, 10, 1), y: null },
           { x: new Date(2019, 11, 1), y: null },
         ],
@@ -359,7 +358,7 @@ function StockDetailPage() {
         animations: {
           enabled: false,
         },
-        height: 350,
+        // height: 9,
         type: "line",
         locales: [ko],
         defaultLocale: "ko",
@@ -387,29 +386,36 @@ function StockDetailPage() {
           },
         },
         selection: {
-          enabled: false,
+          enabled: true,
         },
       },
       grid: {
-        show: false,
+        show: true,
       },
       dataLabels: {
         enabled: true,
         textAnchor: "middle",
         formatter: function (val, opt) {
-          if (opt.seriesIndex <= 0) {
-            return opt.w.globals.initialSeries[opt.seriesIndex].data[opt.dataPointIndex].z + " " + val;
-          }
+          console.log(val);
+          console.log(opt);
+          console.log(my_values);
+          // opts = opt.w.globals;
+          // if (opt.w.globals) {
+          //   console.log(opt);
+          //   return opt.w.globals.initialSeries[opt.seriesIndex].data[0].z + " " + (val - opt.seriesIndex * 0.45 * val + 0.25 * val);
+          // }
         },
         style: {
-          colors: ["#fff"],
+          colors: ["#DD4956"],
         },
         background: {
-          enabled: true,
+          enabled: false,
           foreColor: "#DD4956",
+          opacity: 1,
           padding: 1,
         },
-        offsetX: 0,
+        offsetX: 1,
+        offsetY: 1,
       },
       stroke: {
         width: [3, 3, 3],
