@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { stockDetailGet } from "../../stores/stockSlice";
 import { likeStockPost } from "../../stores/userSlice";
-import { Scatter } from "react-chartjs-2";
 
 function StockDetailPage() {
   const params = useParams();
@@ -276,15 +275,9 @@ function StockDetailPage() {
       },
       xaxis: {
         type: "datetime",
-        tooltip: {
-          enabled: true,
-        },
       },
       yaxis: {
         show: false,
-        tooltip: {
-          enabled: false,
-        },
       },
       tooltip: {
         custom: function ({ seriesIndex, dataPointIndex, w }) {
@@ -317,21 +310,18 @@ function StockDetailPage() {
       },
     },
   });
-  const my_values = {
-    name: "Extreme min",
-    data: [
-      { x: new Date(2019, 4, 1), y: 30000, z: "최저가" },
-      { x: new Date(2019, 8, 1), y: 80000, z: "최고가" },
-    ],
-  };
+  const extremeValues = [
+    { x: new Date(2019, 4, 1), y: 31003, z: "최저가" },
+    { x: new Date(2019, 8, 1), y: 79987, z: "최고가" },
+  ];
   const [lineGraphData, setLineGraphData] = useState({
     series: [
       {
-        name: "Extreme min",
+        name: "ExtremeValue",
         type: "scatter",
         data: [
-          { x: new Date(2019, 4, 1), y: 30000, z: "최저가" },
-          { x: new Date(2019, 8, 1), y: 150000, z: "최고가" },
+          { x: extremeValues[0].x, y: (extremeValues[0].y * 0.92).toFixed(), z: extremeValues[0].z },
+          { x: extremeValues[1].x, y: (extremeValues[1].y * 1.05).toFixed(), z: extremeValues[1].z },
         ],
       },
       {
@@ -341,11 +331,11 @@ function StockDetailPage() {
           { x: "02-05-2019", y: 70000 },
           { x: new Date(2019, 2, 1), y: 60000 },
           { x: new Date(2019, 3, 1), y: 50000 },
-          { x: new Date(2019, 4, 1), y: 30000 },
+          { x: new Date(2019, 4, 1), y: 31003 },
           { x: new Date(2019, 5, 1), y: 40000 },
           { x: new Date(2019, 6, 1), y: 50000 },
           { x: new Date(2019, 7, 1), y: 60000 },
-          { x: new Date(2019, 8, 1), y: 80000 },
+          { x: new Date(2019, 8, 1), y: 79987 },
           { x: new Date(2019, 9, 1), y: 70000 },
           { x: new Date(2019, 10, 1), y: null },
           { x: new Date(2019, 11, 1), y: null },
@@ -353,17 +343,17 @@ function StockDetailPage() {
       },
     ],
     options: {
-      colors: ["#DC6031", "#DD4956"],
+      colors: ["#DD4956", "#DD4956"],
       chart: {
         animations: {
           enabled: false,
         },
-        // height: 9,
+        height: 350,
         type: "line",
-        locales: [ko],
+        locales: [ko, ko],
         defaultLocale: "ko",
         toolbar: {
-          show: true,
+          show: false,
           tools: {
             download: false,
             selection: false,
@@ -386,129 +376,91 @@ function StockDetailPage() {
           },
         },
         selection: {
-          enabled: true,
+          enabled: false,
         },
       },
       grid: {
-        show: true,
+        show: false,
+      },
+      markers: {
+        size: [1, 0],
+        hover: {
+          size: 0,
+        },
       },
       dataLabels: {
         enabled: true,
-        textAnchor: "middle",
+        textAnchor: "start",
         formatter: function (val, opt) {
-          console.log(val);
-          console.log(opt);
-          console.log(my_values);
-          // opts = opt.w.globals;
-          // if (opt.w.globals) {
-          //   console.log(opt);
-          //   return opt.w.globals.initialSeries[opt.seriesIndex].data[0].z + " " + (val - opt.seriesIndex * 0.45 * val + 0.25 * val);
-          // }
-        },
-        style: {
-          colors: ["#DD4956"],
+          const thisData = opt.w.globals.initialSeries[opt.seriesIndex].data[opt.dataPointIndex];
+          if (opt.seriesIndex == 0) {
+            return thisData.z + " " + extremeValues[opt.dataPointIndex].y.toLocaleString() + "원";
+          }
         },
         background: {
           enabled: false,
-          foreColor: "#DD4956",
-          opacity: 1,
-          padding: 1,
         },
-        offsetX: 1,
-        offsetY: 1,
       },
       stroke: {
-        width: [3, 3, 3],
-        curve: "straight",
-        colors: ["#DC6031", "#449431"],
+        width: 3,
+        curve: "smooth",
+        colors: "#DD4956",
+        lineCap: "butt",
       },
       legend: {
         show: false,
       },
-      markers: {
-        size: [5, 0],
-        hover: {
-          sizeOffset: 2,
-        },
-        colors: ["#DC6031", "#fff"],
-      },
       xaxis: {
+        show: true,
+        seriesName: "Line",
         type: "datetime",
-        tooltip: {
-          enabled: false,
+        labels: {
+          show: true,
+          datetimeFormatter: {
+            year: "yy년",
+            month: "yy년 MM월",
+            day: "MM월 dd일",
+            hour: "HH:mm",
+          },
         },
       },
       yaxis: [
         {
           show: false,
-          seriesName: "Income",
-          axisTicks: {
-            show: true,
-          },
-          // axisBorder: {
-          //   show: true,
-          //   color: '#008FFB'
-          // },
+          seriesName: "ExtremeValue",
+          min: extremeValues[0].y * 0.85,
+          max: extremeValues[1].y * 1.1,
           labels: {
             style: {
               colors: "#DC6031",
             },
           },
-          title: {
-            text: "Income",
-            style: {
-              color: "#DC6031",
-            },
-          },
-          tooltip: {
-            enabled: true,
-          },
         },
         {
           show: false,
-          seriesName: "Orders",
-          opposite: true,
-          axisTicks: {
-            show: true,
-          },
-          // axisBorder: {
-          //   show: true,
-          //   color: '#00E396'
-          // },
-          labels: {
-            style: {
-              colors: "#449431",
-            },
-          },
-          title: {
-            text: "Orders",
-            style: {
-              color: "#449431",
-            },
-          },
+          seriesName: "Line",
+          min: extremeValues[0].y * 0.85,
+          max: extremeValues[1].y * 1.1,
         },
       ],
+      // responsive: [{ breakpoint: 1000 }],
       tooltip: {
-        y: [
-          {
-            title: {
-              formatter: function (val) {
-                return val + " (mins)";
-              },
-            },
+        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+          if (seriesIndex == 1) {
+            return series[seriesIndex][dataPointIndex].toLocaleString() + "원";
+          }
+          return extremeValues[dataPointIndex].y.toLocaleString() + "원";
+        },
+        x: {
+          enabled: true,
+          formatter: function (value, timeStamp) {
+            const date = new Date(value);
+            return date.toLocaleString();
           },
-          {
-            title: {
-              formatter: function (val) {
-                return val + " 흐흐";
-              },
-            },
-          },
-        ],
+        },
       },
     },
   });
-
   function StockDetailGraph() {
     if (showCandleGraph) {
       return <ReactApexChart options={candleGraphData.options} series={candleGraphData.series} type="candlestick" height={350} width={310} />;
