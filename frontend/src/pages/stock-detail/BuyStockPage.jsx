@@ -22,6 +22,14 @@ const style = {
   boxShadow: 24,
   p: 1,
 };
+
+// if (ration > 0) {
+//   <span color="red">+ ration</span>
+//    } else { 
+//   <span color="blue">- ration </span>
+//    }
+
+
 function BuyStockPage() {
   const params = useParams();
   const id = params.id;
@@ -42,7 +50,8 @@ function BuyStockPage() {
     return state.persistedReducer.setUser.user;
   });
   const mySeed = userData.data.seed
-
+  
+  
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(shortStockGet(id));
@@ -249,7 +258,7 @@ function BuyStockPage() {
       );
     }
   }
-
+  
   const numberClick = (event) => {
     setIsTooLow(false);
     const tempPrice = Number(wantedPrice + event.target.value);
@@ -458,44 +467,62 @@ function BuyStockPage() {
     }
   }
 
-
-
-
+  const ration = tradeData.fluctuation_rate
+      
   return (
     <div>
       <div>
+      <div className={classes.info}>
         <img
-          onClick={backTo}
+          className={classes.pd}
           src={`${process.env.PUBLIC_URL}/grayBack.svg`}
           alt=""
+          onClick={backTo}
           />
+          <div>
         <div>{tradeData.name}</div>
           <div>
-            <div>{tradeData.price}</div>
-            <div>({tradeData.fluctuation_rate})</div>
+              <span>{tradeData.price}</span>
+              &nbsp;
+              {ration >= 0
+                ? <span style={{ color: 'red' }}>(+{ ration}%)</span>
+                : <span style={{ color: 'blue' }}>({ ration}%)</span>
+              }
+             
+              {/* <span>({tradeData.fluctuation_rate})</span> */}
+            </div>
         </div>
       </div>
-      <div></div>
+      <hr />
+      </div>
+      <div class={classes.realPriceRadio}>
       {isMarketPrice ? (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/stock-detail/checkedBox.svg`}
-            alt=""
-            onClick={checkBoxHandler}
-          />
-          <p>현재가로 주문</p>
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/stock-detail/checkedBox.svg`}
+              alt=""
+              onClick={checkBoxHandler}
+            />
+            &nbsp;
+            &nbsp;
+            <span>현재가로 주문</span>
+          </div>
+         ) : (
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/stock-detail/box.svg`}
+              alt=""
+              onClick={checkBoxHandler}
+            />
+            &nbsp;
+            &nbsp;
+            <span>현재가로 주문</span>
+          </div>
+          )}
         </div>
-      ) : (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/stock-detail/box.svg`}
-            alt=""
-            onClick={checkBoxHandler}
-          />
-          <p>현재가로 주문</p>
-        </div>
-      )}
-      <button onClick={handleOpen}>호가보기</button>
+
+      
+      <button class={classes.hogaButton } onClick={handleOpen}>호가보기</button>
       <PriceInput />
       <ManyInput />
       {isTooHigh && <p>그렇게 비싸겐 못사요</p>}
