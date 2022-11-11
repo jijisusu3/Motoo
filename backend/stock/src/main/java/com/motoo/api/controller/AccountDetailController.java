@@ -41,6 +41,7 @@ public class AccountDetailController {
 //        Long accountId = accountDetailReq.getAccountId();
         AccountDetailDTO detailBuild = AccountDetailDTO.builder()
                 .AccountName(accountService.getAccount(accountId, userId).getName())
+                .School(accountService.getAccount(accountId, userId).isSchool())
                 .PortfolioList(portfolioService.getPortfolioListOrderByRatio(accountId, userId))
                 .accountAsset(accountAssetService.getAccountAsset(accountId, userId))
                 .tradingProfitLoss(tradingProfitLossService.getTradingProfitLoss(userId, accountId))
