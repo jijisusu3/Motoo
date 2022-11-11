@@ -7,8 +7,9 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import ReactApexChart from "react-apexcharts";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { shortStockGet } from "../../stores/stockSlice";
+import { stockTradingPost, stockBuyPost } from "../../stores/userSlice";
 
 const style = {
   position: "absolute",
@@ -22,13 +23,11 @@ const style = {
   p: 1,
 };
 function BuyStockPage() {
-  const mySeed = 100000
-  const params = useParams()
-  const id = params.id
-  const tradeData = useSelector(state => {
-    return state.setStock.shortStockData
-  })
-  console.log(tradeData)
+  const params = useParams();
+  const id = params.id;
+  const tradeData = useSelector((state) => {
+    return state.setStock.shortStockData;
+  });
   const [isMarketPrice, setMarketPrice] = useState(true);
   const [wantedPrice, setWantedPrice] = useState("");
   const [wantedMany, setWantedMany] = useState("");
@@ -38,15 +37,16 @@ function BuyStockPage() {
   const [isTooLow, setIsTooLow] = useState(false);
   const [total, setTotal] = useState(0);
   const [showAskingPrice, setShowAskingPrice] = useState(false);
-
+  
   const userData = useSelector((state) => {
-    return state.persistedReducer.setUser.user
-  })
+    return state.persistedReducer.setUser.user;
+  });
+  const mySeed = userData.data.seed
 
-  const dispatch = useDispatch()
-  useEffect(() =>{
-    dispatch(shortStockGet(id))
-  }, [])
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(shortStockGet(id));
+  }, []);
   const navigate = useNavigate();
   function backTo() {
     navigate(-1);
@@ -265,14 +265,14 @@ function BuyStockPage() {
         if (isMarketPrice) {
           return;
         }
-        if (tempPrice > (tradeData.price * 1.3)) {
+        if (tempPrice > tradeData.price * 1.3) {
           // 상한가보다 클때
           setIsTooHigh(true);
           setTimeout(() => {
             setIsTooHigh(false);
           }, 1000);
           return;
-        } else if (tempPrice < (tradeData.price * 0.7)) {
+        } else if (tempPrice < tradeData.price * 0.7) {
           // 하한가보다 낮을때
           setIsTooLow(true);
         }
@@ -353,11 +353,11 @@ function BuyStockPage() {
     console.log("개수누름");
     setWritePrice(false);
   };
-  
+
   function PriceInput() {
     // 시장가로 즉시판매하겠다고 했을 때,
     if (isMarketPrice) {
-      return
+      return;
     } else {
       // 직접입력하겠다고 할 때,
       if (wantedPrice === "") {
@@ -420,30 +420,50 @@ function BuyStockPage() {
       );
     }
   }
-  console.log(userData)
+  console.log(userData);
   function submitOrder() {
-    const data = {
-      config: {
-        headers: {
-          Authorization: `Bearer ${userData.token}`
-        }
-      },
-      result: {
-        accountId: userData.data.current,
-        amount: wantedMany,
-        price: tradeData.price,
-        tr_type: 1,
-      }
+    // 현재가로 주문, 개수입력
+    if (isMarketPrice && Boolean(wantedMany)) {
+      const data = {
+        config: {
+          headers: {
+            Authorization: `Bearer ${userData.token}`,
+          },
+        },
+        result: {
+          accountId: Number(userData.data.current),
+          amount: Number(wantedMany),
+          price: Number(tradeData.price),
+          stockId: Number(tradeData.id),
+        },
+      };
+      dispatch(stockBuyPost(data))
+    } else if (!isMarketPrice && Boolean(wantedMany) && !isTooLow) {
+      const data = {
+        config: {
+          headers: {
+            Authorization: `Bearer ${userData.token}`,
+          },
+        },
+        result: {
+          accountId: String(userData.data.current),
+          amount: Number(wantedMany),
+          price: tradeData.price,
+          stockId: String(tradeData.id),
+          tr_type: "2",
+        },
+      };
+      console.log(data);
+      dispatch(stockTradingPost(data))
     }
-    // 현재가로 주문
-    if (isMarketPrice) {
-      // dispatch(())
-    }
-    console.log('히')
   }
   return (
     <div>
-      <img onClick={backTo} src={`${process.env.PUBLIC_URL}/grayBack.svg`} alt="" />
+      <img
+        onClick={backTo}
+        src={`${process.env.PUBLIC_URL}/grayBack.svg`}
+        alt=""
+      />
       <div>{tradeData.name}</div>
       <div>{tradeData.price}</div>
       <div>{tradeData.fluctuation_rate}</div>
@@ -511,7 +531,7 @@ function BuyStockPage() {
           />
         </button>
       </div>
-      <button onClick={submitOrder}>팔래요</button>
+      <div onClick={submitOrder}>살래요</div>
       <AskingGraphModal />
     </div>
   );

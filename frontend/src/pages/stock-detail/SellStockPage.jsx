@@ -30,7 +30,7 @@ function SellStockPage() {
   const tradeData = useSelector(state=> {
     return state.setStock.shortStockData
   })
-  const user = useSelector(state=> {
+  const userData = useSelector(state=> {
     return state.persistedReducer.setUser.user
   })
   

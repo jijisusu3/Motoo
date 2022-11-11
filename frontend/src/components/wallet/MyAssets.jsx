@@ -4,20 +4,28 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as React from "react";
 import MyAssetList from "./MyAssetList";
+import { useSelector } from "react-redux";
 
 
-
-
-function MyAssets(props) {
-  
-
+function MyAssets() {
+  const accountAssetData = useSelector((state) =>{
+    return state.setAccount.accountDetail.accountAsset
+  })
   const [expanded, setExpanded] = React.useState(false);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
+  useEffect(() => {
+    try{
+      setAssetProfit(accountAssetData.totalValuePLRatio.toFixed(1))
+    } catch {
+      return
+    }
+  }, [accountAssetData])
   const [assetProfit, setAssetProfit] = useState(13);
 
   function assetProfitCheck() {
@@ -27,17 +35,7 @@ function MyAssets(props) {
       return '#DD4956'
     }
   }
-  const [yesterdayProfit, setYesterdayProfit] = useState(-30);
-
-  function yesterdayProfitCheck() {
-    if (yesterdayProfit < 0) {
-      return '#4D97ED'
-    } else {
-      return '#DD4956'
-    }
-  }
-  const assetProfitColor = assetProfitCheck()
-  const yesterdayProfitColor = yesterdayProfitCheck()
+  const assetProfitColor = assetProfitCheck(assetProfit)
   return (
     <div>
       <div className={classes.assetCard}>
@@ -47,7 +45,7 @@ function MyAssets(props) {
             <div className={classes.cntbox}>
               <img src={`${process.env.PUBLIC_URL}/wallet/money.svg`} style={{ marginRight: "8px", width: 20, height: 20 }} alt="" />
               <div  className={classes.basebox}>
-                <div className={classes.count}>405,219,228</div>
+                {accountAssetData && <div className={classes.count}>{accountAssetData.asset.toLocaleString()}</div>}
                 <div>원</div>
               </div>
             </div>
@@ -70,17 +68,14 @@ function MyAssets(props) {
               <div>현재 씨앗</div>
               <img src={`${process.env.PUBLIC_URL}/wallet/seeds.svg`} style={{ marginLeft: '3px', width: 12, height: 12 }} alt="" />
             </div>
-            <div className={classes.detail}>140,204,201 원</div>
+            {accountAssetData && <div className={classes.detail}>{accountAssetData.asset.toLocaleString()} 원</div>}
           </div>
           <div className={classes.rowbox}>
             <div className={classes.rowbox}>
-              <div>전일 손익</div>
+              <div>사용 가능</div>
               <img src={`${process.env.PUBLIC_URL}/wallet/vege.svg`} style={{ marginLeft: '3px', width: 12, height: 12 }} alt="" />
             </div>
-            <div className={classes.detail}>- 200,434,000 원</div>
-            <div className={classes.persent} style={{ width:33, height:17, borderRadius:5, border:`1px solid ${yesterdayProfitColor}` }}>
-              <div style={{color:yesterdayProfitColor, fontSize:10, fontWeight:700 }}>-30%</div>
-            </div>
+            {accountAssetData && <div className={classes.detail}>{accountAssetData.cash.toLocaleString()}원</div>}
           </div>
         </div>
       </div>
