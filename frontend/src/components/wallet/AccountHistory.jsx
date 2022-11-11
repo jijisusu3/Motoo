@@ -98,19 +98,18 @@ function AccountHistory() {
                 "[]"
               )
             ) {
-              // console.log(postBody)
-              // console.log(j)
               newList[count][i].push(j);
-              // console.log('--------------------')
             }
           }
         }
         count += 1;
       }
       setTimeList(newList);
+      setExample(newList[0]["all"]);
     };
     function dateRefresh() {
       setTimeList(data);
+      setExample(data[0]["all"]);
       setStartDate();
       setEndDate();
     }
@@ -183,8 +182,8 @@ function AccountHistory() {
   }
   // 드롭다운 value기준 정렬
   const [example, setExample] = useState(timeList[0]["all"]);
-  const [value, setValue] = useState("1");
   function RealizedList() {
+    const [value, setValue] = useState("1");
     const [data, setData] = useState(timeList);
     function setDropdownData(value) {
       if (value === "1") {
@@ -199,6 +198,7 @@ function AccountHistory() {
         setExample(data[4]["stock"]);
       }
     }
+
     const handleValueChange = (event) => {
       setValue(event.target.value);
       setDropdownData(event.target.value);
@@ -206,7 +206,7 @@ function AccountHistory() {
 
     function MyRealizedCard(stock) {
       function profitCheck() {
-        if (stock.profit > 0) {
+        if (stock.differ === "구매") {
           return "- ";
         } else {
           return "+ ";
@@ -348,3 +348,4 @@ function AccountHistory() {
 }
 
 export default AccountHistory;
+//코드가 너무 길음 ㅠ
