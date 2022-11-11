@@ -177,14 +177,14 @@ function MyPage() {
         </div>
         <div>
           <div style={{ marginLeft: "10px" }}>수익률</div>
-          {walletList.earningRaito && <div
+          {/* {walletList.earningRaito && <div
             className={classes.rev}
             style={{
               color: profitColor,
             }}
           >
             {walletList.earningRaito.toFixed(2)}%
-          </div>}
+          </div>} */}
         </div>
       </div>
     );
@@ -300,18 +300,20 @@ function MyPage() {
     if (asset.num === 0) {
       return (
         <div id={tmpId} onClick={goToDetail} className={classes.firstAssetCard}>
-          {asset.isSchool && (
-            <img
-              src={`${process.env.PUBLIC_URL}/wallet/school.svg`}
-              alt=""
-              style={{ marginRight: "10px" }}
-            />
-          )}
+          <div className={classes.rowbox}>
+            {asset.isSchool && (
+              <img
+                src={`${process.env.PUBLIC_URL}/wallet/school.svg`}
+                alt=""
+                style={{ marginRight: "10px" }}
+              />
+            )}
           <div id={tmpId}>{asset.name}</div>
           <div className={classes.select}>
             <div style={{ color: "white", fontSize: 12, fontWeight: 600 }}>
               now
             </div>
+          </div>
           </div>
           <div>{walletList.pitches[asset.num].toLocaleString()}원</div>
         </div>
@@ -329,13 +331,15 @@ function MyPage() {
             )}
             <div id={tmpId}>{asset.name}</div>
           </div>
-          <div>{walletList.pitches[asset.num].toLocaleString()}원</div>
-          <img
-            onClick={handleChangeModalOpen}
-            src={`${process.env.PUBLIC_URL}/wallet/change.svg`}
-            alt=""
-            style={{ zIndex: 3 }}
-          />
+          <div className={classes.rowbox}>
+            <div>{walletList.pitches[asset.num].toLocaleString()}원</div>
+            <img
+              onClick={handleChangeModalOpen}
+              src={`${process.env.PUBLIC_URL}/wallet/change.svg`}
+              alt=""
+              style={{ zIndex: 3, marginLeft: 8 }}
+            />
+          </div>
         </div>
       );
     }

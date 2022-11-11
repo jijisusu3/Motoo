@@ -68,7 +68,7 @@ function MyAssets() {
               <div>현재 씨앗</div>
               <img src={`${process.env.PUBLIC_URL}/wallet/seeds.svg`} style={{ marginLeft: '3px', width: 12, height: 12 }} alt="" />
             </div>
-            {accountAssetData && <div className={classes.detail}>{accountAssetData.asset.toLocaleString()} 원</div>}
+            {accountAssetData && <div className={classes.detail}>{accountAssetData.asset.toLocaleString()}원</div>}
           </div>
           <div className={classes.rowbox}>
             <div className={classes.rowbox}>
