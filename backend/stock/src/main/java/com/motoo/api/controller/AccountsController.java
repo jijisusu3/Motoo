@@ -252,7 +252,7 @@ public class AccountsController {
         //주식 소유여부 분기
         if (stockList.contains(accountStockAddPostReq.getStockId())) {
             //판매할 금액이 현재 주식가격보다 높을경우 판매불가
-            if (accountStockAddPostReq.getAmount() * accountStockAddPostReq.getPrice() >= accountStockAddPostReq.getAmount() * stock.getPrice()) {
+            if (accountStockAddPostReq.getAmount() * accountStockAddPostReq.getPrice() > accountStockAddPostReq.getAmount() * stock.getPrice()) {
                 tradingService.writeOrder(userId,accountId,accountStockAddPostReq.getStockId(),3 ,postPrice,postAmount, null);
                 return ResponseEntity.status(401).body(SellOrBuyRes.of(stockList, seed, 401, "판매가격이 시장가보다 높습니다. 판매예약을 보냅니다."));
             } else {

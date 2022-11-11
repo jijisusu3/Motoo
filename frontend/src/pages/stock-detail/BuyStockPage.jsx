@@ -450,23 +450,32 @@ function BuyStockPage() {
           amount: Number(wantedMany),
           price: tradeData.price,
           stockId: String(tradeData.id),
-          tr_type: "2",
+          tr_type: "4",
         },
       };
       console.log(data);
       dispatch(stockTradingPost(data))
     }
   }
+
+
+
+
   return (
     <div>
-      <img
-        onClick={backTo}
-        src={`${process.env.PUBLIC_URL}/grayBack.svg`}
-        alt=""
-      />
-      <div>{tradeData.name}</div>
-      <div>{tradeData.price}</div>
-      <div>{tradeData.fluctuation_rate}</div>
+      <div>
+        <img
+          onClick={backTo}
+          src={`${process.env.PUBLIC_URL}/grayBack.svg`}
+          alt=""
+          />
+        <div>{tradeData.name}</div>
+          <div>
+            <div>{tradeData.price}</div>
+            <div>({tradeData.fluctuation_rate})</div>
+        </div>
+      </div>
+      <div></div>
       {isMarketPrice ? (
         <div>
           <img
@@ -492,48 +501,72 @@ function BuyStockPage() {
       {isTooHigh && <p>그렇게 비싸겐 못사요</p>}
       {isTooLow && <p>그렇게 싸겐 못사요</p>}
       {!isAvailable && <p>넌 그만큼 살 돈이 없어요</p>}
-      <div class="numberSection">
-        <button value={1} class="number" onClick={numberClick}>
-          1
-        </button>
-        <button value={2} class="number" onClick={numberClick}>
-          2
-        </button>
-        <button value={3} class="number" onClick={numberClick}>
-          3
-        </button>
-        <button value={4} class="number" onClick={numberClick}>
+      <div class={classes.numberSection}>
+        <div>
+          <button value={1} class={classes.numberButton} onClick={numberClick}>
+           1
+         </button>
+          <button value={2} class={classes.numberButton} onClick={numberClick}>
+           2
+          </button>
+          <button value={3} class={classes.numberButton} onClick={numberClick}>
+           3
+          </button>
+        </div>
+
+        <div>
+         <button value={4} class={classes.numberButton} onClick={numberClick}>
           4
-        </button>
-        <button value={5} class="number" onClick={numberClick}>
+         </button>
+         <button value={5} class={classes.numberButton} onClick={numberClick}>
           5
-        </button>
-        <button value={6} class="number" onClick={numberClick}>
+          </button>
+         <button value={6} class={classes.numberButton} onClick={numberClick}>
           6
-        </button>
-        <button value={7} class="number" onClick={numberClick}>
+          </button>
+        </div>
+
+        <div>
+        <button value={7} class={classes.numberButton} onClick={numberClick}>
           7
         </button>
-        <button value={8} class="number" onClick={numberClick}>
+        <button value={8} class={classes.numberButton} onClick={numberClick}>
           8
         </button>
-        <button value={9} class="number" onClick={numberClick}>
+        <button value={9} class={classes.numberButton} onClick={numberClick}>
           9
-        </button>
-        <button value={0} class="number" onClick={numberClick}>
+          </button>
+        </div>
+      
+        <div>
+          <button class={classes.numberButton} id={classes.lastNumber}>
+            ``
+          </button>
+        <button value={0} class={classes.numberButton} onClick={numberClick}>
           0
         </button>
-        <button class="number" onClick={numberClick}>
+        <button class={classes.numberButton} onClick={numberClick}>
           <img
             value="삭제"
             src={`${process.env.PUBLIC_URL}/stock-detail/eraser.svg`}
             alt=""
           />
-        </button>
+          </button>
+        </div>
+
+
       </div>
-      <div onClick={submitOrder}>살래요</div>
-      <AskingGraphModal />
+
+    
+      <div class={classes.buyButtonDiv} onClick={submitOrder}>
+      <button class={classes.buyButton}>
+         살래요
+        <AskingGraphModal />
+        </button>
+        </div>
+       
     </div>
+
   );
 }
 
