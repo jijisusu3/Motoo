@@ -6,6 +6,7 @@ from app.schemes.categories import GetCategoryDetailResponse
 
 router = APIRouter(prefix="/category")
 
+
 @router.get("/{category_id}", description="업종 상세 조회", response_model=GetCategoryDetailResponse)
 async def get_category_detail(category_id: int, response: Response):
     try:

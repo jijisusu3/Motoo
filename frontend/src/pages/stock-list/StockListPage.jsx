@@ -341,13 +341,21 @@ function StockListPage() {
   function LimitOrder() {
     return (
       <div onClick={GoToOrderListPage} className={classes.limitOrderCard}>
-        <img
-          src={`${process.env.PUBLIC_URL}/stock-list/waitingListIcon.svg`}
-          alt=""
-        />
-        <div>대기중인 주식 목록</div>
-        <div>{orderMany}건</div>
-        <img src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
+        <div className={classes.nametag}>
+          <img
+            className={classes.imgs}
+            src={`${process.env.PUBLIC_URL}/stock-list/waitingListIcon.svg`}
+            alt=""
+          />
+          <div>대기중인 주식 목록</div>
+        </div>
+        <div className={classes.nametag}>
+          <img
+            className={classes.arrow}
+            src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`}
+            alt=""
+          />
+        </div>
       </div>
     );
   }
@@ -364,7 +372,6 @@ function StockListPage() {
             <div>대기중인 주식 목록</div>
           </div>
           <div className={classes.nametag}>
-            <div>{orderMany}건</div>
             <img
               className={classes.arrow}
               src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`}

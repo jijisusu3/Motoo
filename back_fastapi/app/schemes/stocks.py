@@ -47,10 +47,18 @@ class CandleDataList(BaseModel):
     y: List[Union[str, int]]
 
 
-class ShortStockData(Volume, Price):
+class MinAndMax(BaseModel):
+    minimum: Union[int, None] = Field(description="하한가")
+    maximum: Union[int, None] = Field(description="상한가")
+
+
+class BaseStockData(Price):
     id: Union[int, None]
     name: Union[str, None] = Field(description="종목이름")
     fluctuation_rate: Union[float, None] = Field(description="등락률")
+
+
+class ShortStockData(BaseStockData, Volume):
     fluctuation_price: Union[int, None] = Field(description="등락가")
     trading_value: Union[int, None] = Field(default=None, description="거래대금")
     daily: Union[List[CandleData], None] = Field(default=None, description="당일 10분봉")
@@ -58,19 +66,15 @@ class ShortStockData(Volume, Price):
     daily_max: Union[CandleData, None] = None
 
 
-class EntireStockData(ShortStockData, OpenPrice, ClosePrice):
+class EntireStockData(ShortStockData, OpenPrice, ClosePrice, MinAndMax):
     ticker: Union[str, None]
     category_id: Union[int, None] = Field(description="업종 id")
     category_name: Union[str, None] = Field(default=None, description="업종 이름")
-    minimum: Union[int, None] = Field(description="하한가")
-    maximum: Union[int, None] = Field(description="상한가")
     per: Union[float, None] = Field(default=None, description="주가수익률")
     eps: Union[float, None] = Field(default=None, description="주당순이익")
     m_capital: Union[int, None] = Field(description="시가총액")
-    # issued: Union[int, None] = Field(description="발행주식수")
     keyword: Union[List[str], None] = Field(description="종목키워드")
     sentiment: Union[List[float], None] = Field(description="종목감정분석")
-    # capital: Union[int, None] = Field(default=None, description="자본금")
     weekly: Union[List[CandleData], None] = Field(default=None, description="주간 60분봉")
     weekly_min: Union[CandleData, None] = None
     weekly_max: Union[CandleData, None] = None
@@ -87,6 +91,10 @@ class GetStockDetailResponse(EntireStockData, CommonResponse):
 
 
 class GetShortStockResponse(ShortStockData, CommonResponse):
+    pass
+
+
+class GetTradingStockInfoResponse(CommonResponse, BaseStockData, MinAndMax):
     pass
 
 

@@ -53,23 +53,23 @@ class TestStockDetail:
         stock = await Stock.get(ticker="999999")
         for k in range(37):
             await candle_map[stock.category_id].create(
-                time=f'{(9+k//6)//10}{(9+k//6)%10}{k%6}000',
-                price=1000+10*k,
-                volume=100+k,
+                time=f'{(9 + k // 6) // 10}{(9 + k // 6) % 10}{k % 6}000',
+                price=1000 + 10 * k,
+                volume=100 + k,
                 open_price=1000,
                 min_price=990,
-                max_price=1000+10*k,
+                max_price=1000 + 10 * k,
                 stock_id=stock.pk,
                 date=datetime.date.today()
             )
         for k in range(8):
             await day_map[stock.category_id].create(
-                date=datetime.date.today()+datetime.timedelta(k-7),
-                volume=100+k,
-                open_price=1000+10*k,
-                close_price=1100+10*k,
-                min_price=980+10*k,
-                max_price=1100+10*k,
+                date=datetime.date.today() + datetime.timedelta(k - 7),
+                volume=100 + k,
+                open_price=1000 + 10 * k,
+                close_price=1100 + 10 * k,
+                min_price=980 + 10 * k,
+                max_price=1100 + 10 * k,
                 stock_id=stock.pk,
             )
         res = await client.get("/stocks/detail/999999")
@@ -81,8 +81,8 @@ class TestStockDetail:
         assert res_data["daily"][-1]["time"] == "150000"
         assert res_data["daily"][5]["date"] == today.strftime("%Y-%m-%d")
         assert res_data["weekly"][-1]["time"] == "150000"
-        assert len(res_data['weekly']) == (5+37)//6
-        assert res_data["monthly"][0]["date"] == (today-datetime.timedelta(7)).strftime("%Y-%m-%d")
+        assert len(res_data['weekly']) == (5 + 37) // 6
+        assert res_data["monthly"][0]["date"] == (today - datetime.timedelta(7)).strftime("%Y-%m-%d")
         assert res_data["monthly"][7]["date"] == today.strftime("%Y-%m-%d")
         assert len(res_data["yearly"]) == 2
 
@@ -109,44 +109,27 @@ class TestShortStock:
         assert res.status_code == 404
         assert res_data["message"] == "failed"
 
-    # @pytest.mark.anyio
-    # async def test_stock_exist(self, client: AsyncClient):
-    #     assert True
-    #
-    # @pytest.mark.anyio
-    # async def test_stock_exist_but_some_null(self, client: AsyncClient):
-    #     assert True
 
-# @pytest.mark.anyio
-# async def test_signup_success(client: AsyncClient):
-#     # When: username, password로 회원가입을 성공했을 때
-#     res = await client.post("/example/signup", json={"username": 'username', "password": 'password'})
-#
-#     # Then: 성공을 응답
-#     res_data = res.json()
-#     assert res_data["message"] == "success"
-#
-#
-# @pytest.mark.anyio
-# async def test_signup_failed(client: AsyncClient):
-#     #Given
-#     user, created = await User.get_or_create(username="username2", password="password")
-#     print(user, created)
-#     # When: username, password 등 이미 있는 아이디로 회원가입을 시도했을 때
-#     res = await client.post("/example/signup", json={"username": 'username2', "password": 'password'})
-#     print(res)
-#     # Then: 실패 응답
-#     res_data = res.json()
-#     print(res_data)
-#     assert res_data["detail"] == "실패"
+@pytest.mark.anyio
+class TestTradingStockInfo:
 
-#
-# @pytest.mark.asyncio
-# async def test_login_should_be_failed(async_client):
-#     await User.create(username="username", password="password")
-#     # When: 유저로 로그인을 했을 때
-#     res = await async_client.post("/examples/login", json={"username": 'username', "password": 'password'})
-#
-#     # Then: 실패를 응답하고
-#     res_data = res.json()
-#     assert res_data["message"] == "success"
+    @pytest.mark.anyio
+    async def test_stock_bad_request(self, client: AsyncClient):
+        assert True
+
+    @pytest.mark.anyio
+    async def test_stock_does_not_exist(self, client: AsyncClient):
+        res = await client.get("/stocks/trade/999988")
+        res_data = res.json()
+        assert res.status_code == 404
+        assert res_data["message"] == "failed"
+
+    @pytest.mark.anyio
+    async def test_stock_does_not_exist(self, client: AsyncClient):
+        res = await client.get("/stocks/trade/999999")
+        res_data = res.json()
+        assert res.status_code == 200
+        assert res_data["message"] == "success"
+        assert res_data["minimum"] == 1
+        assert res_data["maximum"] == 10
+        assert res_data["fluctuation_rate"] == -10
