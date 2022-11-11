@@ -22,11 +22,11 @@ public class School {
 
     private String schoolname;
 
-    private Integer rank;
+    private Integer currentRank;
 
     private Float average;
 
-    private String today;
+    private String studRanks;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="sigungu_id")

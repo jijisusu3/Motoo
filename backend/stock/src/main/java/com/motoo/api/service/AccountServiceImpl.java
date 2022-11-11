@@ -74,6 +74,12 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
+    public Account getSchoolAccount(Long userId) {
+        return accountRepositorySupport.findAccountBySchoolAndUserId(userId);
+
+    }
+
+    @Override
     @Transactional
     public void updateAccount(Account account, String name) {
 
@@ -95,6 +101,8 @@ public class AccountServiceImpl implements AccountService{
         return accountStockRepositorySupport.findAllAccountStockByUserIdAccountId(accountId, userId);
     }
 
+
+
     @Override
     public List<AccountStock> getAccountStockByAccountId(Long accountId) {
         return null;
@@ -103,7 +111,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public List<AccountStock> getAccountStockByUserId(Long userId) {
-        return null;
+        return accountStockRepositorySupport.findAllByUserId(userId);
     }
 
 

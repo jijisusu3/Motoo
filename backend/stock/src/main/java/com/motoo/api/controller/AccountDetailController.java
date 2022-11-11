@@ -35,9 +35,9 @@ public class AccountDetailController {
     @GetMapping
     @ApiOperation(value = "계좌 상세조회", notes = "(token) 계좌를 계좌 상세조회한다.")
     @ApiResponses({@ApiResponse(code = 200, message = "계좌 상세조회 성공", response = BaseResponseBody.class), @ApiResponse(code = 401, message = "계좌 계좌 상세조회 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
-    public AccountDetailDTO accountDetail(Authentication authentication, @RequestBody AccountDetailReq accountDetailReq) {
+    public AccountDetailDTO accountDetail(Authentication authentication, Long accountId) {
         Long userId = userService.getUserIdByToken(authentication);
-        Long accountId = accountDetailReq.getAccountId();
+//        Long accountId = accountDetailReq.getAccountId();
         AccountDetailDTO detailBuild = AccountDetailDTO.builder()
                 .PortfolioList(portfolioService.getPortfolioListOrderByRatio(accountId, userId))
                 .accountAsset(accountAssetService.getAccountAsset(accountId, userId))

@@ -44,6 +44,17 @@ public class AccountStockRepositorySupport {
 
     }
 
+    public List<AccountStock> findAllByUserId(Long userId){
+        List<AccountStock> accountStocks = jpaQueryFactory.
+                select(qAccountStock)
+                .from(qAccountStock)
+                .where(qAccountStock.account.user.userId.eq(userId))
+                .fetch();
+        if (accountStocks == null) return null;
+        return accountStocks;
+
+    }
+
 
     public List<AccountStock> findAllAccountStockByUserIdAccountId(Long accountId, Long userId){
         List<AccountStock> accountStocks = jpaQueryFactory.
@@ -81,4 +92,6 @@ public class AccountStockRepositorySupport {
         if (getAccountStockId==null) {return null;}
         else {return getAccountStockId;}
     }
+
+
 }

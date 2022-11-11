@@ -19,6 +19,8 @@ public interface AccountService {
 
     Account getAccount(Long accountId,Long userId );
 
+    Account getSchoolAccount(Long userId);
+
 
     void updateAccount(Account account, String name);
 
@@ -32,11 +34,7 @@ public interface AccountService {
     //메인함수인지 로직
     void updateMainAccount(Account account, boolean main);
 
-//    List<Stock> getStockList(Long userId, Long accountId);
-    //accounts Stock 관련
 
-
-//    AccountStock getAccountStockByAccountId(Long accountId);
 
 
 
@@ -46,6 +44,7 @@ public interface AccountService {
     List<AccountStock> getAccountStockByUserId(Long userId);
 
     List<AccountStock> getAccountStockByUserIdAccountId(Long accountId, Long userId);
+
 
 
     List<AccountStock> getAccountStockByAccountId(Long accountId);
