@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./RealizedPL.module.css";
 // import RealizedList from "./RealizedList";
 import classes from "./RealizedPL.module.css";
@@ -12,122 +12,30 @@ import isBetween from "dayjs/plugin/isBetween";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { useSelector } from "react-redux";
 datejs.extend(isBetween);
 
 function RealizedPL() {
+  const realizedData = useSelector((state) =>{
+    return state.setAccount.accountDetail.tradingProfitLoss
+  })
   const [data, setData] = useState([
     {
-      priceHigh: [
-        {
-          name: "삼성전자",
-          dateTime: "2022-09-26",
-          code: 300020,
-          profit: 111600,
-          percent: 29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
-        },
-        {
-          name: "SK하이닉스",
-          dateTime: "2021-09-26",
-          profit: -111600,
-          code: 671021,
-          percent: -29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
-        },
-        {
-          name: "LG디스플레이",
-          dateTime: "2022-10-23",
-          profit: 111600,
-          code: 582901,
-          percent: 29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
-        },
-      ],
+      priceHigh: []
     },
     {
-      profitHigh: [
-        {
-          name: "삼성전자",
-          dateTime: "2022-09-26",
-          code: 300020,
-          profit: 111600,
-          percent: 29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
-        },
-        {
-          name: "ggggg",
-          dateTime: "2021-09-26",
-          profit: -111600,
-          code: 671021,
-          percent: -29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
-        },
-        {
-          name: "LG디스플레이",
-          dateTime: "2022-10-23",
-          profit: 111600,
-          code: 582901,
-          percent: 29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
-        },
-      ],
-    },
-    {
-      profitLow: [
-        {
-          name: "삼성전자",
-          dateTime: "2022-09-26",
-          code: 300020,
-          profit: 111600,
-          percent: 29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
-        },
-        {
-          name: "SK하이닉스",
-          dateTime: "2021-09-26",
-          profit: -111600,
-          code: 671021,
-          percent: -29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
-        },
-        {
-          name: "ggggg",
-          dateTime: "2022-10-23",
-          profit: 111600,
-          code: 582901,
-          percent: 29,
-          mean: 63200,
-          now: 88000,
-          many: 45,
-          all: 3960000,
-        },
-      ],
-    },
+      profitHigh: []
+    }
   ]);
+  useEffect(() => {
+    try{
+      setExample(realizedData.stockOrderByTotalValue)
+      data[0]["priceHigh"] = realizedData.stockOrderByTotalValue
+      data[1]["profitHigh"] = realizedData.stockOrderByValuePLRatio
+    } catch (err) {
+      return
+    }
+  }, [realizedData])
   const [timeList, setTimeList] = useState(data);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -153,15 +61,13 @@ function RealizedPL() {
         },
         {
           profitHigh: [],
-        },
-        {
-          profitLow: [],
-        },
+        }
       ];
-      const categoryList = ["priceHigh", "profitHigh", "profitLow"];
+      const categoryList = ["priceHigh", "profitHigh"];
       var count = 0;
       for (var i of categoryList) {
         for (var j of data[count][i]) {
+          // 여기서 j["dateTime"]에 해당하는 주식 날짜 한번 slice(0,10) 해서 넣어야할듯
           var stockDate = datejs(j["dateTime"], "YYYY-MM-DD");
           if (
             stockDate.isBetween(
@@ -240,18 +146,16 @@ function RealizedPL() {
     );
   }
   // 드롭다운 value기준 정렬
+  const [value, setValue] = useState('1');
+  const [ example, setExample ] = useState(timeList[0]['priceHigh'])
   function RealizedList() {
-    const [value, setValue] = useState('1');
     const [ data, setData ] = useState(timeList)
-    const [ example, setExample ] = useState(timeList[0]['priceHigh'])
-  
+    
     function setDropdownData(value) {
       if (value === '1') {
         setExample(data[0]['priceHigh']);
-      } else if (value === '2') {
-        setExample(data[1]['profitHigh']);
       } else {
-        setExample(data[2]['profitLow'])
+        setExample(data[1]['profitHigh']);
       }
     }
     const handleValueChange = (event) => {
@@ -339,22 +243,21 @@ function RealizedPL() {
             ".MuiOutlinedInput-notchedOutline": { border: 0 },
           }}
         >
-          <MenuItem value={'1'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">보유가격순</Typography></MenuItem>
+          <MenuItem value={'1'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">손익 높은순</Typography></MenuItem>
           <MenuItem value={'2'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">수익률높은순</Typography></MenuItem>
-          <MenuItem value={'3'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">수익률낮은순</Typography></MenuItem>
         </Select>
       </FormControl>
       <div className={classes.listbox}>
-        {example.map((stock) => (
+        {example && example.map((stock) => (
           <MyRealizedCard
-            key={stock.code}
-            name={stock.name}
-            profit={stock.profit}
-            percent={stock.percent}
-            mean={stock.mean}
-            now={stock.now}
-            many={stock.many}
-            all={stock.all}
+            key={stock.ticker}
+            name={stock.stockName}
+            profit={stock.valuePL}
+            percent={stock.valuePLRatio}
+            mean={stock.avgPrice}
+            now={stock.price}
+            many={stock.amount}
+            all={stock.totalValue}
           />
         ))}
       </div>

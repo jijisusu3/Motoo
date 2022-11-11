@@ -1,9 +1,10 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-import React from "react";
+import React, { useEffect } from "react";
 
 import Chart from "chart.js/auto";
 import * as helpers from "chart.js/helpers";
+import { useSelector } from "react-redux";
 // import React, { useState } from "react";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -15,7 +16,6 @@ function ChartProvider({children}) {
   }, []);
   return children;
 }
-
 export const createChartdata = (labelList, dataList) => {
   return {
     labels: labelList,
@@ -61,8 +61,23 @@ const createOptions = {
 };
 
 export function Portfolio() {
-  const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const datas = [12, 19, 3, 5, 2, 3, 2];
+  const portfolioData = useSelector((state) =>{
+    return state.setAccount.accountDetail.portfolioList
+  })
+  const labels = [];
+  const datas = [];
+  
+  useEffect(() => {
+    try {
+      portfolioData.forEach(element => {
+        console.log(element["ratio"].toFixed(1))
+        labels.append(element["itemName"])
+        console.log(labels)
+      })
+    } catch {
+      return
+    }
+  }, [portfolioData])
   const data = createChartdata(labels, datas);
   return (
     <div style={{ width: "45%" }}>
