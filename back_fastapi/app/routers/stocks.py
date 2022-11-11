@@ -8,7 +8,8 @@ from app.models.accounts import Trading, Account
 from app.models.stocks import Stock
 from app.models.users import User
 from app.routers.authentication import get_current_user
-from app.schemes.stocks import GetStockDetailResponse, GetShortStockResponse, BidAskResponse, SchoolHotStockResponse
+from app.schemes.stocks import GetStockDetailResponse, GetShortStockResponse, BidAskResponse, SchoolHotStockResponse, \
+    GetTradingStockInfoResponse
 
 router = APIRouter(prefix="/stocks")
 
@@ -75,6 +76,16 @@ async def get_stock_short(ticker: str, response: Response):
                                  daily=daily,
                                  daily_min=min(daily, key=lambda x: x.min_price),
                                  daily_max=max(daily, key=lambda x: x.max_price))
+
+
+@router.get("/trade/{ticker}", description="거래 중 주식 간단 조회", response_model=GetTradingStockInfoResponse)
+async def get_trading_stock_info(ticker: str, response: Response):
+    try:
+        stock = await Stock.get(ticker=ticker)
+    except tortoise.exceptions.DoesNotExist:
+        response.status_code = 404
+        return GetStockDetailResponse(message="failed")
+    return GetTradingStockInfoResponse(**dict(stock))
 
 
 @router.get("/bidask/{ticker}", description="매수매도호가 조회", response_model=BidAskResponse)

@@ -109,44 +109,27 @@ class TestShortStock:
         assert res.status_code == 404
         assert res_data["message"] == "failed"
 
-    # @pytest.mark.anyio
-    # async def test_stock_exist(self, client: AsyncClient):
-    #     assert True
-    #
-    # @pytest.mark.anyio
-    # async def test_stock_exist_but_some_null(self, client: AsyncClient):
-    #     assert True
 
-# @pytest.mark.anyio
-# async def test_signup_success(client: AsyncClient):
-#     # When: username, password로 회원가입을 성공했을 때
-#     res = await client.post("/example/signup", json={"username": 'username', "password": 'password'})
-#
-#     # Then: 성공을 응답
-#     res_data = res.json()
-#     assert res_data["message"] == "success"
-#
-#
-# @pytest.mark.anyio
-# async def test_signup_failed(client: AsyncClient):
-#     #Given
-#     user, created = await User.get_or_create(username="username2", password="password")
-#     print(user, created)
-#     # When: username, password 등 이미 있는 아이디로 회원가입을 시도했을 때
-#     res = await client.post("/example/signup", json={"username": 'username2', "password": 'password'})
-#     print(res)
-#     # Then: 실패 응답
-#     res_data = res.json()
-#     print(res_data)
-#     assert res_data["detail"] == "실패"
+@pytest.mark.anyio
+class TestTradingStockInfo:
 
-#
-# @pytest.mark.asyncio
-# async def test_login_should_be_failed(async_client):
-#     await User.create(username="username", password="password")
-#     # When: 유저로 로그인을 했을 때
-#     res = await async_client.post("/examples/login", json={"username": 'username', "password": 'password'})
-#
-#     # Then: 실패를 응답하고
-#     res_data = res.json()
-#     assert res_data["message"] == "success"
+    @pytest.mark.anyio
+    async def test_stock_bad_request(self, client: AsyncClient):
+        assert True
+
+    @pytest.mark.anyio
+    async def test_stock_does_not_exist(self, client: AsyncClient):
+        res = await client.get("/stocks/trade/999988")
+        res_data = res.json()
+        assert res.status_code == 404
+        assert res_data["message"] == "failed"
+
+    @pytest.mark.anyio
+    async def test_stock_does_not_exist(self, client: AsyncClient):
+        res = await client.get("/stocks/trade/999999")
+        res_data = res.json()
+        assert res.status_code == 200
+        assert res_data["message"] == "success"
+        assert res_data["minimum"] == 1
+        assert res_data["maximum"] == 10
+        assert res_data["fluctuation_rate"] == -10
