@@ -38,6 +38,9 @@ public interface UserService {
 
     void updateSchool(Long id, Long schoolId);
 
+    void updateAverage(Long id, Float Average);
+
+    void updateCurrentRank(Long id, Integer rankinschool);
 
     List<String> getFavoriteStockCode(Optional<User> user);
 

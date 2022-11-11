@@ -35,4 +35,15 @@ public class School {
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "school",orphanRemoval = true)
     private List<User> users = new ArrayList<>();
+
+    public void updateAverageAndStud(Float average, String studRanks){
+        this.average = average;
+        this.studRanks = studRanks;
+    }
+
+    public void updateCurrentRank(Integer currentRank){
+        this.currentRank = currentRank;
+    }
+
+
 }
