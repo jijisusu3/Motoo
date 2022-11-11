@@ -103,8 +103,19 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public void updateAverage(Long id, Float average) {
+        User user  = getByUserId(id).orElseGet(() -> new User());
+        user.updateAverage(average);
+        userRepository.save(user);
+    }
 
-
+    @Override
+    public void updateCurrentRank(Long id, Integer rankinschool){
+        User user  = getByUserId(id).orElseGet(() -> new User());
+        user.updateCurrentRank(rankinschool);
+        userRepository.save(user);
+    }
     @Override
     public List<String> getFavoriteStockCode(Optional<User> user) {
         List<FavoriteStock> favoriteStocks = user.get().getFavoriteStocks();

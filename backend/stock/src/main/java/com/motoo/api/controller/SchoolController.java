@@ -55,4 +55,10 @@ public class SchoolController {
         Long id = userService.getUserIdByToken(authentication);
         return ResponseEntity.ok(schoolService.getSchoolPage(id));
     }
+
+    @GetMapping("/api2/test")
+    public ResponseEntity<?> ReadTest() {
+        schoolService.UpdateRanking();
+        return null;
+    }
 }
