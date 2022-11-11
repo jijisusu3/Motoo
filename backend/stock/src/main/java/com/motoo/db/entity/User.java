@@ -52,6 +52,8 @@ public class User {
 
     private Integer currentRank;
 
+    private Float average;
+
     @JsonIgnore
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Trading> tradings  = new ArrayList<>();
@@ -81,6 +83,16 @@ public class User {
     }
 
     public void updateSchool(School school) { this.school = school; }
+
+    public void updateAverage(Float average) {
+        if (average.isNaN()) {
+            average = null;
+        }
+        this.average = average;}
+
+    public void updateCurrentRank(Integer currentRank){
+        this.currentRank = currentRank;
+    }
 
 
 }
