@@ -28,9 +28,11 @@ public class StockListRes extends BaseResponseBody {
     @ApiModelProperty(name = "해당 계좌 주식 리스트")
     List<AccountStockInfo> stockInfo;
 
+
     public static StockListRes of(Account account, List<AccountStockInfo> stockInfo, Integer statusCode, String message){
         StockListRes res = new StockListRes();
         res.setSeed(account.getSeed());
+
         res.setStockInfo(stockInfo);
         res.setStatusCode(statusCode);
         res.setMessage(message);
