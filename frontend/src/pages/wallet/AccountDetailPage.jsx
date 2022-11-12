@@ -76,6 +76,9 @@ function AccountDetailPage() {
   const accountName = useSelector((state) => {
     return state.setAccount.accountDetail.accountName;
   });
+  const isSchool = useSelector((state) => {
+    return state.setAccount.accountDetail.school;
+  });
   const [value, setValue] = useState(0);
   const [nowEdit, setNowEdit] = useState(false);
   const [openDeleteModal, setDeleteModalOpen] = useState(false);
@@ -197,7 +200,18 @@ function AccountDetailPage() {
         </div>
       );
     }
-    return <div className={classes.accountname}>{editName}</div>;
+    return (
+      <div className={classes.accountname}>
+        {editName}
+        {isSchool && 
+          <img
+            src={`${process.env.PUBLIC_URL}/wallet/school.svg`}
+            alt=""
+            style={{ marginLeft: "10px" }}
+          />
+        }
+      </div>
+    );
   }
 
   // 삭제했을 때, 남은 자기계좌 있는지 확인후에, 이 함수 안에서 DELETE 요청 들어가야함.
@@ -252,13 +266,15 @@ function AccountDetailPage() {
           alignItems="center"
         >
           <EditShow />
-          <div onClick={settingOpen}>
-            <img
-              className={classes.dot}
-              src={`${process.env.PUBLIC_URL}/wallet/settingIcon.svg`}
-              alt=""
-            />
-          </div>
+          {!isSchool && (
+            <div onClick={settingOpen}>
+              <img
+                className={classes.dot}
+                src={`${process.env.PUBLIC_URL}/wallet/settingIcon.svg`}
+                alt=""
+              />
+            </div>
+          )}
         </Grid>
         <div className={classes.hrline}></div>
         <SettingShow />

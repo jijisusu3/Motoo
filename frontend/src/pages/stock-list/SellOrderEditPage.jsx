@@ -3,9 +3,10 @@ import { useLocation } from "react-router-dom";
 import classes from "./BuyOrderEditPage.module.css";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
 import { setShowNav } from "../../stores/navSlice";
+import { shortStockGet, limitOrderPut, limitOrderDelete } from "../../stores/stockSlice";
 
 const style = {
   position: "absolute",
@@ -21,13 +22,23 @@ const style = {
 };
 
 function SellOrderEditPage() {
-  const location = useLocation();
-  const orderData = location.state?.data;
-  const mySeed = 10000000;
-  const myStock = 600;
-  const [nowPrice, setNowPrice] = useState(100000);
-  const [wantedPrice, setWantedPrice] = useState(String(orderData.price));
-  const [wantedMany, setWantedMany] = useState(String(orderData.many));
+  const params = useParams();
+  const dataList = params.id.split(":");
+  const tradeId = Number(dataList[3])
+  let myStock = 0;
+  const tradeData = useSelector((state) => {
+    return state.setStock.shortStockData;
+  });
+  const userData = useSelector((state) => {
+    return state.persistedReducer.setUser.user;
+  });
+  userData.haveList.forEach((element) => {
+    if (element.ticker === dataList[0]) {
+      myStock = element.amount;
+    }
+  });
+  const [wantedPrice, setWantedPrice] = useState(dataList[1]);
+  const [wantedMany, setWantedMany] = useState(dataList[2]);
   const [writePrice, setWritePrice] = useState(false);
   const [isHave, setIsHave] = useState(true);
   const [isTooHigh, setIsTooHigh] = useState(false);
@@ -45,6 +56,9 @@ function SellOrderEditPage() {
     const now = window.location.pathname
     dispatch(setShowNav(now))
   })
+  useEffect(() => {
+    dispatch(shortStockGet(dataList[0]));
+  }, []);
 
   const handleDeleteModalOpen = () => {
     setDeleteModalOpen(true);
@@ -53,8 +67,19 @@ function SellOrderEditPage() {
 
   // 삭제확인 눌렀을 때,
   function deleteSubmit() {
+    const data = {
+      config: {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      },
+      tradeId: tradeId
+    };
+    dispatch(limitOrderDelete(data));
     handleDeleteModalClose(false);
-    backToLimitOrderList()
+    setTimeout(() => {
+      backToLimitOrderList();
+    }, 70);
   }
 
   const numberClick = (event) => {
@@ -69,14 +94,14 @@ function SellOrderEditPage() {
             return;
           }
         }
-        if (tempPrice > nowPrice * 1.3) {
+        if (tempPrice > tradeData.maximum) {
           // 상한가보다 클때
           setIsTooHigh(true);
           setTimeout(() => {
             setIsTooHigh(false);
           }, 1000);
           return;
-        } else if (tempPrice < nowPrice * 0.7) {
+        } else if (tempPrice < tradeData.minimum) {
           // 하한가보다 낮을때
           setIsTooLow(true);
         }
@@ -85,7 +110,7 @@ function SellOrderEditPage() {
         if (wantedPrice !== "") {
           const tmp = wantedPrice.slice(0, -1);
           const tmpNum = Number(tmp);
-          if (tmpNum < nowPrice * 0.7) {
+          if (tmpNum < tradeData.minimum) {
             // 하한가보다 낮을때
             setIsTooLow(true);
           }
@@ -187,10 +212,31 @@ function SellOrderEditPage() {
       );
     }
   }
+  function submitEdit() {
+    // 현재가로 주문, 개수입력
+    if (Boolean(wantedMany) && !isTooLow) {
+      const data = {
+        config: {
+          headers: {
+            Authorization: `Bearer ${userData.token}`,
+          },
+        },
+        result: {
+          tr_amount: String(wantedMany),
+          tr_price: String(tradeData.price),
+        },
+        tradeId: tradeId
+      };
+      dispatch(limitOrderPut(data));
+      setTimeout(() => {
+        backToLimitOrderList();
+      }, 70);
+    }
+  }
   return (
     <div>
       <img onClick={backToLimitOrderList} src={`${process.env.PUBLIC_URL}/grayBack.svg`} alt="" />
-      <div>{orderData.name}</div>
+      <div>{tradeData.name}</div>
       <hr />
       <img
         onClick={handleDeleteModalOpen}
@@ -241,6 +287,9 @@ function SellOrderEditPage() {
             alt=""
           />
         </button>
+      </div>
+      <div onClick={submitEdit}>
+        <div>수정</div>
       </div>
       <Modal open={openDeleteModal} onClose={handleDeleteModalClose}>
         <Box sx={style}>

@@ -1,113 +1,67 @@
 import React, { useState, useEffect } from "react";
-import classes from './LimitOrderPage.module.css'
+import classes from "./LimitOrderPage.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
+import { limitListGet } from "../../stores/stockSlice";
 
 function LimitOrderPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => {
+    return state.persistedReducer.setUser.user;
+  });
+  const orderList = useSelector((state) => {
+    return state.setStock.limitList;
+  });
+  useEffect(() => {
+    const now = window.location.pathname;
+    dispatch(setShowNav(now));
+  }, []);
+  console.log(orderList);
+  const tmpData = {
+    config: {
+      headers: {
+        Authorization: `Bearer ${userData.token}`,
+      },
+    },
+    id: userData.data.current,
+  };
+  useEffect(() => {
+    dispatch(limitListGet(tmpData));
+  }, []);
+
   function backToStockList() {
     navigate(`/`);
   }
-  const dispatch = useDispatch()
-  useEffect(() => {
-    const now = window.location.pathname
-    dispatch(setShowNav(now))
-  })
-  const [data, setData] = useState([
-    {
-      name: "삼성전자",
-      code: 300020,
-      price: 111600,
-      many: 5,
-      differ: 1,
-    },
-    {
-      name: "SK하이닉스",
-      price: 111600,
-      code: 671021,
-      many: 5,
-      differ: 2,
-    },
-    {
-      name: "LG디스플레이",
-      price: 111600,
-      code: 582901,
-      many: 5,
-      differ: 1,
-    },
-    {
-      name: "POSCO홀딩스",
-      code: 117239,
-      price: 707800,
-      many: 5,
-      differ: 2,
-    },
-    {
-      name: "하이브",
-      code: 200001,
-      price: 200000,
-      many: 5,
-      differ: 1,
-    },
-    {
-      name: "LG에너지솔루션2",
-      code: 192833,
-      profit: 3.2,
-      price: 293778,
-      many: 34,
-      differ: 1,
-    },
-    {
-      name: "SK하이닉스2",
-      code: 111819,
-      price: 128270,
-      many: 5,
-      differ: 2,
-    },
-    {
-      name: "삼성바이오로직스2",
-      code: 10000,
-      price: 2278,
-      many: 56,
-      differ: 1,
-    },
-    {
-      name: "POSCO홀딩스2",
-      code: 11239,
-      price: 707800,
-      many: 23,
-      differ: 2,
-    },
-    {
-      name: "하이브2",
-      code: 200081,
-      price: 200000,
-      many: 7,
-      differ: 2,
-    },
-  ])
   function MyRealizedCard(stock) {
-    var differText = ''
-    var go = ''
+    const tmpparams = stock.ticker + ":" + stock.price + ":" + stock.many + ":" + stock.id
+    console.log(tmpparams)
+    var differText = "";
+    var go = "";
     function differCheck() {
-      if (stock.differ === 1) {
-        differText = '판매'
-        go = 'sell'
+      if (stock.differ === 4) {
+        differText = "판매";
+        go = "sell";
         return "#4D97ED";
       } else {
-        differText = '구매'
-        go = 'buy'
+        differText = "구매";
+        go = "buy";
         return "#DD4956";
       }
     }
     const differLabel = differCheck();
     return (
       <div className={classes.listbox}>
-        <Link style={{textDecoration: 'none'}} to={`/stock/limit-order/${go}`} state={{data: stock}}>
+        <Link
+          style={{ textDecoration: "none" }}
+          to={`/stock/limit-order/${go}/${tmpparams}`}
+          state={{ data: stock }}
+        >
           <div className={classes.myLimitOrderCard}>
             <div className={classes.rowbox}>
-              <div className={classes.label}
+              <div
+                className={classes.label}
                 style={{
                   backgroundColor: differLabel,
                 }}
@@ -118,7 +72,9 @@ function LimitOrderPage() {
               </div>
               <div>{stock.name}</div>
             </div>
-            <div className={classes.pr}>{stock.price}원</div>
+            <div className={classes.pr}>
+              {stock.price.toLocaleString()}원 / {stock.many}주
+            </div>
           </div>
           <div className={classes.hrline}></div>
         </Link>
@@ -136,17 +92,20 @@ function LimitOrderPage() {
         />
         <div>매일 15:30에 리셋</div>
       </div>
-        <div className={classes.hrline}></div>
-        <div className={classes.title}>대기중인 주문</div>
-      {data.map((stock) => (
-        <MyRealizedCard 
-          key={stock.code}
-          name={stock.name}
-          price={stock.price}
-          differ={stock.differ}
-          many={stock.many}
-        />
-      ))}
+      <div className={classes.hrline}></div>
+      <div className={classes.title}>대기중인 주문</div>
+      {orderList &&
+        orderList.map((stock) => (
+          <MyRealizedCard
+            key={stock.tradeId}
+            id={stock.tradeId}
+            name={stock.ticker_name}
+            ticker={stock.ticker}
+            price={stock.tr_price}
+            differ={stock.tr_type}
+            many={stock.tr_amount}
+          />
+        ))}
     </div>
   );
 }

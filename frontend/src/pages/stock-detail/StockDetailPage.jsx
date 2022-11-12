@@ -55,10 +55,14 @@ function StockDetailPage() {
     // } else {
     //   setShowSellButton(true);
     // }
-    if (!likeList.includes(id)) {
-      setisWatchlist(false);
-    } else {
-      setisWatchlist(true);
+    try {
+      if (!likeList.includes(id)) {
+        setisWatchlist(false);
+      } else {
+        setisWatchlist(true);
+      }
+    } catch{
+      return
     }
   }, [haveList, likeList]);
 
@@ -469,7 +473,7 @@ function StockDetailPage() {
   }
 
   const handleOptionChange = (event) => {
-    console.log(event.target.value);
+    console.log(event.target.id);
     // data 변경해주기
   };
   function WeatherCard(sen) {
@@ -660,12 +664,12 @@ function StockDetailPage() {
               <input 
                 type="radio" 
                 name="filter" 
-                id="filter-1"
+                id="day"
                 className={classes.radioClass} 
                 defaultChecked
                 onChange={handleOptionChange}
               />
-              <label checked for="filter-1" className={classes.radioLabelClass}>
+              <label checked for="day" className={classes.radioLabelClass}>
                 하루
               </label>
             </li>
@@ -673,11 +677,11 @@ function StockDetailPage() {
               <input 
                 type="radio" 
                 name="filter" 
-                id="filter-2" 
+                id="week" 
                 className={classes.radioClass}
                 onChange={handleOptionChange}
               />
-              <label for="filter-2" className={classes.radioLabelClass}>
+              <label for="week" className={classes.radioLabelClass}>
                 일주일
               </label>
             </li>
@@ -685,11 +689,11 @@ function StockDetailPage() {
               <input 
                 type="radio" 
                 name="filter" 
-                id="filter-3"
+                id="month"
                 className={classes.radioClass}
                 onChange={handleOptionChange}
               />
-              <label for="filter-3" className={classes.radioLabelClass}>
+              <label for="month" className={classes.radioLabelClass}>
                 한 달
               </label>
             </li>
@@ -697,11 +701,11 @@ function StockDetailPage() {
               <input 
                 type="radio" 
                 name="filter" 
-                id="filter-4"
+                id="year"
                 className={classes.radioClass}
                 onChange={handleOptionChange}
               />
-              <label for="filter-4" className={classes.radioLabelClass}>
+              <label for="year" className={classes.radioLabelClass}>
                 일 년
               </label>
             </li>
