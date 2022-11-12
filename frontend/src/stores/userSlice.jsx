@@ -70,7 +70,6 @@ const quizPut = createAsyncThunk("stockList/quizResult", async (data) => {
     });
 });
 
-
 // 주식 디테일페이지에 ㄱㄱ
 // const realtimeAccountGet = createAsyncThunk(
 //   "stock/accountGet",
@@ -84,24 +83,32 @@ const quizPut = createAsyncThunk("stockList/quizResult", async (data) => {
 // );
 
 const stockTradingPost = createAsyncThunk("stock/tradingPost", async (data) => {
-  return axios
-    .post(`${api2}trading`, data.result, data.config)
-    .then(() => {
-      axios
+  return axios.post(`${api2}trading`, data.result, data.config).then(() => {
+    axios
       .get(`${api2}account/check/${data.result.accountId}`, data.config)
       .then((response) => {
         console.log(response.data);
       });
-    });
+  });
 });
 
 const stockBuyPost = createAsyncThunk("stock/buyPost", async (data) => {
-  console.log(data)
   return axios
     .post(`${api2}account/buy`, data.result, data.config)
-    .then(() => {
-    });
+    .then(() => {});
 });
+
+const accountChangePut = createAsyncThunk(
+  "account/accountChangePut",
+  async (data) => {
+    console.log(data)
+    return axios
+      .put(`${api2}users/current`, data.result, data.config)
+      .then(() => {
+        return data.result.current;
+      });
+  }
+);
 
 export const userSlice = createSlice({
   name: "userSlice",
@@ -142,8 +149,9 @@ export const userSlice = createSlice({
     // builder.addCase(realtimeAccountGet.fulfilled, (state, action) => {
     //   state.quizData = action.payload;
     // });
-    builder.addCase(stockTradingPost.fulfilled, (state, action) => {
-      console.log(action.payload);
+    builder.addCase(accountChangePut.fulfilled, (state, action) => {
+      state.user.data.current = action.payload
+      console.log(action.payload)
     });
   },
 });
@@ -157,4 +165,5 @@ export {
   stockBuyPost,
   quizGet,
   stockTradingPost,
+  accountChangePut
 };

@@ -10,6 +10,8 @@ const initialState = {
   shortStockData: {},
   likeList: [],
   realtime: [],
+  limitList: [],
+  bidask: {},
 };
 
 const categoryGet = createAsyncThunk("stock-detail/categoryGet", async (id) => {
@@ -30,7 +32,7 @@ const stockDetailGet = createAsyncThunk("stock-detail", async (num) => {
 
 const shortStockGet = createAsyncThunk("stock/short", async (num) => {
   return axios.get(`${api1}stocks/trade/${num}`).then((response) => {
-    console.log(response.data)
+    console.log(response.data);
     return response.data;
   });
 });
@@ -43,18 +45,47 @@ const realtimeGet = createAsyncThunk("stock-list/realtime", async (num) => {
 
 const likeListGet = createAsyncThunk("stock-list/likeList", async (data) => {
   return axios.get(`${api1}list/favorite`, data).then((response) => {
-    return response.data.stocks
+    return response.data.stocks;
   });
 });
 
 const stockSellPost = createAsyncThunk("stock/sellPost", async (data) => {
-  console.log(data)
+  console.log(data);
   return axios
     .post(`${api2}account/sell`, data.result, data.config)
     .then(() => {
-      console.log('여긴안오고')
+      console.log("여긴안오고");
     });
 });
+
+const limitListGet = createAsyncThunk("stock/limitListGet", async (data) => {
+  return axios
+    .get(`${api2}trading/waiting/${data.id}`, data.config)
+    .then((response) => {
+      return response.data.tradings;
+    });
+});
+
+const limitOrderPut = createAsyncThunk("stock/limitEditPut", async (data) => {
+  return axios
+    .put(`${api2}trading/${data.tradeId}`, data.result, data.config)
+    .then((response) => {
+      console.log(response.data);
+    });
+});
+const limitOrderDelete = createAsyncThunk("stock/limitEditPut", async (data) => {
+  return axios
+    .delete(`${api2}trading/${data.tradeId}`, data.config)
+    .then((response) => {
+      console.log(response.data);
+    });
+});
+
+const bidaskGet = createAsyncThunk("stock/bidaskGet", async (data) => {
+  return axios.get(`${api1}stocks/bidask/${data.ticker}`).then((response) => {
+    console.log(response.data)
+  })
+})
 
 export const stockSlice = createSlice({
   name: "stockSlice",
@@ -85,11 +116,11 @@ export const stockSlice = createSlice({
       state.realtime = action.payload;
     });
     builder.addCase(likeListGet.fulfilled, (state, action) => {
-      state.likeList = action.payload
-      console.log(action.payload)
+      state.likeList = action.payload;
+      console.log(action.payload);
     });
-    builder.addCase(stockSellPost.fulfilled, (state, action) => {
-      console.log('주식판매완료')
+    builder.addCase(limitListGet.fulfilled, (state, action) => {
+      state.limitList = action.payload;
     });
   },
 });
@@ -101,4 +132,8 @@ export {
   realtimeGet,
   likeListGet,
   stockSellPost,
+  limitListGet,
+  limitOrderPut,
+  limitOrderDelete,
+  bidaskGet
 };

@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { accountsListGet } from "../../stores/accountSlice";
-import { fontSize } from "@mui/system";
-import { nicknamePut } from "../../stores/userSlice";
+import { nicknamePut, accountChangePut } from "../../stores/userSlice";
+import { accountCreate } from "../../stores/accountSlice";
 
 const style = {
   position: "absolute",
@@ -32,7 +32,6 @@ function MyPage() {
   const [canAddDate, setCanAddDate] = useState(true);
   const [warningEffect, setWarningEffect] = useState(false);
   const [canStartDay, setCanStartDay] = useState("");
-
   const [haveShool, setHaveSchool] = useState(false);
   const userData = useSelector((state) => {
     return state.persistedReducer.setUser.user;
@@ -43,7 +42,6 @@ function MyPage() {
   const walletList = useSelector((state) => {
     return state.setAccount.accountsList;
   });
-  console.log(walletList);
   const dispatch = useDispatch();
   useEffect(() => {
     const now = window.location.pathname;
@@ -61,7 +59,13 @@ function MyPage() {
   const handleCreateModalOpen = () => {
     setCreateModalOpen(true);
   };
-  const handleCreateModalClose = () => setCreateModalOpen(false);
+  const handleCreateModalClose = () => {
+    setAssetInfo({
+      assetName: "",
+      openReason: "",
+    });
+    setCreateModalOpen(false);
+  };
 
   const [assetInfo, setAssetInfo] = useState({
     assetName: "",
@@ -83,7 +87,28 @@ function MyPage() {
     }
   };
 
+  const [data, setData] = useState({
+    config: {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    },
+    result: {
+      current: "",
+    },
+  });
+
   function createSubmit() {
+    const data = {
+      config: {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      },
+      result: {
+        name: "",
+      },
+    }
     if (!canAddDate) {
       setWarningEffect(true);
       setTimeout(function () {
@@ -91,68 +116,46 @@ function MyPage() {
       }, 400);
       return;
     }
-    handleCreateModalClose(false);
+    if (assetInfo.assetName && assetInfo.openReason) {
+      data.result.name = assetInfo.assetName
+      dispatch(accountCreate(data))
+      setTimeout(() => {
+        window.location.reload();
+        handleCreateModalClose(false);
+      }, 30);
+    }
   }
-
   const [openChangeModal, setChangeModalOpen] = useState(false);
-  const handleChangeModalOpen = () => {
+  const handleChangeModalOpen = (tmpId) => {
     setChangeModalOpen(true);
+    setData({
+      config: {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      },
+      result: {
+        current: tmpId,
+      },
+    });
   };
   const handleChangeModalClose = () => setChangeModalOpen(false);
   function changeSubmit() {
-    // 걍바꿔주기~
+    dispatch(accountChangePut(data));
     handleChangeModalClose(false);
+    setTimeout(() => {
+      window.location.reload();
+    }, 30);
   }
-
-  const [data, setData] = useState({
-    all: {
-      all_asset: 602520021,
-      profit: -13,
-    },
-    assets: [
-      {
-        accounts_pk: 18992,
-        seed: 405219228,
-        open: "2020-07-21",
-        isSchool: false,
-        name: "유저의첫번째계좌",
-      },
-      {
-        accounts_pk: 1892,
-        seed: 405219228,
-        open: "2022-09-01",
-        isSchool: true,
-        type: 1,
-        name: "학교대항전",
-      },
-      {
-        accounts_pk: 18921,
-        seed: 405219228,
-        open: "2022-10-21",
-        isSchool: false,
-        type: 1,
-        name: "유저의두번째계좌",
-      },
-      // {
-      //   accounts_pk: 1891221,
-      //   seed: 405219228,
-      //   open: "2021-11-21",
-      //   isSchool: false,
-      //   type: 1,
-      //   name: "유저의세번째계좌",
-      // },
-    ],
-  });
-
   function AllAssets() {
     function profitCheck() {
-      try{
+      try {
         if (walletList.earningRaito < 0) {
           return "#4D97ED";
         } else {
           return "#DD4956";
         }
-      } catch{}
+      } catch {}
     }
     const profitColor = profitCheck();
     return (
@@ -177,14 +180,16 @@ function MyPage() {
         </div>
         <div>
           <div style={{ marginLeft: "10px" }}>수익률</div>
-          {/* {walletList.earningRaito && <div
-            className={classes.rev}
-            style={{
-              color: profitColor,
-            }}
-          >
-            {walletList.earningRaito.toFixed(2)}%
-          </div>} */}
+          {walletList.earningRaito && (
+            <div
+              className={classes.rev}
+              style={{
+                color: profitColor,
+              }}
+            >
+              {walletList.earningRaito.toFixed(2)}%
+            </div>
+          )}
         </div>
       </div>
     );
@@ -198,7 +203,6 @@ function MyPage() {
     const [nickname, setNickname] = useState(userData.data.nickname);
     const handleInputChange = (event) => {
       setNickname(event.target.value);
-      // console.log(nickname)
     };
     // 수정했을때, 이 함수 안에서 POST 요청 들어가야함.
     const handleOnKeyPress = (event) => {
@@ -272,17 +276,16 @@ function MyPage() {
   }
 
   function WalletAssetCard(asset) {
-    console.log("???????");
     setCanAddNum(true);
     var openDate = dayjs(asset.open.slice(0, 10));
     const tmpId = asset.accountId;
-    const dateAvailable = openDate.isBetween(
+    const dateNotAvailable = openDate.isBetween(
       `${now}`,
       `${standard}`,
       undefined,
       "[)"
     );
-    if (dateAvailable) {
+    if (dateNotAvailable && !asset.isSchool) {
       setCanAddDate(false);
       const tempStandard = openDate.add(4, "week").format("YYYY-MM-DD");
       setCanStartDay(tempStandard);
@@ -308,12 +311,12 @@ function MyPage() {
                 style={{ marginRight: "10px" }}
               />
             )}
-          <div id={tmpId}>{asset.name}</div>
-          <div className={classes.select}>
-            <div style={{ color: "white", fontSize: 12, fontWeight: 600 }}>
-              now
+            <div id={tmpId}>{asset.name}</div>
+            <div className={classes.select}>
+              <div style={{ color: "white", fontSize: 12, fontWeight: 600 }}>
+                now
+              </div>
             </div>
-          </div>
           </div>
           <div>{walletList.pitches[asset.num].toLocaleString()}원</div>
         </div>
@@ -334,7 +337,8 @@ function MyPage() {
           <div className={classes.rowbox}>
             <div>{walletList.pitches[asset.num].toLocaleString()}원</div>
             <img
-              onClick={handleChangeModalOpen}
+              // id={tmpId}
+              onClick={() => handleChangeModalOpen(tmpId)}
               src={`${process.env.PUBLIC_URL}/wallet/change.svg`}
               alt=""
               style={{ zIndex: 3, marginLeft: 8 }}
@@ -440,9 +444,9 @@ function MyPage() {
         </Modal>
         <Modal open={openChangeModal} onClose={handleChangeModalClose}>
           <Box className={classes.deletebox} sx={style}>
-            <div className={classes.title}>계좌를 변경하시겠습니까?</div>
+            <div className={classes.title}>주계좌를 변경하시겠습니까?</div>
             <div className={classes.graybox}>
-            <svg
+              <svg
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -454,9 +458,15 @@ function MyPage() {
                   fill="#8D8D8D"
                 />
               </svg>
-              <div style={{ marginLeft: "15px" }}>계좌를 변경하면<br />해당 계좌에서 모든 거래가 이루어져요.</div>
+              <div style={{ marginLeft: "15px" }}>
+                주계좌를 변경하면
+                <br />
+                해당 계좌에서 모든 거래가 이루어져요.
+              </div>
             </div>
-            <button className={classes.btn} onClick={changeSubmit}>변경하기</button>
+            <button className={classes.btn} onClick={changeSubmit}>
+              변경하기
+            </button>
           </Box>
         </Modal>
         <div className={classes.addbtn}>

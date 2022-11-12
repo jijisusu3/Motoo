@@ -36,7 +36,7 @@ function SellStockPage() {
     if (element.ticker === id) {
       myStock = element.amount;
     }
-  });
+  }); 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(shortStockGet(id));
