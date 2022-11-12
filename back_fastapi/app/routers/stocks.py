@@ -97,7 +97,7 @@ async def get_bidask_list(ticker: str):
     ask = redis_session.lrange('ask' + ticker, 0, 9)
     access_token = redis_session.get("get_bidask")
     if access_token is None:
-        save_token()
+        save_token("get_bidask")
         access_token = redis_session.get("get_bidask")
     header = get_header('FHKST01010200', False, settings.APPKEY_FOR_BIDASK, settings.APPSECRET_FOR_BIDASK)
     header["authorization"] = "Bearer " + access_token
