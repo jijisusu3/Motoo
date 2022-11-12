@@ -12,11 +12,10 @@ const initialState = {
     haveList: [],
     data: {},
   },
+  quizData: {},
 };
 
 const nicknamePut = createAsyncThunk("user/edit-nickname", async (data) => {
-  // console.log(data.editname)
-  // console.log(data.config)
   return axios
     .put(`${api2}users/nickname`, data.editname, data.config)
     .then(() => {
@@ -46,6 +45,17 @@ const likeStockPost = createAsyncThunk(
   }
 );
 
+const quizGet = createAsyncThunk("stockList/quizGet", async (data) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${data}`,
+    },
+  };
+  return axios.get(`${api2}quiz`, config).then((response) => {
+    return response.data;
+  });
+});
+
 const quizPut = createAsyncThunk("stockList/quizResult", async (data) => {
   const config = data.config;
   const quizResult = data.quizResult;
@@ -60,11 +70,45 @@ const quizPut = createAsyncThunk("stockList/quizResult", async (data) => {
     });
 });
 
+
+// 주식 디테일페이지에 ㄱㄱ
+// const realtimeAccountGet = createAsyncThunk(
+//   "stock/accountGet",
+//   async (data) => {
+//     return axios
+//       .get(`${api2}account/check/${data.id}`, data.config)
+//       .then((response) => {
+//         console.log(response.data);
+//       });
+//   }
+// );
+
+const stockTradingPost = createAsyncThunk("stock/tradingPost", async (data) => {
+  return axios
+    .post(`${api2}trading`, data.result, data.config)
+    .then(() => {
+      axios
+      .get(`${api2}account/check/${data.result.accountId}`, data.config)
+      .then((response) => {
+        console.log(response.data);
+      });
+    });
+});
+
+const stockBuyPost = createAsyncThunk("stock/buyPost", async (data) => {
+  console.log(data)
+  return axios
+    .post(`${api2}account/buy`, data.result, data.config)
+    .then(() => {
+    });
+});
+
 export const userSlice = createSlice({
   name: "userSlice",
   initialState: initialState,
   reducers: {
     setLogin: (state, action) => {
+      // console.log(action.payload)
       state.user.isLoggin = true;
       state.user.token = action.payload.token;
       state.user.likeList = action.payload.user.favoriteStockCode;
@@ -92,8 +136,25 @@ export const userSlice = createSlice({
     builder.addCase(nicknamePut.fulfilled, (state, action) => {
       state.user.data.nickname = action.payload;
     });
+    builder.addCase(quizGet.fulfilled, (state, action) => {
+      state.quizData = action.payload;
+    });
+    // builder.addCase(realtimeAccountGet.fulfilled, (state, action) => {
+    //   state.quizData = action.payload;
+    // });
+    builder.addCase(stockTradingPost.fulfilled, (state, action) => {
+      console.log(action.payload);
+    });
   },
 });
 
 export const { setLogin, setLogout } = userSlice.actions;
-export { likeStockPost, quizPut, nicknamePut };
+export {
+  likeStockPost,
+  quizPut,
+  nicknamePut,
+  // realtimeAccountGet,
+  stockBuyPost,
+  quizGet,
+  stockTradingPost,
+};

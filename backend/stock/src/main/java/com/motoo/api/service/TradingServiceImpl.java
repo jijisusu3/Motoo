@@ -33,15 +33,29 @@ public class TradingServiceImpl implements TradingService{
     //주문하기
     @Override
     public void writeOrder(Long userId, Long accountId, Long stockId , int tr_type, int tr_price, int tr_amount, Integer tr_avg) {
+        String ticker_name;
+        String ticker;
         Account account = accountRepositorySupport.findAccountByAccountIdAndUserId(accountId, userId);
-        Stock stock =stockRepositorySupport.findStockByAStockId(stockId);
-        Trading trade = new Trading();
         User user = userRepository.findByUserId(userId).get();
-        String ticker = stock.getTicker();
-        String ticker_name = stock.getName();
-        trade.writeOrder(account, user, ticker, ticker_name,tr_type, tr_price, tr_amount, tr_avg);
+        if (stockId ==null){
+            ticker_name= "시드머니추가";
+            ticker = "시드머니추가";
+        }else {
+
+            Stock stock = stockRepositorySupport.findStockByAStockId(stockId);
+
+            ticker_name = stock.getName();
+            ticker = stock.getTicker();
+        }
+        Trading trade = new Trading();
+
+        trade.writeOrder(account, user, ticker, ticker_name, tr_type, tr_price, tr_amount, tr_avg);
         tradingRepository.save(trade);
     }
+
+
+
+
 
 //    public void writeOrder(Account account, String ticker, int tr_type, int tr_price, int tr_amount ){
 //        this.account =account;
@@ -104,10 +118,17 @@ public class TradingServiceImpl implements TradingService{
     public List<Trading> tradingListAccount(Long userId, Long accountId){
         return tradingRepositorySupport.findAllTradingsByUserIdAccountId(userId, accountId);
     }
+    @Override
+    public List<Trading> tradingList3Or4(Long userId, Long accountId){
+        return tradingRepositorySupport.find3Or4ByUserIdAccountId(userId, accountId);
+    }
+
 
     @Override
     public void writeAvg(Trading trading, int tr_avg){
         return;
     }
+
+
 
 }

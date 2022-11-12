@@ -9,6 +9,7 @@ import com.motoo.api.dto.user.AccountStockInfo;
 import com.motoo.api.dto.user.BaseUserInfo;
 import com.motoo.api.response.LoginResponse;
 import com.motoo.common.util.JwtTokenUtil;
+import com.motoo.db.entity.Account;
 import com.motoo.db.entity.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -30,13 +31,15 @@ public class KakaoService {
     private final String REDIRECT_URI;
     private final UserService userService;
     private final AccountService accountService;
+    private final TradingService tradingService;
 
     public KakaoService(@Value("${kakao.client_id}") String CLIENT_ID,
-                        @Value("${kakao.redirect_uri}") String REDIRECT_URI, UserService userService, AccountService accountService) {
+                        @Value("${kakao.redirect_uri}") String REDIRECT_URI, UserService userService, AccountService accountService, TradingService tradingService) {
         this.CLIENT_ID = CLIENT_ID;
         this.REDIRECT_URI = REDIRECT_URI;
         this.userService = userService;
         this.accountService = accountService;
+        this.tradingService = tradingService;
     }
 
     /**
@@ -131,7 +134,11 @@ public class KakaoService {
             //초기 계좌 개설 로직
             String newAccountName = kakaoNickname+"님의 계좌";
             Long accountId = accountService.createAccount(newUserId, newAccountName);
+
             int intAccountId = accountId.intValue();
+
+            Account account = accountService.getAccount(accountId, newUserId);
+            account.updateIsMain(true);
             userService.updateCurrent(newUserId, intAccountId);
 
         }

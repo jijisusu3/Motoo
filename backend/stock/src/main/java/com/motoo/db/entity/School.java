@@ -22,11 +22,11 @@ public class School {
 
     private String schoolname;
 
-    private Integer rank;
+    private Integer currentRank;
 
     private Float average;
 
-    private String today;
+    private String studRanks;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="sigungu_id")
@@ -35,4 +35,15 @@ public class School {
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "school",orphanRemoval = true)
     private List<User> users = new ArrayList<>();
+
+    public void updateAverageAndStud(Float average, String studRanks){
+        this.average = average;
+        this.studRanks = studRanks;
+    }
+
+    public void updateCurrentRank(Integer currentRank){
+        this.currentRank = currentRank;
+    }
+
+
 }

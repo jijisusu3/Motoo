@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./RealizedPL.module.css";
 // import RealizedList from "./RealizedList";
 import classes from "./AccountHistory.module.css";
@@ -11,86 +11,42 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
+import { useSelector } from "react-redux";
 datejs.extend(isBetween);
 
 function AccountHistory() {
+  const accountHistoryData = useSelector((state) => {
+    return state.setAccount.accountDetail.tradingHistory;
+  });
   const [data, setData] = useState([
     {
-      priceHigh: [
-        {
-          name: "삼성전자",
-          dateTime: "2022-09-26",
-          code: 300020,
-          profit: 111600,
-          differ: 1,
-        },
-        {
-          name: "SK하이닉스",
-          dateTime: "2021-09-26",
-          profit: -111600,
-          code: 671021,
-          differ: 2,
-        },
-        {
-          name: "LG디스플레이",
-          dateTime: "2022-10-23",
-          profit: 111600,
-          code: 582901,
-          differ: 3,
-        },
-      ],
+      all: [],
     },
     {
-      profitHigh: [
-        {
-          name: "삼성전자",
-          dateTime: "2022-09-26",
-          code: 300020,
-          profit: 111600,
-          differ: 1,
-        },
-        {
-          name: "ggggg",
-          dateTime: "2021-09-26",
-          profit: -111600,
-          code: 671021,
-          differ: 2,
-        },
-        {
-          name: "LG디스플레이",
-          dateTime: "2022-10-23",
-          profit: 111600,
-          code: 582901,
-          differ: 3,
-        },
-      ],
+      buy: [],
     },
     {
-      profitLow: [
-        {
-          name: "삼성전자",
-          dateTime: "2022-09-26",
-          code: 300020,
-          profit: 111600,
-          differ: 1,
-        },
-        {
-          name: "SK하이닉스",
-          dateTime: "2021-09-26",
-          profit: -111600,
-          code: 671021,
-          differ: 2,
-        },
-        {
-          name: "ggggg",
-          dateTime: "2022-10-23",
-          profit: 111600,
-          code: 582901,
-          differ: 3,
-        },
-      ],
+      cash: [],
+    },
+    {
+      sell: [],
+    },
+    {
+      stock: [],
     },
   ]);
+  useEffect(() => {
+    try {
+      setExample(accountHistoryData.allTradingHistory);
+      data[0]["all"] = accountHistoryData.allTradingHistory;
+      data[1]["buy"] = accountHistoryData.buyTradingHistory;
+      data[2]["cash"] = accountHistoryData.cashHistory;
+      data[3]["sell"] = accountHistoryData.sellTradingHistory;
+      data[4]["stock"] = accountHistoryData.stockTradingHistory;
+    } catch (err) {
+      return;
+    }
+  }, [accountHistoryData]);
   const [timeList, setTimeList] = useState(data);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -112,38 +68,48 @@ function AccountHistory() {
       };
       const newList = [
         {
-          priceHigh: [],
+          all: [],
         },
         {
-          profitHigh: [],
+          buy: [],
         },
         {
-          profitLow: [],
+          cash: [],
+        },
+        {
+          sell: [],
+        },
+        {
+          stock: [],
         },
       ];
-      const categoryList = ["priceHigh", "profitHigh", "profitLow"];
+      const categoryList = ["all", "buy", "cash", "sell", "stock"];
       var count = 0;
       for (var i of categoryList) {
-        for (var j of data[count][i]) {
-          var stockDate = datejs(j["dateTime"], "YYYY-MM-DD");
-          if (
-            stockDate.isBetween(
-              postBody["startChoice"],
-              postBody["endChoice"],
-              undefined,
-              "[]"
-            )
-          ) {
-            newList[count][i].push(j);
+        if (data[count][i].length > 0) {
+          for (var j of data[count][i]) {
+            const tmpDate = j["tradingDate"].slice(0, 10);
+            var stockDate = datejs(tmpDate, "YYYY-MM-DD");
+            if (
+              stockDate.isBetween(
+                postBody["startChoice"],
+                postBody["endChoice"],
+                undefined,
+                "[]"
+              )
+            ) {
+              newList[count][i].push(j);
+            }
           }
         }
         count += 1;
       }
       setTimeList(newList);
+      setExample(newList[0]["all"]);
     };
-
     function dateRefresh() {
       setTimeList(data);
+      setExample(data[0]["all"]);
       setStartDate();
       setEndDate();
     }
@@ -151,7 +117,12 @@ function AccountHistory() {
       <div className={classes.calender}>
         <div>
           <img
-            style={{ marginLeft:'12px', marginRight: '6px', marginBottom: '2px', boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px;'}}
+            style={{
+              marginLeft: "12px",
+              marginRight: "6px",
+              marginBottom: "2px",
+              boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px;",
+            }}
             className={classes.imgs}
             src={`${process.env.PUBLIC_URL}/wallet/calendar.svg`}
             alt=""
@@ -170,8 +141,11 @@ function AccountHistory() {
                 endDate={endDate}
               />
             </div>
-            <div style={{ color: "#929E9E", marginLeft: "2.5px"}} >-</div>
-            <div className={classes.wrap} style={{marginLeft: '5px', marginRight: '5px'}}>
+            <div style={{ color: "#929E9E", marginLeft: "2.5px" }}>-</div>
+            <div
+              className={classes.wrap}
+              style={{ marginLeft: "5px", marginRight: "5px" }}
+            >
               <DatePicker
                 className={classes.tag}
                 required
@@ -189,7 +163,12 @@ function AccountHistory() {
             </div>
             <div>
               <img
-                style={{ marginTop: '2px', marginLeft: '10px', width: '16px', boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px;'}}
+                style={{
+                  marginTop: "2px",
+                  marginLeft: "10px",
+                  width: "16px",
+                  boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px;",
+                }}
                 className={classes.imgs}
                 onClick={dateRefresh}
                 src={`${process.env.PUBLIC_URL}/wallet/dateRefresh.svg`}
@@ -202,20 +181,24 @@ function AccountHistory() {
     );
   }
   // 드롭다운 value기준 정렬
+  const [example, setExample] = useState(timeList[0]["all"]);
   function RealizedList() {
     const [value, setValue] = useState("1");
     const [data, setData] = useState(timeList);
-    const [example, setExample] = useState(timeList[0]["priceHigh"]);
-
     function setDropdownData(value) {
       if (value === "1") {
-        setExample(data[0]["priceHigh"]);
+        setExample(data[0]["all"]);
       } else if (value === "2") {
-        setExample(data[1]["profitHigh"]);
+        setExample(data[1]["buy"]);
+      } else if (value === "3") {
+        setExample(data[2]["cash"]);
+      } else if (value === "4") {
+        setExample(data[3]["sell"]);
       } else {
-        setExample(data[2]["profitLow"]);
+        setExample(data[4]["stock"]);
       }
     }
+
     const handleValueChange = (event) => {
       setValue(event.target.value);
       setDropdownData(event.target.value);
@@ -223,23 +206,23 @@ function AccountHistory() {
 
     function MyRealizedCard(stock) {
       function profitCheck() {
-        if (stock.profit < 0) {
-          return;
+        if (stock.differ === "구매") {
+          return "- ";
         } else {
-          return "+";
+          return "+ ";
         }
       }
       const profitLabel = profitCheck();
-      var differText = ''
+      var differText = "";
       function differCheck() {
         if (stock.differ === 1) {
-          differText = '판매'
+          differText = "판매";
           return "#4D97ED";
         } else if (stock.differ === 2) {
-          differText = '구매'
+          differText = "구매";
           return "#DD4956";
         } else {
-          differText = '입금'
+          differText = "입금";
           return "#FEBF45";
         }
       }
@@ -247,7 +230,8 @@ function AccountHistory() {
       return (
         <div className={classes.myHistoryCard}>
           <div className={classes.namebox}>
-            <div className={classes.section}
+            <div
+              className={classes.section}
               style={{
                 backgroundColor: differLabel,
               }}
@@ -258,7 +242,11 @@ function AccountHistory() {
           </div>
           <div className={classes.pricebox}>
             {" "}
-            <img src={`${process.env.PUBLIC_URL}/wallet/coin.svg`} style={{ width: 12, height: 12, marginRight: '8px' }} alt="" />
+            <img
+              src={`${process.env.PUBLIC_URL}/wallet/coin.svg`}
+              style={{ width: 12, height: 12, marginRight: "8px" }}
+              alt=""
+            />
             {profitLabel}
             {stock.profit}
           </div>
@@ -268,7 +256,11 @@ function AccountHistory() {
 
     return (
       <>
-        <FormControl sx={{ m: 1, minWidth: 120, marginTop: '30px', margin: '0px' }} size="small" focused={0}>
+        <FormControl
+          sx={{ m: 1, minWidth: 120, marginTop: "30px", margin: "0px" }}
+          size="small"
+          focused={0}
+        >
           <Select
             className={classes.sltbox}
             labelId="demo-select-small"
@@ -281,22 +273,68 @@ function AccountHistory() {
               ".MuiOutlinedInput-notchedOutline": { border: 0 },
             }}
           >
-            <MenuItem value={'1'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">전체</Typography></MenuItem>
-            <MenuItem value={'2'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">구매</Typography></MenuItem>
-            <MenuItem value={'3'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">판매</Typography></MenuItem>
-            <MenuItem value={'4'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">주식거래</Typography></MenuItem>
-            <MenuItem value={'5'}><Typography fontSize={"14px"} fontWeight={"500"} color={"#474747"} fontFamily="Pretendard">주식거래외</Typography></MenuItem>
+            <MenuItem value={"1"}>
+              <Typography
+                fontSize={"14px"}
+                fontWeight={"500"}
+                color={"#474747"}
+                fontFamily="Pretendard"
+              >
+                전체
+              </Typography>
+            </MenuItem>
+            <MenuItem value={"2"}>
+              <Typography
+                fontSize={"14px"}
+                fontWeight={"500"}
+                color={"#474747"}
+                fontFamily="Pretendard"
+              >
+                구매만
+              </Typography>
+            </MenuItem>
+            <MenuItem value={"3"}>
+              <Typography
+                fontSize={"14px"}
+                fontWeight={"500"}
+                color={"#474747"}
+                fontFamily="Pretendard"
+              >
+                입금만
+              </Typography>
+            </MenuItem>
+            <MenuItem value={"4"}>
+              <Typography
+                fontSize={"14px"}
+                fontWeight={"500"}
+                color={"#474747"}
+                fontFamily="Pretendard"
+              >
+                판매만
+              </Typography>
+            </MenuItem>
+            <MenuItem value={"5"}>
+              <Typography
+                fontSize={"14px"}
+                fontWeight={"500"}
+                color={"#474747"}
+                fontFamily="Pretendard"
+              >
+                주식만
+              </Typography>
+            </MenuItem>
           </Select>
         </FormControl>
         <div className={classes.listbox}>
-          {example.map((stock) => (
-            <MyRealizedCard
-              key={stock.code}
-              name={stock.name}
-              profit={stock.profit}
-              differ={stock.differ}
-            />
-          ))}
+          {example &&
+            example.map((stock, index) => (
+              <MyRealizedCard
+                key={stock.index}
+                name={stock.stockName}
+                profit={stock.totalTradingPrice}
+                differ={stock.tradingType}
+              />
+            ))}
         </div>
       </>
     );
@@ -310,3 +348,4 @@ function AccountHistory() {
 }
 
 export default AccountHistory;
+//코드가 너무 길음 ㅠ

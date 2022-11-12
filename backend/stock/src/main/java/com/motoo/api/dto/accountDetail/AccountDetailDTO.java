@@ -9,6 +9,10 @@ import java.util.List;
 @Setter
 @Builder
 public class AccountDetailDTO {
+    String AccountName;
+
+    boolean School;
+
     List<Portfolio> PortfolioList;
 
     AccountAsset accountAsset;

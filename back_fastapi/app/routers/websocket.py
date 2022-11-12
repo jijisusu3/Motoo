@@ -1,7 +1,6 @@
 import tortoise
 from fastapi import APIRouter, Response, WebSocket
 
-
 router = APIRouter(prefix="/socket")
 
 

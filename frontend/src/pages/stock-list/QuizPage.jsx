@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setActiveNav } from "../../stores/navSlice";
 import { useNavigate } from "react-router-dom";
 import classes from './QuizPage.module.css'
-import { quizGet } from '../../stores/stockSlice'
-import { quizPut } from '../../stores/userSlice'
+import { quizPut, quizGet } from '../../stores/userSlice'
 
 function QuizPage() {
   const dispatch = useDispatch();
@@ -12,11 +11,14 @@ function QuizPage() {
     return state.persistedReducer.setUser.user.token;
   })
   const quizData = useSelector((state) => {
-    return state.setStock.quizData
+    return state.persistedReducer.setUser.quizData
   })
+  console.log(quizData)
+
   useEffect(() => {
     dispatch(setActiveNav(1));
   },[]);
+
   useEffect(() => {
     if (userToken){
       const data = userToken

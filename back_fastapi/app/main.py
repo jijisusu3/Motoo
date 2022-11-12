@@ -8,8 +8,6 @@ from tortoise.contrib.fastapi import register_tortoise
 from app.config import TORTOISE_ORM
 from app.routers import router
 
-# from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 app = FastAPI(title="b204", version="0.0")
@@ -20,9 +18,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-# app.add_middleware(
-#     HTTPSRedirectMiddleware,
-# )
 
 register_tortoise(app=app, config=TORTOISE_ORM)
 

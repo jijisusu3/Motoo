@@ -23,11 +23,19 @@ public class Sigungu {
 
     private String sido;
 
-    private String group;
+    private String school_ranks;
 
     private String personal;
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sigungu", orphanRemoval = true)
     private List<School> school = new ArrayList<>();
+
+    public void updateSchoolRanks(String school_ranks){
+        this.school_ranks = school_ranks;
+    }
+
+    public void updatePersonal(String personal) {
+        this.personal = personal;
+    }
 }

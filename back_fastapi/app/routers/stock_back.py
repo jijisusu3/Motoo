@@ -13,9 +13,9 @@ async def ticker_normalization():
     stocks = await Stock.all()
     for stock in stocks:
         stock.ticker = (6 - len(stock.ticker)) * '0' + stock.ticker
-    await Stock.bulk_update(stocks, fields=('ticker', ))
+    await Stock.bulk_update(stocks, fields=('ticker',))
     end = time.time()
-    print(start-end)
+    print(start - end)
     return stocks
 
 

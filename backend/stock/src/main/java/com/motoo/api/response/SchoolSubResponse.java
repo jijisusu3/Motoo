@@ -14,16 +14,16 @@ public class SchoolSubResponse {
 
     private String schoolname;
 
-    private Integer rank;
+    private Integer currentRank;
 
     private Float average;
 
-    private String today;
+    private String studRanks;
 
     private SigunguSubResponse sigunguSubResponse;
 
     public static SchoolSubResponse response(School school){
-        return new SchoolSubResponse(school.getSchoolId(), school.getSchoolname(), school.getRank(), school.getAverage(), school.getToday(), SigunguSubResponse.response(school.getSigungu()));
+        return new SchoolSubResponse(school.getSchoolId(), school.getSchoolname(), school.getCurrentRank(), school.getAverage(), school.getStudRanks(), SigunguSubResponse.response(school.getSigungu()));
     }
 
 

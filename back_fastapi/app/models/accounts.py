@@ -6,6 +6,7 @@ class Account(Model):
     created_at = fields.DatetimeField(auto_now_add=True)
     school = fields.BooleanField(default=False)
     name = fields.CharField(max_length=24)
+    is_main = fields.BooleanField(default=False)
     user = fields.ForeignKeyField('b204.User', related_name='accounts', description='계좌 생성 유저')
 
 

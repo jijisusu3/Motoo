@@ -89,6 +89,7 @@ function StockSearchPage() {
         <input
           className={classes.ipt}
           type="text"
+          autoFocus
           value={keyword || ""}
           onChange={(e) => updateField("keyword", e.target.value)}
           placeholder='검색할 주식을 입력해주세요.'

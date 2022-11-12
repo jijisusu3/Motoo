@@ -21,16 +21,15 @@ class TestSchoolHot:
             represent=[]
         )
         await Stock.bulk_create([
-           Stock(ticker='111111',
-                 name='TMPCORP',
-                 price=5400,
-                 close_price=6000,
-                 fluctuation_rate=-10,
-                 fluctuation_price=-600,
-                 volume=1000,
-                 m_capital=54000000,
-                 issued=10000,
-                 category_id=category.pk),
+            Stock(ticker='111111',
+                  name='TMPCORP',
+                  price=5400,
+                  close_price=6000,
+                  fluctuation_rate=-10,
+                  fluctuation_price=-600,
+                  volume=1000,
+                  m_capital=54000000,
+                  category_id=category.pk),
             Stock(ticker='000001',
                   name='TMPCORP2',
                   price=5400,
@@ -39,11 +38,12 @@ class TestSchoolHot:
                   fluctuation_price=-600,
                   volume=1000,
                   m_capital=54000000,
-                  issued=10000,
                   category_id=category.pk)]
         )
         res = await client.get("/stocks/school-hot/1")
+        print(res)
         res_data = res.json()
+        print(res_data)
         assert res.status_code == 404
         assert res_data["message"] == "failed"
 
@@ -57,7 +57,7 @@ class TestSchoolHot:
             [
                 School(
                     schoolname=f"{k}학교",
-                    sigungu_id=k+1
+                    sigungu_id=k + 1
                 )
                 for k in range(2)
             ]
@@ -68,13 +68,14 @@ class TestSchoolHot:
                     email=f"test_user{k}@user.com",
                     nickname=f"user{k}",
                     current=1,
-                    school_id=k//4 if k > 3 else None
+                    school_id=k // 4 if k > 3 else None
                 )
                 for k in range(12)
             ]
         )
         res = await client.get("/stocks/school-hot/4")
         res_data = res.json()
+        print(res_data)
         assert res.status_code == 404
         assert res_data["message"] == "failed"
 
@@ -82,6 +83,7 @@ class TestSchoolHot:
     async def test_school_exist_but_no_tradings(self, client: AsyncClient):
         res = await client.get("/stocks/school-hot/5")
         res_data = res.json()
+        print(res_data)
         assert res.status_code == 404
         assert res_data["message"] == "failed"
         assert res_data["stock_id"] is None
@@ -178,6 +180,8 @@ class TestSchoolHot:
         res2 = await client.get("/stocks/school-hot/10")
         res_data1 = res1.json()
         res_data2 = res2.json()
+        print(res_data1)
+        print(res_data2)
         assert res1.status_code == 200
         assert res2.status_code == 200
         assert res_data1["message"] == "success"
