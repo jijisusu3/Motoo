@@ -18,6 +18,8 @@ import StockDetailPage from "./pages/stock-detail/StockDetailPage";
 import QuizPage from "./pages/stock-list/QuizPage";
 import QuizResultPage from "./pages/stock-list/QuizResultPage";
 
+
+
 function PrivateOutlet() {
   const isLogin = localStorage.getItem("login-token");
   return isLogin ? <Outlet /> : <Navigate to="/login" />;

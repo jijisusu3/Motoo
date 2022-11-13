@@ -4,7 +4,8 @@
   display: flex;
   justify-content: center;
   padding: 32px;
-  background-color: var(--color-grey-900);
+  background-color: transparent;
   color: #43B8B1;
   text-align: center;
+
 }
