@@ -36,7 +36,7 @@ function SellStockPage() {
     if (element.ticker === id) {
       myStock = element.amount;
     }
-  }); 
+  });
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(shortStockGet(id));
@@ -69,6 +69,7 @@ function SellStockPage() {
           type: "bar",
           height: 350,
           width: 120,
+          offsetX: 10,
           toolbar: {
             show: false,
           },
@@ -150,6 +151,7 @@ function SellStockPage() {
           type: "bar",
           height: 350,
           width: 120,
+          offsetX: 220,
           toolbar: {
             show: false,
           },
@@ -229,22 +231,25 @@ function SellStockPage() {
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            <button onClick={handleClose}>X</button>
-            <p>이가격에</p>
-            <p>팔려는 주식수</p>
-            <p>사려는 주식수</p>
+            {/* <button onClick={handleClose}>X</button> */}
+            <div class={classes.words}>
+              <p class={classes.thisMoney}>이 가격에</p>
+              <br></br>
+              <span class={classes.sellHoga}>팔려는 주식수</span>
+              <span class={classes.buyHoga}>사려는 주식수</span>
+            </div>
             <ReactApexChart
               options={buyData.options}
               series={buyData.series}
               type="bar"
-              height={180}
+              height={200}
               width={120}
             />
             <ReactApexChart
               options={sellData.options}
               series={sellData.series}
               type="bar"
-              height={180}
+              height={200}
               width={120}
             />
           </Box>
@@ -340,7 +345,7 @@ function SellStockPage() {
       // 직접입력하겠다고 할 때,
       if (wantedPrice === "") {
         return (
-          <div onClick={priceClickHandler}>
+          <span class={classes.buyNumber} onClick={priceClickHandler}>
             {writePrice && (
               <img
                 className={classes.blinking}
@@ -348,13 +353,15 @@ function SellStockPage() {
                 alt=""
               />
             )}
-            <h1>얼마에 팔고싶나요?</h1>
-          </div>
+            <span class={classes.howMuchWant}>얼마에 팔고싶나요?</span>
+          </span>
         );
       } else {
         return (
           <>
-            <span onClick={priceClickHandler}>{wantedPrice}</span>
+            <span class={classes.buyNumber} onClick={priceClickHandler}>
+              {wantedPrice}
+            </span>
             {writePrice && (
               <img
                 className={classes.blinking}
@@ -362,7 +369,7 @@ function SellStockPage() {
                 alt=""
               />
             )}
-            <span>원</span>
+            <span class={classes.zuOrwon}>원</span>
           </>
         );
       }
@@ -371,7 +378,7 @@ function SellStockPage() {
   function ManyInput() {
     if (wantedMany === "") {
       return (
-        <div onClick={manyClickHandler}>
+        <div class={classes.buyNumber} onClick={manyClickHandler}>
           {!writePrice && (
             <img
               className={classes.blinking}
@@ -379,26 +386,30 @@ function SellStockPage() {
               alt=""
             />
           )}
-          <h1>몇 주를 팔건가요?</h1>
+          <span class={classes.howMuchWant}>몇 주를 팔건가요?</span>
         </div>
       );
     } else {
       return (
         <>
-          <p onClick={manyClickHandler}>{wantedMany}</p>
-          {!writePrice && (
-            <img
-              className={classes.blinking}
-              src={`${process.env.PUBLIC_URL}/stock-detail/inputIcon.svg`}
-              alt=""
-            />
-          )}
-          <span>주</span>
+          <div class={classes.buyNumber} onClick={manyClickHandler}>
+            {wantedMany}
+            {!writePrice && (
+              <img
+                className={classes.blinking}
+                src={`${process.env.PUBLIC_URL}/stock-detail/inputIcon.svg`}
+                alt=""
+              />
+            )}
+            <span class={classes.zuOrwon}>주</span>
+          </div>
         </>
       );
     }
   }
+
   function submitOrder() {
+    // 현재가로 주문, 개수입력
     if (isMarketPrice && Boolean(wantedMany)) {
       const data = {
         config: {
@@ -413,7 +424,7 @@ function SellStockPage() {
           stockId: Number(tradeData.id),
         },
       };
-      dispatch(stockSellPost(data))
+      dispatch(stockSellPost(data));
     } else if (!isMarketPrice && Boolean(wantedMany) && !isTooLow) {
       const data = {
         config: {
@@ -429,85 +440,173 @@ function SellStockPage() {
           tr_type: "3",
         },
       };
-      dispatch(stockTradingPost(data))
+      dispatch(stockTradingPost(data));
     }
   }
+
+  const ration = tradeData.fluctuation_rate;
   return (
     <div>
-      <img
-        onClick={backTo}
-        src={`${process.env.PUBLIC_URL}/grayBack.svg`}
-        alt=""
-      />
-      <div>{tradeData.name}</div>
-      <div>{tradeData.price}</div>
-      <div>{tradeData.fluctuation_rate}</div>
-      {isMarketPrice ? (
-        <div>
+      <div>
+        <div className={classes.info}>
           <img
-            src={`${process.env.PUBLIC_URL}/stock-detail/checkedBox.svg`}
+            className={classes.pd}
+            src={`${process.env.PUBLIC_URL}/grayBack.svg`}
             alt=""
-            onClick={checkBoxHandler}
+            onClick={backTo}
           />
-          <p>시장가로 즉시 판매</p>
+          <div>
+            <div>{tradeData.name}</div>
+            <div>
+              <span>{tradeData.price}</span>
+              &nbsp;
+              {ration >= 0 ? (
+                <span style={{ color: "red" }}>(+{ration}%)</span>
+              ) : (
+                <span style={{ color: "blue" }}>({ration}%)</span>
+              )}
+            </div>
+          </div>
         </div>
-      ) : (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/stock-detail/box.svg`}
-            alt=""
-            onClick={checkBoxHandler}
-          />
-          <p>시장가로 즉시 판매</p>
-        </div>
-      )}
-      <button onClick={handleOpen}>호가보기</button>
-      <PriceInput />
-      <ManyInput />
-      {isTooHigh && <p>이렇게 비싸겐 못팔아요</p>}
-      {isTooLow && <p>이렇게 싸겐 못팔아요</p>}
-      {!isHave && <p>넌 그만큼 팔 주식 개수가 없어요</p>}
-      <div class="numberSection">
-        <button value={1} class="number" onClick={numberClick}>
-          1
-        </button>
-        <button value={2} class="number" onClick={numberClick}>
-          2
-        </button>
-        <button value={3} class="number" onClick={numberClick}>
-          3
-        </button>
-        <button value={4} class="number" onClick={numberClick}>
-          4
-        </button>
-        <button value={5} class="number" onClick={numberClick}>
-          5
-        </button>
-        <button value={6} class="number" onClick={numberClick}>
-          6
-        </button>
-        <button value={7} class="number" onClick={numberClick}>
-          7
-        </button>
-        <button value={8} class="number" onClick={numberClick}>
-          8
-        </button>
-        <button value={9} class="number" onClick={numberClick}>
-          9
-        </button>
-        <button value={0} class="number" onClick={numberClick}>
-          0
-        </button>
-        <button class="number" onClick={numberClick}>
-          <img
-            value="삭제"
-            src={`${process.env.PUBLIC_URL}/stock-detail/eraser.svg`}
-            alt=""
-          />
-        </button>
+        <hr />
       </div>
-      <div onClick={submitOrder}>팔래요</div>
-      <AskingGraphModal />
+
+      <div class={classes.total}>
+        <div class={classes.realPriceRadio}>
+          {isMarketPrice ? (
+            <div>
+              <img
+                src={`${process.env.PUBLIC_URL}/stock-detail/checkedBox.svg`}
+                alt=""
+                onClick={checkBoxHandler}
+              />
+              &nbsp; &nbsp;
+              <span>시장가로 즉시 판매</span>
+            </div>
+          ) : (
+            <div>
+              <img
+                src={`${process.env.PUBLIC_URL}/stock-detail/box.svg`}
+                alt=""
+                onClick={checkBoxHandler}
+              />
+              &nbsp; &nbsp;
+              <span>시장가로 즉시 판매</span>
+            </div>
+          )}
+          <button class={classes.hogaButton} onClick={handleOpen}>
+            호가보기
+          </button>
+        </div>
+        <PriceInput />
+        <ManyInput />
+        {isTooHigh && <p>이렇게 비싸겐 못팔아요</p>}
+        {isTooLow && <p>이렇게 싸겐 못팔아요</p>}
+        {!isHave && <p>넌 그만큼 팔 주식 개수가 없어요</p>}
+      </div>
+
+      <div class={classes.buyButtom}>
+        <div class={classes.numberSection}>
+          <div>
+            <button
+              value={1}
+              class={classes.numberButton}
+              onClick={numberClick}
+            >
+              1
+            </button>
+            <button
+              value={2}
+              class={classes.numberButton}
+              onClick={numberClick}
+            >
+              2
+            </button>
+            <button
+              value={3}
+              class={classes.numberButton}
+              onClick={numberClick}
+            >
+              3
+            </button>
+          </div>
+
+          <div>
+            <button
+              value={4}
+              class={classes.numberButton}
+              onClick={numberClick}
+            >
+              4
+            </button>
+            <button
+              value={5}
+              class={classes.numberButton}
+              onClick={numberClick}
+            >
+              5
+            </button>
+            <button
+              value={6}
+              class={classes.numberButton}
+              onClick={numberClick}
+            >
+              6
+            </button>
+          </div>
+
+          <div>
+            <button
+              value={7}
+              class={classes.numberButton}
+              onClick={numberClick}
+            >
+              7
+            </button>
+            <button
+              value={8}
+              class={classes.numberButton}
+              onClick={numberClick}
+            >
+              8
+            </button>
+            <button
+              value={9}
+              class={classes.numberButton}
+              onClick={numberClick}
+            >
+              9
+            </button>
+          </div>
+
+          <div>
+            <button class={classes.numberButton} id={classes.lastNumber}>
+              ``
+            </button>
+            <button
+              value={0}
+              class={classes.numberButton}
+              onClick={numberClick}
+            >
+              0
+            </button>
+            <button class={classes.numberButton} onClick={numberClick}>
+              <img
+                value="삭제"
+                src={`${process.env.PUBLIC_URL}/stock-detail/eraser.svg`}
+                alt=""
+              />
+            </button>
+          </div>
+        </div>
+
+        <div class={classes.buyButtonDiv} onClick={submitOrder}>
+          <button class={classes.buyButton}>
+            팔래요
+            <AskingGraphModal />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
