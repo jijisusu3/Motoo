@@ -9,8 +9,7 @@ import App from "./App";
 import "./styles/index.css";
 import "./styles/minireset.min.css";
 import "./styles/pretendard.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+
 
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
