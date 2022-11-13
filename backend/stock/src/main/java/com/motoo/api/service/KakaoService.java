@@ -166,4 +166,24 @@ public class KakaoService {
 
         return response;
     }
+
+
+    public String dummySignup(String email, String nickname) {
+
+        Long newUserId = userService.signupUser(email, nickname);
+        Optional<User> dummyUser = userService.getByUserId(newUserId);
+        //초기 계좌 개설 로직
+        String newAccountName = nickname+"님의 계좌";
+        Long accountId = accountService.createAccount(newUserId, newAccountName);
+
+        int intAccountId = accountId.intValue();
+
+        Account account = accountService.getAccount(accountId, newUserId);
+        account.updateIsMain(true);
+        userService.updateCurrent(newUserId, intAccountId);
+
+        String token = JwtTokenUtil.getToken(dummyUser.get().getEmail());
+
+        return token;
+    }
 }

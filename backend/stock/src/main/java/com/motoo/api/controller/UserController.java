@@ -167,4 +167,13 @@ public class UserController {
 
         return loginResponse;
     }
+
+    /**
+     * 더미계정 회원가입
+     */
+    @PostMapping("/dummysignup")
+    public String dummy(String email, String nickname) {
+        String dummyToken = kakaoService.dummySignup(email, nickname);
+        return dummyToken;
+    }
 }
