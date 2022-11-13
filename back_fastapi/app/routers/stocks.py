@@ -93,15 +93,15 @@ async def get_trading_stock_info(ticker: str, response: Response):
 
 @router.get("/bidask/{ticker}", description="매수매도호가 조회", response_model=BidAskResponse)
 async def get_bidask_list(ticker: str):
-    bid = redis_session.lrange('bid' + ticker, 0, 9)
-    ask = redis_session.lrange('ask' + ticker, 0, 9)
+    bid_list = redis_session.lrange('bid_' + ticker, 0, 9)
+    ask_list = redis_session.lrange('ask_' + ticker, 0, 9)
     access_token = redis_session.get("get_bidask")
     if access_token is None:
-        save_token()
+        save_token("get_bidask")
         access_token = redis_session.get("get_bidask")
     header = get_header('FHKST01010200', False, settings.APPKEY_FOR_BIDASK, settings.APPSECRET_FOR_BIDASK)
     header["authorization"] = "Bearer " + access_token
-    if not bid or not ask:
+    if not bid_list or not ask_list:
         res = requests.get(
             url=settings.OPEN_API_DOMAIN + settings.BIDASK_API_URL,
             headers=header,
@@ -109,14 +109,22 @@ async def get_bidask_list(ticker: str):
         )
         if res.status_code == 200:
             data = res.json()['output1']
-            for i in range(1, 11):
-                redis_session.rpush('ask' + ticker, data[f'askp{i}'])
-                redis_session.rpush('bid' + ticker, data[f'bidp{i}'])
-                redis_session.expire('ask' + ticker, 60)
-                redis_session.expire('bid' + ticker, 60)
-            bid = sorted(redis_session.lrange('bid' + ticker, 0, 9), reverse=True)[:5]
-            ask = sorted(redis_session.lrange('ask' + ticker, 0, 9))[:5]
-    return BidAskResponse(bid=bid, ask=ask)
+            for i in range(1, 6):
+                redis_session.rpush('ask_' + ticker, data[f'askp{i}'])
+                redis_session.rpush('bid_' + ticker, data[f'bidp{i}'])
+            for i in range(1,6):
+                redis_session.rpush('ask_' + ticker, data[f'askp_rsqn{i}'])
+                redis_session.rpush('bid_' + ticker, data[f'bidp_rsqn{i}'])
+            redis_session.expire('ask_' + ticker, 60)
+            redis_session.expire('bid_' + ticker, 60)
+            bid_list = redis_session.lrange('bid_' + ticker, 0, 9)
+            ask_list = redis_session.lrange('ask_' + ticker, 0, 9)
+    return BidAskResponse(
+        bid_pr=bid_list[:5],
+        ask_pr=ask_list[:5],
+        bid_rsqn=bid_list[5:],
+        ask_rsqn=ask_list[5:]
+    )
 
 
 @router.get("/school-hot", description="교내 핫 종목", response_model=SchoolHotStockResponse)

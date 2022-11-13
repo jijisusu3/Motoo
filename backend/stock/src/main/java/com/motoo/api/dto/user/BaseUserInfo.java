@@ -1,7 +1,6 @@
 package com.motoo.api.dto.user;
 
 
-import com.motoo.db.entity.School;
 import com.motoo.db.entity.User;
 import lombok.Getter;
 import lombok.Setter;

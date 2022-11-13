@@ -13,4 +13,5 @@ public class AccountStockInfo {
     private Long stockId;
     private String ticker;
     private int amount;
+    private int available;
 }

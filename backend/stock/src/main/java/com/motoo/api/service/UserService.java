@@ -1,7 +1,6 @@
 package com.motoo.api.service;
 
 import com.motoo.api.dto.user.AccountStockInfo;
-import com.motoo.api.request.UpdateUserCurrentAccountPutReq;
 import com.motoo.db.entity.User;
 import org.springframework.security.core.Authentication;
 

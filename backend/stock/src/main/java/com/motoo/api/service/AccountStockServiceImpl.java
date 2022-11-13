@@ -80,47 +80,9 @@ public class AccountStockServiceImpl implements AccountStockService{
 
         return stockId;
     }
-    /**
-     * public void registerStock(Long userId, Long stockId) {
-     *         User user = userRepository.findByUserId(userId).orElseGet(() -> new User());
-     *         Stock stock = stockRepository.findById(stockId).orElseGet(() -> new Stock());
-     *         FavoriteStock build = FavoriteStock.builder()
-     *                 .user(user)
-     *                 .stock(stock)
-     *                 .build();
-     *         favoriteStockRepository.save(build);
-     *     }
-     *
-     *     public void delistStock(Long userId, Long stockId) {
-     *         User user = userRepository.findByUserId(userId).orElseGet(() -> new User());
-     *         Stock stock = stockRepository.findById(stockId).orElseGet(() -> new Stock());
-     *         FavoriteStock test = favoriteStockRepository.findByUserAndStock(user, stock).orElseGet(() -> new FavoriteStock());
-     *         favoriteStockRepository.delete(test);
-     * //        favoriteStockRepository.deleteByUserAndStock(user, stock);
-     *     }
-     *
-     *
-     *
-     * //주식 계좌 추가
-     *     @Override
-     *     public void addStockAccount(Long userId, Long stockId) {
-     *         User user = userRepository.findByUserId(userId).orElseGet(() -> new User());
-     *         Account account = accountRepositorySupport.findAccountByUserId(userId);
-     *
-     *
-     *         Stock stock = stockRepository.findById(stockId).orElseGet(() -> new Stock());
-     *         AccountStock build = AccountStock.builder()
-     *                 .account(account)
-     *                 .build();
-     *     }
-     *
-     *     //주식 계좌 삭제
-     *     @Override
-     *     public void deleteStockAccount(Long userId, Long stockId) {
-     *
-     *     }
-     *
-     *
-     *
-     * **/
+    @Override
+    public List<AccountStock>getAccountStockListByUserIdAccountIdStockId(Long userId, Long accountId, Long stockId){
+        List<AccountStock> accountStocks = accountStockRepositorySupport.getAccountStockListByUserIdAccountIdStockId(userId,accountId,stockId);
+        return accountStocks;
+    }
 }

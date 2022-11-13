@@ -2,24 +2,17 @@ package com.motoo.api.controller;
 
 
 import com.motoo.api.dto.accountDetail.*;
-import com.motoo.api.request.AccountDetailReq;
 import com.motoo.api.service.*;
 import com.motoo.common.model.response.BaseResponseBody;
-import com.motoo.db.entity.AccountStock;
-import com.motoo.db.entity.Trading;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @Api(value = "계좌 상세조회 API", tags = {"AccountDetail"})
 @RestController

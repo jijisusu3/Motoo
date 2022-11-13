@@ -1,7 +1,6 @@
 package com.motoo.api.service;
 
 import com.motoo.api.dto.accountDetail.*;
-import com.motoo.db.entity.AccountStock;
 
 import java.util.List;
 

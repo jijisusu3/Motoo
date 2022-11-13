@@ -3,9 +3,11 @@ import { useLocation } from "react-router-dom";
 import classes from "./BuyOrderEditPage.module.css";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
 import { setShowNav } from "../../stores/navSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { shortStockGet, limitOrderPut, limitOrderDelete } from "../../stores/stockSlice";
 
 const style = {
   position: "absolute",
@@ -21,12 +23,11 @@ const style = {
 };
 
 function BuyOrderEditPage() {
-  const location = useLocation();
-  const orderData = location.state?.data;
-  const mySeed = 10000000;
-  const [nowPrice, setNowPrice] = useState(100000);
-  const [wantedPrice, setWantedPrice] = useState(String(orderData.price));
-  const [wantedMany, setWantedMany] = useState(String(orderData.many));
+  const params = useParams();
+  const dataList = params.id.split(":");
+  const tradeId = Number(dataList[3])
+  const [wantedPrice, setWantedPrice] = useState(dataList[1]);
+  const [wantedMany, setWantedMany] = useState(dataList[2]);
   const [writePrice, setWritePrice] = useState(false);
   const [isAvailable, setIsAvailable] = useState(true);
   const [isTooHigh, setIsTooHigh] = useState(false);
@@ -34,17 +35,28 @@ function BuyOrderEditPage() {
   const [total, setTotal] = useState(0);
   const [openDeleteModal, setDeleteModalOpen] = useState(false);
 
+  const tradeData = useSelector((state) => {
+    return state.setStock.shortStockData;
+  });
+  const userData = useSelector((state) => {
+    return state.persistedReducer.setUser.user;
+  });
+  const mySeed = userData.data.seed;
+  console.log(tradeData);
   const navigate = useNavigate();
   function backToLimitOrderList() {
     navigate(`/stock/limit-order`);
-  } 
+  }
 
-  
-  const dispatch = useDispatch()
   useEffect(() => {
-    const now = window.location.pathname
-    dispatch(setShowNav(now))
-  })
+    dispatch(shortStockGet(dataList[0]));
+  }, []);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const now = window.location.pathname;
+    dispatch(setShowNav(now));
+  }, []);
 
   const handleDeleteModalOpen = () => {
     setDeleteModalOpen(true);
@@ -53,8 +65,19 @@ function BuyOrderEditPage() {
 
   // 삭제확인 눌렀을 때,
   function deleteSubmit() {
+    const data = {
+      config: {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      },
+      tradeId: tradeId
+    };
+    dispatch(limitOrderDelete(data));
     handleDeleteModalClose(false);
-    backToLimitOrderList()
+    setTimeout(() => {
+      backToLimitOrderList();
+    }, 70);
   }
 
   const numberClick = (event) => {
@@ -69,14 +92,14 @@ function BuyOrderEditPage() {
             return;
           }
         }
-        if (tempPrice > nowPrice * 1.3) {
+        if (tempPrice > tradeData.maximum) {
           // 상한가보다 클때
           setIsTooHigh(true);
           setTimeout(() => {
             setIsTooHigh(false);
           }, 1000);
           return;
-        } else if (tempPrice < nowPrice * 0.7) {
+        } else if (tempPrice < tradeData.minimum) {
           // 하한가보다 낮을때
           setIsTooLow(true);
         }
@@ -99,7 +122,7 @@ function BuyOrderEditPage() {
         if (wantedPrice !== "") {
           const tmp = wantedPrice.slice(0, -1);
           const tmpNum = Number(tmp);
-          if (tmpNum < nowPrice * 0.7) {
+          if (tmpNum < tradeData.minimum) {
             // 하한가보다 낮을때
             setIsTooLow(true);
           }
@@ -121,7 +144,7 @@ function BuyOrderEditPage() {
           }, 1000);
           return;
         } else {
-          if (nowPrice * Number(wantedMany) > mySeed) {
+          if (tradeData.price * Number(wantedMany) > mySeed) {
             setIsAvailable(false);
             setTimeout(() => {
               setIsAvailable(true);
@@ -129,7 +152,7 @@ function BuyOrderEditPage() {
             return;
           } else {
             setIsAvailable(true);
-            setTotal(nowPrice * Number(wantedMany));
+            setTotal(tradeData.price * Number(wantedMany));
           }
         }
         setWantedMany(String(tempMany));
@@ -192,7 +215,7 @@ function BuyOrderEditPage() {
               alt=""
             />
           )}
-          <h1>몇 주를 사고싶나요?</h1>
+          <h1>몇 주로 변경할까요?</h1>
         </div>
       );
     } else {
@@ -211,10 +234,43 @@ function BuyOrderEditPage() {
       );
     }
   }
+  function submitEdit() {
+    // 현재가로 주문, 개수입력
+    console.log('하하')
+    if (Boolean(wantedMany) && !isTooLow) {
+      const data = {
+        config: {
+          headers: {
+            Authorization: `Bearer ${userData.token}`,
+          },
+        },
+        result: {
+          tr_amount: String(wantedMany),
+          tr_price: String(tradeData.price),
+        },
+        tradeId: tradeId
+      };
+      dispatch(limitOrderPut(data));
+      setTimeout(() => {
+        backToLimitOrderList();
+      }, 70);
+    }
+  }
   return (
     <div>
-      <img onClick={backToLimitOrderList} src={`${process.env.PUBLIC_URL}/grayBack.svg`} alt="" />
-      <div>{orderData.name}</div>
+      <div>
+        <div className={classes.info}>
+          <img
+            className={classes.pd}
+            src={`${process.env.PUBLIC_URL}/grayBack.svg`}
+            alt=""
+            onClick={backToLimitOrderList}
+          />
+          <div>
+            <div>{tradeData.name}</div>
+          </div>
+        </div>
+      </div>
       <hr />
       <img
         onClick={handleDeleteModalOpen}
@@ -266,12 +322,13 @@ function BuyOrderEditPage() {
           />
         </button>
       </div>
+      <div onClick={submitEdit}>
+        <div>수정</div>
+      </div>
       <Modal open={openDeleteModal} onClose={handleDeleteModalClose}>
         <Box sx={style}>
           <p>정말 삭제하시겠습니까?</p>
-          <p>
-            구매 주문을 취소하면 사용가능한 씨드가 원래대로 돌아옵니다!
-          </p>
+          <p>구매 주문을 취소하면 사용가능한 씨드가 재설정됩니다!</p>
           <button onClick={deleteSubmit}>삭제하기</button>
         </Box>
       </Modal>

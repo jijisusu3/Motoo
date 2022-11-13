@@ -24,8 +24,14 @@ public interface TradingService {
     //주문목록조회 전부
     List<Trading> tradingListAccount(Long userId, Long accountId);
 
+    List<Trading> tradingList3Or4(Long userId, Long accountId);
+
+    //판매하고 있는 거래내역 조회
+    List<Trading> tradingList3(Long userId, Long accountId);
 
 
+    //판매가능한 갯수 확인용용
+    public int tradingList3ByTicker(Long userId, Long accountId, String ticker);
     //주문 객체조회
     Trading getTrading(Long userId, Long tradeId);
 

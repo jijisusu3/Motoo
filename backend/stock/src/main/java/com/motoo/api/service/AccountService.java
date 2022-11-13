@@ -2,7 +2,6 @@ package com.motoo.api.service;
 
 import com.motoo.db.entity.Account;
 import com.motoo.db.entity.AccountStock;
-import com.motoo.db.entity.Stock;
 
 import java.util.List;
 

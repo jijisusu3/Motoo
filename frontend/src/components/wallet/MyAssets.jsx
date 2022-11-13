@@ -26,7 +26,7 @@ function MyAssets() {
       return
     }
   }, [accountAssetData])
-  const [assetProfit, setAssetProfit] = useState(13);
+  const [assetProfit, setAssetProfit] = useState(0);
 
   function assetProfitCheck() {
     if (assetProfit < 0) {

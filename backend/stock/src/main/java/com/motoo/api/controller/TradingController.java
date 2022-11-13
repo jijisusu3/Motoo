@@ -66,6 +66,16 @@ public class TradingController {
         return ResponseEntity.status(200).body(TradingListRes.of(tradings, 200, "주문 목록조회에 성공하였습니다."));
     }
 
+    //대기중인 (3 or 4) 주문 조회
+    @GetMapping("waiting/{accountId}")
+    @ApiResponses({@ApiResponse(code = 200, message = "(token) 대기주문 목록 조회 성공", response = AccountListRes.class), @ApiResponse(code = 401, message = "대기주문 목록 조회 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
+    @ApiOperation(value = "대기주문 목록 조회", notes = "대기주문 목록을 조회한다.")
+    public ResponseEntity<TradingListRes> watingListTradings(@ApiIgnore Authentication authentication, @PathVariable @ApiParam(value = "상세번호", required = true) Long accountId){
+        Long userId =  userService.getUserIdByToken(authentication);
+        List<Trading> tradings= tradingService.tradingList3Or4(userId,accountId);
+        return ResponseEntity.status(200).body(TradingListRes.of(tradings, 200, "주문 목록조회에 성공하였습니다."));
+    }
+
     //주문 삭제
     @DeleteMapping("/{tradeId}")
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 주문 삭제 성공", response = BaseResponseBody.class), @ApiResponse(code = 401, message = "주문 삭제 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
@@ -95,6 +105,8 @@ public class TradingController {
         }
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "주문 수정에 성공했습니다."));
     }
+
+
 
 
 }
