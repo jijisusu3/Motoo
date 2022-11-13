@@ -1,18 +1,17 @@
 package com.motoo.api.service;
 
-import com.motoo.api.response.SchoolAccResponse;
 import com.motoo.api.response.SchoolPageResponse;
 import com.motoo.api.response.SchoolResponse;
-import com.motoo.db.entity.*;
+import com.motoo.db.entity.Events;
+import com.motoo.db.entity.School;
+import com.motoo.db.entity.Sigungu;
+import com.motoo.db.entity.User;
 import com.motoo.db.repository.*;
-import jdk.swing.interop.SwingInterOpUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Index;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Optional;

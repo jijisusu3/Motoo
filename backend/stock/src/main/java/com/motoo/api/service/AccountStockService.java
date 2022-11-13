@@ -28,6 +28,8 @@ public interface AccountStockService {
     void updateAmountPrice(AccountStock accountStock, int amount, int price);
 
     Long getStockIdByTicker(String ticker);
+
+    List<AccountStock> getAccountStockListByUserIdAccountIdStockId(Long userId, Long accountId, Long stockId);
 }
 
 

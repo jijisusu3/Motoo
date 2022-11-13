@@ -19,11 +19,10 @@ public class StockRepositorySupport {
         return stock;
     }
 
-    public Long findStockIdByTicker(String tiker){
-        Stock stock = jpaQueryFactory.selectFrom(qStock).where(qStock.ticker.eq(tiker)).fetchOne();
+    public Long findStockIdByTicker(String ticker){
+        Stock stock = jpaQueryFactory.selectFrom(qStock).where(qStock.ticker.eq(ticker)).fetchOne();
         return stock.getStockId();
     }
-
 
 
 //

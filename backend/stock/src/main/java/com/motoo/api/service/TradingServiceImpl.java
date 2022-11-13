@@ -5,7 +5,6 @@ import com.motoo.db.entity.Stock;
 import com.motoo.db.entity.Trading;
 import com.motoo.db.entity.User;
 import com.motoo.db.repository.*;
-import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,12 +121,16 @@ public class TradingServiceImpl implements TradingService{
     public List<Trading> tradingList3Or4(Long userId, Long accountId){
         return tradingRepositorySupport.find3Or4ByUserIdAccountId(userId, accountId);
     }
-
-
     @Override
-    public void writeAvg(Trading trading, int tr_avg){
-        return;
+    public List<Trading> tradingList3(Long userId, Long accountId){
+        return tradingRepositorySupport.find3ByUserIdAcountId(userId, accountId);
     }
+    @Override
+    public int tradingList3ByTicker(Long userId, Long accountId, String ticker){
+        return tradingRepositorySupport.find3ByUserIdAccountIdTicker(userId, accountId, ticker);
+    }
+    @Override
+    public void writeAvg(Trading trading, int tr_avg){};
 
 
 

@@ -1,9 +1,7 @@
 package com.motoo.db.repository;
 
 import com.motoo.db.entity.QSchool;
-import com.motoo.db.entity.QUser;
 import com.motoo.db.entity.School;
-import com.motoo.db.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

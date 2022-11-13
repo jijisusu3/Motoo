@@ -1,13 +1,12 @@
 package com.motoo.api.controller;
 
 import com.motoo.api.dto.user.AccountStockInfo;
-import com.motoo.api.dto.user.BaseUserInfo;
 import com.motoo.api.request.*;
 import com.motoo.api.response.*;
 import com.motoo.api.service.*;
 import com.motoo.common.model.response.BaseResponseBody;
-import com.motoo.db.entity.*;
 
+import com.motoo.db.entity.*;
 import com.motoo.db.repository.StockRepositorySupport;
 
 import io.swagger.annotations.*;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
-import java.util.HashMap;
 
 
 import javax.persistence.EntityManager;
@@ -315,10 +313,21 @@ public class AccountsController {
         //주 계좌 시드머니 세팅
         int seed = userService.getAccountSeed(user);
 
+        //판매가능한 수
+        int available=0;
+
+        List<Trading> trading = tradingService.tradingList3(userId, account_id);
+//        Long stockId = accountStockService.getStockIdByTicker(ticker);
+        long stockId = 1L;
+        List<AccountStock> accountStocks = accountStockService.getAccountStockListByUserIdAccountIdStockId(userId,account_id,stockId);
+
+
+
+
 
         List<AccountStockInfo> stockInfo = userService.getStockInfoByAccountId(userId,account_id);
 
-        return ResponseEntity.status(200).body(StockListRes.of(account,stockInfo, 200, "보유주식 리스트 조회에 성공하였습니다."));
+        return ResponseEntity.status(200).body(StockListRes.of(account,stockInfo, available,200, "보유주식 리스트 조회에 성공하였습니다."));
     }
 }
 
