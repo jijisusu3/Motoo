@@ -1,0 +1,57 @@
+.myLimitOrderCard {
+  width: 100%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.listbox{
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+.rowbox{
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 18px;
+}
+.hrline{
+  border: #EAF0EF 1px solid;
+  display: flex;
+  justify-content: center;
+}
+.pr{
+  color: #929e9e;
+  font-weight: 600;
+}
+.label{
+  display: flex;
+  width: 32px;
+  justify-content: center;
+  align-items: center;
+  height: 18px;
+  border-radius: 5px;
+  margin-right: 1rem;
+}
+.title{
+  font-size: 24px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  margin: 2rem;
+}
+.info{
+  display: flex;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  justify-content: center;
+  font-weight: 600;
+}
+.pd{
+  position: absolute;
+  left: 5%;
+}

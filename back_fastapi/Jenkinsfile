@@ -1,0 +1,33 @@
+pipeline {
+    agent any 
+    stages {
+        stage('Clean') {
+            steps {
+                script {
+                    try {
+                        sh "docker stop motoo_fastapi_container"
+                        sleep 1  
+                        sh "docker rm motoo_fastapi_container"
+                    } catch (error) {
+                        echo error
+                        sh 'exit 0'
+                    }
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh "docker build -t motoo_fastapi ./back_fastapi"
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh "docker run -e TZ=Asia/Seoul --env-file /home/.env -d --name=motoo_fastapi_container -p 8080:8000 motoo_fastapi"
+                sh "docker image prune --force"
+
+            }
+        }
+    }
+}

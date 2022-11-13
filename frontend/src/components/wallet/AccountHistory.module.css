@@ -1,0 +1,109 @@
+.myHistoryCard {
+  width: 100%;
+  height: 56px;
+  background-color: #fff;
+  border: 1px solid;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+}
+.formbox{
+  width: 78%;
+}
+.imgs{
+  width: 19px;
+}
+.calender{
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+.dateipt{
+  display: flex;
+  /* justify-content: space-between;
+  align-items: center; */
+}
+.tag{
+  padding: 8px;
+  width: 95%;  
+  display: flex;
+  justify-content: center;
+  border-radius: 5px;
+  border-color: #c5c9c9;
+  border-style: solid;
+  border-width: 0.5px;
+  width: 80px;
+  height: 28px;
+  background-color: #ffffff;
+}
+.tag:focus {
+  outline: 0;
+  border-color: rgb(255, 231, 160) !important;
+  background-color: #F8F8F8;
+  /* box-shadow: inset rgb(129, 120, 161) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em !important; */
+}
+.wrap{
+  /* width: 32%; */
+  font-size: 14px;
+
+}
+.namebox{
+  display: flex;
+  margin-left: 1.5rem;
+  align-items: center;
+}
+.search{
+  border: none;
+  border-radius: 5px;
+  background: #d9d9d9;
+  width: 40px;
+  font-weight: 500;
+}
+.pricebox{
+  display: flex;
+  margin-right: 1.5rem;
+  align-items: center;
+  font-weight: 600;
+  color: #929E9E;
+}
+.listbox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.section{
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 16px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+}
+.stname{
+  font-weight: 700;
+  font-size: 16px;
+}
+.search{
+  border: none;
+  border-radius: 5px;
+  background: #FEBF45;
+  width: 40px;
+  height: 28px;
+  font-weight: 500;
+  font-size: 14px;
+  color: white;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.sltbox{
+  margin-bottom: 1rem;
+  border: none;
+}

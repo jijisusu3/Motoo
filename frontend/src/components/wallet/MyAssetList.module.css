@@ -1,0 +1,75 @@
+.myStockCard {
+  padding: 0.5rem 0.5rem 0px 0.5rem;
+  width: 100%;
+  height: 140px;
+  background-color: #fff;
+  border: none;
+  border-radius: 10px;
+  display: flex;
+  /* flex-direction: column; */
+  flex-wrap: wrap;
+  align-content: space-between;
+  margin-bottom: 25px;
+  box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
+}
+.listbox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.abovebox{
+  display: flex;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+.result{
+  display: flex;
+  align-items: center;
+  color: #4E5E5E;
+  font-size: 11px;
+  background-color: #fff;
+  margin-left: 1rem;
+}
+.rowbox{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+.belowbox{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  width: 100%;
+}
+.stname{
+  font-weight: 700;
+  font-size: 16px;
+}
+.section{
+  margin-left: 2rem;
+}
+.infobox{
+  display: flex;
+  flex-direction: column;
+  color: #929E9E;
+  font-weight: 600;
+  font-size: 10px;
+}
+.numbox{
+  align-items: baseline;
+  display: flex;
+  margin-top: 4px;
+}
+.txts{
+  color: #000;
+  font-size: 0.9rem;
+  margin-right: 3px;
+}

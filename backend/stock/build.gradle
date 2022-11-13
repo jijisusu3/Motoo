@@ -1,0 +1,109 @@
+
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+plugins {
+	id 'org.springframework.boot' version '2.7.5'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'java'
+
+	// querydsl 플러그인 추가
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+}
+
+//apply plugin: "com.ewerk.gradle.plugins.querydsl"
+
+group = 'motoo'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
+
+
+
+	developmentOnly'org.springframework.boot:spring-boot-devtools'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'com.vladmihalcea:hibernate-types-52:2.16.2'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	//swager
+//	implementation("io.springfox:springfox-swagger2:3.0.0")
+//	implementation("io.springfox:springfox-swagger-ui:3.0.0")
+// <https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui>
+	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+// <https://mvnrepository.com/artifact/io.springfox/springfox-swagger2>
+	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+
+
+
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	testImplementation("org.springframework.security:spring-security-test")
+
+	//jwt
+	implementation("com.auth0:java-jwt:3.10.3")
+
+	// querydsl 디펜던시 추가
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	implementation("com.google.guava:guava:29.0-jre")
+	annotationProcessor("com.google.guava:guava:29.0-jre")
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+}
+
+// querydsl 사용할 경로 지정합니다. 현재 지정한 부분은 .gitignore에 포함되므로 git에 올라가지 않습니다.
+def querydslDir = "$buildDir/generated/'querydsl'"
+
+// JPA 사용여부 및 사용 경로 설정
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+
+// build시 사용할 sourceSet 추가 설정
+sourceSets {
+	main.java.srcDir querydslDir
+}
+
+
+// querydsl 컴파일 시 사용할 옵션 설정
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+// querydsl이 compileClassPath를 상속하도록 설정
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+}
+clean.doLast {
+	file(generated).deleteDir()
+}
+tasks.named('test') {
+	useJUnitPlatform()
+}

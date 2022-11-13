@@ -1,0 +1,90 @@
+.assetCard {
+  padding-top: 0.5rem;
+  padding-left: 0.5rem;
+  width: 100%;
+  height: 160px;
+  border: none;
+  background-color: #fff;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.acd{
+  height: 48px;
+  background: linear-gradient(90deg, #43B8B1 4%, #FFC34D 94.15%, #FFC149 94.15%);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: #fff;
+}
+
+.cntbox{
+  display: flex;
+  align-items: center;
+}
+.present{
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  color: #929e9e;
+  margin-top: 1rem;
+  width: 100%;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+.rowbox{
+  display: flex;
+  align-items: center;
+}
+.count{
+  color: #000;
+  font-size: 20px;
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+.bar{
+  /* background-color: #929e9e; */
+  width: 100%;
+  border: #f5f5f5 1px solid;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+}
+.lst{
+  width: 100%;
+  margin-bottom: 1rem;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  font-size: 12px;
+  font-weight: 500;
+  color: #929e9e;
+}
+.rev{
+  font-size: 24px;
+  font-weight: bold;
+}
+.detail{
+  color: #000;
+  width: 40%;
+  display: flex;
+  justify-content: end;
+  margin-right: 1rem;
+}
+.persent{
+  display: flex;
+  justify-content: center;
+}
+.basebox{
+  display: flex;
+  align-items: baseline;
+}
+.ptfl{
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  color: #fff;
+}
+
+.Mui-expanded{
+  min-height: 50px;
+}

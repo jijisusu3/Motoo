@@ -1,0 +1,17 @@
+version: "3.3"
+services: # 이 항목 밑에 실행하려는 컨테이너 들을 정의 ( 컴포즈에서 컨테이너 : 서비스 )
+  db: # 서비스 명
+    image: mysql:8.0 # 사용할 이미지
+    container_name: mysql_db
+    ports:
+      - "3307:3306" # 접근 포트 설정 (컨테이너 외부:컨테이너 내부)  <- 컨테이너 내부는 무조건 3306
+    environment: # -e 옵션
+      - MYSQL_DATABASE=B204
+      - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD} # MYSQL 패스워드 설정 옵션
+      - TZ=Asia/Seoul
+    expose:
+      - 3305
+    volumes:
+      - b204:/var/lib/mysql # -v 옵션 (다렉토리 마운트 설정)
+volumes:
+  b204:
