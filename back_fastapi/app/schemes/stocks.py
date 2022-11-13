@@ -103,8 +103,10 @@ class GetAllStocks(CommonResponse):
 
 
 class BidAskResponse(CommonResponse):
-    bid: List[str] = []
-    ask: List[str] = []
+    bid_pr: List[str] = []
+    ask_pr: List[str] = []
+    bid_rsqn: List[str] = []
+    ask_rsqn: List[str] = []
 
 
 class SchoolHotStockResponse(CommonResponse):
