@@ -17,6 +17,9 @@ import IndustryPage from "./pages/stock-detail/IndustryPage";
 import StockDetailPage from "./pages/stock-detail/StockDetailPage";
 import QuizPage from "./pages/stock-list/QuizPage";
 import QuizResultPage from "./pages/stock-list/QuizResultPage";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 
 function PrivateOutlet() {
   const isLogin = localStorage.getItem("login-token");
