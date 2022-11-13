@@ -502,6 +502,8 @@ function BuyStockPage() {
       </div>
       <hr />
       </div>
+
+      <div>
       <div class={classes.realPriceRadio}>
       {isMarketPrice ? (
           <div>
@@ -528,11 +530,13 @@ function BuyStockPage() {
         )}
         <button class={classes.hogaButton } onClick={handleOpen}>호가보기</button>
         </div>
-
+        </div>
       
       
       <PriceInput />
+     
       <ManyInput />
+      <div></div>
       {isTooHigh && <p>그렇게 비싸겐 못사요</p>}
       {isTooLow && <p>그렇게 싸겐 못사요</p>}
       {!isAvailable && <p>넌 그만큼 살 돈이 없어요</p>}

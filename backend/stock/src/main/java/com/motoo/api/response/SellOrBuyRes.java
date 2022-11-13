@@ -2,7 +2,6 @@ package com.motoo.api.response;
 
 
 import com.motoo.common.model.response.BaseResponseBody;
-import com.motoo.db.entity.Account;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;

@@ -2,12 +2,9 @@ package com.motoo.api.response;
 
 import com.motoo.db.entity.Events;
 import com.motoo.db.entity.School;
-import com.motoo.db.entity.Sigungu;
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.w3c.dom.events.Event;
 
 @Data
 @NoArgsConstructor

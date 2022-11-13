@@ -1,6 +1,7 @@
 package com.motoo.api.service;
 
 import com.motoo.api.dto.user.AccountStockInfo;
+
 import com.motoo.common.auth.AppUserDetails;
 import com.motoo.db.entity.*;
 import com.motoo.db.repository.SchoolRepository;
@@ -23,7 +24,9 @@ public class UserServiceImpl implements UserService {
 
     private final AccountService accountService;
 
+    private final StockService stockService;
 
+    private final TradingService tradingService;
 
 
     @Override
@@ -165,10 +168,17 @@ public class UserServiceImpl implements UserService {
             Long stockId = accountStock.getStock().getStockId();
             String ticker = accountStock.getStock().getTicker();
             int amount = accountStock.getAmount();
+
+            int trade = tradingService.tradingList3ByTicker(userId, accountId, ticker);
+
+            int available = amount-trade;
+
             AccountStockInfo accountStockInfo = new AccountStockInfo();
+            accountStockInfo.setAvailable(available);
             accountStockInfo.setStockId(stockId);
             accountStockInfo.setTicker(ticker);
             accountStockInfo.setAmount(amount);
+
             return accountStockInfo;
         }).collect(Collectors.toList());
         return accountStockInfoList;

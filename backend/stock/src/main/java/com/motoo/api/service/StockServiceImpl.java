@@ -6,6 +6,8 @@ import com.motoo.db.repository.StockRepositorySupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class StockServiceImpl implements StockService {
@@ -16,5 +18,15 @@ public class StockServiceImpl implements StockService {
     @Override
     public Stock getStock(Long stockId) {
         return stockRepositorySupport.findStockByAStockId(stockId);
+    }
+
+    @Override
+    public List<Stock> getStockListByTicker(String ticker) {
+        return null;
+    }
+
+    @Override
+    public Long getStockIdByTicker(String ticker){
+        return stockRepositorySupport.findStockIdByTicker(ticker);
     }
 }
