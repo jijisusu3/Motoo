@@ -21,7 +21,7 @@ import QuizResultPage from "./pages/stock-list/QuizResultPage";
 
 function PrivateOutlet() {
   const isLogin = localStorage.getItem("login-token");
-  return isLogin ? <Outlet /> : <Navigate to="/motoo/welcome" />;
+  return isLogin ? <Outlet /> : <Navigate to="/login" />;
 }
 
 function App() {
@@ -52,7 +52,7 @@ function App() {
         <Route path="/wallet/detail/:id" element={<AccountDetailPage />} />
       </Route>
       <Route path="/social-login" element={<MainPage />} />
-      <Route path="/motoo/welcome" element={<LoginPage />} />
+      <Route path="/login" element={<LoginPage />} />
     </Routes>
   );
 }

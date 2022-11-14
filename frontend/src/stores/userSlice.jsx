@@ -129,7 +129,7 @@ export const userSlice = createSlice({
     },
     setLogout: () => {
       window.localStorage.clear();
-      window.location.replace("/motoo/welcome");
+      window.location.replace("/login");
     },
   },
   extraReducers: (builder) => {

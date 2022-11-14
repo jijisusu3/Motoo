@@ -24,7 +24,7 @@ export const navSlice = createSlice({
         `/stock/buy/${id}`,
         `/stock/sell/${id}`,
         `/stock/industry/${id}`,
-        "/motoo/welcome"
+        "/login"
       ];
       if (tmpList.includes(mylocation)) {
         state.nav.showNav = false
