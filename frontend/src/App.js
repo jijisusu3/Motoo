@@ -2,6 +2,7 @@ import { Route, Routes, Outlet, Navigate } from "react-router-dom";
 
 import MainPage from "./pages/main/MainPage";
 import SchoolMainPage from "./pages/school/SchoolMainPage";
+import SchoolDetailPage from "./pages/school/SchoolDetailPage"
 import StockListPage from "./pages/stock-list/StockListPage";
 import MyPage from "./pages/wallet/MyPage";
 import MenuPage from "./pages/MenuPage";
@@ -43,8 +44,9 @@ function App() {
         <Route path="/stock/search" element={<StockSearchPage />} />
         <Route path="/stock/limit-order" element={<LimitOrderPage />} />
         <Route path="/stock/industry/:id" element={<IndustryPage />} />
-        <Route path="/wallet" element={<MyPage />} />
+        <Route path="/wallet/my" element={<MyPage />} />
         <Route path="/school" element={<SchoolMainPage />} />
+        <Route path="/school-battle" element={<SchoolDetailPage />} />
         <Route path="/menu" element={<MenuPage />} />`
         <Route path="/stock/detail/:id" element={<StockDetailPage />} />
         <Route path="/wallet/detail/:id" element={<AccountDetailPage />} />
