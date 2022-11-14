@@ -104,8 +104,6 @@ public class UserServiceImpl implements UserService {
         User user = getByUserId(id).orElseGet(() -> new User());
         School school = schoolRepository.findById(schoolId).get();
         user.updateSchool(school);
-        System.out.println(schoolId+"학교ID");
-        System.out.println(school+"학교객체");
         userRepository.save(user);
     }
 
@@ -114,9 +112,6 @@ public class UserServiceImpl implements UserService {
     public void updateAverage(Long id, Float average) {
         User user  = getByUserId(id).orElseGet(() -> new User());
         user.updateAverage(average);
-        System.out.println(user.getAverage());
-        System.out.println("다시!!!1보자!!!!!!!후후ㅜ");
-        System.out.println(user);
         userRepository.save(user);
     }
 
