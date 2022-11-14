@@ -71,16 +71,19 @@ const quizPut = createAsyncThunk("stockList/quizResult", async (data) => {
 });
 
 // 주식 디테일페이지에 ㄱㄱ
-// const realtimeAccountGet = createAsyncThunk(
-//   "stock/accountGet",
-//   async (data) => {
-//     return axios
-//       .get(`${api2}account/check/${data.id}`, data.config)
-//       .then((response) => {
-//         console.log(response.data);
-//       });
-//   }
-// );
+const realtimeAccountGet = createAsyncThunk(
+  "stock/accountGet",
+  async (data) => {
+    return axios
+      .get(`${api2}account/check/${data.current}`, data.config)
+      .then((response) => {
+        console.log('------------------------')
+        console.log(response.data)
+        console.log('------------------------')
+        return response.data.stockInfo
+      });
+  }
+);
 
 const stockTradingPost = createAsyncThunk("stock/tradingPost", async (data) => {
   return axios.post(`${api2}trading`, data.result, data.config).then(() => {
@@ -146,9 +149,12 @@ export const userSlice = createSlice({
     builder.addCase(quizGet.fulfilled, (state, action) => {
       state.quizData = action.payload;
     });
-    // builder.addCase(realtimeAccountGet.fulfilled, (state, action) => {
-    //   state.quizData = action.payload;
-    // });
+    builder.addCase(realtimeAccountGet.fulfilled, (state, action) => {
+      // state.user.haveList = action.payload;
+      console.log('-------------------------')
+      console.log(action.payload)
+      console.log('-------------------------')
+    });
     builder.addCase(accountChangePut.fulfilled, (state, action) => {
       state.user.data.current = action.payload
       console.log(action.payload)
@@ -161,7 +167,7 @@ export {
   likeStockPost,
   quizPut,
   nicknamePut,
-  // realtimeAccountGet,
+  realtimeAccountGet,
   stockBuyPost,
   quizGet,
   stockTradingPost,
