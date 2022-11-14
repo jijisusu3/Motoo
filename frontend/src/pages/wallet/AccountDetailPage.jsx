@@ -84,7 +84,7 @@ function AccountDetailPage() {
   const [openDeleteModal, setDeleteModalOpen] = useState(false);
   const navigate = useNavigate();
   function backToMyWallet() {
-    navigate(`/wallet`);
+    navigate(`/wallet/`);
   }
 
   const dispatch = useDispatch();
