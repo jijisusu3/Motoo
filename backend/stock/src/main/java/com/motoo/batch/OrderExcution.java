@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+//2분마다 거래내역 조회 후, 거래체결
 @Component
 @Transactional
 @Slf4j
@@ -43,8 +43,8 @@ public class OrderExcution {
         this.accountStockRepositorySupport = accountStockRepositorySupport;
     }
 
-    //매일 9시-16시 사이에 2분간격으로 조회
-//    @Scheduled(cron = " * 0/2 9,16 * * * ")
+    //월~금 9시-16시 사이에 2분간격으로 조회
+//    @Scheduled(cron = " * 0/2 9,16 * * MON-FRI ")
 //    @Scheduled(cron = " * * * * * * ")
     public void timeSchedule() {
 

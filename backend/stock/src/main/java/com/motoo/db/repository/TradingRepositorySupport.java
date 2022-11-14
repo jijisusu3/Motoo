@@ -153,4 +153,26 @@ public class TradingRepositorySupport {
                         .fetch().size();
         return tradings;
     }
+
+    public List<Trading> find6And7(){
+        List<Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
+                        .where(qTrading.tr_type.eq(6).or(qTrading.tr_type.eq(7)))
+                        .fetch();
+        if (tradings==null) {return null;}
+        else {return tradings;}
+    }
+
+    public List<Trading>find6And7ByUserIdAccountId(Long userId, Long accountId){
+        List<Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
+                        .where(qTrading.user.userId.eq(userId))
+                        .where(qTrading.account.accountId.eq(accountId))
+                        .where(qTrading.tr_type.eq(6).or(qTrading.tr_type.eq(7)))
+                        .fetch();
+
+        if (tradings==null) {return null;}
+        else {return tradings;}
+
+    }
 }

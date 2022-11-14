@@ -24,14 +24,26 @@ public interface TradingService {
     //주문목록조회 전부
     List<Trading> tradingListAccount(Long userId, Long accountId);
 
+
+    //거래 체결전의 본인의 거래목록 조회
     List<Trading> tradingList3Or4(Long userId, Long accountId);
 
-    //판매하고 있는 거래내역 조회
+    //전날 미체결된 본인의 거래목록 조회
+    List<Trading> tradingList6Or7FindByUserAccountId(Long userId, Long accountId);
+
+    //판매하고 있는 본인 거래내역 조회
     List<Trading> tradingList3(Long userId, Long accountId);
 
 
     //판매가능한 갯수 확인용용
-    public int tradingList3ByTicker(Long userId, Long accountId, String ticker);
+    int tradingList3ByTicker(Long userId, Long accountId, String ticker);
+
+    //체결되지 않은 주문 리스트
+    List<Trading> tradingList3Or4WillBeChange();
+
+    //전날 미수 됐던 주문 리스트
+    List<Trading> tradingList6Or7WillBeDelete();
+
     //주문 객체조회
     Trading getTrading(Long userId, Long tradeId);
 
