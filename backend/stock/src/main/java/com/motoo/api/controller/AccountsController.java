@@ -19,6 +19,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +51,13 @@ public class AccountsController {
     public ResponseEntity<? extends BaseResponseBody> createAccount(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "계좌 상세 내용", required = true) @Valid MakeAccountPostReq makeAccountPostReq) throws Exception {
 
         Long userId = userService.getUserIdByToken(authentication);
+        List<Account> accounts = accountService.listAccount(userId);
+
+        //계좌 갯수 유효성 검사
+        if (accounts.size()>=3){
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌가 3개 이상입니다. 생성할 수 없습니다."));
+        }
+        else {
 
         try {
             accountService.createAccount(userId, makeAccountPostReq.getName());
@@ -57,10 +65,9 @@ public class AccountsController {
                 Exception e) {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌 생성에 실패하였습니다."));
         }
-        return ResponseEntity.status(200).
-
-                body(BaseResponseBody.of(200, "계좌가 생성되었습니다."));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌가 생성되었습니다."));
     }
+}
 
     //계좌 목록조회
     @GetMapping()
@@ -73,7 +80,8 @@ public class AccountsController {
         int seeds=0;
 
         List<Integer> pitches = new ArrayList<>();
-//
+//      구매할때는 시드-구매가*주식수 + 구매가 *주식수 라서 pitches은 안변함
+//      판매할때는 시드+평단가*주식수 라서 pitches는 변함
         for (Account value : account) {
             int accountAsset=0;
             seeds+=value.getSeed();
@@ -164,6 +172,14 @@ public class AccountsController {
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 주식 구매 성공", response = BaseResponseBody.class), @ApiResponse(code = 401, message = "계좌에 주식 구매 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @ApiOperation(value = "계좌에 구매 추가", notes = "계좌에 주식 구매한다.")
     public ResponseEntity<? extends BaseResponseBody> addStockToAccount(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "주식번호", required = true) @Valid AccountStockAddPostReq accountStockAddPostReq) {
+
+        //거래시간 설정
+//        LocalTime now = LocalTime.now();
+//        int hour = now.getHour();
+//        if (hour >16){
+//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래시간이 아닙니다."));
+//        }
+
         Long userId = userService.getUserIdByToken(authentication);
         Account account = accountService.getAccount(accountStockAddPostReq.getAccountId(), userId);
         List<Long> stockList = accountStockService.getAccountStockIdList(account);
@@ -240,8 +256,17 @@ public class AccountsController {
         Stock stock = stockRepositorySupport.findStockByAStockId(accountStockAddPostReq.getStockId());
         Long stockId =  stock.getStockId();
         Long accountId = account.getAccountId();
+
+
+        //거래시간 설정
+//        LocalTime now = LocalTime.now();
+//        int hour = now.getHour();
+//        if (hour >16){
+//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래시간이 아닙니다."));
+//        }
+
+        
         //주문 객체
-//
 
         int postPrice = accountStockAddPostReq.getPrice();
         int postAmount = accountStockAddPostReq.getAmount();
@@ -254,8 +279,8 @@ public class AccountsController {
                 tradingService.writeOrder(userId,accountId,accountStockAddPostReq.getStockId(),3 ,postPrice,postAmount, null);
                 return ResponseEntity.status(401).body(SellOrBuyRes.of(stockList, seed, 401, "판매가격이 시장가보다 높습니다. 판매예약을 보냅니다."));
             } else {
-                //해당 보유한 주식의 양분기
-                if (accountStock.getAmount() <= accountStockAddPostReq.getAmount()) {
+                //해당 보유한 주식의 양분기 같으면 안됌!!!!!
+                if (accountStock.getAmount() < accountStockAddPostReq.getAmount()) {
 
 
                     return ResponseEntity.status(401).body(SellOrBuyRes.of(stockList, seed, 401, "계좌에 해당 주식의 양이 없습니다."));
@@ -318,12 +343,6 @@ public class AccountsController {
 
         List<Trading> trading = tradingService.tradingList3(userId, account_id);
 //        Long stockId = accountStockService.getStockIdByTicker(ticker);
-        long stockId = 1L;
-        List<AccountStock> accountStocks = accountStockService.getAccountStockListByUserIdAccountIdStockId(userId,account_id,stockId);
-
-
-
-
 
         List<AccountStockInfo> stockInfo = userService.getStockInfoByAccountId(userId,account_id);
 
