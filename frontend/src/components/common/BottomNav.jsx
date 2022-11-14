@@ -35,7 +35,7 @@ const BottomNav = () => {
         </Link>
       </div>
       <div>
-        <Link to="/wallet/" className="nav-link" onClick={() => dispatch(setActiveNav(2))}>
+        <Link to="/wallet/test" className="nav-link" onClick={() => dispatch(setActiveNav(2))}>
           <svg
             width="23"
             height="22"
