@@ -82,8 +82,8 @@ const limitOrderDelete = createAsyncThunk("stock/limitEditPut", async (data) => 
 });
 
 const bidaskGet = createAsyncThunk("stock/bidaskGet", async (data) => {
-  return axios.get(`${api1}stocks/bidask/${data.ticker}`).then((response) => {
-    console.log(response.data)
+  return axios.get(`${api1}stocks/bidask/${data}`).then((response) => {
+    return response.data
   })
 })
 
@@ -121,6 +121,9 @@ export const stockSlice = createSlice({
     });
     builder.addCase(limitListGet.fulfilled, (state, action) => {
       state.limitList = action.payload;
+    });
+    builder.addCase(bidaskGet.fulfilled, (state, action) => {
+      state.bidask = action.payload;
     });
   },
 });
