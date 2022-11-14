@@ -19,6 +19,12 @@ const schoolPut = createAsyncThunk("school/schoolPut", async (data) => {
   })
 });
 
+const schoolPageGet = createAsyncThunk("school/pageGet", async (data) => {
+  return axios.get(`${api2}schoolpage`, data).then((response) => {
+    console.log(response.data)
+  })
+})
+
 export const schoolSlice = createSlice({
   name: "schoolSlice",
   initialState: initialState,
@@ -33,4 +39,4 @@ export const schoolSlice = createSlice({
   },
 });
 
-export { schoolGet, schoolPut };
+export { schoolGet, schoolPut, schoolPageGet };

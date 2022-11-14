@@ -8,7 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { stockDetailGet } from "../../stores/stockSlice";
-import { likeStockPost } from "../../stores/userSlice";
+import { likeStockPost, realtimeAccountGet } from "../../stores/userSlice";
 
 function StockDetailPage() {
   const params = useParams();
@@ -26,16 +26,26 @@ function StockDetailPage() {
   const shortStockData = useSelector((state) => {
     return state.setStock.shortStockData;
   });
-  console.log(stockData)
   const userToken = useSelector((state) => {
     return state.persistedReducer.setUser.user.token;
   });
+  const userCurrent = useSelector((state) => {
+    return state.persistedReducer.setUser.user.data.current
+  })
   const haveList = useSelector((state) => {
     return state.persistedReducer.setUser.user.haveList;
   });
   const likeList = useSelector((state) => {
     return state.persistedReducer.setUser.user.likeList;
   });
+  const data = {
+    config: {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      }
+    },
+    current: userCurrent
+  }
   function backTo() {
     navigate(-1);
   }
@@ -49,9 +59,11 @@ function StockDetailPage() {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
     dispatch(stockDetailGet(id));
+    dispatch(realtimeAccountGet(data))
   }, []);
 
   useEffect(() => {
+    console.log('haveList', haveList)
     // if (!haveList.includes(id)) {
     //   setShowSellButton(false);
     // } else {
@@ -143,9 +155,9 @@ function StockDetailPage() {
         xaxis: {
           tickPlacement: 'between',
           show: false,
-          type: "datetime",
+          type: "category",
           labels: {
-            show: true,
+            show: false,
             datetimeFormatter: {
               year: "yy년",
               month: "yy년 MM월",
@@ -335,57 +347,63 @@ function StockDetailPage() {
         },
       },
     });
-    // useEffect(() => {
-    //   if (stockData.daily) {
-    //       const tmpDaily = []
-    //       const tmpDailyCandle = []
-    //       stockData.daily.forEach((element) => {
-    //         const tmpLine = {
-    //           x: element.date + " " + element.time.slice(0,2) + ':' + element.time.slice(2,4),
-    //           y: element.price
-    //         }
-    //         const tmpCandle = {
-    //             x: element.date + " " + element.time.slice(0,2) + ':' + element.time.slice(2,4),
-    //             y: [element.open_price, element.max_price, element.min_price, element.close_price,]
-    //         }
-    //         tmpDaily.push(tmpLine)
-    //         tmpDailyCandle.push(tmpCandle)
-    //       })
-    //       extremeValues[0].x = stockData.daily_min.date + " " + stockData.daily_min.time.slice(0, 2) + ':' + stockData.daily_min.time.slice(2, 4)
-    //       extremeValues[1].x = stockData.daily_max.date + " " + stockData.daily_max.time.slice(0, 2) + ':' + stockData.daily_max.time.slice(2, 4)
-    //       extremeValues[0].y = stockData.daily_min.min_price
-    //       extremeValues[1].y = stockData.daily_max.max_price
-    //       setLineGraphData((pre) => ({
-    //         ...pre,
-    //         series:  [
-    //           {
-    //             name: "ExtremeValue",
-    //             type: "scatter",
-    //             data: [
-    //               {
-    //                 x: extremeValues[0].x,
-    //                 y: (extremeValues[0].y * 0.92).toFixed(),
-    //                 z: extremeValues[0].z,
-    //               },
-    //               {
-    //                 x: extremeValues[1].x,
-    //                 y: (extremeValues[1].y * 1.05).toFixed(),
-    //                 z: extremeValues[1].z,
-    //               },
-    //             ],
-    //           },
-    //           {
-    //             name: "Line",
-    //             data: tmpDaily
-    //           },
-    //         ],
-    //       }))
-    //       setCandleGraphData((pre)=> ({
-    //         ...pre,
-            
-    //       }))
-    //   }
-    // }, [])
+    useEffect(() => {
+      if (stockData.daily) {
+          let tmpDaily = []
+          let tmpDailyCandle = []
+          stockData.daily.forEach((element) => {
+            const tmpLine = {
+              x: element.date + " " + element.time.slice(0,2) + ':' + element.time.slice(2,4),
+              y: element.price
+            }
+            const tmpCandle = {
+              x: element.date + " " + element.time.slice(0,2) + ':' + element.time.slice(2,4),
+              y: [element.open_price, element.max_price, element.min_price, element.price]
+            }
+            tmpDaily.push(tmpLine)
+            tmpDailyCandle.push(tmpCandle)
+          })
+          console.log(tmpDailyCandle)
+          setCandleGraphData((pre) => ({
+            ...pre,
+            series: [
+              {
+                data: tmpDailyCandle
+              }
+            ]
+          }))
+          
+          extremeValues[0].x = stockData.daily_min.date + " " + stockData.daily_min.time.slice(0, 2) + ':' + stockData.daily_min.time.slice(2, 4)
+          extremeValues[1].x = stockData.daily_max.date + " " + stockData.daily_max.time.slice(0, 2) + ':' + stockData.daily_max.time.slice(2, 4)
+          extremeValues[0].y = stockData.daily_min.min_price
+          extremeValues[1].y = stockData.daily_max.max_price
+          setLineGraphData((pre) => ({
+            ...pre,
+            series:  [
+              {
+                name: "ExtremeValue",
+                type: "scatter",
+                data: [
+                  {
+                    x: extremeValues[0].x,
+                    y: (extremeValues[0].y * 0.92).toFixed(),
+                    z: extremeValues[0].z,
+                  },
+                  {
+                    x: extremeValues[1].x,
+                    y: (extremeValues[1].y * 1.05).toFixed(),
+                    z: extremeValues[1].z,
+                  },
+                ],
+              },
+              {
+                name: "Line",
+                data: tmpDaily
+              },
+            ],
+          }))
+      }
+    }, [])
     let clickedOptions = candleGraphData.options
     let clickedSeries = candleGraphData.series
     let clickedType = "candlestick"
@@ -405,7 +423,6 @@ function StockDetailPage() {
           tmpDaily.push(tmpLine)
           tmpDailyCandle.push(tmpCandle)
         })
-        console.log(tmpDailyCandle)
         setCandleGraphData((pre) => ({
           ...pre,
           series: [
@@ -704,7 +721,7 @@ function StockDetailPage() {
             src={`${process.env.PUBLIC_URL}/stock-detail/rain.svg`}
             alt=""
           />
-          <div className={classes.perc}>지수야</div>
+          <div className={classes.perc}>{sen.sen.toFixed(1)}%</div>
         </div>
       );
     } else if (sen.thisIndex === 1) {
@@ -719,7 +736,7 @@ function StockDetailPage() {
             src={`${process.env.PUBLIC_URL}/stock-detail/cloudy.svg`}
             alt=""
           />
-          <div className={classes.perc}>퍼센트</div>
+          <div className={classes.perc}>{sen.sen.toFixed(1)}%</div>
         </div>
       );
     } else {
@@ -733,7 +750,7 @@ function StockDetailPage() {
             src={`${process.env.PUBLIC_URL}/stock-detail/sun.svg`}
             alt=""
           />
-          <div className={classes.perc}>너어죠</div>
+          <div className={classes.perc}>{sen.sen.toFixed(1)}%</div>
         </div>
       );
     }
@@ -1027,7 +1044,7 @@ function StockDetailPage() {
           <div className={classes.space}>
             <div className={classes.greenbox}>
               <img
-                src={`${process.env.PUBLIC_URL}/stock-detail/check-circle.svg`}
+지수야                src={`${process.env.PUBLIC_URL}/stock-detail/check-circle.svg`}
                 alt=""
               />
               <div className={classes.green}>어떻게 판단하나요?</div>
