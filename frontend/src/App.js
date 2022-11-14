@@ -21,7 +21,7 @@ import QuizResultPage from "./pages/stock-list/QuizResultPage";
 
 function PrivateOutlet() {
   const isLogin = localStorage.getItem("login-token");
-  return isLogin ? <Outlet /> : <Navigate to="/login" />;
+  return isLogin ? <Outlet /> : <Navigate to="/motoo/welcome" />;
 }
 
 function App() {
@@ -44,15 +44,15 @@ function App() {
         <Route path="/stock/search" element={<StockSearchPage />} />
         <Route path="/stock/limit-order" element={<LimitOrderPage />} />
         <Route path="/stock/industry/:id" element={<IndustryPage />} />
-        <Route path="/wallet/test" element={<MyPage />} />
-        <Route path="/school" element={<SchoolMainPage />} />
+        <Route path="/wallet/my" element={<MyPage />} />
+        <Route path="/school/entrance" element={<SchoolMainPage />} />
         <Route path="/school-battle" element={<SchoolDetailPage />} />
         <Route path="/menu" element={<MenuPage />} />`
         <Route path="/stock/detail/:id" element={<StockDetailPage />} />
         <Route path="/wallet/detail/:id" element={<AccountDetailPage />} />
       </Route>
       <Route path="/social-login" element={<MainPage />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/motoo/welcome" element={<LoginPage />} />
     </Routes>
   );
 }
