@@ -38,7 +38,7 @@ public class Account {
     @Column(name="created_at")
     @CreationTimestamp
     private Date created_at;
-//    private int type;
+
     @Column(name="name")
     private String name;
 

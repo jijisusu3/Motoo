@@ -75,7 +75,6 @@ public class AccountsController {
     @ApiOperation(value = "계좌 목록 조회", notes = "계좌 목록을 조회한다.")
     public ResponseEntity<AccountsListRes> listAccounts(@ApiIgnore Authentication authentication) {
         Long userId = userService.getUserIdByToken(authentication);
-        Optional<User> user = userService.getByUserId(userId);
         List<Account> account = accountService.listAccount(userId);
         int seeds=0;
 
@@ -191,7 +190,6 @@ public class AccountsController {
 
         //지금 주식 가격이랑 내 주문량, 가격이랑 비교용도의 주식객체
         Stock stock = stockRepositorySupport.findStockByAStockId(accountStockAddPostReq.getStockId());
-        List<AccountStock> accountStocks = accountService.getAccountStockByUserIdAccountId(accountStockAddPostReq.getAccountId(), userId);
 
 
         //시드머니 조회하여 구매가격이 시드머니보다 높으면 구매불가
@@ -202,7 +200,6 @@ public class AccountsController {
 
                 //계좌 주식 리스트에 해당 주식이 있으면 주식 평단가 수정
                 if (stockList.contains(accountStockAddPostReq.getStockId())) {
-//            accountStockService.deleteStockInAccount(userId, accountStockAddPostReq.getAccountId(), accountStockAddPostReq.getStockId());
                     Long accountStockId = accountStockService.getAccountStockIdByStockId(account.getAccountId(), accountStockAddPostReq.getStockId());
                     AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
                     int currentAmount = accountStock.getAmount();
@@ -248,7 +245,6 @@ public class AccountsController {
     @ApiOperation(value = "계좌에 주식 판매", notes = "계좌에 주식을 판매한다.")
     public ResponseEntity<? extends BaseResponseBody> sellStockToAccount(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "주식번호", required = true) @Valid AccountStockAddPostReq accountStockAddPostReq) {
         Long userId = userService.getUserIdByToken(authentication);
-        Optional<User> user = userService.getByUserId(userId);
         Account account = accountService.getAccount(accountStockAddPostReq.getAccountId(), userId);
         List<Long> stockList = accountStockService.getAccountStockIdList(account);
         Long accountStockId = accountStockService.getAccountStockIdByStockId(account.getAccountId(), accountStockAddPostReq.getStockId());
@@ -265,7 +261,7 @@ public class AccountsController {
 //            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래시간이 아닙니다."));
 //        }
 
-        
+
         //주문 객체
 
         int postPrice = accountStockAddPostReq.getPrice();
@@ -285,9 +281,6 @@ public class AccountsController {
 
                     return ResponseEntity.status(401).body(SellOrBuyRes.of(stockList, seed, 401, "계좌에 해당 주식의 양이 없습니다."));
                 } else {
-//                accountStockService.deleteStockInAccount(userId, accountStockAddPostReq.getAccountId(), accountStockAddPostReq.getStockId());
-//                List<AccountStock> accountStocks = accountService.getAccountStockByUserIdAccountId(accountStockAddPostReq.getAccountId(),userId);
-
                     int currentAmount = accountStock.getAmount();
                     int currentPrice = accountStock.getPrice();
 
@@ -336,13 +329,10 @@ public class AccountsController {
         Optional<User> user = userService.getByUserId(userId);
 
         //주 계좌 시드머니 세팅
-        int seed = userService.getAccountSeed(user);
 
         //판매가능한 수
         int available=0;
 
-        List<Trading> trading = tradingService.tradingList3(userId, account_id);
-//        Long stockId = accountStockService.getStockIdByTicker(ticker);
 
         List<AccountStockInfo> stockInfo = userService.getStockInfoByAccountId(userId,account_id);
 

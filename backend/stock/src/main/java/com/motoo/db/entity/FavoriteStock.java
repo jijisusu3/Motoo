@@ -30,10 +30,6 @@ public class FavoriteStock {
     @JoinColumn(name="stock_id")
     private Stock stock;
 
-//    private List<User> user = new ArrayList<>();
 
 
-
-
-//    private List<Stock> stocks = new ArrayList<>();
 }

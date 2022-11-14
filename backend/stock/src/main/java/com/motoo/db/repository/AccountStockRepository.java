@@ -16,15 +16,9 @@ public interface AccountStockRepository  extends JpaRepository<AccountStock, Lon
     List<AccountStock> findByAccountStockId(Long accountStockId);
 
 
-//    List<AccountStock> findByAccountStock_AccountId(Long accountId);
 
     Optional <AccountStock> findByAccountAndStock(Account account, Stock stock);
 
 
-//    void deleteByAccountAndStock(Account account, Stock stock);
-//
-//    @Transactional
-//    Optional<AccountStock> deleteByAccountStockId(Long accountStockId);
 
-//    AccountStock findByUserIdAccountId(Long userId, Long accountId);
 }
