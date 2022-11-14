@@ -26,7 +26,7 @@ public class MakeOrderPostReq {
 //    int tr_type, int price, int amount
 
     @NotNull
-    @ApiModelProperty(name="거래 타입", example = "1= 판매, 2= 구매, 3= 판매예약, 4= 구매예약")
+    @ApiModelProperty(name="거래 타입", example = "1 = 판매완료, 2 = 구매완료, 3 = 판매예약, 4 = 구매예약, 5 = 퀴즈, 6=판매미수, 7=구매미수")
     int tr_type;
 
     @NotNull
