@@ -45,7 +45,7 @@ function App() {
         <Route path="/stock/limit-order" element={<LimitOrderPage />} />
         <Route path="/stock/industry/:id" element={<IndustryPage />} />
         <Route path="/wallet/my" element={<MyPage />} />
-        <Route path="/school/entrance" element={<SchoolMainPage />} />
+        <Route path="/school" element={<SchoolMainPage />} />
         <Route path="/school-battle" element={<SchoolDetailPage />} />
         <Route path="/menu" element={<MenuPage />} />`
         <Route path="/stock/detail/:id" element={<StockDetailPage />} />

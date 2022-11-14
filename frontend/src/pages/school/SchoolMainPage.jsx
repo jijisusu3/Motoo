@@ -175,7 +175,7 @@ function SchoolMainPage() {
   return (
     <div className={classes.schoolOutDiv}>
       <div className={classes.schoolMainDiv}>
-        <img src={`${process.env.PUBLIC_URL}/school/schoolmain.svg`} alt="" />
+        <img src={`${process.env.PUBLIC_URL}/schoolstatic/schoolmain.svg`} alt="" />
         <button
           onClick={onClickHandler}
           className={classes.schoolRegisterButton}
