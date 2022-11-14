@@ -51,7 +51,7 @@ public class User {
     private Date quizDay;
 
     private Integer currentRank;
-
+    @Column(name="average")
     private Float average;
 
     @JsonIgnore
@@ -85,9 +85,14 @@ public class User {
     public void updateSchool(School school) { this.school = school; }
 
     public void updateAverage(Float average) {
+        System.out.println(average);
+        Float a = 3.111f;
+        System.out.println(a.isNaN());
         if (average.isNaN()) {
             average = null;
         }
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!1");
+        System.out.println(average);
         this.average = average;}
 
     public void updateCurrentRank(Integer currentRank){
