@@ -27,12 +27,14 @@ async def get_stock_detail(ticker: str, response: Response):
     except tortoise.exceptions.DoesNotExist:
         response.status_code = 404
         return GetStockDetailResponse(message="failed")
+    now = datetime.datetime.now()
     today = date.today()
+    if now.hour < 9:
+        today -= timedelta(1)
     if today.weekday() >= 5:
         today = date.today() - timedelta(today.weekday() - 4)
-    today = today.strftime("%Y-%m-%d")
     # 차트 데이터
-    daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
+    daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today.strftime("%Y-%m-%d"))
     weekly = (await candle_map[stock.category_id].filter(
         stock_id=stock.pk,
         date__gte=date.today() - timedelta(7)
@@ -69,16 +71,18 @@ async def get_stock_short(ticker: str, response: Response):
     except tortoise.exceptions.DoesNotExist:
         response.status_code = 404
         return GetStockDetailResponse(message="failed")
+    now = datetime.datetime.now()
     today = date.today()
+    if now.hour < 9:
+        today -= timedelta(1)
     if today.weekday() >= 5:
         today = date.today() - timedelta(today.weekday() - 4)
-    today = today.strftime("%Y-%m-%d")
     # 차트 데이터
-    daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
+    daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today.strftime("%Y-%m-%d"))
     return GetShortStockResponse(**dict(stock),
                                  daily=daily,
-                                 daily_min=min(daily, key=lambda x: x.min_price),
-                                 daily_max=max(daily, key=lambda x: x.max_price))
+                                 daily_min=min(daily, key=lambda x: x.min_price, default=None),
+                                 daily_max=max(daily, key=lambda x: x.max_price, default=None))
 
 
 @router.get("/trade/{ticker}", description="거래 중 주식 간단 조회", response_model=GetTradingStockInfoResponse)

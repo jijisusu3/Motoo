@@ -74,6 +74,7 @@ class TestStockDetail:
             )
         res = await client.get("/stocks/detail/999999")
         res_data = res.json()
+        print(res_data['daily'])
         today = datetime.date.today()
         assert res.status_code == 200
         assert res_data["message"] == "success"
@@ -93,6 +94,7 @@ class TestStockDetail:
         res_data = res.json()
         assert res.status_code == 404
         assert res_data["message"] == "failed"
+
 
 
 @pytest.mark.anyio
