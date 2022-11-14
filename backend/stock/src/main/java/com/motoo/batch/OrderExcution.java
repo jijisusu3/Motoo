@@ -32,15 +32,14 @@ public class OrderExcution {
 
     private final TradingService tradingService;
 
-    private final AccountStockRepositorySupport accountStockRepositorySupport;
 
-    public OrderExcution(TradingRepositorySupport tradingRepositorySupport, AccountService accountService, AccountStockService accountStockService, StockRepositorySupport stockRepositorySupport, TradingService tradingService, AccountStockRepositorySupport accountStockRepositorySupport) {
+    public OrderExcution(TradingRepositorySupport tradingRepositorySupport, AccountService accountService, AccountStockService accountStockService, StockRepositorySupport stockRepositorySupport, TradingService tradingService) {
         this.tradingRepositorySupport = tradingRepositorySupport;
         this.accountService = accountService;
         this.accountStockService = accountStockService;
         this.stockRepositorySupport = stockRepositorySupport;
         this.tradingService = tradingService;
-        this.accountStockRepositorySupport = accountStockRepositorySupport;
+
     }
 
     //월~금 9시-16시 사이에 2분간격으로 조회

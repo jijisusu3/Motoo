@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -44,7 +45,7 @@ public class TradingRepositorySupport {
                 .where(qTrading.tr_type.eq(3).or(qTrading.tr_type.eq(4)))
                 .fetch();
 
-         if (tradings==null) return null;
+         if (tradings==null) return Collections.emptyList();
          else return tradings;
     }
 
@@ -58,7 +59,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -69,7 +70,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
 
     }
@@ -83,7 +84,7 @@ public class TradingRepositorySupport {
                         .orderBy(qTrading.tr_date.desc())
                         .fetch();
 
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -94,7 +95,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -105,7 +106,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -116,7 +117,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
-        if (tradings ==null) {return null;}
+        if (tradings ==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -128,7 +129,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -139,7 +140,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -159,7 +160,7 @@ public class TradingRepositorySupport {
                 jpaQueryFactory.select(qTrading).from(qTrading)
                         .where(qTrading.tr_type.eq(6).or(qTrading.tr_type.eq(7)))
                         .fetch();
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -171,7 +172,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.tr_type.eq(6).or(qTrading.tr_type.eq(7)))
                         .fetch();
 
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
 
     }

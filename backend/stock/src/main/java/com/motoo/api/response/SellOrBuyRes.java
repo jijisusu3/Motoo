@@ -22,8 +22,6 @@ public class SellOrBuyRes extends BaseResponseBody {
     int seed;
     public static SellOrBuyRes of(List<Long> stockList, int seed , Integer statusCode, String message){
         SellOrBuyRes res = new SellOrBuyRes();
-        res.setStockList(stockList);
-        res.setSeed(seed);
         res.setStatusCode(statusCode);
         res.setMessage(message);
         return res;

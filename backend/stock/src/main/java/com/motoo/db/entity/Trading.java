@@ -68,9 +68,7 @@ public class Trading {
 
 
     }
-//    public void setAccounts(Account accounts) {
-//        this.account = accounts;
-//    }
+
 
     public void updateType(int tr_type) {this.tr_type = tr_type;}
 

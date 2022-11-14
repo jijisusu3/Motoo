@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.time.LocalTime;
 import java.util.List;
 
 @Api(value = "트레이딩 API", tags = {"Trading"})
@@ -37,6 +38,14 @@ public class TradingController {
     @ApiResponses({@ApiResponse(code = 200, message = " 생성 성공", response = BaseResponseBody.class), @ApiResponse(code = 401, message = "주문 생성 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @PostMapping()
     public ResponseEntity<? extends BaseResponseBody> createOrder(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "주문 상세 내용", required = true) @Valid MakeOrderPostReq makeOrderPostReq) throws Exception {
+        //거래시간 설정
+//        LocalTime now = LocalTime.now();
+//        int hour = now.getHour();
+//        if (hour >16){
+//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래시간이 아닙니다."));
+//        }
+
+
         Long userId =  userService.getUserIdByToken(authentication);
         try
         {
