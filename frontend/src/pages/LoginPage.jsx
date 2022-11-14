@@ -35,7 +35,7 @@ function LoginPage() {
       <div className={classes.bigbox}>
 
         <div>
-          <button className={classes.kakao} onClick={kakaoLoginClick}></button>
+          <button className={classes.kakao} onClick={kakaoLoginClick}>하하하</button>
         </div>
       </div>
     </div>
