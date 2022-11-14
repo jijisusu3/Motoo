@@ -9,7 +9,9 @@
   margin-top: 1rem;
 }
 .bodybox{
-margin: 1.5rem;
+  margin: auto;
+  width: 90%;
+
 }
 .imgs{
   width: 32px;
@@ -29,42 +31,55 @@ margin: 1.5rem;
 .editbox{
   display: flex;
   font-weight: 600;
-  justify-content: space-between;
+  min-height: 70vh;
+  flex-direction: column;
   padding: 2rem;
   color: #929e9e;
-  align-items: center;
+  margin-bottom: 20px;
+  /* align-items: center; */
 }
+
+.listctnbox {
+  display: flex;
+  font-weight: 600;
+  min-height: 70vh;
+  flex-direction: column;
+  padding: 1rem 2rem 2rem 2rem;
+  margin-bottom: 20px;
+}
+
 .favorite{
   display: flex;
   align-items: center;
-  font-size: 22px;
+  font-size: 2.7vh;
   color: #000;
+  margin-left: 4px;
 }
 .listbox{
   background-color: #fff;
   border-radius: 10px 10px 0 0;
-  box-shadow: 0px -1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px -2px 4px 1px rgba(93, 93, 93, 0.08);
 }
 .star{
-  width: 24px;
-  height: 24px;
-  margin-left: 1rem;
+  width: 21px;
+  height: 21px;
+  margin-left: 13px;
 }
 .lists{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: 2rem;
-  margin-right: 2rem;
+  margin-left: 5px;
+  margin-right: 5px;
   margin-bottom: 0.5rem;
   margin-top: 0.5rem;
   font-weight: 600;
   font-size: 18px;
 }
 .hrline{
-  border: #EAF0EF 1px solid;
-  margin-left: 2rem;
-  margin-right: 2rem;
+  border: #EAF0EF 0.5px solid;
+  margin-left: 5px;
+  margin-right: 5px;
   display: flex;
   justify-content: center;
 }
@@ -78,14 +93,20 @@ margin: 1.5rem;
 }
 .logo{
   width: 48px;
+  margin-left: 5px;
+}
+.searchicon {
+  margin-right: 5px;
 }
 .header{
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   padding-top: 3rem;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
+  margin: auto;
   align-items: center;
+  width: 90%;
+  margin-bottom: 8px;
 }
 .tabs{
   margin-left: 0.5rem;
@@ -95,22 +116,23 @@ margin: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: 2rem;
-  margin-right: 2rem;
+  margin-left: 5px;
+  margin-right: 5px;
   margin-bottom: 1rem;
   margin-top: 1rem;
   font-weight: 600;
   font-size: 18px;
 }
 .tabbox{
-  display: flex;
-  justify-content: center;
+  margin-bottom: 24px;
 }
 .listcard{
   display: flex;
 }
 .rank{
   margin-right: 1rem;
+  color: #7BCDC8;
+  font-size: 18px;
 }
 .first{
   margin-right: 2rem;
@@ -136,4 +158,24 @@ margin: 1.5rem;
   border-radius: 10px;
   background: #FFFFFF;
   border: 0.5px solid #9D9D9D;
+}
+
+.listbg {
+  background-color: #EAF0EF;
+  height: 100%;
+}
+
+.listctn {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  /* justify-content: center;
+  align-items: center; */
+  max-width: 600px;
+}
+
+.interestnav{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
 }
