@@ -74,7 +74,7 @@ public class SchoolService {
         return SchoolPageResponse.response(school, events, currentRank, asset, avg);
     }
 
-    @Scheduled(cron = "0 0 14 * * *")
+//    @Scheduled(cron = "0 0 14 * * *")
     @Transactional
     public void UpdateAverage(){
         List<User> users = userRepositorySupport.findAllUserBySchool();

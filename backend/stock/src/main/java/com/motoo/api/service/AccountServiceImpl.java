@@ -85,7 +85,6 @@ public class AccountServiceImpl implements AccountService{
     @Override
     @Transactional
     public void updateAccount(Account account, String name) {
-
         account.updateAccountName(name);
 
     }

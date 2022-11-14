@@ -104,6 +104,8 @@ public class UserServiceImpl implements UserService {
         User user = getByUserId(id).orElseGet(() -> new User());
         School school = schoolRepository.findById(schoolId).get();
         user.updateSchool(school);
+        System.out.println(schoolId+"학교ID");
+        System.out.println(school+"학교객체");
         userRepository.save(user);
     }
 
