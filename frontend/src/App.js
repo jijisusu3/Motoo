@@ -20,7 +20,7 @@ import QuizResultPage from "./pages/stock-list/QuizResultPage";
 
 function PrivateOutlet() {
   const isLogin = localStorage.getItem("login-token");
-  return !isLogin ? <Outlet /> : <Navigate to="/login" />;
+  return isLogin ? <Outlet /> : <Navigate to="/login" />;
 }
 
 function App() {
