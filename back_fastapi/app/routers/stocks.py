@@ -32,7 +32,7 @@ async def get_stock_detail(ticker: str, response: Response):
         today = date.today() - timedelta(today.weekday() - 4)
     today = today.strftime("%Y-%m-%d")
     # 차트 데이터
-    daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
+    daily = await candle_map[stock.category_id].filter(stock_id=stock.pk).order_by("-date", "-time").limit(37)
     weekly = (await candle_map[stock.category_id].filter(
         stock_id=stock.pk,
         date__gte=date.today() - timedelta(7)
@@ -44,7 +44,7 @@ async def get_stock_detail(ticker: str, response: Response):
     ).order_by('-id'))[::5][::-1]
     return GetStockDetailResponse(**dict(stock),
                                   category_name=stock.category.name,
-                                  daily=daily,
+                                  daily=daily[::-1],
                                   weekly=weekly,
                                   monthly=monthly,
                                   yearly=yearly,
@@ -72,13 +72,13 @@ async def get_stock_short(ticker: str, response: Response):
     today = date.today()
     if today.weekday() >= 5:
         today = date.today() - timedelta(today.weekday() - 4)
-    today = today.strftime("%Y-%m-%d")
+    today_str = today.strftime("%Y-%m-%d")
     # 차트 데이터
-    daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today)
+    daily = await candle_map[stock.category_id].filter(stock_id=stock.pk).order_by("-date", "-time").limit(37)
     return GetShortStockResponse(**dict(stock),
-                                 daily=daily,
-                                 daily_min=min(daily, key=lambda x: x.min_price),
-                                 daily_max=max(daily, key=lambda x: x.max_price))
+                                 daily=daily[::-1],
+                                 daily_min=min(daily, key=lambda x: x.min_price, default=None),
+                                 daily_max=max(daily, key=lambda x: x.max_price, default=None))
 
 
 @router.get("/trade/{ticker}", description="거래 중 주식 간단 조회", response_model=GetTradingStockInfoResponse)
