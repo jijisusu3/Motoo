@@ -8,7 +8,7 @@ import Modal from "@mui/material/Modal";
 import ReactApexChart from "react-apexcharts";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { shortStockGet } from "../../stores/stockSlice";
+import { shortStockGet, bidaskGet } from "../../stores/stockSlice";
 import { stockTradingPost, stockBuyPost } from "../../stores/userSlice";
 
 const style = {
@@ -48,11 +48,15 @@ function BuyStockPage() {
   const userData = useSelector((state) => {
     return state.persistedReducer.setUser.user;
   });
+  const bidaskData = useSelector((state) => {
+    return state.setStock.bidask;
+  });
   const mySeed = userData.data.seed;
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(shortStockGet(id));
+    dispatch(bidaskGet(id));
   }, []);
   const navigate = useNavigate();
   function backTo() {
@@ -65,7 +69,7 @@ function BuyStockPage() {
     const [buyData, setBuyData] = useState({
       series: [
         {
-          data: [2890, 2211, 1100, 900, 201],
+          data: bidaskData.bid_rsqn,
         },
       ],
       options: {
@@ -147,7 +151,7 @@ function BuyStockPage() {
     const [sellData, setSellData] = useState({
       series: [
         {
-          data: [2890, 2211, 1100, 900, 201],
+          data: bidaskData.ask_rsqn,
         },
       ],
       options: {
@@ -250,7 +254,16 @@ function BuyStockPage() {
               height={200}
               width={120}
             />
-
+            <div>
+              {bidaskData.bid_pr.map((bid) => (
+                <div>{bid.toLocaleString()}원</div>
+              ))}
+            </div>
+            <div>
+              {bidaskData.ask_pr.slice(0,4).map((ask) => (
+                <div>{ask.toLocaleString()}원</div>
+              ))}
+            </div>
             <ReactApexChart
               options={sellData.options}
               series={sellData.series}

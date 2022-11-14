@@ -32,32 +32,17 @@ export const createChartdata = (labelList, dataList) => {
           "rgba(255, 159, 64, 0.2)",
         ],
         borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 1)",
+          "rgba(255, 255, 255, 1)",
         ],
         borderWidth: 1,
       },
     ],
   };
-};
-
-const createOptions = {
-  plugins: {
-    labels: {
-      render: (args) => {
-        if (args.percentage > 10) {
-          return args.percentage + "%";
-        }
-      },
-    },
-    legend: {
-      display: false,
-    },
-  },
 };
 
 export function Portfolio() {
@@ -66,24 +51,51 @@ export function Portfolio() {
   })
   const labels = [];
   const datas = [];
-  
-  useEffect(() => {
-    try {
-      portfolioData.forEach(element => {
-        console.log(element["ratio"].toFixed(1))
-        labels.append(element["itemName"])
-        console.log(labels)
-      })
-    } catch {
-      return
-    }
-  }, [portfolioData])
+  if(portfolioData){
+    portfolioData.forEach(element => {
+      labels.push(element["itemName"])
+      datas.push(element["ratio"].toFixed(1))
+    })
+  }
+  const backgroundColor = [
+    "rgba(255, 99, 132, 0.2)",
+    "rgba(54, 162, 235, 0.2)",
+    "rgba(255, 206, 86, 0.2)",
+    "rgba(75, 192, 192, 0.2)",
+    "rgba(153, 102, 255, 0.2)",
+    "rgba(255, 159, 64, 0.2)",
+  ]
   const data = createChartdata(labels, datas);
+  const createOptions = {
+    plugins: {
+      labels: {
+        render: (args) => {
+          if (args.value > 10) {
+            return args.value + "%";
+          }
+        },
+      },
+      legend: {
+        display: false,
+      },
+    },
+  };
+
   return (
-    <div style={{ width: "45%" }}>
-      <ChartProvider>
-        <Doughnut data={data} options={createOptions} />
-      </ChartProvider>
+    <div>
+      <div style={{ width: "55%" }}>
+        <ChartProvider>
+          <Doughnut data={data} options={createOptions} />
+        </ChartProvider>
+      </div>
+      <div>
+        {labels && labels.map((label, index) => (
+          <div key={index}>
+            <div style={{width:12, height:12, borderRadius:50, backgroundColor: backgroundColor[index]}}></div>
+            <div>{label}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
