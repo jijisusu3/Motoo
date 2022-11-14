@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import Chart from "chart.js/auto";
 import * as helpers from "chart.js/helpers";
 import { useSelector } from "react-redux";
+import classes from "./DounutChart.module.css";
 // import React, { useState } from "react";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -82,17 +83,17 @@ export function Portfolio() {
   };
 
   return (
-    <div>
-      <div style={{ width: "55%" }}>
+    <div className={classes.portFolioChart}>
+      <div style={{ width: 144 }}>
         <ChartProvider>
           <Doughnut data={data} options={createOptions} />
         </ChartProvider>
       </div>
-      <div>
+      <div className={classes.chartLabel}>
         {labels && labels.map((label, index) => (
-          <div key={index}>
-            <div style={{width:12, height:12, borderRadius:50, backgroundColor: backgroundColor[index]}}></div>
-            <div>{label}</div>
+          <div key={index} >
+            <div className={classes.chartLabelOne} style={{width:12, height:12, borderRadius:50, backgroundColor: backgroundColor[index]}}></div>
+            <div className={classes.chartLabelText}>{label}</div>
           </div>
         ))}
       </div>

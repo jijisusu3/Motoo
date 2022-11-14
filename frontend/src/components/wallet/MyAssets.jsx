@@ -101,7 +101,7 @@ function MyAssets() {
           </div>
         </AccordionSummary>
         <AccordionDetails
-          style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)", borderRadius: "0 0 10px 10px", padding: "30px"}}>
+          style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)", borderRadius: "0 0 10px 10px", padding: "30px", display:"flex", justifyContent:"center"}}>
           <Portfolio />
         </AccordionDetails>
       </Accordion>
