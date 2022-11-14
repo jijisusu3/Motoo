@@ -23,12 +23,6 @@ const style = {
   p: 1,
 };
 
-// if (ration > 0) {
-//   <span color="red">+ ration</span>
-//    } else {
-//   <span color="blue">- ration </span>
-//    }
-
 function BuyStockPage() {
   const params = useParams();
   const id = params.id;
@@ -260,7 +254,7 @@ function BuyStockPage() {
               ))}
             </div>
             <div>
-              {bidaskData.ask_pr.slice(0,4).map((ask) => (
+              {bidaskData.ask_pr.slice(0, 4).map((ask) => (
                 <div>{ask.toLocaleString()}원</div>
               ))}
             </div>

@@ -74,7 +74,7 @@ public class SchoolService {
         return SchoolPageResponse.response(school, events, currentRank, asset, avg);
     }
 
-    @Scheduled(cron = "0 0 14 * * *")
+//    @Scheduled(cron = "0 0 14 * * *")
     @Transactional
     public void UpdateRanking(){
         // 학교 등록된 유저 수익률 계산 및 저장
