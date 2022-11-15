@@ -78,7 +78,7 @@ const realtimeAccountGet = createAsyncThunk(
       .get(`${api2}account/check/${data.current}`, data.config)
       .then((response) => {
         console.log('------------------------')
-        console.log(response.data)
+        console.log(response)
         console.log('------------------------')
         return response.data.stockInfo
       });
