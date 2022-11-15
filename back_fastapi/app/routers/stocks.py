@@ -147,8 +147,7 @@ async def get_school_hot_list(response: Response, user: User = Depends(get_curre
         hot_item = None
         if tr_amounts.values():
             hot_item = max(tr_amounts, key=tr_amounts.get)
-        hot_stock = await Stock.get(ticker=hot_item)
-        print(users_in_school, accounts, not_finished, finished, hot_stock)
+        hot_stock = await Stock.get(ticker=hot_item.ticker)
     except tortoise.exceptions.DoesNotExist:
         response.status_code = 404
         return SchoolHotStockResponse(message="failed")
