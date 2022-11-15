@@ -9,6 +9,7 @@ import com.motoo.common.model.response.BaseResponseBody;
 import com.motoo.db.entity.*;
 import com.motoo.db.repository.StockRepositorySupport;
 
+import com.motoo.db.repository.TradingRepository;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,7 @@ public class AccountsController {
 
     private final TradingService tradingService;
     private final AccountAssetService accountAssetService;
+
     //계좌 생성
     @ApiOperation(value = "계좌 생성", notes = "(token) 계좌를 생성한다.")
     @ApiResponses({@ApiResponse(code = 200, message = "계좌 생성 성공", response = BaseResponseBody.class), @ApiResponse(code = 401, message = "계좌 생성 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
@@ -368,8 +370,15 @@ public class AccountsController {
 
 
         List<AccountStockInfo> stockInfo = userService.getStockInfoByAccountId(userId,account_id);
+        StockListRes stockListRes = StockListRes.of(account, stockInfo, available, 200, "보유주식 리스트 조회에 성공하였습니다.");
+        int seed = account.getSeed();
+        List<Trading> tradings4 = tradingService.tradingList4(userId, account_id);
+        List<Integer> waitingPriceList = tradings4.stream().map(trading -> trading.getTr_amount() * trading.getTr_price()).collect(Collectors.toList());
+        int waitingPrice = waitingPriceList.stream().mapToInt(Integer::intValue).sum();
 
-        return ResponseEntity.status(200).body(StockListRes.of(account,stockInfo, available,200, "보유주식 리스트 조회에 성공하였습니다."));
+        stockListRes.setAvailableSeed(seed-waitingPrice);
+
+        return ResponseEntity.status(200).body(stockListRes);
     }
 }
 

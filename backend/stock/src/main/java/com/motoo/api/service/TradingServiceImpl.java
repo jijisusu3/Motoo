@@ -125,6 +125,10 @@ public class TradingServiceImpl implements TradingService{
     public List<Trading> tradingList3(Long userId, Long accountId){
         return tradingRepositorySupport.find3ByUserIdAcountId(userId, accountId);
     }
+    @Override
+    public List<Trading>tradingList4(Long userId, Long accountId){
+        return tradingRepositorySupport.find4ByUserIdAcountId(userId, accountId);
+    }
 
     @Override
     public List<Trading> tradingList3Or4WillBeChange(){
