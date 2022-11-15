@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 1rem;
 }
 
 .radioUlClass label {
@@ -84,11 +85,22 @@
   color: #929E9E;
   margin-bottom: 0.5rem;
 }
-.hrline{
-  border: #EAF0EF 8px solid;
+.hrline1{
+  position: relative;
+  top: -20px;
+  height: 30px;
+  background-color: #EAF0EF;
   display: flex;
   justify-content: center;
-  margin-top: 1.5rem;
+  /* margin-top: 1.5rem; */
+  margin-bottom: 1.5rem;
+}
+.hrline{
+  height: 30px;
+  background-color: #EAF0EF;
+  display: flex;
+  justify-content: center;
+  /* margin-top: 1.5rem; */
   margin-bottom: 1.5rem;
 }
 .line{
@@ -110,10 +122,11 @@
 }
 .radio{
   display: flex;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
+  /* margin-left: 2.2rem; */
+  width: 90%;
+  max-width: 600px;
   align-items: center;
-  justify-content: space-between;
+  margin: auto;
 }
 .imgrowbox{
   display: flex;
@@ -149,10 +162,8 @@
   margin-right: 1.5rem;
   margin-top: 1rem;
 }
-.start{
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-  margin-top: 6rem;
+.subctn1graph{
+  margin: auto;
 }
 .top{
   display: flex;
@@ -212,7 +223,7 @@
 .script{
   color: #929e9e;
   font-size: 14px;
-  margin-top: 0.5rem;
+  /* margin-top: 0.5rem; */
 }
 .edge{
   display: flex;
@@ -306,22 +317,27 @@
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
-.flx{
-  width: 45%;
-}
+
 .fixbox{
   display: flex;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+  margin-top: 1.3rem;
   margin-left: 1.5rem;
   margin-right: 1.5rem;
+  margin-bottom: 1.3rem;
+
+  /* margin-top: 2rem;
+  margin-bottom: 1rem;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem; */
   justify-content: space-between;
 }
 .fix{
   position: fixed;
+  z-index: 1;
   background-color: #fff;
   width: 100%;
   top: 0;
+  box-shadow: 0px 1px 2px 1px rgba(148, 148, 148, 0.25);
 }
 .topline{
   border: #EAF0EF 1px solid;
@@ -329,4 +345,39 @@
 .big{
   font-size: 24px;
   font-weight: 600;
+}
+
+.stkdtctn{
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  background-color: white;
+  padding-top: 30px;
+
+}
+
+.stkdtbg {
+  background-color: #EAF0EF ;
+  position: relative;
+  top: -29px;
+}
+
+.testtest{
+  margin-top: 1rem;
+  margin-left: 2.4rem;
+  /* margin: auto; */
+  /* display: flex;
+  justify-content: center; */
+}
+
+.dtctntitle{
+  margin-left: 40px;
+  margin-right: 1.5rem;
+  margin-top: 6rem;
+}
+
+.dtsub1{
+  margin-bottom: 50px;
+  background-color: white;
+
 }
