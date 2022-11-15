@@ -45,7 +45,7 @@ public class Account {
     @Column(name="is_main")
     private boolean is_main;
 
-//    @JsonIgnore
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account", orphanRemoval = true)
     private List<AccountStock> accountStocks = new ArrayList<>();
 
