@@ -74,9 +74,9 @@
 }
 .infobox{
   display: flex;
-  margin-top: 1rem;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
+  margin-top: 1.8rem;
+  margin-left: 2.5rem;
+  margin-right: 2.5rem;
   align-items: center;
   justify-content: space-between;
   font-weight: 600;
@@ -85,30 +85,38 @@
   color: #929E9E;
   margin-bottom: 0.5rem;
 }
+.hrline2{
+  height: 30px;
+  background-color: #EAF0EF;
+  display: flex;
+  justify-content: center;
+  margin-top: 1.6rem;
+  margin-bottom: 1.6rem;
+}
+
 .hrline1{
-  position: relative;
-  top: -20px;
   height: 30px;
   background-color: #EAF0EF;
   display: flex;
   justify-content: center;
   /* margin-top: 1.5rem; */
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.8rem;
 }
 .hrline{
   height: 30px;
   background-color: #EAF0EF;
   display: flex;
   justify-content: center;
-  /* margin-top: 1.5rem; */
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
+  position: relative;
+  top: -20px;
 }
 .line{
   border: #EAF0EF 1px solid;
   display: flex;
   justify-content: center;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 .back{
   margin-top: 2rem;
@@ -163,7 +171,8 @@
   margin-top: 1rem;
 }
 .subctn1graph{
-  margin: auto;
+  /* margin: auto; */
+  margin-top: 3rem;
 }
 .top{
   display: flex;
@@ -184,8 +193,9 @@
   align-items: center;
   justify-content: center;
   margin: 1.5rem;
-  background: #f5f5f5;
-  border: 0.5px solid #929E9E;
+  margin: 1.5rem 1.5rem 3.2rem 1.5rem;
+  background: #f9f9f9;
+  border: 0.5px solid #c8d3d3;
   border-radius: 10px;
   font-weight: 600;
 }
@@ -200,8 +210,9 @@
   margin-left: 0.5rem;
 }
 .news{
-  font-size: 10px;
-  margin-left: 1.5rem;
+  font-size: 12px;
+  margin-left: 10px;
+  font-weight: 400;
   color: #929e9e;
 }
 .weatherbox{
@@ -212,6 +223,7 @@
   width: 30%;
   height: 88px;
   border-radius: 10px;
+  margin-bottom: 10px;
 }
 .wimg{
   height: 40px;
@@ -223,6 +235,7 @@
 .script{
   color: #929e9e;
   font-size: 14px;
+  margin-top: 3px;
   /* margin-top: 0.5rem; */
 }
 .edge{
@@ -243,12 +256,14 @@
   height: 30px;
   display: inline-flex;
   align-items: center;
-  margin-right: 1rem;
-  margin-top: 1rem;
+  margin-right: 0.7rem;
+  margin-top: 0.7rem;
 }
 .boxes{
   margin-left: 1rem;
   margin-right: 1rem;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 .onlybuy{
   width: 100%;
@@ -264,12 +279,12 @@
   font-size: 20px;
 }
 .sell{
-  width: 100%;
+  width: 180px;
   height: 54px;
   color: #fff;
   border: none;
   margin-top: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 5px;
   background: #7BCDC8;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -280,12 +295,12 @@
   justify-content: center;
 }
 .buy{
-  width: 100%;
+  width: 180px;
   height: 54px;
   color: #fff;
   border: none;
   margin-top: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 5px;
   background: #FECE6D;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -306,11 +321,13 @@
 .greenbox{
   display: flex;
   align-items: center;
+  margin-bottom: 5px;
 }
 .sellbuy{
   position: fixed;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  /* justify-content: space-between; */
   bottom: 0;
   width: 100%;
   background: linear-gradient(to top, white, white 50%, transparent);
@@ -373,11 +390,25 @@
 .dtctntitle{
   margin-left: 40px;
   margin-right: 1.5rem;
-  margin-top: 6rem;
+  margin-top: 8rem;
 }
 
 .dtsub1{
   margin-bottom: 50px;
   background-color: white;
 
+}
+
+.epsper{
+  margin-left: 1.3rem;
+  margin-right: 1.3rem;
+}
+
+.explainbox {
+  margin-top: 20px;
+  padding: 5px;
+  margin-left: 1.2rem;
+  margin-right: 1.2rem;
+  background-color: #EAF0EF60;
+  border-radius: 10px;
 }
