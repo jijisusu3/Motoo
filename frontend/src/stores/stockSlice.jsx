@@ -12,6 +12,7 @@ const initialState = {
   realtime: [],
   limitList: [],
   bidask: {},
+  schoolStock: {},
 };
 
 const categoryGet = createAsyncThunk("stock-detail/categoryGet", async (id) => {
@@ -87,6 +88,12 @@ const bidaskGet = createAsyncThunk("stock/bidaskGet", async (data) => {
   })
 })
 
+const schoolBestGet = createAsyncThunk("stock/schoolBestGet", async (data) => {
+  return axios.get(`${api1}stocks/school-hot`, data).then((response) => {
+    return response.data
+  })
+})
+
 export const stockSlice = createSlice({
   name: "stockSlice",
   initialState: initialState,
@@ -125,6 +132,9 @@ export const stockSlice = createSlice({
     builder.addCase(bidaskGet.fulfilled, (state, action) => {
       state.bidask = action.payload;
     });
+    builder.addCase(schoolBestGet.fulfilled, (state, action) => {
+      state.schoolStock = action.payload;
+    });
   },
 });
 
@@ -138,5 +148,6 @@ export {
   limitListGet,
   limitOrderPut,
   limitOrderDelete,
-  bidaskGet
+  bidaskGet,
+  schoolBestGet
 };
