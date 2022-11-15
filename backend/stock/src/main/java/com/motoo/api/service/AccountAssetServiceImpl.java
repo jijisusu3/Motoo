@@ -2,6 +2,7 @@ package com.motoo.api.service;
 
 import com.motoo.api.dto.accountDetail.*;
 import com.motoo.db.entity.AccountStock;
+import com.motoo.db.entity.Trading;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,21 +15,25 @@ import java.util.stream.Collectors;
 public class AccountAssetServiceImpl implements AccountAssetService {
 
     private final AccountService accountService;
+    private final TradingService tradingService;
 
     @Override
     public AccountAsset getAccountAsset(Long accountId, Long userId) {
         int cash = accountService.getAccount(accountId, userId).getSeed();
+        List<Trading> tradings4List = tradingService.tradingList4(userId, accountId);
+        List<Integer> waitingPriceList = tradings4List.stream().map(trading -> trading.getTr_amount() * trading.getTr_price()).collect(Collectors.toList());
+        int waitingPrice = waitingPriceList.stream().mapToInt(Integer::intValue).sum();
         int stockAsset = getStockAsset(accountId, userId);
         int asset = cash + stockAsset;
         float totalValuePLRatio = getTotalValuePLRatio(accountId, userId);
         AccountAsset build = AccountAsset.builder()
                 .Asset(asset)
                 .Cash(cash)
+                .AvailableCash(cash - waitingPrice)
                 .StockOrderByTotalValue(getStockOrderByTotalValue(accountId, userId))
                 .StockOrderByValuePLRatio(getStockOrderByValuePLRatio(accountId, userId))
                 .TotalValuePLRatio(totalValuePLRatio)
                 .build();
-
         return build;
     }
 
