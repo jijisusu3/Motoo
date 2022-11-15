@@ -49,6 +49,16 @@ public class TradingRepositorySupport {
          else return tradings;
     }
 
+    public List<Trading> find4ByUserIdAcountId(Long userId, Long accountId){
+        List<Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
+                        .where(qTrading.tr_type.eq(4))
+                        .where(qTrading.account.user.userId.eq(userId))
+                        .where(qTrading.account.accountId.eq(accountId))
+                        .fetch();
+        if (tradings==null) return Collections.emptyList();
+        else return tradings;
+    }
 
     //개인 특정계좌 판매됨,구매됨 조회
 
