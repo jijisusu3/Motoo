@@ -23,12 +23,9 @@ import java.util.Date;
 public class QuizController {
 
     private final UserService userService;
-
     private final QuizService quizService;
-
     @GetMapping("/api2/quiz")
     public ResponseEntity<?> ReadQuiz() { return ResponseEntity.ok(quizService.getQuiz()); }
-
     @PutMapping("/api2/quiz")
     public ResponseEntity SolveQuiz(Authentication authentication, @RequestBody QuizReq quizReq) {
         Long id = userService.getUserIdByToken(authentication);
