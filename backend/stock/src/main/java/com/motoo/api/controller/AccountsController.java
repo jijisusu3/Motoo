@@ -19,6 +19,8 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,11 +55,27 @@ public class AccountsController {
         Long userId = userService.getUserIdByToken(authentication);
         List<Account> accounts = accountService.listAccount(userId);
 
-        //계좌 갯수 유효성 검사
-        if (accounts.size()>=3){
-            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌가 3개 이상입니다. 생성할 수 없습니다."));
+        boolean isSchool = false;
+        for (int i=0; i<accounts.size(); i++){
+            if ( accounts.get(i).isSchool()){
+                isSchool=true;
+            }
+            else {
+                continue;
+            }
         }
-        else {
+        //계좌 갯수 유효성 검사
+        if (isSchool==true){
+            if (accounts.size()>=4){
+                return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌가 4개 이상입니다. 생성할 수 없습니다."));
+            }
+        }else {
+            if (accounts.size()>=3){
+                return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌가 3개 이상입니다. 생성할 수 없습니다."));
+            }
+        }
+
+
 
         try {
             accountService.createAccount(userId, makeAccountPostReq.getName());
@@ -67,7 +85,6 @@ public class AccountsController {
         }
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌가 생성되었습니다."));
     }
-}
 
     //계좌 목록조회
     @GetMapping()
@@ -87,7 +104,7 @@ public class AccountsController {
             accountAsset+=value.getSeed();
             for (int a = 0; a < value.getAccountStocks().size(); a++) {
                 seeds += value.getAccountStocks().get(a).getAmount() * value.getAccountStocks().get(a).getPrice();
-                accountAsset += value.getAccountStocks().get(a).getAmount() * value.getAccountStocks().get(a).getPrice();
+                accountAsset += value.getAccountStocks().get(a).getAmount() * value.getAccountStocks().get(a).getStock().getPrice();
             }
             pitches.add(accountAsset);
         }
@@ -172,18 +189,27 @@ public class AccountsController {
     @ApiOperation(value = "계좌에 구매 추가", notes = "계좌에 주식 구매한다.")
     public ResponseEntity<? extends BaseResponseBody> addStockToAccount(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "주식번호", required = true) @Valid AccountStockAddPostReq accountStockAddPostReq) {
 
-        //거래시간 설정
+//        //거래시간 설정
 //        LocalTime now = LocalTime.now();
+//        LocalDate date = LocalDate.now();
+//        // 2. DayOfWeek 객체 구하기
+//        DayOfWeek dayOfWeek = date.getDayOfWeek();
+////        the day-of-week, from 1 (Monday) to 7 (Sunday)
+//        // 3. 숫자 요일 구하기
+//        int dayOfWeekNumber = dayOfWeek.getValue();
+//        // 4. 숫자 요일 검증
+//        if (dayOfWeekNumber >=6){
+//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 요일이 아닙니다."));
+//        }
 //        int hour = now.getHour();
-//        if (hour >16){
-//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래시간이 아닙니다."));
+//        if (hour >16 || hour <9){
+//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
 //        }
 
         Long userId = userService.getUserIdByToken(authentication);
         Account account = accountService.getAccount(accountStockAddPostReq.getAccountId(), userId);
         List<Long> stockList = accountStockService.getAccountStockIdList(account);
         int seed = account.getSeed();
-//        Stock stock = stockService.getStock(accountStockAddPostReq.getStockId());
         int postPrice = accountStockAddPostReq.getPrice();
         int postAmount = accountStockAddPostReq.getAmount();
         Long accountId = account.getAccountId();
@@ -252,13 +278,21 @@ public class AccountsController {
         Stock stock = stockRepositorySupport.findStockByAStockId(accountStockAddPostReq.getStockId());
         Long stockId =  stock.getStockId();
         Long accountId = account.getAccountId();
-
-
-        //거래시간 설정
+//
+//        //거래시간 설정
 //        LocalTime now = LocalTime.now();
+//        LocalDate date = LocalDate.now();
+//        // 2. DayOfWeek 객체 구하기
+//        DayOfWeek dayOfWeek = date.getDayOfWeek();
+//        // 3. 숫자 요일 구하기
+//        int dayOfWeekNumber = dayOfWeek.getValue();
+//        // 4. 숫자 요일 검증
+//        if (dayOfWeekNumber >=6){
+//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
+//        }
 //        int hour = now.getHour();
-//        if (hour >16){
-//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래시간이 아닙니다."));
+//        if (hour >16 || hour <9){
+//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
 //        }
 
 
@@ -326,7 +360,6 @@ public class AccountsController {
     public ResponseEntity<? extends BaseResponseBody> checkStockList(@ApiIgnore Authentication authentication, @PathVariable("account_id") @ApiParam(value = "상세계좌 번호", required = true) Long account_id) {
         Long userId = userService.getUserIdByToken(authentication);
         Account account = accountService.getAccount(account_id, userId);
-        Optional<User> user = userService.getByUserId(userId);
 
         //주 계좌 시드머니 세팅
 
