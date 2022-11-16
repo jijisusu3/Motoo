@@ -19,7 +19,6 @@ function LimitOrderPage() {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
   }, []);
-  console.log(orderList);
   const tmpData = {
     config: {
       headers: {
@@ -36,26 +35,20 @@ function LimitOrderPage() {
   function backToStockList() {
     navigate(`/`);
   }
-  const [differText, setDifferText] = useState("");
-  const [ go, setGo] = useState("");
   function MyRealizedCard(stock) {
-    console.log(stock.differ)
+    let go = 'sell'
+    let isSell = false;
+    console.log(stock.differ);
     const tmpparams =
       stock.ticker + ":" + stock.price + ":" + stock.many + ":" + stock.id;
-    console.log(tmpparams);
-    function differCheck() {
+
       if (stock.differ === 4) {
-        console.log('??????????')
-        setDifferText("판매");
-        setGo("sell");
-        return "#4D97ED";
-      } else {
-        setDifferText("구매");
-        setGo("buy");
-        return "#DD4956";
+        isSell = false
+        go = 'buy'
+      } else if (stock.differ === 3) {
+        isSell = true
       }
-    }
-    const differLabel = differCheck();
+
     return (
       <div className={classes.listbox}>
         <Link
@@ -65,16 +58,33 @@ function LimitOrderPage() {
         >
           <div className={classes.myLimitOrderCard}>
             <div className={classes.rowbox}>
-              <div
-                className={classes.label}
-                style={{
-                  backgroundColor: differLabel,
-                }}
-              >
-                <div style={{ color: "white", fontSize: 10, fontWeight: 700 }}>
-                  {differText}
+              {isSell ? (
+                <div
+                  className={classes.label}
+                  style={{
+                    backgroundColor: "#4D97ED",
+                  }}
+                >
+                  <div
+                    style={{ color: "white", fontSize: 10, fontWeight: 700 }}
+                  >
+                    판매
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div
+                  className={classes.label}
+                  style={{
+                    backgroundColor: "#DD4956",
+                  }}
+                >
+                  <div
+                    style={{ color: "white", fontSize: 10, fontWeight: 700 }}
+                  >
+                    구매
+                  </div>
+                </div>
+              )}
               <div>{stock.name}</div>
             </div>
             <div className={classes.pr}>
@@ -118,7 +128,6 @@ function LimitOrderPage() {
               />
             ))}
         </div>
-
       </div>
       
 
