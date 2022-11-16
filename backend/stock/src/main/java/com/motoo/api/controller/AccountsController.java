@@ -53,10 +53,8 @@ public class AccountsController {
     @ApiResponses({@ApiResponse(code = 200, message = "계좌 생성 성공", response = BaseResponseBody.class), @ApiResponse(code = 401, message = "계좌 생성 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @PostMapping()
     public ResponseEntity<? extends BaseResponseBody> createAccount(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "계좌 상세 내용", required = true) @Valid MakeAccountPostReq makeAccountPostReq) throws Exception {
-
         Long userId = userService.getUserIdByToken(authentication);
         List<Account> accounts = accountService.listAccount(userId);
-
         boolean isSchool = false;
         for (int i=0; i<accounts.size(); i++){
             if ( accounts.get(i).isSchool()){
@@ -76,9 +74,6 @@ public class AccountsController {
                 return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌가 3개 이상입니다. 생성할 수 없습니다."));
             }
         }
-
-
-
         try {
             accountService.createAccount(userId, makeAccountPostReq.getName());
         } catch (
@@ -96,7 +91,6 @@ public class AccountsController {
         Long userId = userService.getUserIdByToken(authentication);
         List<Account> account = accountService.listAccount(userId);
         int seeds=0;
-
         List<Integer> pitches = new ArrayList<>();
 //      구매할때는 시드-구매가*주식수 + 구매가 *주식수 라서 pitches은 안변함
 //      판매할때는 시드+평단가*주식수 라서 pitches는 변함
@@ -105,7 +99,7 @@ public class AccountsController {
             seeds+=value.getSeed();
             accountAsset+=value.getSeed();
             for (int a = 0; a < value.getAccountStocks().size(); a++) {
-                seeds += value.getAccountStocks().get(a).getAmount() * value.getAccountStocks().get(a).getPrice();
+                seeds += value.getAccountStocks().get(a).getAmount() * value.getAccountStocks().get(a).getStock().getPrice();
                 accountAsset += value.getAccountStocks().get(a).getAmount() * value.getAccountStocks().get(a).getStock().getPrice();
             }
             pitches.add(accountAsset);
@@ -219,7 +213,6 @@ public class AccountsController {
         //지금 주식 가격이랑 내 주문량, 가격이랑 비교용도의 주식객체
         Stock stock = stockRepositorySupport.findStockByAStockId(accountStockAddPostReq.getStockId());
 
-
         //시드머니 조회하여 구매가격이 시드머니보다 높으면 구매불가
         if (seed >= postPrice * postAmount) {
 
@@ -243,7 +236,6 @@ public class AccountsController {
                     accountStockService.updateAmountPrice(accountStock, newAmount, newPrice);
                     tradingService.writeOrder(userId,accountId,accountStockAddPostReq.getStockId(),2 ,postPrice,postAmount, null);
                     //변경된 stockList
-
 
                     return ResponseEntity.status(200).body(SellOrBuyRes.of(stockList, seed, 200, "계좌에 이동평균가격 적용"));
                 }
@@ -280,7 +272,7 @@ public class AccountsController {
         Stock stock = stockRepositorySupport.findStockByAStockId(accountStockAddPostReq.getStockId());
         Long stockId =  stock.getStockId();
         Long accountId = account.getAccountId();
-//
+
 //        //거래시간 설정
 //        LocalTime now = LocalTime.now();
 //        LocalDate date = LocalDate.now();
@@ -296,8 +288,6 @@ public class AccountsController {
 //        if (hour >16 || hour <9){
 //            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
 //        }
-
-
         //주문 객체
 
         int postPrice = accountStockAddPostReq.getPrice();
@@ -353,8 +343,6 @@ public class AccountsController {
             return ResponseEntity.status(401).body(SellOrBuyRes.of(stockList, seed, 401, "계좌에 해당 주식이 없습니다."));
         }
     }
-
-
     //보유한 주식 계좌 리스트 조회
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 계좌상세 목록 조회 성공", response = AccountListRes.class), @ApiResponse(code = 401, message = "계좌상세 목록 조회 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @ApiOperation(value = "보유한 주식 Id, 보유량 조회", notes = "보유한 주식 Id, 보유량 조회")
@@ -367,7 +355,6 @@ public class AccountsController {
 
         //판매가능한 수
         int available=0;
-
 
         List<AccountStockInfo> stockInfo = userService.getStockInfoByAccountId(userId,account_id);
         StockListRes stockListRes = StockListRes.of(account, stockInfo, available, 200, "보유주식 리스트 조회에 성공하였습니다.");
