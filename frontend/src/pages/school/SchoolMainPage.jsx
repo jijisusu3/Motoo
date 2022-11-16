@@ -12,14 +12,15 @@ import classes from "./SchoolMainPage.module.css";
 
 const style = {
   position: "absolute",
-  top: "35%",
+  top: "45%",
   left: "50%",
-  width: "300px",
-  height: "50%",
+  maxWidth: "400px",
+  width: "85%",
+  height: "460px",
   transform: "translate(-50%, -50%)",
   bgcolor: "background.paper",
   boxShadow: 24,
-  p: 4,
+  p: 3,
   borderRadius: 5,
 };
 
@@ -88,11 +89,11 @@ function SchoolMainPage() {
           >
             <div className={classes.sidoList}>
               <div className={classes.sido}>
-                <p>{item.sigunguResponse.sido}</p>
+                <p>{item.sigunguResponse.sido} {item.sigunguResponse.sigungu_name}</p>
               </div>
-              <div className={classes.sigungu}>
-                <p>{item.sigunguResponse.sigungu_name}</p>
-              </div>
+              {/* <div className={classes.sigungu}>
+                <p></p>
+              </div> */}
             </div>
             <div className={classes.schoolList}>{item.schoolname}</div>
 
@@ -195,7 +196,7 @@ function SchoolMainPage() {
         >
           <Fade in={open}>
             <Box sx={style}>
-              <div className={classes.schoolText}>학교 등록하기</div>
+              <div style={{marginTop: "5px",marginBottom: "30px"}}className={classes.schoolText}>학교 등록하기</div>
               <div className={classes.schoolSearchBox}>
                 <input
                   type="text"
@@ -229,7 +230,7 @@ function SchoolMainPage() {
               <div
                 style={{
                   overflow: "auto",
-                  width: "100%",
+                  width: "95%",
                   height: "50%",
                   // border: "1px solid red",
                   marginTop: "10px",
@@ -237,10 +238,13 @@ function SchoolMainPage() {
               >
                 <SearchBar />
               </div>
-              {!isGetId && <div>학교를 선택하세요!</div>}
+
               <button className={classes.schoolBtn} onClick={startClick}>
                 시작하기
               </button>
+              <div>
+                {!isGetId && <div className={classes.schoolaler}>학교를 선택하세요!</div>}
+              </div>
             </Box>
           </Fade>
         </Modal>

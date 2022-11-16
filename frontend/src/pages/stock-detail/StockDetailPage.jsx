@@ -1068,7 +1068,7 @@ function StockDetailPage() {
             </div>
           )}
         </div>
-        <div className={classes.hrline}></div>
+        <div className={classes.hrline3}></div>
         <AnalyzedData />
         <div className={classes.imgrowbox} onClick={goToIndustry}>
           <div className={classes.rowbox}>
