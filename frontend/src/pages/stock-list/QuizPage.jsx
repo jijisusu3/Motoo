@@ -69,7 +69,7 @@ function QuizPage() {
 
   return (
     <div className={classes.quizBG}>
-      <img style={{ marginLeft: "30px"}} onClick={backToList} src={`${process.env.PUBLIC_URL}/grayBack.svg`} alt="" />
+      <img style={{ marginLeft: "30px"}} onClick={backToList} src={`${process.env.PUBLIC_URL}/stock-detail/back.svg`} alt="" />
       <div className={classes.quizCtn}>
         <div className={classes.quizCtnNv}>
           <div>

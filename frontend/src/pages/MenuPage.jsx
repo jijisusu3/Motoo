@@ -65,13 +65,16 @@ function MenuPage() {
         <Link to="/wallet/my">
           <div>내 지갑 리스트</div>
         </Link>
-        {/* <Link to={`/wallet/detail/${}`}>
+        <Link to={`/wallet/detail/${userCurrent}`}>
           <div>주 계좌 보러가기</div>
-        </Link> */}
-        <Link to="/stock/search">
-          <div>주식 검색</div>
         </Link>
       </div>
+      <div>
+        <Link to="/school">
+          <div>학교대항전</div>
+        </Link>
+      </div>
+
       <button onClick={logoutClick}>로그아웃</button>
       <button onClick={handleDeleteModalOpen}>회원탈퇴</button>
       <Modal open={openDeleteModal} onClose={handleDeleteModalClose}>
