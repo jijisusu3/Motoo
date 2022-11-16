@@ -20,7 +20,7 @@ function StockDetailPage() {
   const [showSellButton, setShowSellButton] = useState(true);
   // useEffect로 데이터 받아오고 관심목록에 있으면 true, 없으면 false 그대로
   const [isWatchlist, setisWatchlist] = useState(true);
-  const [mainColor, setMainColor] = useState("#DD4956")
+  const [mainColor, setMainColor] = useState("#DD4956");
   const stockData = useSelector((state) => {
     return state.setStock.detail;
   });
@@ -31,8 +31,8 @@ function StockDetailPage() {
     return state.persistedReducer.setUser.user.token;
   });
   const userCurrent = useSelector((state) => {
-    return state.persistedReducer.setUser.user.data.current
-  })
+    return state.persistedReducer.setUser.user.data.current;
+  });
   const haveList = useSelector((state) => {
     return state.persistedReducer.setUser.user.haveList;
   });
@@ -43,10 +43,10 @@ function StockDetailPage() {
     config: {
       headers: {
         Authorization: `Bearer ${userToken}`,
-      }
+      },
     },
-    current: userCurrent
-  }
+    current: userCurrent,
+  };
   function backTo() {
     navigate(-1);
   }
@@ -60,11 +60,11 @@ function StockDetailPage() {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
     dispatch(stockDetailGet(id));
-    dispatch(realtimeAccountGet(data))
+    dispatch(realtimeAccountGet(data));
   }, []);
 
   useEffect(() => {
-    console.log('haveList', haveList)
+    // console.log("haveList", haveList);
     // if (!haveList.includes(id)) {
     //   setShowSellButton(false);
     // } else {
@@ -102,8 +102,7 @@ function StockDetailPage() {
     const [candleGraphData, setCandleGraphData] = useState({
       series: [
         {
-          data: [
-          ],
+          data: [],
         },
       ],
       options: {
@@ -133,17 +132,6 @@ function StockDetailPage() {
               zoomout: true,
               pan: false,
               reset: false,
-              // 툴바 아이콘 커스텀 하는 곳...
-              // customIcons: [
-              //   {
-              //     icon: '<img src={`${process.env.PUBLIC_URL}/dateRefresh.svg`} alt="">',
-              //     index: 6,
-              //     class: 'custom-icon',
-              //     click: function (chart, options, e) {
-              //       console.log("clicked custom-icon")
-              //     }
-              //   }
-              // ]
             },
           },
           selection: {
@@ -154,7 +142,7 @@ function StockDetailPage() {
           show: false,
         },
         xaxis: {
-          tickPlacement: 'between',
+          tickPlacement: "between",
           show: false,
           type: "category",
           labels: {
@@ -215,16 +203,16 @@ function StockDetailPage() {
           name: "ExtremeValue",
           type: "scatter",
           data: [
-            {
-              x: extremeValues[0].x,
-              y: (extremeValues[0].y * 0.92).toFixed(),
-              z: extremeValues[0].z,
-            },
-            {
-              x: extremeValues[1].x,
-              y: (extremeValues[1].y * 1.05).toFixed(),
-              z: extremeValues[1].z,
-            },
+            // {
+            //   x: extremeValues[0].x,
+            //   y: extremeValues[0].y,
+            //   z: extremeValues[0].z,
+            // },
+            // {
+            //   x: extremeValues[1].x,
+            //   y: extremeValues[0].y,
+            //   z: extremeValues[1].z,
+            // },
           ],
         },
         {
@@ -239,6 +227,7 @@ function StockDetailPage() {
             enabled: false,
           },
           height: 350,
+          width: "100%",
           type: "line",
           locales: [ko, ko],
           defaultLocale: "ko",
@@ -267,27 +256,7 @@ function StockDetailPage() {
             size: 0,
           },
         },
-        dataLabels: {
-          enabled: true,
-          textAnchor: "start",
-          formatter: function (val, opt) {
-            const thisData =
-              opt.w.globals.initialSeries[opt.seriesIndex].data[
-                opt.dataPointIndex
-              ];
-            if (opt.seriesIndex === 0) {
-              return (
-                thisData.z +
-                " " +
-                extremeValues[opt.dataPointIndex].y.toLocaleString() +
-                "원"
-              );
-            }
-          },
-          background: {
-            enabled: false,
-          },
-        },
+
         stroke: {
           width: 3,
           curve: "smooth",
@@ -298,7 +267,7 @@ function StockDetailPage() {
           show: false,
         },
         xaxis: {
-          show: true,
+          show: false,
           seriesName: "Line",
           type: "datetime",
           labels: {
@@ -315,8 +284,6 @@ function StockDetailPage() {
           {
             show: false,
             seriesName: "ExtremeValue",
-            // min: extremeValues[0].y * 0.85,
-            // max: extremeValues[1].y * 1.1,
             labels: {
               style: {
                 colors: mainColor,
@@ -326,11 +293,13 @@ function StockDetailPage() {
           {
             show: false,
             seriesName: "Line",
-            // min: extremeValues[0].y * 0.85,
-            // max: extremeValues[1].y * 1.1,
+            labels: {
+              style: {
+                colors: mainColor,
+              },
+            },
           },
         ],
-        // responsive: [{ breakpoint: 1000 }],
         tooltip: {
           custom: function ({ series, seriesIndex, dataPointIndex, w }) {
             if (seriesIndex === 1) {
@@ -350,286 +319,489 @@ function StockDetailPage() {
     });
     useEffect(() => {
       if (stockData.daily) {
-          let tmpDaily = []
-          let tmpDailyCandle = []
-          stockData.daily.forEach((element) => {
-            const tmpLine = {
-              x: element.date + " " + element.time.slice(0,2) + ':' + element.time.slice(2,4),
-              y: element.price
-            }
-            const tmpCandle = {
-              x: element.date + " " + element.time.slice(0,2) + ':' + element.time.slice(2,4),
-              y: [element.open_price, element.max_price, element.min_price, element.price]
-            }
-            tmpDaily.push(tmpLine)
-            tmpDailyCandle.push(tmpCandle)
-          })
-          console.log(tmpDailyCandle)
-          setCandleGraphData((pre) => ({
-            ...pre,
-            series: [
-              {
-                data: tmpDailyCandle
-              }
-            ]
-          }))
-          
-          extremeValues[0].x = stockData.daily_min.date + " " + stockData.daily_min.time.slice(0, 2) + ':' + stockData.daily_min.time.slice(2, 4)
-          extremeValues[1].x = stockData.daily_max.date + " " + stockData.daily_max.time.slice(0, 2) + ':' + stockData.daily_max.time.slice(2, 4)
-          extremeValues[0].y = stockData.daily_min.min_price
-          extremeValues[1].y = stockData.daily_max.max_price
-          setLineGraphData((pre) => ({
-            ...pre,
-            series:  [
-              {
-                name: "ExtremeValue",
-                type: "scatter",
-                data: [
-                  {
-                    x: extremeValues[0].x,
-                    y: (extremeValues[0].y * 0.92).toFixed(),
-                    z: extremeValues[0].z,
-                  },
-                  {
-                    x: extremeValues[1].x,
-                    y: (extremeValues[1].y * 1.05).toFixed(),
-                    z: extremeValues[1].z,
-                  },
-                ],
-              },
-              {
-                name: "Line",
-                data: tmpDaily
-              },
-            ],
-          }))
-      }
-    }, [])
-    let clickedOptions = candleGraphData.options
-    let clickedSeries = candleGraphData.series
-    let clickedType = "candlestick"
-    const handleOptionChange = (event) => {
-      if (event.target.id === "daily"){
-        const tmpDaily = []
-        const tmpDailyCandle = []
+        let tmpDaily = [];
+        let tmpDailyCandle = [];
         stockData.daily.forEach((element) => {
           const tmpLine = {
-            x: element.date + " " + element.time.slice(0,2) + ':' + element.time.slice(2,4),
-            y: element.price
-          }
+            x: element.date + " " + element.time.slice(0, 2) + ":" + element.time.slice(2, 4),
+            y: element.price,
+          };
           const tmpCandle = {
-            x: element.date + " " + element.time.slice(0,2) + ':' + element.time.slice(2,4),
-            y: [element.open_price, element.max_price, element.min_price, element.price]
-          }
-          tmpDaily.push(tmpLine)
-          tmpDailyCandle.push(tmpCandle)
-        })
+            x: element.date + " " + element.time.slice(0, 2) + ":" + element.time.slice(2, 4),
+            y: [element.open_price, element.max_price, element.min_price, element.price],
+          };
+          tmpDaily.push(tmpLine);
+          tmpDailyCandle.push(tmpCandle);
+        });
+
         setCandleGraphData((pre) => ({
           ...pre,
           series: [
             {
-              data:tmpDailyCandle
-            }
-          ]
-        }))
-        extremeValues[0].x = stockData.daily_min.date + " " + stockData.daily_min.time.slice(0, 2) + ':' + stockData.daily_min.time.slice(2, 4)
-        extremeValues[1].x = stockData.daily_max.date + " " + stockData.daily_max.time.slice(0, 2) + ':' + stockData.daily_max.time.slice(2, 4)
-        extremeValues[0].y = stockData.daily_min.min_price
-        extremeValues[1].y = stockData.daily_max.max_price
+              data: tmpDailyCandle,
+            },
+          ],
+          options: {
+            yaxis: {
+              show: false,
+              min: parseInt((8 * stockData.daily_min.min_price + stockData.minimum - 900) / 9),
+              max: parseInt((8 * stockData.daily_max.max_price + stockData.maximum + 900) / 9),
+            },
+          },
+        }));
+
+        extremeValues[0].x = stockData.daily_min.date + " " + stockData.daily_min.time.slice(0, 2) + ":" + stockData.daily_min.time.slice(2, 4);
+        extremeValues[1].x = stockData.daily_max.date + " " + stockData.daily_max.time.slice(0, 2) + ":" + stockData.daily_max.time.slice(2, 4);
+        extremeValues[0].y = stockData.daily_min.min_price;
+        extremeValues[1].y = stockData.daily_max.max_price;
         setLineGraphData((pre) => ({
           ...pre,
-          series:  [
+          series: [
             {
               name: "ExtremeValue",
               type: "scatter",
               data: [
                 {
                   x: extremeValues[0].x,
-                  y: (extremeValues[0].y * 0.92).toFixed(),
+                  y: extremeValues[0].y,
                   z: extremeValues[0].z,
                 },
                 {
                   x: extremeValues[1].x,
-                  y: (extremeValues[1].y * 1.05).toFixed(),
+                  y: extremeValues[1].y,
                   z: extremeValues[1].z,
                 },
               ],
             },
             {
               name: "Line",
-              data: tmpDaily
+              data: tmpDaily,
             },
           ],
-        }))
+          options: {
+            xaxis: {
+              show: false,
+              seriesName: "Line",
+              type: "datetime",
+              labels: {
+                show: false,
+                datetimeFormatter: {
+                  year: "yy년",
+                  month: "yy년 MM월",
+                  day: "MM월 dd일",
+                  hour: "HH:mm",
+                },
+              },
+            },
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3,
+              },
+            },
+            yaxis: [
+              {
+                show: false,
+                min: parseInt((8 * stockData.daily_min.min_price + stockData.minimum - 1350) / 9),
+                max: parseInt((8 * stockData.daily_max.max_price + stockData.maximum + 1350) / 9),
+                labels: {
+                  style: {
+                    colors: mainColor,
+                  },
+                },
+              },
+              {
+                show: false,
+                min: parseInt((8 * stockData.daily_min.min_price + stockData.minimum - 1350) / 9),
+                max: parseInt((8 * stockData.daily_max.max_price + stockData.maximum + 1350) / 9),
+                labels: {
+                  style: {
+                    colors: mainColor,
+                  },
+                },
+              },
+            ],
+          },
+        }));
+      }
+    }, []);
+    let clickedOptions = candleGraphData.options;
+    let clickedSeries = candleGraphData.series;
+    let clickedType = "candlestick";
+    const handleOptionChange = (event) => {
+      if (event.target.id === "daily") {
+        const tmpDaily = [];
+        const tmpDailyCandle = [];
+        stockData.daily.forEach((element) => {
+          const tmpLine = {
+            x: element.date + " " + element.time.slice(0, 2) + ":" + element.time.slice(2, 4),
+            y: element.price,
+          };
+          const tmpCandle = {
+            x: element.date + " " + element.time.slice(0, 2) + ":" + element.time.slice(2, 4),
+            y: [element.open_price, element.max_price, element.min_price, element.price],
+          };
+          tmpDaily.push(tmpLine);
+          tmpDailyCandle.push(tmpCandle);
+        });
+        extremeValues[0].x = stockData.daily_min.date + " " + stockData.daily_min.time.slice(0, 2) + ":" + stockData.daily_min.time.slice(2, 4);
+        extremeValues[1].x = stockData.daily_max.date + " " + stockData.daily_max.time.slice(0, 2) + ":" + stockData.daily_max.time.slice(2, 4);
+        extremeValues[0].y = stockData.daily_min.min_price;
+        extremeValues[1].y = stockData.daily_max.max_price;
+        setCandleGraphData((pre) => ({
+          ...pre,
+          series: [
+            {
+              data: tmpDailyCandle,
+            },
+          ],
+          options: {
+            yaxis: {
+              show: false,
+              min: parseInt((8 * stockData.daily_min.min_price + stockData.minimum - 1350) / 9),
+              max: parseInt((8 * stockData.daily_max.max_price + stockData.maximum + 1350) / 9),
+            },
+          },
+        }));
+        setLineGraphData((pre) => ({
+          ...pre,
+          series: [
+            {
+              name: "ExtremeValue",
+              type: "scatter",
+              data: [
+                {
+                  x: extremeValues[0].x,
+                  y: extremeValues[0].y,
+                  z: extremeValues[0].z,
+                },
+                {
+                  x: extremeValues[1].x,
+                  y: extremeValues[1].y,
+                  z: extremeValues[1].z,
+                },
+              ],
+            },
+            {
+              name: "Line",
+              data: tmpDaily,
+            },
+          ],
+          options: {
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3,
+              },
+            },
+            yaxis: [
+              {
+                show: false,
+                min: parseInt((8 * stockData.daily_min.min_price + stockData.minimum - 1350) / 9),
+                max: parseInt((8 * stockData.daily_max.max_price + stockData.maximum + 1350) / 9),
+                labels: {
+                  style: {
+                    colors: mainColor,
+                  },
+                },
+              },
+              {
+                show: false,
+                min: parseInt((8 * stockData.daily_min.min_price + stockData.minimum - 1350) / 9),
+                max: parseInt((8 * stockData.daily_max.max_price + stockData.maximum + 1350) / 9),
+                labels: {
+                  style: {
+                    colors: mainColor,
+                  },
+                },
+              },
+            ],
+          },
+        }));
       } else if (event.target.id === "weekly") {
-        const tmpWeeky = []
-        const tmpWeeklyCandle = []
+        const tmpWeeky = [];
+        const tmpWeeklyCandle = [];
         stockData.weekly.forEach((element) => {
           const tmpLine = {
-            x: element.date + " " + element.time.slice(0,2) + ':' + element.time.slice(2,4),
-            y: element.price
-          }
+            x: element.date + " " + element.time.slice(0, 2) + ":" + element.time.slice(2, 4),
+            y: element.price,
+          };
           const tmpCandle = {
-            x: element.date + " " + element.time.slice(0,2) + ':' + element.time.slice(2,4),
-            y: [element.open_price, element.max_price, element.min_price, element.price]
-          }
-          tmpWeeky.push(tmpLine)
-          tmpWeeklyCandle.push(tmpCandle)
-        })
-        extremeValues[0].x = stockData.weekly_min.date + " " + stockData.weekly_min.time.slice(0, 2) + ':' + stockData.weekly_min.time.slice(2, 4)
-        extremeValues[1].x = stockData.weekly_max.date + " " + stockData.weekly_max.time.slice(0, 2) + ':' + stockData.weekly_max.time.slice(2, 4)
-        extremeValues[0].y = stockData.weekly_min.min_price
-        extremeValues[1].y = stockData.weekly_max.max_price
-        console.log(tmpWeeklyCandle)
+            x: element.date + " " + element.time.slice(0, 2) + ":" + element.time.slice(2, 4),
+            y: [element.open_price, element.max_price, element.min_price, element.price],
+          };
+          tmpWeeky.push(tmpLine);
+          tmpWeeklyCandle.push(tmpCandle);
+        });
+        extremeValues[0].x = stockData.weekly_min.date + " " + stockData.weekly_min.time.slice(0, 2) + ":" + stockData.weekly_min.time.slice(2, 4);
+        extremeValues[1].x = stockData.weekly_max.date + " " + stockData.weekly_max.time.slice(0, 2) + ":" + stockData.weekly_max.time.slice(2, 4);
+        extremeValues[0].y = stockData.weekly_min.min_price;
+        extremeValues[1].y = stockData.weekly_max.max_price;
+        console.log("weekly", extremeValues);
         setCandleGraphData((pre) => ({
           ...pre,
           series: [
             {
-              data:tmpWeeklyCandle
-            }
-          ]
-        }))
+              data: tmpWeeklyCandle,
+            },
+          ],
+          options: {
+            yaxis: {
+              show: false,
+              min: parseInt(stockData.weekly_min.min_price * 0.9),
+              max: parseInt(stockData.weekly_max.max_price * 1.1),
+            },
+          },
+        }));
         setLineGraphData((pre) => ({
           ...pre,
-          series:  [
+          series: [
             {
               name: "ExtremeValue",
               type: "scatter",
               data: [
                 {
                   x: extremeValues[0].x,
-                  y: (extremeValues[0].y * 0.92).toFixed(),
+                  y: extremeValues[0].y,
                   z: extremeValues[0].z,
                 },
                 {
                   x: extremeValues[1].x,
-                  y: (extremeValues[1].y * 1.05).toFixed(),
+                  y: extremeValues[1].y,
                   z: extremeValues[1].z,
                 },
               ],
             },
             {
               name: "Line",
-              data: tmpWeeky
+              data: tmpWeeky,
             },
           ],
-        }))
-        console.log(candleGraphData)
+          options: {
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3,
+              },
+            },
+            yaxis: [
+              {
+                show: false,
+                min: parseInt(stockData.weekly_min.min_price * 0.9),
+                max: parseInt(stockData.weekly_max.max_price * 1.1),
+              },
+              {
+                show: false,
+                min: parseInt(stockData.weekly_min.min_price * 0.9),
+                max: parseInt(stockData.weekly_max.max_price * 1.1),
+              },
+            ],
+          },
+        }));
       } else if (event.target.id === "monthly") {
-        const tmpMonthly = []
-        const tmpMonthlyCandle = []
+        const tmpMonthly = [];
+        const tmpMonthlyCandle = [];
         stockData.monthly.forEach((element) => {
           const tmpLine = {
             x: element.date,
-            y: element.open_price
-          }
+            y: element.open_price,
+          };
           const tmpCandle = {
             x: element.date,
-            y: [element.open_price, element.max_price, element.min_price, element.close_price]
-          }
-          tmpMonthly.push(tmpLine)
-          tmpMonthlyCandle.push(tmpCandle)
-        })
+            y: [element.open_price, element.max_price, element.min_price, element.close_price],
+          };
+          tmpMonthly.push(tmpLine);
+          tmpMonthlyCandle.push(tmpCandle);
+        });
         setCandleGraphData((pre) => ({
           ...pre,
           series: [
             {
-              data: tmpMonthlyCandle
-            }
-          ]
-        }))
-        extremeValues[0].x = stockData.monthly_min.date
-        extremeValues[1].x = stockData.monthly_max.date
-        extremeValues[0].y = stockData.monthly_min.min_price
-        extremeValues[1].y = stockData.monthly_max.max_price
+              data: tmpMonthlyCandle,
+            },
+          ],
+          options: {
+            yaxis: {
+              show: false,
+              min: parseInt(stockData.monthly_min.min_price * 0.9),
+              max: parseInt(stockData.monthly_max.max_price * 1.1),
+            },
+          },
+        }));
+        extremeValues[0].x = stockData.monthly_min.date;
+        extremeValues[1].x = stockData.monthly_max.date;
+        extremeValues[0].y = stockData.monthly_min.min_price;
+        extremeValues[1].y = stockData.monthly_max.max_price;
         setLineGraphData((pre) => ({
           ...pre,
-          series:  [
+          series: [
             {
               name: "ExtremeValue",
               type: "scatter",
               data: [
                 {
                   x: extremeValues[0].x,
-                  y: (extremeValues[0].y * 0.92).toFixed(),
+                  y: extremeValues[0].y,
                   z: extremeValues[0].z,
                 },
                 {
                   x: extremeValues[1].x,
-                  y: (extremeValues[1].y * 1.05).toFixed(),
+                  y: extremeValues[1].y,
                   z: extremeValues[1].z,
                 },
               ],
             },
             {
               name: "Line",
-              data: tmpMonthly
+              data: tmpMonthly,
             },
           ],
-        }))
+          options: {
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3,
+              },
+            },
+            yaxis: [
+              {
+                show: false,
+                min: parseInt(stockData.monthly_min.min_price * 0.9),
+                max: parseInt(stockData.monthly_max.max_price * 1.1),
+              },
+              {
+                show: false,
+                min: parseInt(stockData.monthly_min.min_price * 0.9),
+                max: parseInt(stockData.monthly_max.max_price * 1.1),
+              },
+            ],
+          },
+        }));
       } else {
-        const tmpYearly = []
-        const tmpYearlyCandle = []
+        const tmpYearly = [];
+        const tmpYearlyCandle = [];
         stockData.yearly.forEach((element) => {
           const tmpLine = {
             x: element.date,
-            y: element.open_price
-          }
+            y: element.open_price,
+          };
           const tmpCandle = {
             x: element.date,
-            y: [element.open_price, element.max_price, element.min_price, element.close_price]
-          }
-          tmpYearly.push(tmpLine)
-          tmpYearlyCandle.push(tmpCandle)
-        })
+            y: [element.open_price, element.max_price, element.min_price, element.close_price],
+          };
+          tmpYearly.push(tmpLine);
+          tmpYearlyCandle.push(tmpCandle);
+        });
         setCandleGraphData((pre) => ({
           ...pre,
           series: [
             {
-              data: tmpYearlyCandle
-            }
-          ]
-        }))
-        extremeValues[0].x = stockData.yearly_min.date
-        extremeValues[1].x = stockData.yearly_max.date
-        extremeValues[0].y = stockData.yearly_min.min_price
-        extremeValues[1].y = stockData.yearly_max.max_price
+              data: tmpYearlyCandle,
+            },
+          ],
+          options: {
+            yaxis: {
+              show: false,
+              min: parseInt(stockData.yearly_min.min_price * 0.9),
+              max: parseInt(stockData.yearly_max.max_price * 1.1),
+            },
+          },
+        }));
+        extremeValues[0].x = stockData.yearly_min.date;
+        extremeValues[1].x = stockData.yearly_max.date;
+        extremeValues[0].y = stockData.yearly_min.min_price;
+        extremeValues[1].y = stockData.yearly_max.max_price;
         setLineGraphData((pre) => ({
           ...pre,
-          series:  [
+          series: [
             {
               name: "ExtremeValue",
               type: "scatter",
               data: [
                 {
                   x: extremeValues[0].x,
-                  y: (extremeValues[0].y * 0.92).toFixed(),
+                  y: extremeValues[0].y,
                   z: extremeValues[0].z,
                 },
                 {
                   x: extremeValues[1].x,
-                  y: (extremeValues[1].y * 1.05).toFixed(),
+                  y: extremeValues[1].y,
                   z: extremeValues[1].z,
                 },
               ],
             },
             {
               name: "Line",
-              data: tmpYearly
+              data: tmpYearly,
             },
           ],
-        }))
+          options: {
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3,
+              },
+            },
+            yaxis: [
+              {
+                show: false,
+                min: parseInt(stockData.yearly_min.min_price * 0.9),
+                max: parseInt(stockData.yearly_max.max_price * 1.1),
+              },
+              {
+                show: false,
+                min: parseInt(stockData.yearly_min.min_price * 0.9),
+                max: parseInt(stockData.yearly_max.max_price * 1.1),
+              },
+            ],
+          },
+        }));
       }
       // data 변경해주기
     };
     if (!showCandleGraph) {
-      clickedOptions = lineGraphData.options
-      clickedSeries = lineGraphData.series
-      clickedType = "line"
+      clickedOptions = lineGraphData.options;
+      clickedSeries = lineGraphData.series;
+      clickedType = "line";
     } else {
-      clickedOptions = candleGraphData.options
-      clickedSeries = candleGraphData.series
-      clickedType = "candlestick"
+      clickedOptions = candleGraphData.options;
+      clickedSeries = candleGraphData.series;
+      clickedType = "candlestick";
     }
     return (
       <>
@@ -643,50 +815,25 @@ function StockDetailPage() {
           <ul id="filter" className={classes.radioUlClass}>
             <div className={classes.radiobox}>
               <li className={classes.radioLiClass}>
-                <input
-                  type="radio"
-                  name="filter"
-                  id="daily"
-                  className={classes.radioClass}
-                  defaultChecked
-                  onChange={handleOptionChange}
-                />
+                <input type="radio" name="filter" id="daily" className={classes.radioClass} defaultChecked onChange={handleOptionChange} />
                 <label checked for="daily" className={classes.radioLabelClass}>
                   하루
                 </label>
               </li>
               <li className={classes.radioLiClass}>
-                <input
-                  type="radio"
-                  name="filter"
-                  id="weekly"
-                  className={classes.radioClass}
-                  onChange={handleOptionChange}
-                />
+                <input type="radio" name="filter" id="weekly" className={classes.radioClass} onChange={handleOptionChange} />
                 <label for="weekly" className={classes.radioLabelClass}>
                   일주일
                 </label>
               </li>
               <li className={classes.radioLiClass}>
-                <input
-                  type="radio"
-                  name="filter"
-                  id="monthly"
-                  className={classes.radioClass}
-                  onChange={handleOptionChange}
-                />
+                <input type="radio" name="filter" id="monthly" className={classes.radioClass} onChange={handleOptionChange} />
                 <label for="monthly" className={classes.radioLabelClass}>
                   한 달
                 </label>
               </li>
               <li className={classes.radioLiClass}>
-                <input
-                  type="radio"
-                  name="filter"
-                  id="yearly"
-                  className={classes.radioClass}
-                  onChange={handleOptionChange}
-                />
+                <input type="radio" name="filter" id="yearly" className={classes.radioClass} onChange={handleOptionChange} />
                 <label for="yearly" className={classes.radioLabelClass}>
                   일 년
                 </label>
@@ -695,17 +842,11 @@ function StockDetailPage() {
           </ul>
           {showCandleGraph ? (
             <div className={classes.chartChangeBtn} onClick={changeToLine}>
-              <img
-                src={`${process.env.PUBLIC_URL}/stock-detail/line.svg`}
-                alt=""
-              />
+              <img src={`${process.env.PUBLIC_URL}/stock-detail/line.svg`} alt="" />
             </div>
           ) : (
             <div className={classes.chartChangeBtn} onClick={changeToCandle}>
-              <img
-                src={`${process.env.PUBLIC_URL}/stock-detail/candle.svg`}
-                alt=""
-              />
+              <img src={`${process.env.PUBLIC_URL}/stock-detail/candle.svg`} alt="" />
             </div>
           )}
         </div>
@@ -722,11 +863,7 @@ function StockDetailPage() {
       }
       return (
         <div className={classes.weatherbox} style={{ border: border }}>
-          <img
-            className={classes.wimg}
-            src={`${process.env.PUBLIC_URL}/stock-detail/rain.svg`}
-            alt=""
-          />
+          <img className={classes.wimg} src={`${process.env.PUBLIC_URL}/stock-detail/rain.svg`} alt="" />
           <div className={classes.perc}>{sen.sen.toFixed(1)}%</div>
         </div>
       );
@@ -737,11 +874,7 @@ function StockDetailPage() {
       }
       return (
         <div className={classes.weatherbox} style={{ border: border }}>
-          <img
-            className={classes.wimg}
-            src={`${process.env.PUBLIC_URL}/stock-detail/cloudy.svg`}
-            alt=""
-          />
+          <img className={classes.wimg} src={`${process.env.PUBLIC_URL}/stock-detail/cloudy.svg`} alt="" />
           <div className={classes.perc}>{sen.sen.toFixed(1)}%</div>
         </div>
       );
@@ -751,11 +884,7 @@ function StockDetailPage() {
       }
       return (
         <div className={classes.weatherbox} style={{ border: border }}>
-          <img
-            className={classes.wimg}
-            src={`${process.env.PUBLIC_URL}/stock-detail/sun.svg`}
-            alt=""
-          />
+          <img className={classes.wimg} src={`${process.env.PUBLIC_URL}/stock-detail/sun.svg`} alt="" />
           <div className={classes.perc}>{sen.sen.toFixed(1)}%</div>
         </div>
       );
@@ -773,12 +902,7 @@ function StockDetailPage() {
     return (
       <div className={classes.edge}>
         {sentiments.map((sentiment, index) => (
-          <WeatherCard
-            key={index}
-            sen={sentiment}
-            maxIndex={max_index}
-            thisIndex={index}
-          />
+          <WeatherCard key={index} sen={sentiment} maxIndex={max_index} thisIndex={index} />
         ))}
       </div>
     );
@@ -821,14 +945,7 @@ function StockDetailPage() {
     };
     if (isWatchlist) {
       return (
-        <svg
-          width="23"
-          height="20"
-          viewBox="0 0 23 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          onClick={heartClick}
-        >
+        <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={heartClick}>
           <path
             d="M20.6386 1.36753C18.1922 -0.717255 14.5539 -0.342262 12.3084 1.97466L11.4289 2.88089L10.5495 1.97466C8.30843 -0.342262 4.66564 -0.717255 2.21926 1.36753C-0.584263 3.76034 -0.731582 8.05491 1.7773 10.6486L10.4155 19.5681C10.9736 20.144 11.8798 20.144 12.4378 19.5681L21.0761 10.6486C23.5894 8.05491 23.4421 3.76034 20.6386 1.36753Z"
             fill="#FE8289"
@@ -837,14 +954,7 @@ function StockDetailPage() {
       );
     }
     return (
-      <svg
-        width="23"
-        height="20"
-        viewBox="0 0 23 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        onClick={heartClick}
-      >
+      <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={heartClick}>
         <path
           d="M20.6386 1.36753C18.1922 -0.717255 14.5539 -0.342262 12.3084 1.97466L11.4289 2.88089L10.5495 1.97466C8.30843 -0.342262 4.66564 -0.717255 2.21926 1.36753C-0.584263 3.76034 -0.731582 8.05491 1.7773 10.6486L10.4155 19.5681C10.9736 20.144 11.8798 20.144 12.4378 19.5681L21.0761 10.6486C23.5894 8.05491 23.4421 3.76034 20.6386 1.36753Z"
           fill="#929E9E"
@@ -897,7 +1007,7 @@ function StockDetailPage() {
   }
   function CompareText() {
     if (stockData.fluctuation_rate > 0) {
-      setMainColor("#DD4956")
+      setMainColor("#DD4956");
       return (
         <div>
           어제보다 {stockData.fluctuation_price}원 올랐어요 (+
@@ -905,11 +1015,10 @@ function StockDetailPage() {
         </div>
       );
     } else {
-      setMainColor("#4D97ED")
+      setMainColor("#4D97ED");
       return (
         <div>
-          어제보다 {stockData.fluctuation_price}원 떨어졌어요 (
-          {stockData.fluctuation_rate}%)
+          어제보다 {stockData.fluctuation_price}원 떨어졌어요 ({stockData.fluctuation_rate}%)
         </div>
       );
     }
@@ -918,11 +1027,7 @@ function StockDetailPage() {
     <div className={classes.stkdtbg}>
       <div className={classes.fix}>
         <div className={classes.fixbox}>
-          <img
-            onClick={backTo}
-            src={`${process.env.PUBLIC_URL}/stock-detail/back.svg`}
-            alt=""
-          />
+          <img onClick={backTo} src={`${process.env.PUBLIC_URL}/stock-detail/back.svg`} alt="" />
           <WishListIcon />
         </div>
         {/* <div className={classes.topline}></div> */}
