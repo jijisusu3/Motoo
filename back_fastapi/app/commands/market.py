@@ -1,7 +1,7 @@
 import asyncio
 import datetime
 from collections import defaultdict
-
+import threading
 import aiohttp
 import typer
 
@@ -62,7 +62,7 @@ async def update_and_insert_stock_list(update_time: str = None):
                 stck.trading_value = data['output1']['acml_tr_pbmn']
                 stck.volume = data['output1']['acml_vol']
             end_s = time.time()
-            time.sleep(min(abs(1.1 - end_s + start), 1.02))
+            threading.Event().wait(min(abs(1.1 - end_s + start), 1.05))
             end_t = time.time()
             print(f'{min(20 * (r + 1), len(stocks))}개 {end_t - start}s')
     if update_time is not None:
@@ -75,6 +75,7 @@ async def update_and_insert_stock_list(update_time: str = None):
     )
     finished = time.time()
     print(f'{finished - initial_start}s 종료')
+    redis_session.set("updated", 1, ex=2)
     return None
 
 
