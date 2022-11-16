@@ -42,6 +42,7 @@ function MyPage() {
   const walletList = useSelector((state) => {
     return state.setAccount.accountsList;
   });
+  console.log(walletList)
   const dispatch = useDispatch();
   useEffect(() => {
     const now = window.location.pathname;
@@ -155,9 +156,12 @@ function MyPage() {
         } else {
           return "#DD4956";
         }
-      } catch {}
+      } catch {
+        return "#4D97ED"
+      }
     }
     const profitColor = profitCheck();
+    console.log(walletList.earningRaito)
     return (
       <div className={classes.present}>
         <div>
@@ -180,6 +184,7 @@ function MyPage() {
         </div>
         <div>
           <div style={{ marginLeft: "10px" }}>수익률</div>
+        </div>
           {walletList.earningRaito && (
             <div
               className={classes.rev}
@@ -187,13 +192,12 @@ function MyPage() {
                 color: profitColor,
               }}
             >
-              {isNaN(walletList.earningRaito)
+              {!walletList.earningRaito === 0
                 ? 0
                 : walletList.earningRaito.toFixed(2)}
               %
             </div>
           )}
-        </div>
       </div>
     );
   }
