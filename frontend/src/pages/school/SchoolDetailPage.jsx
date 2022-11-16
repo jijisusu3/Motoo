@@ -5,6 +5,7 @@ import { setShowNav, setActiveNav } from "../../stores/navSlice";
 import { schoolPageGet } from "../../stores/schoolSlice";
 import { schoolBestGet } from "../../stores/stockSlice";
 import { useNavigate } from "react-router-dom";
+import classes from "./SchoolDetailPage.module.css";
 
 function SchoolDetailPage() {
   const dispatch = useDispatch();
@@ -40,22 +41,52 @@ function SchoolDetailPage() {
 
   function MyAssetCard() {
     return (
-      <div>
+      <div className={classes.myrowbox}>
         {/* 왼쪽 */}
-        <div>
-          <div>{user.nickname}</div>
-          {myAsset?.myRank ? <div>{myAsset.asset}원</div> : <></>}
-          {myAsset?.myAvg ? (
-            <div>
-              {myAsset.myAvg === "NaN" ? "0" : myAsset.myAvg.toFixed(2)}%
+        <div className={classes.mycard}>
+          <div className={classes.myrowbox}>
+            <div>{user.data.nickname}</div>
+            <div className={classes.rowbox}>
+            <img
+                  src={`${process.env.PUBLIC_URL}/wallet/coin.svg`}
+                  style={{ width: 16, height: 16, marginRight: 4 }}
+                  alt=""
+                />
+            {myAsset?.myRank ? <div>{myAsset.asset}원</div> : <></>}
             </div>
-          ) : (
-            <></>
-          )}
-          {myAsset?.myRank ? <div>{myAsset.myRank}원</div> : <></>}
+          </div>
+          <div className={classes.mysmallbox}>
+            <div className={classes.rowbox}>
+              <img
+                src={`${process.env.PUBLIC_URL}/schoolstatic/cake.svg`}
+                alt=""
+              />
+              <div className={classes.graybox}>수익률</div>
+            </div>
+            {myAsset?.myAvg ? (
+              <div>
+                {myAsset.myAvg === "NaN" ? "0" : myAsset.myAvg.toFixed(2)}%
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className={classes.mysmallbox}>
+            <div className={classes.rowbox}>
+              <img
+                src={`${process.env.PUBLIC_URL}/schoolstatic/magic.svg`}
+                alt=""
+              />
+              <div className={classes.graybox}>교내등수</div>
+            </div>
+            <div className={classes.rowbox}>
+              {myAsset?.myRank ? <div className={classes.rank}>{myAsset.myRank}</div> : <></>}
+              <div>등</div>
+            </div>
+          </div>
         </div>
         {/* 오른쪽 */}
-        <div onClick={goToSchoolWallet}>나의 학교 대항전 보유주식</div>
+        <div className={classes.mybox} onClick={goToSchoolWallet}>나의<br />학교 대항전<br />보유주식</div>
       </div>
     );
   }
@@ -241,111 +272,117 @@ function SchoolDetailPage() {
   console.log(schoolData);
   return (
     <>
-      <div>
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/medal.svg`}
-            alt=""
-          />
+      <div className={classes.outdiv}>
+        <div className={classes.innerdiv}>
+          <div className={classes.titlebox}>
+            <img
+              src={`${process.env.PUBLIC_URL}/schoolstatic/medal.svg`}
+              alt=""
+            />
+            <div className={classes.title}>
+              {schoolData?.eventsResponse?.eventsId ? (
+                <div className={classes.maintitle}>제 {schoolData.eventsResponse.eventsId}회 학교대항전</div>
+              ) : (
+                <></>
+              )}
+              {schoolData?.eventsResponse?.start_date ? (
+                <div className={classes.date}>
+                  {schoolData.eventsResponse.start_date.slice(0, 10)}~
+                  {schoolData.eventsResponse.close_date.slice(0, 10)}
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          </div>
+          <div className={classes.myschool}>
+            <div className={classes.rowbox}>
+              <img style={{ marginRight: 8 }}
+                src={`${process.env.PUBLIC_URL}/schoolstatic/school.svg`}
+                alt=""
+              />
+                {schoolData?.schoolSubResponse?.schoolname ? (
+                  <div>{schoolData.schoolSubResponse.schoolname}</div>
+                ) : (
+                  <></>
+                )}
+            </div>
+              {schoolData?.schoolAccResponse?.myRank ? (
+                <div className={classes.rowbox}>
+                  <div>전국</div>
+                  <div className={classes.rank}>{schoolData.schoolAccResponse.myRank}</div>
+                  <div>등</div>
+                </div>
+              ) : (
+                <></>
+              )}
+          </div>
+          <MyAssetCard />
           <div>
-            {schoolData?.eventsResponse?.eventsId ? (
-              <div>제 {schoolData.eventsResponse.eventsId}회 학교대항전</div>
+            <img
+              src={`${process.env.PUBLIC_URL}/schoolstatic/schoolbus.svg`}
+              alt=""
+            />
+            <div>지금 우리 학교는</div>
+          </div>
+          <div style={{ border: "2px solid red" }}>
+            <div>우리학교</div>
+            <div>HOT 주식🔥</div>
+            <div>LG디스플레이</div>
+          </div>
+          <div style={{ border: "2px solid blue" }}>
+            {schoolData?.schoolSubResponse?.average ? (
+              <div>
+                <div>
+                  {schoolData.schoolSubResponse.average === "NaN"
+                    ? "0"
+                    : schoolData.schoolSubResponse.average.toFixed(2)}
+                  %
+                </div>
+                <div>평균수익률</div>
+              </div>
             ) : (
               <></>
             )}
-            {schoolData?.eventsResponse?.start_date ? (
+            {schoolData?.schoolSubResponse?.myRank ? (
               <div>
-                {schoolData.eventsResponse.start_date.slice(0, 10)}~
-                {schoolData.eventsResponse.close_date.slice(0, 10)}
+                <div>{schoolData.schoolSubResponse.currentRank}등</div>
+                <div>전국</div>
               </div>
             ) : (
               <></>
             )}
           </div>
-        </div>
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/school.svg`}
-            alt=""
-          />
           <div>
             {schoolData?.schoolSubResponse?.schoolname ? (
-              <div>{schoolData.schoolSubResponse.schoolname}</div>
+              <div>{schoolData.schoolSubResponse.schoolname} TOP 5</div>
             ) : (
               <></>
             )}
-            {schoolData?.schoolAccResponse?.myRank ? (
-              <div>전국 {schoolData.schoolAccResponse.myRank} 등</div>
-            ) : (
-              <></>
-            )}
+            <MySchoolCards />
           </div>
-        </div>
-        <MyAssetCard />
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/schoolbus.svg`}
-            alt=""
-          />
-          <div>지금 우리 학교는</div>
-        </div>
-        <div style={{ border: "2px solid red" }}>
-          <div>우리학교</div>
-          <div>HOT 주식🔥</div>
-          <div>LG디스플레이</div>
-        </div>
-        <div style={{ border: "2px solid blue" }}>
-          {schoolData?.schoolSubResponse?.average ? (
-            <div>
+          <div>
+            {schoolData?.schoolSubResponse?.sigunguSubResponse?.sigungu_name ? (
               <div>
-                {schoolData.schoolSubResponse.average === "NaN"
-                  ? "0"
-                  : schoolData.schoolSubResponse.average.toFixed(2)}
-                %
+                {schoolData.schoolSubResponse.sigunguSubResponse.sigungu_name}{" "}
+                개인 랭킹
               </div>
-              <div>평균수익률</div>
-            </div>
-          ) : (
-            <></>
-          )}
-          {schoolData?.schoolSubResponse?.myRank ? (
-            <div>
-              <div>{schoolData.schoolSubResponse.currentRank}등</div>
-              <div>전국</div>
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
-        <div>
-          {schoolData?.schoolSubResponse?.schoolname ? (
-            <div>{schoolData.schoolSubResponse.schoolname} TOP 5</div>
-          ) : (
-            <></>
-          )}
-          <MySchoolCards />
-        </div>
-        <div>
-          {schoolData?.schoolSubResponse?.sigunguSubResponse?.sigungu_name ? (
-            <div>
-              {schoolData.schoolSubResponse.sigunguSubResponse.sigungu_name}{" "}
-              개인 랭킹
-            </div>
-          ) : (
-            <></>
-          )}
-          <SigunguPersonalCards />
-        </div>
-        <div style={{ height: 300 }}>
-          {schoolData?.schoolSubResponse?.sigunguSubResponse?.sigungu_name ? (
-            <div>
-              {schoolData.schoolSubResponse.sigunguSubResponse.sigungu_name}{" "}
-              학교 랭킹
-            </div>
-          ) : (
-            <></>
-          )}
-          <SigunguSchoolCards />
+            ) : (
+              <></>
+            )}
+            <SigunguPersonalCards />
+          </div>
+          <div style={{ height: 300 }}>
+            {schoolData?.schoolSubResponse?.sigunguSubResponse?.sigungu_name ? (
+              <div>
+                {schoolData.schoolSubResponse.sigunguSubResponse.sigungu_name}{" "}
+                학교 랭킹
+              </div>
+            ) : (
+              <></>
+            )}
+            <SigunguSchoolCards />
+          </div>
         </div>
       </div>
     </>

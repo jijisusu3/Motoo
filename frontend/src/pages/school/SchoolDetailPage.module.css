@@ -1,0 +1,88 @@
+.outdiv{
+  background: linear-gradient(180deg, #FFF5F2 0%, #F2FFF8 100%);
+  padding: 1rem;
+}
+.innerdiv{
+  max-width: 600px;
+  margin: auto;
+}
+.rowbox{
+  display: flex;
+  align-items: center;
+}
+.titlebox{
+  display: flex;
+  height: 80px;
+  justify-content: center;
+  align-items: center;
+  background: #FFFFFF;
+  border: 0.3px solid #FFC1C1;
+  border-radius: 5px;
+  margin-top: 2rem;
+}
+.title{
+  font-weight: 600;
+  margin-left: 1rem;
+}
+.maintitle{
+  font-size: 24px;
+}
+.rank{
+  color: #FE8289;
+  margin-left: 0.5rem;
+}
+.date{
+  color: #FE8289;
+  font-size: 14px;
+}
+.myschool{
+  display: flex;
+  background: #FFFFFF;
+  border: 0.3px solid #FFC1C1;
+  border-radius: 5px;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  font-weight: 600;
+}
+.myrowbox{
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 14px;
+}
+.mysmallbox{
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 12px;
+}
+.mycard{
+  background: #FFF;
+  border: 0.3px solid #FAE0C1;
+  border-radius: 5px;
+  width: 68%;
+  padding: 1rem;
+}
+.mybox{
+  color: #fff;
+  background: #FFB65F;
+  border: 0.3px solid #FFCF95;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  width: 30%;
+  display: flex;
+  align-items: end;
+  text-align: end;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+.graybox{
+  margin-left: 0.5rem;
+  color: #929e9e;
+}
