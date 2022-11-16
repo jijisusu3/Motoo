@@ -13,3 +13,17 @@ async def websocket_endpoint(websoket: WebSocket):
         await websoket.send_json({
             "result": True
         })
+
+    # await websoket.send_json({
+    #             "result": True
+    #         })
+    # while True:
+    #     week = datetime.now().weekday()
+    #     hour = datetime.now().hour
+    #     min = datetime.now().minute
+    #     sec = datetime.now().second
+    #     if week < 5 and 9 <= hour <=16 and min % 2 == 1 and sec == 1:
+    #         await websoket.send_json({
+    #             "result": True
+    #         })
+    #         time.sleep(1)
