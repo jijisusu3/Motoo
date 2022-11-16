@@ -12,6 +12,7 @@ import com.motoo.db.repository.StockRepositorySupport;
 import com.motoo.db.repository.TradingRepository;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 @CrossOrigin("*")
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/api2/account")
 public class AccountsController {
 
@@ -94,6 +96,7 @@ public class AccountsController {
         List<Integer> pitches = new ArrayList<>();
 //      구매할때는 시드-구매가*주식수 + 구매가 *주식수 라서 pitches은 안변함
 //      판매할때는 시드+평단가*주식수 라서 pitches는 변함
+        log.info("계좌가 생성됨");
         for (Account value : account) {
             int accountAsset=0;
             seeds+=value.getSeed();
