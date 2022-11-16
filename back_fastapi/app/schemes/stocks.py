@@ -13,15 +13,15 @@ class MinMaxPrice(BaseModel):
 
 
 class Volume(BaseModel):
-    volume: Union[int, None] = Field(description="거래량")
+    volume: Union[int, None] = Field(default=None, description="거래량")
 
 
 class Price(BaseModel):
-    price: Union[int, None] = Field(description="현재가")
+    price: Union[int, None] = Field(default=None, description="현재가")
 
 
 class OpenPrice(BaseModel):
-    open_price: Union[int, None] = Field(description="시작가")
+    open_price: Union[int, None] = Field(default=None, description="시작가")
 
 
 class ClosePrice(BaseModel):
@@ -29,7 +29,7 @@ class ClosePrice(BaseModel):
 
 
 class ChartBase(MinMaxPrice, Volume, OpenPrice):
-    id: int
+    id: int = None
     stock_id: int
     date: date_type = Field(default=None, description="날짜")
 

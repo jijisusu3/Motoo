@@ -12,7 +12,7 @@ from app.schemes.stocks import (GetStockDetailResponse,
                                 GetShortStockResponse,
                                 BidAskResponse,
                                 SchoolHotStockResponse,
-                                GetTradingStockInfoResponse)
+                                GetTradingStockInfoResponse, CandleData)
 
 router = APIRouter(prefix="/stocks")
 
@@ -44,20 +44,42 @@ async def get_stock_detail(ticker: str, response: Response):
         stock_id=stock.pk,
         date__gte=date.today() - timedelta(365)
     ).order_by('-id'))[::5][::-1]
+    daily_min = min(daily, key=lambda x: x.min_price, default=None)
+    daily_max = max(daily, key=lambda x: x.max_price, default=None)
+    weekly_min = min(weekly, key=lambda x: x.min_price, default=None)
+    weekly_max = max(weekly, key=lambda x: x.max_price, default=None)
+    monthly_min = min(monthly, key=lambda x: x.min_price, default=None)
+    monthly_max = max(monthly, key=lambda x: x.max_price, default=None)
+    yearly_min = min(yearly, key=lambda x: x.min_price, default=None)
+    yearly_max = max(yearly, key=lambda x: x.max_price, default=None)
+    if not daily:
+        daily.append(CandleData(stock_id=stock.pk, date=today.strftime("%Y-%m-%d"), time='090000'))
+    today_len = 39-len(daily)
+    for t in range(today_len):
+        daily.append(
+            CandleData(
+                stock_id=stock.pk,
+                date=today.strftime("%Y-%m-%d"),
+                time=datetime.time(
+                    hour=int(daily[-1].time[:2])+(int(daily[-1].time[2:4])+10)//60,
+                    minute=(int(daily[-1].time[2:4])+10)%60
+                ).strftime("%H%M%S")
+            )
+        )
     return GetStockDetailResponse(**dict(stock),
                                   category_name=stock.category.name,
                                   daily=daily,
                                   weekly=weekly,
                                   monthly=monthly,
                                   yearly=yearly,
-                                  daily_min=min(daily, key=lambda x: x.min_price, default=None),
-                                  daily_max=max(daily, key=lambda x: x.max_price, default=None),
-                                  weekly_min=min(weekly, key=lambda x: x.min_price, default=None),
-                                  weekly_max=max(weekly, key=lambda x: x.max_price, default=None),
-                                  monthly_min=min(monthly, key=lambda x: x.min_price, default=None),
-                                  monthly_max=max(monthly, key=lambda x: x.max_price, default=None),
-                                  yearly_min=min(yearly, key=lambda x: x.min_price, default=None),
-                                  yearly_max=max(yearly, key=lambda x: x.max_price, default=None),
+                                  daily_min=daily_min,
+                                  daily_max=daily_max,
+                                  weekly_min=weekly_min,
+                                  weekly_max=weekly_max,
+                                  monthly_min=monthly_min,
+                                  monthly_max=monthly_max,
+                                  yearly_min=yearly_min,
+                                  yearly_max=yearly_max,
                                   keyword=keywords.keyword if keywords else None,
                                   sentiment=keywords.sentiment if keywords else None,
                                   )
@@ -79,10 +101,26 @@ async def get_stock_short(ticker: str, response: Response):
         today = date.today() - timedelta(today.weekday() - 4)
     # 차트 데이터
     daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today.strftime("%Y-%m-%d"))
+    daily_min = min(daily, key=lambda x: x.min_price, default=None)
+    daily_max = max(daily, key=lambda x: x.max_price, default=None)
+    if not daily:
+        daily.append(CandleData(stock_id=stock.pk, date=today.strftime("%Y-%m-%d"), time='090000'))
+    today_len = 39-len(daily)
+    for t in range(today_len):
+        daily.append(
+            CandleData(
+                stock_id=stock.pk,
+                date=today.strftime("%Y-%m-%d"),
+                time=datetime.time(
+                    hour=int(daily[-1].time[:2])+(int(daily[-1].time[2:4])+10)//60,
+                    minute=(int(daily[-1].time[2:4])+10)%60
+                ).strftime("%H%M%S")
+            )
+        )
     return GetShortStockResponse(**dict(stock),
                                  daily=daily,
-                                 daily_min=min(daily, key=lambda x: x.min_price, default=None),
-                                 daily_max=max(daily, key=lambda x: x.max_price, default=None))
+                                 daily_min=daily_min,
+                                 daily_max=daily_max)
 
 
 @router.get("/trade/{ticker}", description="거래 중 주식 간단 조회", response_model=GetTradingStockInfoResponse)
