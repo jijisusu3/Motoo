@@ -47,6 +47,6 @@ public class FavoriteStockService {
         Stock stock = stockRepository.findById(stockId).orElseGet(() -> new Stock());
         FavoriteStock test = favoriteStockRepository.findByUserAndStock(user, stock).orElseGet(() -> new FavoriteStock());
         favoriteStockRepository.delete(test);
-//        favoriteStockRepository.deleteByUserAndStock(user, stock);
+
     }
 }

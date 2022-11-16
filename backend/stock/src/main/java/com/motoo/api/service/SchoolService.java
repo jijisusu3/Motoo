@@ -91,7 +91,6 @@ public class SchoolService {
         List<School> schools = schoolRepositorySupport.findGameSchool();
         for (School school : schools){
             List <User> students = school.getUsers();
-            System.out.println(school.getSchoolname());
             students.sort(new Comparator<User>() {
                 @Override
                 public int compare(User o1, User o2) {

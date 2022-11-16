@@ -25,10 +25,6 @@ public class AccountStockServiceImpl implements AccountStockService{
 
 
 
-    @Override
-    public void addStockToAccount(Long userId, Long accountId, Long stockId) {
-
-    }
 
     @Override
     public void addStockToAccount(Long userId, Long accountId, Long stockId, int price, int amount) {
@@ -45,7 +41,6 @@ public class AccountStockServiceImpl implements AccountStockService{
     public int deleteStockInAccount(Long userId, Long accountId, Long stockId) {
         Account account = accountRepositorySupport.findAccountByAccountIdAndUserId(accountId, userId);
         Stock stock = stockRepository.findById(stockId).orElseGet(() -> new Stock());
-//        AccountStock accountStock  =accountStockRepositorySupport.findAccountStockByUserIdAccountId(userId,accountId);
         AccountStock test = accountStockRepository.findByAccountAndStock(account, stock).orElseGet(() -> new AccountStock());
         accountStockRepository.delete(test);
         return 0;

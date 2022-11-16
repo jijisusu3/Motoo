@@ -41,7 +41,7 @@ public class PortfolioServiceImpl implements PortfolioService{
     public List<Portfolio> getPortfolioListOrderByRatio(Long accountId, Long userId) {
 
         List<Portfolio> portfolioList = getPortfolioList(accountId, userId);
-        System.out.println(portfolioList.toString());
+
 
         portfolioList.sort(new Comparator<Portfolio>() {
             @Override
@@ -51,7 +51,7 @@ public class PortfolioServiceImpl implements PortfolioService{
                 return 0;
             }
         });
-        System.out.println(portfolioList.toString());
+
 
         if (portfolioList.size() < 6) {
             return portfolioList;
