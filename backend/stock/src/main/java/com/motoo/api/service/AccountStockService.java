@@ -9,9 +9,6 @@ import java.util.List;
 public interface AccountStockService {
 
 
-    void addStockToAccount(Long userId, Long accountId, Long stockId);
-
-
     void addStockToAccount(Long userId, Long accountId, Long stockId, int price, int amount);
 
     int deleteStockInAccount(Long userId, Long accountId, Long stockId);

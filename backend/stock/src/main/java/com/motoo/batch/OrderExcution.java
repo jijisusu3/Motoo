@@ -14,6 +14,7 @@ import com.motoo.db.repository.TradingRepositorySupport;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,19 +44,17 @@ public class OrderExcution {
     }
 
     //월~금 9시-16시 사이에 2분간격으로 조회
-//    @Scheduled(cron = " * 0/2 9,16 * * MON-FRI ")
-//    @Scheduled(cron = " * * * * * * ")
+    @Scheduled(cron = " * 0/2 9,16 * * MON-FRI ")
     public void timeSchedule() {
 
         //3판매예약,  4구매예약 인 거래계좌 리스트
         List<Trading> tradingList = tradingRepositorySupport.findAllTrading();
 
         //예약 중인 거래내역이 없는 경우 종료
-        if (tradingList == null) {
+        if (tradingList.isEmpty()) {
             log.trace("예약중인 거래내역이 없습니다.");
             return;
         } else {
-
             for (int i = 0; i < tradingList.size(); i++) {
 
                 //3,4인 사람의 accountId
