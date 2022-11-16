@@ -74,7 +74,7 @@ public class SchoolService {
         return SchoolPageResponse.response(school, events, currentRank, asset, avg);
     }
 
-//    @Scheduled(cron = "0 0 14 * * *")
+    @Scheduled(cron = "0 0 20 * * *")
     @Transactional
     public void UpdateAverage(){
         List<User> users = userRepositorySupport.findAllUserBySchool();
@@ -85,13 +85,12 @@ public class SchoolService {
         }
     }
 
-    @Scheduled(cron = "0 10 14 * * *")
+    @Scheduled(cron = "0 10 20 * * *")
     @Transactional
     public void UpdateSchoolRanking(){
         List<School> schools = schoolRepositorySupport.findGameSchool();
         for (School school : schools){
             List <User> students = school.getUsers();
-            System.out.println(school.getSchoolname());
             students.sort(new Comparator<User>() {
                 @Override
                 public int compare(User o1, User o2) {
@@ -134,7 +133,7 @@ public class SchoolService {
         }
     }
 
-    @Scheduled(cron = "0 20 14 * * *")
+    @Scheduled(cron = "0 20 20 * * *")
     @Transactional
     public void UpdateSigunguRanking(){
         List <Sigungu> sigungus = sigunguRepository.findAll();

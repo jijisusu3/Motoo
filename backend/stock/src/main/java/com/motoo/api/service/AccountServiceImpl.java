@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +33,8 @@ public class AccountServiceImpl implements AccountService{
     public Long createAccount(Long userId, String name) {
         Account account = new Account();
         User user = userRepository.findByUserId(userId).get();
+
+
         account.createAccount(user, name);
         account.updateSeed(20000000);
         //5거래타입
@@ -39,7 +42,7 @@ public class AccountServiceImpl implements AccountService{
         accountRepository.save(account);
         Long accountId = account.getAccountId();
         tradingService.writeOrder(userId, accountId, null,5,20000000,1,null);
-        System.out.println("어카운트 아이디 "+accountId);
+
 
         return accountId;
 
@@ -105,11 +108,6 @@ public class AccountServiceImpl implements AccountService{
 
 
 
-    @Override
-    public List<AccountStock> getAccountStockByAccountId(Long accountId) {
-        return null;
-    }
-
 
     @Override
     public List<AccountStock> getAccountStockByUserId(Long userId) {
@@ -128,7 +126,6 @@ public class AccountServiceImpl implements AccountService{
         Account account;
         try {
             account = accountRepository.findByAccountId(accountId).get();
-//            accounts = accountsRepositorySupport.findAccountsByAccountsIdAndUserId(userId, accountsId).get();
 
         }catch (Exception e){
             return 0;
@@ -140,15 +137,6 @@ public class AccountServiceImpl implements AccountService{
 
     }
 
-//    @Override
-//    public AccountStock addAccountStock(AccountStockAddPostReq accountStockAddPostReq){
-//        AccountStock accountStock = new AccountStock();
-//        Accounts accounts = accountsRepository.findByAccountsId(accountStockAddPostReq.getAccountsId()).orElse(null);
-//        Long stockId = accountStockAddPostReq.getStockId();
-//
-//        accountStock.createAccountStock(accounts, );
-//
-//    }
     @Override
     public long[] getAccountCount(List<Account> accounts) {
         long[] detailCounts = new long[accounts.size()];

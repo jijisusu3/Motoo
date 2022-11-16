@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { limitListGet } from "../../stores/stockSlice";
+import { realtimeAccountGet } from "../../stores/userSlice";
 
 function LimitOrderPage() {
   const navigate = useNavigate();
@@ -29,24 +30,28 @@ function LimitOrderPage() {
   };
   useEffect(() => {
     dispatch(limitListGet(tmpData));
+    dispatch(realtimeAccountGet(tmpData));
   }, []);
 
   function backToStockList() {
     navigate(`/`);
   }
+  const [differText, setDifferText] = useState("");
+  const [ go, setGo] = useState("");
   function MyRealizedCard(stock) {
-    const tmpparams = stock.ticker + ":" + stock.price + ":" + stock.many + ":" + stock.id
-    console.log(tmpparams)
-    var differText = "";
-    var go = "";
+    console.log(stock.differ)
+    const tmpparams =
+      stock.ticker + ":" + stock.price + ":" + stock.many + ":" + stock.id;
+    console.log(tmpparams);
     function differCheck() {
       if (stock.differ === 4) {
-        differText = "판매";
-        go = "sell";
+        console.log('??????????')
+        setDifferText("판매");
+        setGo("sell");
         return "#4D97ED";
       } else {
-        differText = "구매";
-        go = "buy";
+        setDifferText("구매");
+        setGo("buy");
         return "#DD4956";
       }
     }

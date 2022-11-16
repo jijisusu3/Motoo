@@ -62,7 +62,7 @@ function QuizPage() {
   function QuizAnswer(quiz) {
     return (
       <div id={quiz.answerIdx} onClick={clickAnswer} className={classes.quizEx}>
-        <p id={quiz.answerIdx} onClick={clickAnswer} style={{ margin: "10px"}}>{quiz.answer}</p>
+        <p id={quiz.answerIdx} style={{ margin: "10px"}}>{quiz.answer}</p>
       </div>
     );
   }

@@ -69,8 +69,11 @@ public class SchoolController {
     @GetMapping("/api2/test")
     public ResponseEntity<?> ReadTest() {
         schoolService.UpdateAverage();
+        System.out.println("확인1");
         schoolService.UpdateSchoolRanking();
+        System.out.println("확인2");
         schoolService.UpdateSigunguRanking();
+        System.out.println("확인3");
         return null;
     }
 }

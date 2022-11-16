@@ -2,24 +2,28 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import classes from "./BottomNav.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveNav  } from "../../stores/navSlice";
+import { setActiveNav } from "../../stores/navSlice";
 
 const BottomNav = () => {
-  const dispatch = useDispatch()
-  const activeNav = useSelector(state => {
-    return state.setNav.nav.activeNav
-  })
-  const show = useSelector(state=> {
-    return state.setNav.nav.showNav
-  })
-  if(!show) {
-    return
+  const dispatch = useDispatch();
+  const activeNav = useSelector((state) => {
+    return state.setNav.nav.activeNav;
+  });
+  const show = useSelector((state) => {
+    return state.setNav.nav.showNav;
+  });
+  if (!show) {
+    return;
   }
 
   return (
     <nav className={classes.wrapper}>
       <div>
-        <Link to="/" className="nav-link" onClick={() => dispatch(setActiveNav(1))}>
+        <Link
+          to="/"
+          className="nav-link"
+          onClick={() => dispatch(setActiveNav(1))}
+        >
           <svg
             width="30"
             height="26"
@@ -35,7 +39,11 @@ const BottomNav = () => {
         </Link>
       </div>
       <div>
-        <Link to="/wallet/my" className="nav-link" onClick={() => dispatch(setActiveNav(2))}>
+        <Link
+          to="/wallet/my"
+          className="nav-link"
+          onClick={() => dispatch(setActiveNav(2))}
+        >
           <svg
             width="23"
             height="22"
@@ -48,7 +56,11 @@ const BottomNav = () => {
         </Link>
       </div>
       <div>
-        <Link to="/school" className="nav-link" onClick={() => dispatch(setActiveNav(3))}>
+        <Link
+          to="/school"
+          className="nav-link"
+          onClick={() => dispatch(setActiveNav(3))}
+        >
           <svg
             width="28"
             height="22"
@@ -61,13 +73,34 @@ const BottomNav = () => {
         </Link>
       </div>
       <div>
-        <Link to="/menu" className="nav-link" onClick={() => dispatch(setActiveNav(4))}>
+        <Link
+          to="/stock/search"
+          className="nav-link"
+          onClick={() => dispatch(setActiveNav(4))}
+        >
           <svg
             width="22"
             height="22"
             viewBox="0 0 22 22"
             xmlns="http://www.w3.org/2000/svg"
             className={activeNav === 4 ? classes.active : classes.navItem}
+          >
+            <path d="M1.57143 0H20.4286C20.8453 0 21.245 0.231785 21.5397 0.644365C21.8344 1.05694 22 1.61652 22 2.2C22 2.78348 21.8344 3.34305 21.5397 3.75563C21.245 4.16821 20.8453 4.4 20.4286 4.4H1.57143C1.15466 4.4 0.754961 4.16821 0.460261 3.75563C0.165561 3.34305 0 2.78348 0 2.2C0 1.61652 0.165561 1.05694 0.460261 0.644365C0.754961 0.231785 1.15466 0 1.57143 0ZM1.57143 8.8H20.4286C20.8453 8.8 21.245 9.03179 21.5397 9.44437C21.8344 9.85695 22 10.4165 22 11C22 11.5835 21.8344 12.1431 21.5397 12.5556C21.245 12.9682 20.8453 13.2 20.4286 13.2H1.57143C1.15466 13.2 0.754961 12.9682 0.460261 12.5556C0.165561 12.1431 0 11.5835 0 11C0 10.4165 0.165561 9.85695 0.460261 9.44437C0.754961 9.03179 1.15466 8.8 1.57143 8.8ZM1.57143 17.6H20.4286C20.8453 17.6 21.245 17.8318 21.5397 18.2444C21.8344 18.6569 22 19.2165 22 19.8C22 20.3835 21.8344 20.9431 21.5397 21.3556C21.245 21.7682 20.8453 22 20.4286 22H1.57143C1.15466 22 0.754961 21.7682 0.460261 21.3556C0.165561 20.9431 0 20.3835 0 19.8C0 19.2165 0.165561 18.6569 0.460261 18.2444C0.754961 17.8318 1.15466 17.6 1.57143 17.6Z" />
+          </svg>
+        </Link>
+      </div>
+      <div>
+        <Link
+          to="/menu"
+          className="nav-link"
+          onClick={() => dispatch(setActiveNav(5))}
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 22 22"
+            xmlns="http://www.w3.org/2000/svg"
+            className={activeNav === 5 ? classes.active : classes.navItem}
           >
             <path d="M1.57143 0H20.4286C20.8453 0 21.245 0.231785 21.5397 0.644365C21.8344 1.05694 22 1.61652 22 2.2C22 2.78348 21.8344 3.34305 21.5397 3.75563C21.245 4.16821 20.8453 4.4 20.4286 4.4H1.57143C1.15466 4.4 0.754961 4.16821 0.460261 3.75563C0.165561 3.34305 0 2.78348 0 2.2C0 1.61652 0.165561 1.05694 0.460261 0.644365C0.754961 0.231785 1.15466 0 1.57143 0ZM1.57143 8.8H20.4286C20.8453 8.8 21.245 9.03179 21.5397 9.44437C21.8344 9.85695 22 10.4165 22 11C22 11.5835 21.8344 12.1431 21.5397 12.5556C21.245 12.9682 20.8453 13.2 20.4286 13.2H1.57143C1.15466 13.2 0.754961 12.9682 0.460261 12.5556C0.165561 12.1431 0 11.5835 0 11C0 10.4165 0.165561 9.85695 0.460261 9.44437C0.754961 9.03179 1.15466 8.8 1.57143 8.8ZM1.57143 17.6H20.4286C20.8453 17.6 21.245 17.8318 21.5397 18.2444C21.8344 18.6569 22 19.2165 22 19.8C22 20.3835 21.8344 20.9431 21.5397 21.3556C21.245 21.7682 20.8453 22 20.4286 22H1.57143C1.15466 22 0.754961 21.7682 0.460261 21.3556C0.165561 20.9431 0 20.3835 0 19.8C0 19.2165 0.165561 18.6569 0.460261 18.2444C0.754961 17.8318 1.15466 17.6 1.57143 17.6Z" />
           </svg>

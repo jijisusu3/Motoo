@@ -108,7 +108,7 @@ function MyPage() {
       result: {
         name: "",
       },
-    }
+    };
     if (!canAddDate) {
       setWarningEffect(true);
       setTimeout(function () {
@@ -117,8 +117,8 @@ function MyPage() {
       return;
     }
     if (assetInfo.assetName && assetInfo.openReason) {
-      data.result.name = assetInfo.assetName
-      dispatch(accountCreate(data))
+      data.result.name = assetInfo.assetName;
+      dispatch(accountCreate(data));
       setTimeout(() => {
         window.location.reload();
         handleCreateModalClose(false);
@@ -145,7 +145,7 @@ function MyPage() {
     handleChangeModalClose(false);
     setTimeout(() => {
       window.location.reload();
-    }, 30);
+    }, 100);
   }
   function AllAssets() {
     function profitCheck() {
@@ -187,7 +187,10 @@ function MyPage() {
                 color: profitColor,
               }}
             >
-              {walletList.earningRaito.toFixed(2)}%
+              {isNaN(walletList.earningRaito)
+                ? 0
+                : walletList.earningRaito.toFixed(2)}
+              %
             </div>
           )}
         </div>
@@ -223,7 +226,6 @@ function MyPage() {
       return (
         <div className={classes.accountbox}>
           <img
-            onClick={handleOnKeyPress}
             src={`${process.env.PUBLIC_URL}/wallet/mypageIcon.svg`}
             style={{ marginRight: "10px" }}
             alt=""
@@ -235,7 +237,11 @@ function MyPage() {
             className={classes.editname}
             onChange={handleInputChange}
             value={nickname}
-            onKeyPress={handleOnKeyPress}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleOnKeyPress();
+              }
+            }}
           />
           <img
             style={{
@@ -254,7 +260,6 @@ function MyPage() {
     return (
       <div className={classes.accountbox}>
         <img
-          onClick={handleOnKeyPress}
           src={`${process.env.PUBLIC_URL}/wallet/mypageIcon.svg`}
           style={{ marginRight: "10px" }}
           alt=""

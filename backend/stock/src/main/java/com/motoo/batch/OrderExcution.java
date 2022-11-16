@@ -14,6 +14,7 @@ import com.motoo.db.repository.TradingRepositorySupport;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,20 +43,18 @@ public class OrderExcution {
 
     }
 
-    //월~금 9시-16시 사이에 2분간격으로 조회
-//    @Scheduled(cron = " * 0/2 9,16 * * MON-FRI ")
-//    @Scheduled(cron = " * * * * * * ")
+    //월~금 9시~16시 사이에 2분간격으로 조회
+    @Scheduled(cron = " 0 0/2 9-16 * * MON-FRI ")
     public void timeSchedule() {
 
         //3판매예약,  4구매예약 인 거래계좌 리스트
         List<Trading> tradingList = tradingRepositorySupport.findAllTrading();
 
         //예약 중인 거래내역이 없는 경우 종료
-        if (tradingList == null) {
-            log.trace("예약중인 거래내역이 없습니다.");
+        if (tradingList.isEmpty()) {
+            log.info("예약중인 거래내역이 없습니다.");
             return;
         } else {
-
             for (int i = 0; i < tradingList.size(); i++) {
 
                 //3,4인 사람의 accountId
@@ -63,7 +62,7 @@ public class OrderExcution {
 
                 if (accountId == null) {
 
-                    log.trace("예약중인 사람이 없습니다.");
+                    log.info("예약중인 사람이 없습니다.");
                     break;
 
                 } else {
@@ -94,7 +93,7 @@ public class OrderExcution {
 
                     //트레이딩 타입 바꿔줄 트레이딩의 객체
                     Trading trading = tradingService.getTrading(userId, tradeId);
-                    log.trace("트레이딩 타입");
+                    log.info("트레이딩 타입  ",+trading.getTr_type());
 
 
                     //accountStockId
@@ -128,14 +127,14 @@ public class OrderExcution {
                             //accountStock 객체 가져오기
                             AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
                             if(amount*price > amount*stock.getPrice()){
-                                log.trace("판매가격이 시장가보다 높습니다.");
+                                log.info("판매가격이 시장가보다 높습니다.");
                                 continue;
 
                             }else {
                             //해당 보유한 주식의 양분기
                                 if( accountStock.getAmount()<amount){
 
-                                    log.trace("계좌에 해당 양의 주식이 없습니다.");
+                                    log.info("계좌에 해당 양의 주식이 없습니다.");
                                     continue;
                                 }else {
 //                                List<AccountStock> accountStocks = accountService.getAccountStockByUserIdAccountId(accountStockAddPostReq.getAccountId(),userId);
@@ -159,13 +158,13 @@ public class OrderExcution {
                                      if (accountStock.getAmount() <=0){
                                          accountStockService.deleteStockInAccount(userId, SellAccountId, stockId);
                                      }
-                                    log.trace("해당 주식 판매완료");
+                                    log.info("해당 주식 판매완료");
                                  }
                             }
 
                         }
                         else{
-                                log.trace("해당 주식이 없습니다.");
+                                log.info("해당 주식이 없습니다.");
                                 continue;
                             }
                     }
@@ -200,7 +199,7 @@ public class OrderExcution {
                                      //해당 보유주식 가격, 수량 변경
                                      accountStockService.updateAmountPrice(accountStock, newAmount, newPrice);
                                      tradingService.updateType(trading,2);
-                                     log.trace("주식이 체결됐습니다.");
+                                     log.info("주식이 체결됐습니다.");
                                     }
                             //사려는 주식이 계좌에 없는 경우 새로 구매 후 추가
                                  else {
@@ -208,18 +207,17 @@ public class OrderExcution {
                                      accountService.updateSeed(account, -(price * amount));
                                      accountStockService.addStockToAccount(userId, accountId, stockId, price, amount);
                                      tradingService.updateType(trading,2);
-                                     log.trace("주식이 체결됐습니다.");
+                                     log.info("주식이 체결됐습니다.");
                                     }
                             }else {
-                                log.trace("구매할 수 없는 금액입니다.");
+                                log.info("구매할 수 없는 금액입니다.");
                                 continue;
                                 }
                         }else {
-                            log.trace("주식 구매 체결되지 않았습니다.");
+                            log.info("주식 구매 체결되지 않았습니다.");
                             continue;
                         }
                     }
-
                 }
             }
         }
