@@ -489,17 +489,18 @@ function BuyStockPage() {
 
   return (
     <div>
-      <div>
+      <div className={classes.infobox}>
         <div className={classes.info}>
           <img
             className={classes.pd}
             src={`${process.env.PUBLIC_URL}/grayBack.svg`}
             alt=""
             onClick={backTo}
+            style={{marginTop: "10px"}}
           />
-          <div>
-            <div>{tradeData.name}</div>
-            <div>
+          <div className={classes.stinfo}>
+            <div style={{ fontWeight: '700'}}>{tradeData.name}</div>
+            <div style={{ fontSize: '15px'}}>
               <span>{tradeData.price}</span>
               &nbsp;
               {ration >= 0 ? (
@@ -511,7 +512,6 @@ function BuyStockPage() {
             </div>
           </div>
         </div>
-        <hr />
       </div>
 
       <div class={classes.total}>
