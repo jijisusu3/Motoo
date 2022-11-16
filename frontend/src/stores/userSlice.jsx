@@ -70,29 +70,20 @@ const quizPut = createAsyncThunk("stockList/quizResult", async (data) => {
     });
 });
 
-// 주식 디테일페이지에 ㄱㄱ
+// 주식 디테일페이지에 ㄱㄱ, 대기중인 주식에서도 ㄱㄱ
 const realtimeAccountGet = createAsyncThunk(
   "stock/accountGet",
   async (data) => {
     return axios
-      .get(`${api2}account/check/${data.current}`, data.config)
+      .get(`${api2}account/check/${data.id}`, data.config)
       .then((response) => {
-        console.log('------------------------')
-        console.log(response)
-        console.log('------------------------')
-        return response.data.stockInfo
+        return response.data;
       });
   }
 );
 
 const stockTradingPost = createAsyncThunk("stock/tradingPost", async (data) => {
-  return axios.post(`${api2}trading`, data.result, data.config).then(() => {
-    axios
-      .get(`${api2}account/check/${data.result.accountId}`, data.config)
-      .then((response) => {
-        console.log(response.data);
-      });
-  });
+  return axios.post(`${api2}trading`, data.result, data.config).then(() => {});
 });
 
 const stockBuyPost = createAsyncThunk("stock/buyPost", async (data) => {
@@ -104,7 +95,6 @@ const stockBuyPost = createAsyncThunk("stock/buyPost", async (data) => {
 const accountChangePut = createAsyncThunk(
   "account/accountChangePut",
   async (data) => {
-    console.log(data)
     return axios
       .put(`${api2}users/current`, data.result, data.config)
       .then(() => {
@@ -112,6 +102,10 @@ const accountChangePut = createAsyncThunk(
       });
   }
 );
+
+const userDelete = createAsyncThunk("user/userDelete", async (data) => {
+  return axios.delete(`${api2}users`, data).then(() => {});
+});
 
 export const userSlice = createSlice({
   name: "userSlice",
@@ -150,14 +144,17 @@ export const userSlice = createSlice({
       state.quizData = action.payload;
     });
     builder.addCase(realtimeAccountGet.fulfilled, (state, action) => {
-      // state.user.haveList = action.payload;
-      console.log('-------------------------')
       console.log(action.payload)
-      console.log('-------------------------')
+      state.user.haveList = action.payload.stockInfo;
+      state.user.data.seed = action.payload.availableSeed;
     });
     builder.addCase(accountChangePut.fulfilled, (state, action) => {
-      state.user.data.current = action.payload
-      console.log(action.payload)
+      state.user.data.current = action.payload;
+      console.log(action.payload);
+    });
+    builder.addCase(userDelete.fulfilled, () => {
+      window.localStorage.clear();
+      window.location.replace("/login");
     });
   },
 });
@@ -171,5 +168,6 @@ export {
   stockBuyPost,
   quizGet,
   stockTradingPost,
-  accountChangePut
+  accountChangePut,
+  userDelete,
 };
