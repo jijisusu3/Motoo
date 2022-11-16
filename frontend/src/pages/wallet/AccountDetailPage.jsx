@@ -73,6 +73,9 @@ function AccountDetailPage() {
   const userToken = useSelector((state) => {
     return state.persistedReducer.setUser.user.token;
   });
+  const userCurrent = useSelector((state) => {
+    return state.persistedReducer.setUser.user.data.current;
+  });
   const accountName = useSelector((state) => {
     return state.setAccount.accountDetail.accountName;
   });
@@ -105,6 +108,7 @@ function AccountDetailPage() {
   useEffect(() => {
     dispatch(accountDetailGet(data));
   }, [userToken]);
+
 
   const handleDeleteModalOpen = () => {
     setDeleteModalOpen(true);
@@ -162,23 +166,21 @@ function AccountDetailPage() {
 
     // 수정했을때, 이 함수 안에서 POST 요청 들어가야함.
     const handleOnKeyPress = (event) => {
-      if (event.key === "Enter") {
-        const data = {
-          config: {
-            headers: {
-              Authorization: `Bearer ${userToken}`,
-            },
+      const data = {
+        config: {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
           },
-          result: {
-            accountId: Number(id),
-            name: editName,
-          },
-        };
-        if (editName) {
-          dispatch(accountNamePut(data));
-        }
-        setNowEdit(false);
+        },
+        result: {
+          accountId: Number(id),
+          name: editName,
+        },
+      };
+      if (editName) {
+        dispatch(accountNamePut(data));
       }
+
       setNowEdit(false);
     };
     if (nowEdit) {
@@ -190,7 +192,11 @@ function AccountDetailPage() {
             className={classes.editInput}
             onChange={handleInputChange}
             value={editName}
-            onKeyPress={handleOnKeyPress}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleOnKeyPress();
+              }
+            }}
           />
           <img
             onClick={handleOnKeyPress}
@@ -203,13 +209,13 @@ function AccountDetailPage() {
     return (
       <div className={classes.accountname}>
         {editName}
-        {isSchool && 
+        {isSchool && (
           <img
             src={`${process.env.PUBLIC_URL}/wallet/school.svg`}
             alt=""
             style={{ marginLeft: "10px" }}
           />
-        }
+        )}
       </div>
     );
   }
@@ -254,9 +260,15 @@ function AccountDetailPage() {
                 삭제되어요!
               </span>
             </div>
-            <div className={classes.dltbtn} onClick={deleteSubmit}>
-              삭제하기
-            </div>
+            {Number(id) === userCurrent ? (
+              <div>
+                <div style={{color: '#DD4956'}}>주계좌 변경 후 삭제할 수 있어요!</div>
+              </div>
+            ) : (
+              <div className={classes.dltbtn} onClick={deleteSubmit}>
+                삭제하기
+              </div>
+            )}
           </Box>
         </Modal>
         <Grid

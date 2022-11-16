@@ -71,7 +71,7 @@ function IndustryPage() {
       return (
         <div className={classes.weatherbox}  style={{ border: border }}>
           <img className={classes.wimg} src={`${process.env.PUBLIC_URL}/stock-detail/rain.svg`} alt="" />
-          <div className={classes.perc}>지수야</div>
+          <div className={classes.perc}>{sen.sen.toFixed(2)}%</div>
         </div>
       );
     } else if (sen.thisIndex === 1) {
@@ -82,7 +82,7 @@ function IndustryPage() {
       return (
         <div className={classes.weatherbox}  style={{ border: border }}>
           <img className={classes.wimg} src={`${process.env.PUBLIC_URL}/stock-detail/cloudy.svg`} alt=""/>
-          <div className={classes.perc}>퍼센트</div>
+          <div className={classes.perc}>{sen.sen.toFixed(2)}%</div>
         </div>
       );
     } else {
@@ -92,7 +92,7 @@ function IndustryPage() {
       return (
         <div className={classes.weatherbox}  style={{ border: border }}>
           <img className={classes.wimg} src={`${process.env.PUBLIC_URL}/stock-detail/sun.svg`} alt="" />
-          <div className={classes.perc}>너어죠</div>
+          <div className={classes.perc}>{sen.sen.toFixed(2)}%</div>
         </div>
       );
     }

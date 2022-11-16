@@ -18,6 +18,7 @@ function AccountHistory() {
   const accountHistoryData = useSelector((state) => {
     return state.setAccount.accountDetail.tradingHistory;
   });
+  console.log(accountHistoryData)
   const [data, setData] = useState([
     {
       all: [],
@@ -206,7 +207,7 @@ function AccountHistory() {
 
     function MyRealizedCard(stock) {
       function profitCheck() {
-        if (stock.differ === "구매") {
+        if (stock.differ === 2) {
           return "- ";
         } else {
           return "+ ";

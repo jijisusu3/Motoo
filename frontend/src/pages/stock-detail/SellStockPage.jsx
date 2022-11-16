@@ -7,7 +7,11 @@ import Modal from "@mui/material/Modal";
 import ReactApexChart from "react-apexcharts";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { shortStockGet, stockSellPost } from "../../stores/stockSlice";
+import {
+  shortStockGet,
+  bidaskGet,
+  stockSellPost,
+} from "../../stores/stockSlice";
 import { stockTradingPost } from "../../stores/userSlice";
 
 const style = {
@@ -25,21 +29,27 @@ const style = {
 function SellStockPage() {
   const params = useParams();
   const id = params.id;
-  let myStock = 0;
+  const [myStock, setMyStock] = useState(0);
   const tradeData = useSelector((state) => {
     return state.setStock.shortStockData;
   });
   const userData = useSelector((state) => {
     return state.persistedReducer.setUser.user;
   });
-  userData.haveList.forEach((element) => {
-    if (element.ticker === id) {
-      myStock = element.amount;
-    }
+  const bidaskData = useSelector((state) => {
+    return state.setStock.bidask;
   });
+  useEffect(() => {
+    userData.haveList?.forEach((element) => {
+      if (element.ticker === id) {
+        setMyStock(element.available);
+      }
+    });
+  }, [userData]);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(shortStockGet(id));
+    dispatch(bidaskGet(id));
   }, []);
   const [isMarketPrice, setMarketPrice] = useState(true);
   const [wantedPrice, setWantedPrice] = useState("");
@@ -61,7 +71,7 @@ function SellStockPage() {
     const [buyData, setBuyData] = useState({
       series: [
         {
-          data: [2890, 2211, 1100, 900, 201],
+          data: bidaskData.bid_rsqn,
         },
       ],
       options: {
@@ -143,7 +153,7 @@ function SellStockPage() {
     const [sellData, setSellData] = useState({
       series: [
         {
-          data: [2890, 2211, 1100, 900, 201],
+          data: bidaskData.ask_rsqn,
         },
       ],
       options: {
@@ -245,6 +255,16 @@ function SellStockPage() {
               height={200}
               width={120}
             />
+            <div>
+              {bidaskData.bid_pr.map((bid) => (
+                <div>{bid.toLocaleString()}원</div>
+              ))}
+            </div>
+            <div>
+              {bidaskData.ask_pr.slice(0, 4).map((ask) => (
+                <div>{ask.toLocaleString()}원</div>
+              ))}
+            </div>
             <ReactApexChart
               options={sellData.options}
               series={sellData.series}
@@ -275,9 +295,13 @@ function SellStockPage() {
         if (tempPrice > tradeData.maximum) {
           // 상한가보다 클때
           setIsTooHigh(true);
+          setIsTooLow(false);
           setTimeout(() => {
             setIsTooHigh(false);
           }, 1000);
+          if (Number(wantedPrice) <= tradeData.price * 0.7) {
+            setIsTooLow(true);
+          }
           return;
         } else if (tempPrice < tradeData.minimum) {
           // 하한가보다 낮을때
@@ -340,7 +364,7 @@ function SellStockPage() {
   function PriceInput() {
     // 시장가로 즉시판매하겠다고 했을 때,
     if (isMarketPrice) {
-      return <h1 onClick={priceClickHandler}>{tradeData.price}원</h1>;
+      return;
     } else {
       // 직접입력하겠다고 할 때,
       if (wantedPrice === "") {
@@ -425,6 +449,9 @@ function SellStockPage() {
         },
       };
       dispatch(stockSellPost(data));
+      setTimeout(() => {
+        backTo();
+      }, 40);
     } else if (!isMarketPrice && Boolean(wantedMany) && !isTooLow) {
       const data = {
         config: {
@@ -441,6 +468,9 @@ function SellStockPage() {
         },
       };
       dispatch(stockTradingPost(data));
+      setTimeout(() => {
+        backTo();
+      }, 40);
     }
   }
 
@@ -461,9 +491,9 @@ function SellStockPage() {
               <span>{tradeData.price}</span>
               &nbsp;
               {ration >= 0 ? (
-                <span style={{ color: "red" }}>(+{ration}%)</span>
+                <span style={{ color: "#DD4956" }}>(+{ration}%)</span>
               ) : (
-                <span style={{ color: "blue" }}>({ration}%)</span>
+                <span style={{ color: "#4D97ED" }}>({ration}%)</span>
               )}
             </div>
           </div>
@@ -500,9 +530,12 @@ function SellStockPage() {
         </div>
         <PriceInput />
         <ManyInput />
-        {isTooHigh && <p>이렇게 비싸겐 못팔아요</p>}
-        {isTooLow && <p>이렇게 싸겐 못팔아요</p>}
-        {!isHave && <p>넌 그만큼 팔 주식 개수가 없어요</p>}
+        <div>{myStock}주 보유</div>
+        {!isMarketPrice && isTooHigh === true && <p>그렇게 비싸겐 못사요</p>}
+        {!isMarketPrice && isTooLow === true && isTooHigh === false && (
+          <p>그렇게 싸겐 못사요</p>
+        )}
+        {!isHave && <p>판매 가능한 개수를 초과했어요!</p>}
       </div>
 
       <div class={classes.buyButtom}>
