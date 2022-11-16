@@ -109,7 +109,7 @@ function StockSearchPage() {
             onChange={(e) => updateField("keyword", e.target.value)}
             placeholder='검색할 주식을 입력해주세요.'
           />
-          <img className={classes.dot} src={`${process.env.PUBLIC_URL}/stock-list/dotbogi.svg`} alt="" />
+          <img className={classes.dot} src={`${process.env.PUBLIC_URL}/stock-list/stockListSearchIcon.svg`} alt="" />
         </div>
         <SearchBar/>
       </div>
