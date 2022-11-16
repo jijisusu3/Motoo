@@ -23,6 +23,7 @@ function MyAssets() {
     try{
       setAssetProfit(accountAssetData.totalValuePLRatio.toFixed(1))
     } catch {
+      setAssetProfit(0)
       return
     }
   }, [accountAssetData])

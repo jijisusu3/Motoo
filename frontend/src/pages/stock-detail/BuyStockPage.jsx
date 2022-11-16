@@ -63,7 +63,7 @@ function BuyStockPage() {
     const [buyData, setBuyData] = useState({
       series: [
         {
-          data: bidaskData.bid_rsqn,
+          data: bidaskData.ask_rsqn,
         },
       ],
       options: {
@@ -145,7 +145,7 @@ function BuyStockPage() {
     const [sellData, setSellData] = useState({
       series: [
         {
-          data: bidaskData.ask_rsqn,
+          data: bidaskData.bid_rsqn,
         },
       ],
       options: {
@@ -249,13 +249,13 @@ function BuyStockPage() {
               width={120}
             />
             <div>
-              {bidaskData.bid_pr.map((bid) => (
-                <div>{bid.toLocaleString()}원</div>
+              {bidaskData.ask_pr.map((ask) => (
+                <div>{ask.toLocaleString()}원</div>
               ))}
             </div>
             <div>
-              {bidaskData.ask_pr.slice(0, 4).map((ask) => (
-                <div>{ask.toLocaleString()}원</div>
+              {bidaskData.bid_pr.slice(0, 4).map((bid) => (
+                <div>{bid.toLocaleString()}원</div>
               ))}
             </div>
             <ReactApexChart
@@ -289,9 +289,13 @@ function BuyStockPage() {
         if (tempPrice > tradeData.price * 1.3) {
           // 상한가보다 클때
           setIsTooHigh(true);
+          setIsTooLow(false);
           setTimeout(() => {
             setIsTooHigh(false);
           }, 1000);
+          if (Number(wantedPrice) <= tradeData.price * 0.7) {
+            setIsTooLow(true);
+          }
           return;
         } else if (tempPrice < tradeData.price * 0.7) {
           // 하한가보다 낮을때
@@ -465,6 +469,9 @@ function BuyStockPage() {
         },
       };
       dispatch(stockBuyPost(data));
+      setTimeout(() => {
+        backTo();
+      }, 40);
     } else if (!isMarketPrice && Boolean(wantedMany) && !isTooLow) {
       const data = {
         config: {
@@ -475,13 +482,15 @@ function BuyStockPage() {
         result: {
           accountId: String(userData.data.current),
           amount: Number(wantedMany),
-          price: tradeData.price,
+          price: Number(wantedPrice),
           stockId: String(tradeData.id),
           tr_type: "4",
         },
       };
-      console.log(data);
       dispatch(stockTradingPost(data));
+      setTimeout(() => {
+        backTo();
+      }, 40);
     }
   }
 
@@ -500,15 +509,14 @@ function BuyStockPage() {
           />
           <div className={classes.stinfo}>
             <div style={{ fontWeight: '700'}}>{tradeData.name}</div>
-            <div style={{ fontSize: '15px'}}>
+            <div>
               <span>{tradeData.price}</span>
               &nbsp;
               {ration >= 0 ? (
-                <span style={{ color: "red" }}>(+{ration}%)</span>
+                <span style={{ color: "#DD4956" }}>(+{ration}%)</span>
               ) : (
-                <span style={{ color: "blue" }}>({ration}%)</span>
+                <span style={{ color: "#4D97ED" }}>({ration}%)</span>
               )}
-              {/* <span>({tradeData.fluctuation_rate})</span> */}
             </div>
           </div>
         </div>
@@ -546,9 +554,12 @@ function BuyStockPage() {
 
         <ManyInput />
 
-        {isTooHigh && <p>그렇게 비싸겐 못사요</p>}
-        {isTooLow && <p>그렇게 싸겐 못사요</p>}
-        {!isAvailable && <p>넌 그만큼 살 돈이 없어요</p>}
+        {mySeed && <div>사용가능 금액 {mySeed}</div>}
+        {!isMarketPrice && isTooHigh === true && <p>그렇게 비싸겐 못사요</p>}
+        {!isMarketPrice && isTooLow === true && isTooHigh === false && (
+          <p>그렇게 싸겐 못사요</p>
+        )}
+        {!isAvailable && <p>사용 가능한 금액을 초과했어요!</p>}
       </div>
 
       <div class={classes.buyButtom}>
