@@ -87,8 +87,42 @@ function LimitOrderPage() {
     );
   }
   return (
-    <div>
-      <div className={classes.info}>
+    <div className={classes.limitbg}>
+      <div className={classes.fix}>
+        <div className={classes.fixbox}>
+          <img
+              onClick={backToStockList}
+              src={`${process.env.PUBLIC_URL}/stock-detail/back.svg`}
+              alt=""
+            />
+        </div>
+      </div>
+      <div className={classes.limitctn}>
+
+      
+        <div>
+          <div className={classes.title}>대기중인 주문</div>
+          <div className={classes.timereset}>매일 15:30에 리셋</div>
+        </div>
+        <div className={classes.limitList}>
+          {orderList &&
+            orderList.map((stock) => (
+              <MyRealizedCard
+                key={stock.tradeId}
+                id={stock.tradeId}
+                name={stock.ticker_name}
+                ticker={stock.ticker}
+                price={stock.tr_price}
+                differ={stock.tr_type}
+                many={stock.tr_amount}
+              />
+            ))}
+        </div>
+
+      </div>
+      
+
+      {/* <div className={classes.info}>
         <img
           className={classes.pd}
           src={`${process.env.PUBLIC_URL}/grayBack.svg`}
@@ -96,21 +130,9 @@ function LimitOrderPage() {
           onClick={backToStockList}
         />
         <div>매일 15:30에 리셋</div>
-      </div>
-      <div className={classes.hrline}></div>
-      <div className={classes.title}>대기중인 주문</div>
-      {orderList &&
-        orderList.map((stock) => (
-          <MyRealizedCard
-            key={stock.tradeId}
-            id={stock.tradeId}
-            name={stock.ticker_name}
-            ticker={stock.ticker}
-            price={stock.tr_price}
-            differ={stock.tr_type}
-            many={stock.tr_amount}
-          />
-        ))}
+      </div> */}
+      {/* <div className={classes.hrline}></div>
+      <div className={classes.title}>대기중인 주문</div> */}
     </div>
   );
 }
