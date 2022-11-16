@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { stockDetailGet } from "../../stores/stockSlice";
 import { likeStockPost, realtimeAccountGet } from "../../stores/userSlice";
+import { width } from "@mui/system";
 
 function StockDetailPage() {
   const params = useParams();
@@ -804,7 +805,12 @@ function StockDetailPage() {
     }
     return (
       <>
-        <ReactApexChart options={clickedOptions} series={clickedSeries} type={clickedType} height={350} width={310} />
+      <div>
+        <div className={classes.testtest}>
+
+          <ReactApexChart options={clickedOptions} series={clickedSeries} type={clickedType} height={330} width={"90%"}/>
+        </div>
+      </div>
         <div className={classes.radio}>
           <ul id="filter" className={classes.radioUlClass}>
             <div className={classes.radiobox}>
@@ -905,11 +911,11 @@ function StockDetailPage() {
   function BuySellButton() {
     if (showSellButton) {
       return (
-        <>
+        <div style={{width:"100%"}}>
           <div className={classes.sellbuy}>
             <div className={classes.flx}>
               <Link to={`/stock/sell/${id}`}>
-                <button className={classes.sell}>팔래요</button>
+                <button style={{marginRight:"5px"}}className={classes.sell}>팔래요</button>
               </Link>
             </div>
             <div className={classes.flx}>
@@ -918,7 +924,7 @@ function StockDetailPage() {
               </Link>
             </div>
           </div>
-        </>
+        </div>
       );
     }
     return (
@@ -963,15 +969,27 @@ function StockDetailPage() {
     return (
       <div>
         <div className={classes.rowbox}>
-          <div className={classes.today}>오늘 {stockData.name} 날씨는?</div>
-          <img src={`${process.env.PUBLIC_URL}/stock-detail/newspaper.svg`} alt="" />
+          <img
+            src={`${process.env.PUBLIC_URL}/stock-detail/newspaper.svg`}
+            alt=""
+            style={{marginRight: "16px"}}
+          />
+          <div className={classes.today}>오늘 {stockData.name} 날씨는? <span className={classes.news}>* 네이버 뉴스 기반</span></div>
         </div>
-        <div className={classes.news}>*네이버 뉴스 기반</div>
-        <div className={classes.weather}>{stockData.sentiment && <WeatherCards />}</div>
-        <div className={classes.hrline}></div>
+        <div className={classes.weather}>
+          {stockData.sentiment && <WeatherCards />}
+        </div>
+
+        <div className={classes.hrline2}></div>
         <div className={classes.rowbox}>
-          <div className={classes.today}>{stockData.name} 이렇게 표현되고 있어요</div>
-          <img src={`${process.env.PUBLIC_URL}/stock-detail/keyword.svg`} alt="" />
+          <img
+            src={`${process.env.PUBLIC_URL}/stock-detail/explain.svg`}
+            alt=""
+            style={{marginRight: "16px", width: '20px'}}
+          />
+          <div style={{marginTop: "8px"}} className={classes.today}>
+            {stockData.name} 이렇게 표현되고 있어요
+          </div>
         </div>
         <div className={classes.box}>
           <div className={classes.boxes}>
@@ -983,7 +1001,7 @@ function StockDetailPage() {
               ))}
           </div>
         </div>
-        <div className={classes.hrline}></div>
+        <div className={classes.hrline2}></div>
       </div>
     );
   }
@@ -1006,132 +1024,162 @@ function StockDetailPage() {
     }
   }
   return (
-    <div>
+    <div className={classes.stkdtbg}>
       <div className={classes.fix}>
         <div className={classes.fixbox}>
           <img onClick={backTo} src={`${process.env.PUBLIC_URL}/stock-detail/back.svg`} alt="" />
           <WishListIcon />
         </div>
-        <div className={classes.topline}></div>
+        {/* <div className={classes.topline}></div> */}
       </div>
-      <div className={classes.start}>
-        <div className={classes.script}>{id} / KOSPI</div>
-        <div className={classes.big}>{stockData.name}</div>
-        <div className={classes.big}>{shortStockData.price}원</div>
-        {stockData && <CompareText />}
-      </div>
-      <StockDetailGraph />
-      <div className={classes.hrline}></div>
-      <div className={classes.imgrowbox}>
-        <div className={classes.rowbox}>
-          <div className={classes.today}>이 주식은 오늘 ?</div>
-          <img src={`${process.env.PUBLIC_URL}/stock-detail/cal.svg`} alt="" />
-        </div>
-        <img src={`${process.env.PUBLIC_URL}/Q.svg`} alt="" />
-      </div>
-      <div>
-        {stockData && (
-          <div className={classes.repre}>
-            <div className={classes.rowbox}>
-              아무리 올라도 <div className={classes.upcoltex}>{stockData.maximum}원</div>
-            </div>
-            <div className={classes.rowbox}>
-              아무리 떨어져도 <div className={classes.downcoltex}>{stockData.minimum}원</div>
-            </div>
+      <div className={classes.stkdtctn}>
+        <div className={classes.dtsub1}>
+          <div className={classes.dtctntitle}>
+
+            <div className={classes.script}>{id} / KOSPI</div>
+            <div className={classes.big}>{stockData.name}</div>
+            <div className={classes.big}>{shortStockData.price}원</div>
+            {stockData && <CompareText />}
           </div>
-        )}
-      </div>
-      <div className={classes.hrline}></div>
-      <AnalyzedData />
-      <div className={classes.imgrowbox} onClick={goToIndustry}>
-        <div className={classes.rowbox}>
-          <div className={classes.today}>{stockData.category_name} 업종 키워드 보러가기</div>
-          <img className={classes.ind} src={`${process.env.PUBLIC_URL}/stock-detail/industry.svg`} alt="" />
-        </div>
-        <img src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
-      </div>
-      <div className={classes.hrline}></div>
-      <div>
-        <div className={classes.rowbox}>
-          <div className={classes.today}>기업정보</div>
-          <img src={`${process.env.PUBLIC_URL}/stock-detail/checklist.svg`} alt="" />
-        </div>
-        <div className={classes.infobox}>
-          <div>
-            <div className={classes.info}>거래량</div>
-            <div>{stockData.volume}</div>
-          </div>
-          <div>
-            <div className={classes.info}>거래대금</div>
-            <div>{stockData.trading_value}원</div>
-          </div>
-          <div>
-            <div className={classes.info}>시가총액</div>
-            <div>{stockData.m_capital}억원</div>
+          <div className={classes.subctn1graph}>
+            <StockDetailGraph />
           </div>
         </div>
-        <div className={classes.line}></div>
+        <div className={classes.roundline}></div>
+        <div className={classes.hrline}></div>
+        <div className={classes.imgrowbox}>
+          <div className={classes.rowbox}>
+            <img src={`${process.env.PUBLIC_URL}/stock-detail/cal.svg`} style={{marginRight: "16px"}} alt="" />
+            <div className={classes.today}>이 주식은 오늘 ?</div>
+          </div>
+          <img style={{marginRight: "5px"}} src={`${process.env.PUBLIC_URL}/Q.svg`} alt="" />
+        </div>
         <div>
-          <div className={classes.imgrowbox}>
-            <div className={classes.rowbox}>
-              <div className={classes.today}>{stockData.name}의 EPS</div>
-              <img src={`${process.env.PUBLIC_URL}/stock-detail/increase.svg`} alt="" />
+          {stockData && (
+            <div className={classes.repre}>
+              <div className={classes.rowbox}>
+                아무리 올라도{" "}
+                <div className={classes.upcoltex}>{stockData.maximum}원</div>
+              </div>
+              <div className={classes.rowbox}>
+                아무리 떨어져도{" "}
+                <div className={classes.downcoltex}>{stockData.minimum}원</div>
+              </div>
             </div>
-            <div className={classes.infotxt}>{stockData.eps}원</div>
-          </div>
-          <div className={classes.space}>
-            <div className={classes.today}>EPS 란?</div>
-            <div className={classes.script}>
-              1년간의 순이익을 현재 발행된 총 주식수로 나누어 1주당
-              <br />
-              얼마나 많은 이익을 창출했는지 나타내는 지표입니다.
-            </div>
-          </div>
-          <div className={classes.space}>
-            <div className={classes.greenbox}>
-              <img src={`${process.env.PUBLIC_URL}/stock-detail/check-circle.svg`} alt="" />
-              <div className={classes.green}>어떻게 판단하나요?</div>
-            </div>
-            <div className={classes.script}>
-              EPS가 높다면 기업의 경영실적이 양호하고 배당여력이
-              <br />
-              많다는 것을 의미하므로 주가 상승의 요인이 됩니다.
-            </div>
-          </div>
+          )}
         </div>
-        <div className={classes.line}></div>
+        <div className={classes.hrline}></div>
+        <AnalyzedData />
+        <div className={classes.imgrowbox} onClick={goToIndustry}>
+          <div className={classes.rowbox}>
+            <img
+              className={classes.ind}
+              src={`${process.env.PUBLIC_URL}/stock-detail/industry.svg`}
+              alt=""
+              style={{marginRight: "16px"}} 
+            />
+            <div className={classes.today}>
+              {stockData.category_name} 업종 키워드 보러가기
+            </div>
+          </div>
+          <img src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
+        </div>
+        <div className={classes.hrline2}></div>
         <div>
-          <div className={classes.imgrowbox}>
-            <div className={classes.rowbox}>
-              <div className={classes.today}>{stockData.name}의 PER</div>
-              <img src={`${process.env.PUBLIC_URL}/stock-detail/increase.svg`} alt="" />
-            </div>
-            <div className={classes.infotxt}>{stockData.per}배</div>
+          <div className={classes.rowbox}>
+            <img
+              src={`${process.env.PUBLIC_URL}/stock-detail/checklist.svg`}
+              alt=""
+              style={{marginRight: "16px"}}
+            />
+            <div className={classes.today}>기업정보</div>
           </div>
-          <div className={classes.space}>
-            <div className={classes.today}>PER 란?</div>
-            <div className={classes.script}>
-              현재 주가가 지난 1년간의 순이익의 몇배에 거래되고 있는지
-              <br />
-              보여주는 지표입니다.
+          <div className={classes.infobox}>
+            <div>
+              <div className={classes.info}>거래량</div>
+              <div style={{fontSize: "15px"}}>{stockData.volume}</div>
+            </div>
+            <div>
+              <div className={classes.info}>거래대금</div>
+              <div style={{fontSize: "15px"}}>{stockData.trading_value}원</div>
+            </div>
+            <div>
+              <div className={classes.info}>시가총액</div>
+              <div style={{fontSize: "15px"}}>{stockData.m_capital}억원</div>
             </div>
           </div>
-          <div className={classes.space}>
-            <div className={classes.greenbox}>
-              <img 지수야 src={`${process.env.PUBLIC_URL}/stock-detail/check-circle.svg`} alt="" />
-              <div className={classes.green}>어떻게 판단하나요?</div>
+          <div className={classes.line}></div>
+          <div className={classes.epsper}>
+            <div className={classes.imgrowbox}>
+              <div className={classes.rowbox}>
+                <div className={classes.today}>{stockData.name}의 EPS</div>
+                <img
+                  src={`${process.env.PUBLIC_URL}/stock-detail/increase.svg`}
+                  alt=""
+                />
+              </div>
+              <div className={classes.infotxt}>{stockData.eps}원</div>
             </div>
-            <div className={classes.script}>
-              주가가 적당하게 평가되는지 판단하기 위해서는 같은 업종의
-              <br />
-              비슷한 규모의 회사와 비교해봐야 합니다.
+            <div className={classes.explainbox}>
+
+              <div className={classes.space}>
+                <div className={classes.today}>EPS 란?</div>
+                <div  className={classes.script}>
+                  1년간의 순이익을 현재 발행된 총 주식수로 나누어 1주당 얼마나 많은 이익을 창출했는지 나타내는 지표입니다.
+                </div>
+              </div>
+              <div className={classes.space}>
+                <div className={classes.greenbox}>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/stock-detail/check-circle.svg`}
+                    alt=""
+                  />
+                  <div className={classes.green}>어떻게 판단하나요?</div>
+                </div>
+                <div style={{marginBottom: "18px", marginTop: "0px"}} className={classes.script}>
+                  EPS가 높다면 기업의 경영실적이 양호하고 배당여력이 많다는 것을 의미하므로 주가 상승의 요인이 됩니다.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={classes.line}></div>
+          <div className={classes.epsper}>
+            <div className={classes.imgrowbox}>
+              <div className={classes.rowbox}>
+                <div className={classes.today}>{stockData.name}의 PER</div>
+                <img
+                  src={`${process.env.PUBLIC_URL}/stock-detail/increase.svg`}
+                  alt=""
+                />
+              </div>
+              <div className={classes.infotxt}>{stockData.per}배</div>
+            </div>
+            <div className={classes.explainbox}>
+
+              <div className={classes.space}>
+                <div className={classes.today}>PER 란?</div>
+                <div className={classes.script}>
+                  현재 주가가 지난 1년간의 순이익의 몇배에 거래되고 있는지 보여주는 지표입니다.
+                </div>
+              </div>
+              <div className={classes.space}>
+                <div className={classes.greenbox}>
+                  <img src={`${process.env.PUBLIC_URL}/stock-detail/check-circle.svg`}
+                    alt=""
+                  />
+                  <div className={classes.green}>어떻게 판단하나요?</div>
+                </div>
+                <div  style={{marginBottom: "18px", marginTop: "0px"}} className={classes.script}>
+                  주가가 적당하게 평가되는지 판단하기 위해서는 같은 업종의 비슷한 규모의 회사와 비교해봐야 합니다.
+                </div>
+              </div>
+            </div>
+            <div style={{height: "80px"}}>
+
             </div>
           </div>
         </div>
-        <div className={classes.line}></div>
-        <div>지수야 배당수익률 여기넣어줘라!!!!!!</div>
       </div>
-      <div className={classes.hrline}></div>
       <BuySellButton />
     </div>
   );

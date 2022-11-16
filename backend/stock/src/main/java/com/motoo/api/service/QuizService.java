@@ -39,7 +39,7 @@ public class QuizService {
         Long acc = Long.valueOf(userRepository.findByUserId(id).get().getCurrent());
         Account account = accountRepository.findByAccountId(acc).get();
         if (req.getAnswer() == quiz.getAnswer()) {
-            accountService.updateSeed(account, 2000000);
+            accountService.updateSeed(account, 200000);
             Trading trade = new Trading();
             trade.writeOrder(account, user, null, "퀴즈",5, 200000, 1,null);
             tradingRepository.save(trade);

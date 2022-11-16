@@ -34,6 +34,9 @@ public interface TradingService {
     //판매하고 있는 본인 거래내역 조회
     List<Trading> tradingList3(Long userId, Long accountId);
 
+    //개인이 주문 보낸 주문 리스트
+    List<Trading> tradingList4(Long userId, Long accountId);
+
 
     //판매가능한 갯수 확인용용
     int tradingList3ByTicker(Long userId, Long accountId, String ticker);

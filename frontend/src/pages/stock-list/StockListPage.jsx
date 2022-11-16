@@ -470,7 +470,7 @@ function StockListPage() {
               <Tab
                 label={
                   <Typography
-                    fontSize="2.7vh"
+                    fontSize="20px"
                     fontWeight="600"
                     color={value === 0 ? "#43B8B1" : "#929E9E"}
                     fontFamily="Pretendard"
@@ -489,7 +489,7 @@ function StockListPage() {
               <Tab
                 label={
                   <Typography
-                    fontSize="2.7vh"
+                    fontSize="20px"
                     fontWeight="600"
                     color={value === 1 ? "#43B8B1" : "#929E9E"}
                     fontFamily="Pretendard"
