@@ -54,7 +54,7 @@ async def get_stock_detail(ticker: str, response: Response):
     yearly_max = max(yearly, key=lambda x: x.max_price, default=None)
     if not daily:
         daily.append(CandleData(stock_id=stock.pk, date=today.strftime("%Y-%m-%d"), time='090000'))
-    today_len = 39-len(daily)
+    today_len = abs(38-len(daily))
     for t in range(today_len):
         daily.append(
             CandleData(
@@ -105,7 +105,7 @@ async def get_stock_short(ticker: str, response: Response):
     daily_max = max(daily, key=lambda x: x.max_price, default=None)
     if not daily:
         daily.append(CandleData(stock_id=stock.pk, date=today.strftime("%Y-%m-%d"), time='090000'))
-    today_len = 39-len(daily)
+    today_len = abs(38-len(daily))
     for t in range(today_len):
         daily.append(
             CandleData(
