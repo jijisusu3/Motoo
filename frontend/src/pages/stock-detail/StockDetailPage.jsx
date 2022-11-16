@@ -202,16 +202,16 @@ function StockDetailPage() {
           name: "ExtremeValue",
           type: "scatter",
           data: [
-            {
-              x: extremeValues[0].x,
-              y: parseInt((stockData.minimum + stockData.price) / 2),
-              z: extremeValues[0].z,
-            },
-            {
-              x: extremeValues[1].x,
-              y: parseInt((stockData.maximum + stockData.price) / 2),
-              z: extremeValues[1].z,
-            },
+            // {
+            //   x: extremeValues[0].x,
+            //   y: extremeValues[0].y,
+            //   z: extremeValues[0].z,
+            // },
+            // {
+            //   x: extremeValues[1].x,
+            //   y: extremeValues[0].y,
+            //   z: extremeValues[1].z,
+            // },
           ],
         },
         {
@@ -255,19 +255,7 @@ function StockDetailPage() {
             size: 0,
           },
         },
-        dataLabels: {
-          enabled: true,
-          textAnchor: "start",
-          formatter: function (val, opt) {
-            const thisData = opt.w.globals.initialSeries[opt.seriesIndex].data[opt.dataPointIndex];
-            if (opt.seriesIndex === 0) {
-              return thisData.z + " " + extremeValues[opt.dataPointIndex].y.toLocaleString() + "원";
-            }
-          },
-          background: {
-            enabled: false,
-          },
-        },
+
         stroke: {
           width: 3,
           curve: "smooth",
@@ -278,7 +266,7 @@ function StockDetailPage() {
           show: false,
         },
         xaxis: {
-          show: true,
+          show: false,
           seriesName: "Line",
           type: "datetime",
           labels: {
@@ -291,16 +279,26 @@ function StockDetailPage() {
             },
           },
         },
-        yaxis: {
-          show: false,
-          min: stockData.maximum,
-          max: stockData.minimum,
-          labels: {
-            style: {
-              colors: mainColor,
+        yaxis: [
+          {
+            show: false,
+            seriesName: "ExtremeValue",
+            labels: {
+              style: {
+                colors: mainColor,
+              },
             },
           },
-        },
+          {
+            show: false,
+            seriesName: "Line",
+            labels: {
+              style: {
+                colors: mainColor,
+              },
+            },
+          },
+        ],
         tooltip: {
           custom: function ({ series, seriesIndex, dataPointIndex, w }) {
             if (seriesIndex === 1) {
@@ -334,6 +332,7 @@ function StockDetailPage() {
           tmpDaily.push(tmpLine);
           tmpDailyCandle.push(tmpCandle);
         });
+
         setCandleGraphData((pre) => ({
           ...pre,
           series: [
@@ -341,6 +340,13 @@ function StockDetailPage() {
               data: tmpDailyCandle,
             },
           ],
+          options: {
+            yaxis: {
+              show: false,
+              min: parseInt((8 * stockData.daily_min.min_price + stockData.minimum - 900) / 9),
+              max: parseInt((8 * stockData.daily_max.max_price + stockData.maximum + 900) / 9),
+            },
+          },
         }));
 
         extremeValues[0].x = stockData.daily_min.date + " " + stockData.daily_min.time.slice(0, 2) + ":" + stockData.daily_min.time.slice(2, 4);
@@ -356,12 +362,12 @@ function StockDetailPage() {
               data: [
                 {
                   x: extremeValues[0].x,
-                  y: stockData.max_price,
+                  y: extremeValues[0].y,
                   z: extremeValues[0].z,
                 },
                 {
                   x: extremeValues[1].x,
-                  y: stockData.min_price,
+                  y: extremeValues[1].y,
                   z: extremeValues[1].z,
                 },
               ],
@@ -372,19 +378,12 @@ function StockDetailPage() {
             },
           ],
           options: {
-            chart: {
-              zoom: {
-                enabled: true,
-                type: "y",
-                autoScaleYaxis: true,
-              },
-            },
             xaxis: {
-              show: true,
+              show: false,
               seriesName: "Line",
               type: "datetime",
               labels: {
-                show: true,
+                show: false,
                 datetimeFormatter: {
                   year: "yy년",
                   month: "yy년 MM월",
@@ -393,20 +392,41 @@ function StockDetailPage() {
                 },
               },
             },
-            yaxis: {
-              show: false,
-              min: function (min) {
-                return stockData.minimum;
-              },
-              max: function (max) {
-                return stockData.maximum;
-              },
-              labels: {
-                style: {
-                  colors: mainColor,
-                },
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3,
               },
             },
+            yaxis: [
+              {
+                show: false,
+                min: parseInt((8 * stockData.daily_min.min_price + stockData.minimum - 1350) / 9),
+                max: parseInt((8 * stockData.daily_max.max_price + stockData.maximum + 1350) / 9),
+                labels: {
+                  style: {
+                    colors: mainColor,
+                  },
+                },
+              },
+              {
+                show: false,
+                min: parseInt((8 * stockData.daily_min.min_price + stockData.minimum - 1350) / 9),
+                max: parseInt((8 * stockData.daily_max.max_price + stockData.maximum + 1350) / 9),
+                labels: {
+                  style: {
+                    colors: mainColor,
+                  },
+                },
+              },
+            ],
           },
         }));
       }
@@ -442,12 +462,10 @@ function StockDetailPage() {
             },
           ],
           options: {
-            chart: {
-              zoom: {
-                enabled: true,
-                type: "y",
-                autoScaleYaxis: true,
-              },
+            yaxis: {
+              show: false,
+              min: parseInt((8 * stockData.daily_min.min_price + stockData.minimum - 1350) / 9),
+              max: parseInt((8 * stockData.daily_max.max_price + stockData.maximum + 1350) / 9),
             },
           },
         }));
@@ -460,12 +478,12 @@ function StockDetailPage() {
               data: [
                 {
                   x: extremeValues[0].x,
-                  y: (extremeValues[0].y * 0.92).toFixed(),
+                  y: extremeValues[0].y,
                   z: extremeValues[0].z,
                 },
                 {
                   x: extremeValues[1].x,
-                  y: (extremeValues[1].y * 1.05).toFixed(),
+                  y: extremeValues[1].y,
                   z: extremeValues[1].z,
                 },
               ],
@@ -476,24 +494,41 @@ function StockDetailPage() {
             },
           ],
           options: {
-            chart: {
-              zoom: {
-                enabled: true,
-                type: "y",
-                autoScaleYaxis: true,
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3,
               },
             },
-            yaxis: {
-              show: false,
-              min: function (min) {
-                console.log("min", min);
-                return min;
+            yaxis: [
+              {
+                show: false,
+                min: parseInt((8 * stockData.daily_min.min_price + stockData.minimum - 1350) / 9),
+                max: parseInt((8 * stockData.daily_max.max_price + stockData.maximum + 1350) / 9),
+                labels: {
+                  style: {
+                    colors: mainColor,
+                  },
+                },
               },
-              max: function (max) {
-                console.log("max", max);
-                return max;
+              {
+                show: false,
+                min: parseInt((8 * stockData.daily_min.min_price + stockData.minimum - 1350) / 9),
+                max: parseInt((8 * stockData.daily_max.max_price + stockData.maximum + 1350) / 9),
+                labels: {
+                  style: {
+                    colors: mainColor,
+                  },
+                },
               },
-            },
+            ],
           },
         }));
       } else if (event.target.id === "weekly") {
@@ -515,6 +550,7 @@ function StockDetailPage() {
         extremeValues[1].x = stockData.weekly_max.date + " " + stockData.weekly_max.time.slice(0, 2) + ":" + stockData.weekly_max.time.slice(2, 4);
         extremeValues[0].y = stockData.weekly_min.min_price;
         extremeValues[1].y = stockData.weekly_max.max_price;
+        console.log("weekly", extremeValues);
         setCandleGraphData((pre) => ({
           ...pre,
           series: [
@@ -522,7 +558,13 @@ function StockDetailPage() {
               data: tmpWeeklyCandle,
             },
           ],
-          options: {},
+          options: {
+            yaxis: {
+              show: false,
+              min: parseInt(stockData.weekly_min.min_price * 0.9),
+              max: parseInt(stockData.weekly_max.max_price * 1.1),
+            },
+          },
         }));
         setLineGraphData((pre) => ({
           ...pre,
@@ -533,12 +575,12 @@ function StockDetailPage() {
               data: [
                 {
                   x: extremeValues[0].x,
-                  y: (extremeValues[0].y * 0.92).toFixed(),
+                  y: extremeValues[0].y,
                   z: extremeValues[0].z,
                 },
                 {
                   x: extremeValues[1].x,
-                  y: (extremeValues[1].y * 1.05).toFixed(),
+                  y: extremeValues[1].y,
                   z: extremeValues[1].z,
                 },
               ],
@@ -549,10 +591,31 @@ function StockDetailPage() {
             },
           ],
           options: {
-            yaxis: {
-              min: stockData.minimum,
-              max: stockData.maximum,
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3,
+              },
             },
+            yaxis: [
+              {
+                show: false,
+                min: parseInt(stockData.weekly_min.min_price * 0.9),
+                max: parseInt(stockData.weekly_max.max_price * 1.1),
+              },
+              {
+                show: false,
+                min: parseInt(stockData.weekly_min.min_price * 0.9),
+                max: parseInt(stockData.weekly_max.max_price * 1.1),
+              },
+            ],
           },
         }));
       } else if (event.target.id === "monthly") {
@@ -577,7 +640,13 @@ function StockDetailPage() {
               data: tmpMonthlyCandle,
             },
           ],
-          options: {},
+          options: {
+            yaxis: {
+              show: false,
+              min: parseInt(stockData.monthly_min.min_price * 0.9),
+              max: parseInt(stockData.monthly_max.max_price * 1.1),
+            },
+          },
         }));
         extremeValues[0].x = stockData.monthly_min.date;
         extremeValues[1].x = stockData.monthly_max.date;
@@ -592,12 +661,12 @@ function StockDetailPage() {
               data: [
                 {
                   x: extremeValues[0].x,
-                  y: (extremeValues[0].y * 0.92).toFixed(),
+                  y: extremeValues[0].y,
                   z: extremeValues[0].z,
                 },
                 {
                   x: extremeValues[1].x,
-                  y: (extremeValues[1].y * 1.05).toFixed(),
+                  y: extremeValues[1].y,
                   z: extremeValues[1].z,
                 },
               ],
@@ -608,10 +677,31 @@ function StockDetailPage() {
             },
           ],
           options: {
-            yaxis: {
-              min: stockData.minimum,
-              max: stockData.maximum,
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3,
+              },
             },
+            yaxis: [
+              {
+                show: false,
+                min: parseInt(stockData.monthly_min.min_price * 0.9),
+                max: parseInt(stockData.monthly_max.max_price * 1.1),
+              },
+              {
+                show: false,
+                min: parseInt(stockData.monthly_min.min_price * 0.9),
+                max: parseInt(stockData.monthly_max.max_price * 1.1),
+              },
+            ],
           },
         }));
       } else {
@@ -636,7 +726,13 @@ function StockDetailPage() {
               data: tmpYearlyCandle,
             },
           ],
-          options: {},
+          options: {
+            yaxis: {
+              show: false,
+              min: parseInt(stockData.yearly_min.min_price * 0.9),
+              max: parseInt(stockData.yearly_max.max_price * 1.1),
+            },
+          },
         }));
         extremeValues[0].x = stockData.yearly_min.date;
         extremeValues[1].x = stockData.yearly_max.date;
@@ -651,12 +747,12 @@ function StockDetailPage() {
               data: [
                 {
                   x: extremeValues[0].x,
-                  y: (extremeValues[0].y * 0.92).toFixed(),
+                  y: extremeValues[0].y,
                   z: extremeValues[0].z,
                 },
                 {
                   x: extremeValues[1].x,
-                  y: (extremeValues[1].y * 1.05).toFixed(),
+                  y: extremeValues[1].y,
                   z: extremeValues[1].z,
                 },
               ],
@@ -667,10 +763,31 @@ function StockDetailPage() {
             },
           ],
           options: {
-            yaxis: {
-              min: stockData.minimum,
-              max: stockData.maximum,
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3,
+              },
             },
+            yaxis: [
+              {
+                show: false,
+                min: parseInt(stockData.yearly_min.min_price * 0.9),
+                max: parseInt(stockData.yearly_max.max_price * 1.1),
+              },
+              {
+                show: false,
+                min: parseInt(stockData.yearly_min.min_price * 0.9),
+                max: parseInt(stockData.yearly_max.max_price * 1.1),
+              },
+            ],
           },
         }));
       }
