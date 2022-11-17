@@ -9,6 +9,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { stockDetailGet } from "../../stores/stockSlice";
 import { likeStockPost, realtimeAccountGet } from "../../stores/userSlice";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+
+const style = {
+  position: "absolute",
+  top: "40%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 324,
+  height: 225,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 5,
+};
 
 function StockDetailPage() {
   const params = useParams();
@@ -18,7 +33,6 @@ function StockDetailPage() {
   // useEffect로 데이터 받아오고 구매주식목록에 있으면 true, 없으면 false 그대로
   const [showSellButton, setShowSellButton] = useState(false);
   // useEffect로 데이터 받아오고 관심목록에 있으면 true, 없으면 false 그대로
-  const [isWatchlist, setisWatchlist] = useState(true);
   const [mainColor, setMainColor] = useState("#DD4956");
   const stockData = useSelector((state) => {
     return state.setStock.detail;
@@ -34,10 +48,6 @@ function StockDetailPage() {
   });
   const haveList = useSelector((state) => {
     return state.persistedReducer.setUser.user.haveList;
-  });
-  console.log("have", haveList);
-  const likeList = useSelector((state) => {
-    return state.persistedReducer.setUser.user.likeList;
   });
   const data = {
     config: {
@@ -71,16 +81,7 @@ function StockDetailPage() {
         setShowSellButton(false);
       }
     });
-    try {
-      if (!likeList.includes(id)) {
-        setisWatchlist(false);
-      } else {
-        setisWatchlist(true);
-      }
-    } catch {
-      return;
-    }
-  }, [haveList, likeList]);
+  }, [haveList]);
 
   useEffect(() => {
     const wss = new WebSocket("wss://k7b204.p.ssafy.io:443/api1/socket/ws");
@@ -90,10 +91,10 @@ function StockDetailPage() {
     wss.onmessage = (event) => {
       console.log(`받았다 니 데이터 : ${event.data}`);
     };
-    wss.onclose = (event) => {
-      console.log(`${event.data}`);
-      console.log(`끝`);
-    };
+    // wss.onclose = (event) => {
+    //   console.log(`${event.data}`);
+    //   console.log(`끝`);
+    // };
   });
 
   function changeToCandle() {
@@ -102,7 +103,47 @@ function StockDetailPage() {
   function changeToLine() {
     setShowCandleGraph(false);
   }
-
+  function OpenQModal() {
+    const [graphExplain, setGraphExplain] = useState(false);
+    function handleQModalOpen() {
+      setGraphExplain(true)
+    }
+    function handleQModalClose() {
+      setGraphExplain(false)
+    }
+    return (
+      <div style={{ marginLeft: "3%" }}>
+        <img
+          src={`${process.env.PUBLIC_URL}/Q.svg`}
+          alt=""
+          onClick={handleQModalOpen}
+        />
+        <Modal open={graphExplain} onClose={handleQModalClose}>
+        <Box className={classes.deletebox} sx={style}>
+          <div className={classes.title}>정말 삭제하시겠습니까?</div>
+          <div className={classes.graybox}>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M7.43866e-05 9.99846C7.43866e-05 4.47648 4.4766 0 9.99857 0C15.5206 0 19.9971 4.47648 19.9971 9.99846C19.9971 11.641 19.5999 13.2274 18.8523 14.6481L19.9685 18.9358C20.0051 19.0762 20.0051 19.2237 19.9685 19.3642C19.8502 19.8184 19.3861 20.0906 18.9319 19.9724L14.6421 18.8554C13.2229 19.601 11.6387 19.997 9.99857 19.997C4.4766 19.997 7.43866e-05 15.5205 7.43866e-05 9.99846ZM9.99857 4.50078C9.58443 4.50078 9.24868 4.83652 9.24868 5.25067V11.4997C9.24868 11.9139 9.58443 12.2496 9.99857 12.2496C10.4127 12.2496 10.7485 11.9139 10.7485 11.4997V5.25067C10.7485 4.83652 10.4127 4.50078 9.99857 4.50078ZM8.99872 14.4972C8.99872 15.0493 9.44635 15.497 9.99857 15.497C10.5508 15.497 10.9984 15.0493 10.9984 14.4972C10.9984 13.945 10.5508 13.4973 9.99857 13.4973C9.44635 13.4973 8.99872 13.945 8.99872 14.4972Z"
+                fill="#8D8D8D"
+              />
+            </svg>
+            <span style={{ marginLeft: "15px" }}>
+              계좌를 삭제하면 <br></br> 해당 계좌의 주식, 자산들이 같이
+              삭제되어요!
+            </span>
+          </div>
+        </Box>
+      </Modal>
+      </div>
+    );
+  }
   function StockDetailGraph() {
     const [candleGraphData, setCandleGraphData] = useState({
       series: [
@@ -1041,6 +1082,7 @@ function StockDetailPage() {
               />
             </div>
           )}
+          <OpenQModal />
         </div>
       </>
     );
@@ -1125,13 +1167,7 @@ function StockDetailPage() {
     const nowTime = date.getTime();
     const before = new Date(`${nowDay} 09:00:00`).getTime();
     const after = new Date(`${nowDay} 15:00:00`).getTime();
-    if (before <= nowTime <= after){
-      console.log('??????????')
-    } else {
-      console.log('no')
-    }
-    console.log(nowTime, before, after)
-    if ((before <= nowTime) && (nowTime <= after)) {
+    if (before <= nowTime && nowTime <= after) {
       if (showSellButton) {
         return (
           <div style={{ width: "100%" }}>
@@ -1165,18 +1201,34 @@ function StockDetailPage() {
       }
     } else {
       return (
-        <div>
-          주문가능한 시간이 아닙니다
+        <div className={classes.onlysellbuy}>
+          <button className={classes.onlybuy}>
+            주문가능한 시간이 아닙니다
+          </button>
         </div>
-      )
+      );
     }
   }
   function WishListIcon() {
-    let data = {};
-    if (userToken) {
-      data = { token: userToken, id: stockData.id };
-    }
+    const [isWatchlist, setisWatchlist] = useState(true);
+
+    const data = { token: userToken, id: stockData.id };
+    const likeList = useSelector((state) => {
+      return state.persistedReducer.setUser.user.likeList;
+    });
+    useEffect(() => {
+      try {
+        if (!likeList.includes(id)) {
+          setisWatchlist(false);
+        } else {
+          setisWatchlist(true);
+        }
+      } catch {
+        return;
+      }
+    }, [likeList])
     const heartClick = () => {
+      console.log('????')
       dispatch(likeStockPost(data));
     };
     if (isWatchlist) {
@@ -1187,7 +1239,7 @@ function StockDetailPage() {
           viewBox="0 0 23 20"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          onClick={heartClick}
+          onClick={() => heartClick()}
         >
           <path
             d="M20.6386 1.36753C18.1922 -0.717255 14.5539 -0.342262 12.3084 1.97466L11.4289 2.88089L10.5495 1.97466C8.30843 -0.342262 4.66564 -0.717255 2.21926 1.36753C-0.584263 3.76034 -0.731582 8.05491 1.7773 10.6486L10.4155 19.5681C10.9736 20.144 11.8798 20.144 12.4378 19.5681L21.0761 10.6486C23.5894 8.05491 23.4421 3.76034 20.6386 1.36753Z"
@@ -1203,7 +1255,7 @@ function StockDetailPage() {
         viewBox="0 0 23 20"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        onClick={heartClick}
+        onClick={() => heartClick()}
       >
         <path
           d="M20.6386 1.36753C18.1922 -0.717255 14.5539 -0.342262 12.3084 1.97466L11.4289 2.88089L10.5495 1.97466C8.30843 -0.342262 4.66564 -0.717255 2.21926 1.36753C-0.584263 3.76034 -0.731582 8.05491 1.7773 10.6486L10.4155 19.5681C10.9736 20.144 11.8798 20.144 12.4378 19.5681L21.0761 10.6486C23.5894 8.05491 23.4421 3.76034 20.6386 1.36753Z"
@@ -1258,11 +1310,12 @@ function StockDetailPage() {
       </div>
     );
   }
+
   function CompareText() {
     if (stockData.fluctuation_rate > 0) {
       setMainColor("#DD4956");
       return (
-        <div>
+        <div style={{ color: "#DD4956" }}>
           어제보다 {stockData.fluctuation_price}원 올랐어요 (+
           {stockData.fluctuation_rate}%)
         </div>
@@ -1270,7 +1323,7 @@ function StockDetailPage() {
     } else {
       setMainColor("#4D97ED");
       return (
-        <div>
+        <div style={{ color: "#4D97ED" }}>
           어제보다 {stockData.fluctuation_price}원 떨어졌어요 (
           {stockData.fluctuation_rate}%)
         </div>
