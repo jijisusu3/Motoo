@@ -36,9 +36,15 @@ async def update_and_insert_stock_list(update_time: str = None):
         for r in range(1 + len(stocks) // 20):
             start = time.time()
             for stck in stocks[20 * r:20 * (r + 1)]:
-                async with session.get(candle_url, params=parameter_setter(stck.ticker, input_time)) as response:
-                    data = await response.json()
-                latest = data['output2'][0]
+                try:
+                    async with session.get(candle_url, params=parameter_setter(stck.ticker, input_time)) as response:
+                        data = await response.json()
+                    latest = data['output2'][0]
+                except KeyError:
+                    threading.Event().wait(1)
+                    async with session.get(candle_url, params=parameter_setter(stck.ticker, input_time)) as response:
+                        data = await response.json()
+                    latest = data['output2'][0]
                 items = list(filter(
                     lambda x: check_time_interval(latest['stck_bsop_date'], int(latest['stck_cntg_hour']), x),
                     data['output2']
@@ -69,6 +75,7 @@ async def update_and_insert_stock_list(update_time: str = None):
         print('update')
         for category in category_dict.keys():
             await candle_map[category].bulk_create(category_dict[category])
+            print("created")
     await Stock.bulk_update(
         stocks,
         fields=('name', 'price', 'fluctuation_rate', 'fluctuation_price', 'trading_value', 'volume',)
