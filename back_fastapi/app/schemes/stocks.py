@@ -76,6 +76,7 @@ class EntireStockData(ShortStockData, OpenPrice, ClosePrice, MinAndMax):
     per: Union[float, None] = Field(default=None, description="주가수익률")
     eps: Union[float, None] = Field(default=None, description="주당순이익")
     m_capital: Union[int, None] = Field(description="시가총액")
+    div_yield: Union[float, None] = Field(default=None, description="배당수익률")
     keyword: Union[List[str], None] = Field(description="종목키워드")
     sentiment: Union[List[float], None] = Field(description="종목감정분석")
     weekly: Union[List[CandleData], None] = Field(default=None, description="주간 60분봉")
