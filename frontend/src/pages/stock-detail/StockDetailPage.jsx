@@ -9,8 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { stockDetailGet } from "../../stores/stockSlice";
 import { likeStockPost, realtimeAccountGet } from "../../stores/userSlice";
-import { width } from "@mui/system";
-import { ButtonBase } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 

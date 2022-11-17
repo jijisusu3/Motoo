@@ -120,9 +120,8 @@ function MyPage() {
       data.result.name = assetInfo.assetName;
       dispatch(accountCreate(data));
       setTimeout(() => {
-        window.location.reload();
-        handleCreateModalClose(false);
-      }, 30);
+        dispatch(accountsListGet(data.config))
+      }, 100);
     }
   }
   const [openChangeModal, setChangeModalOpen] = useState(false);
@@ -144,7 +143,7 @@ function MyPage() {
     dispatch(accountChangePut(data));
     handleChangeModalClose(false);
     setTimeout(() => {
-      window.location.reload();
+      dispatch(accountsListGet(data.config))
     }, 100);
   }
   function AllAssets() {
@@ -160,7 +159,6 @@ function MyPage() {
       }
     }
     const profitColor = profitCheck();
-    console.log(walletList.earningRaito)
     return (
       <div className={classes.present}>
         <div>
@@ -345,7 +343,6 @@ function MyPage() {
           <div className={classes.rowbox}>
             <div>{walletList.pitches[asset.num].toLocaleString()}원</div>
             <img
-              // id={tmpId}
               onClick={() => handleChangeModalOpen(tmpId)}
               src={`${process.env.PUBLIC_URL}/wallet/change.svg`}
               alt=""
