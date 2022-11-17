@@ -1,7 +1,4 @@
-from typing import List
-
 import redis
-from fastapi import WebSocket
 from pydantic import BaseSettings
 
 
