@@ -37,7 +37,7 @@ export const schoolSlice = createSlice({
       state.schoolData = action.payload;
     });
     builder.addCase(schoolPut.fulfilled, (state, action) => {
-      console.log("여기는 학교등록 thunk~!!");
+      console.log(action.payload)
     });
     builder.addCase(schoolPageGet.fulfilled, (state, action) => {
       state.schoolBattleData = action.payload;
