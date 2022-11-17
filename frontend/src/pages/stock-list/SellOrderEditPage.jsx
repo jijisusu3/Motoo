@@ -101,9 +101,13 @@ function SellOrderEditPage() {
         if (tempPrice > tradeData.maximum) {
           // 상한가보다 클때
           setIsTooHigh(true);
+          setIsTooLow(false);
           setTimeout(() => {
             setIsTooHigh(false);
           }, 1000);
+          if (Number(wantedPrice) <= tradeData.minimum) {
+            setIsTooLow(true);
+          }
           return;
         } else if (tempPrice < tradeData.minimum) {
           // 하한가보다 낮을때
@@ -274,9 +278,12 @@ function SellOrderEditPage() {
         <div class={classes.manyInput}>
           <ManyInput />
         </div>
-        {isTooHigh && <p>그렇게 비싸겐 못팔아요</p>}
-        {isTooLow && <p>그렇게 싸겐 못팔아요</p>}
-        {!isHave && <p>넌 그만큼 팔 주식이 없어요</p>}
+        <div>{myStock}주 보유</div>
+        {isTooHigh === true && <p>그렇게 비싸겐 팔아요</p>}
+        {isTooLow === true && isTooHigh === false && (
+          <p>그렇게 싸겐 못팔아요</p>
+        )}
+        {!isHave && <p>판매 가능한 개수를 초과했어요!</p>}
       </div>
       <div class={classes.buyButtom}>
         <div class={classes.numberSection}>

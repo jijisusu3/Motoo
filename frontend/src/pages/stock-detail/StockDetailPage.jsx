@@ -10,7 +10,6 @@ import { setShowNav } from "../../stores/navSlice";
 import { stockDetailGet } from "../../stores/stockSlice";
 import { likeStockPost, realtimeAccountGet } from "../../stores/userSlice";
 
-
 function StockDetailPage() {
   const params = useParams();
   const id = params.id;
@@ -36,7 +35,7 @@ function StockDetailPage() {
   const haveList = useSelector((state) => {
     return state.persistedReducer.setUser.user.haveList;
   });
-  console.log("have", haveList)
+  console.log("have", haveList);
   const likeList = useSelector((state) => {
     return state.persistedReducer.setUser.user.likeList;
   });
@@ -83,7 +82,6 @@ function StockDetailPage() {
     }
   }, [haveList, likeList]);
 
-
   useEffect(() => {
     const wss = new WebSocket("wss://k7b204.p.ssafy.io:443/api1/socket/ws");
     wss.onopen = () => {
@@ -93,9 +91,9 @@ function StockDetailPage() {
       console.log(`받았다 니 데이터 : ${event.data}`);
     };
     wss.onclose = (event) => {
-      console.log(`${event.data}`)
-      console.log(`끝`)
-    }
+      console.log(`${event.data}`);
+      console.log(`끝`);
+    };
   });
 
   function changeToCandle() {
@@ -162,11 +160,11 @@ function StockDetailPage() {
             },
           },
           axisBorder: {
-            show: false
+            show: false,
           },
           axisTicks: {
             show: false,
-          }
+          },
         },
         yaxis: {
           show: false,
@@ -293,11 +291,11 @@ function StockDetailPage() {
             },
           },
           axisBorder: {
-            show: false
+            show: false,
           },
           axisTicks: {
             show: false,
-          }
+          },
         },
         yaxis: [
           {
@@ -1120,33 +1118,58 @@ function StockDetailPage() {
   }
   // 가격업데이트 될 때, 해당 데이터도 업데이트
   function BuySellButton() {
-    if (showSellButton) {
-      return (
-        <div style={{ width: "100%" }}>
-          <div className={classes.sellbuy}>
-            <div className={classes.flx}>
-              <Link to={`/stock/sell/${id}`}>
-                <button style={{ marginRight: "5px" }} className={classes.sell}>
-                  팔래요
-                </button>
-              </Link>
-            </div>
-            <div className={classes.flx}>
-              <Link to={`/stock/buy/${id}`}>
-                <button className={classes.buy}>살래요</button>
-              </Link>
+    const date = new Date();
+    const nowDay = `${date.getFullYear()}-${("00" + (date.getMonth() + 1))
+      .toString()
+      .slice(-2)}-${("00" + date.getDate()).toString().slice(-2)}`;
+    const nowTime = date.getTime();
+    const before = new Date(`${nowDay} 09:00:00`).getTime();
+    const after = new Date(`${nowDay} 15:00:00`).getTime();
+    if (before <= nowTime <= after){
+      console.log('??????????')
+    } else {
+      console.log('no')
+    }
+    console.log(nowTime, before, after)
+    if ((before <= nowTime) && (nowTime <= after)) {
+      if (showSellButton) {
+        return (
+          <div style={{ width: "100%" }}>
+            <div className={classes.sellbuy}>
+              <div className={classes.flx}>
+                <Link to={`/stock/sell/${id}`}>
+                  <button
+                    style={{ marginRight: "5px" }}
+                    className={classes.sell}
+                  >
+                    팔래요
+                  </button>
+                </Link>
+              </div>
+              <div className={classes.flx}>
+                <Link to={`/stock/buy/${id}`}>
+                  <button className={classes.buy}>살래요</button>
+                </Link>
+              </div>
             </div>
           </div>
+        );
+      } else {
+        return (
+          <div className={classes.onlysellbuy}>
+            <Link to={`/stock/buy/${id}`} state={{ data: shortStockData }}>
+              <button className={classes.onlybuy}>살래요</button>
+            </Link>
+          </div>
+        );
+      }
+    } else {
+      return (
+        <div>
+          주문가능한 시간이 아닙니다
         </div>
-      );
+      )
     }
-    return (
-      <div className={classes.onlysellbuy}>
-        <Link to={`/stock/buy/${id}`} state={{ data: shortStockData }}>
-          <button className={classes.onlybuy}>살래요</button>
-        </Link>
-      </div>
-    );
   }
   function WishListIcon() {
     let data = {};

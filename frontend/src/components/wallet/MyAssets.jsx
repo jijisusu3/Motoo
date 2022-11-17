@@ -76,7 +76,7 @@ function MyAssets() {
               <div>사용 가능</div>
               <img src={`${process.env.PUBLIC_URL}/wallet/vege.svg`} style={{ marginLeft: '3px', width: 12, height: 12 }} alt="" />
             </div>
-            {accountAssetData && <div className={classes.detail}>{accountAssetData.cash.toLocaleString()}원</div>}
+            {accountAssetData && <div className={classes.detail}>{accountAssetData.availableCash.toLocaleString()}원</div>}
           </div>
         </div>
       </div>

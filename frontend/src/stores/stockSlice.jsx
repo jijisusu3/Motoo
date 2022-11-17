@@ -13,6 +13,7 @@ const initialState = {
   limitList: [],
   bidask: {},
   schoolStock: {},
+  rejectedList: [],
 };
 
 const categoryGet = createAsyncThunk("stock-detail/categoryGet", async (id) => {
@@ -67,6 +68,14 @@ const limitListGet = createAsyncThunk("stock/limitListGet", async (data) => {
     });
 });
 
+const rejectedLimitListGet = createAsyncThunk("stock/rejectedLimitListGet", async (data) => {
+  return axios
+    .get(`${api2}trading/rejected/${data.id}`, data.config)
+    .then((response) => {
+      return response.data.tradings
+    });
+});
+
 const limitOrderPut = createAsyncThunk("stock/limitEditPut", async (data) => {
   return axios
     .put(`${api2}trading/${data.tradeId}`, data.result, data.config)
@@ -74,6 +83,7 @@ const limitOrderPut = createAsyncThunk("stock/limitEditPut", async (data) => {
       console.log(response.data);
     });
 });
+
 const limitOrderDelete = createAsyncThunk("stock/limitEditPut", async (data) => {
   return axios
     .delete(`${api2}trading/${data.tradeId}`, data.config)
@@ -135,6 +145,9 @@ export const stockSlice = createSlice({
     builder.addCase(schoolBestGet.fulfilled, (state, action) => {
       state.schoolStock = action.payload;
     });
+    builder.addCase(rejectedLimitListGet.fulfilled, (state, action) => {
+      state.rejectedList = action.payload;
+    });
   },
 });
 
@@ -149,5 +162,6 @@ export {
   limitOrderPut,
   limitOrderDelete,
   bidaskGet,
-  schoolBestGet
+  schoolBestGet,
+  rejectedLimitListGet
 };

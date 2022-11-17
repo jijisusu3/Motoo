@@ -3,18 +3,23 @@ import classes from "./LimitOrderPage.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
-import { limitListGet } from "../../stores/stockSlice";
+import { limitListGet, rejectedLimitListGet } from "../../stores/stockSlice";
 import { realtimeAccountGet } from "../../stores/userSlice";
 
 function LimitOrderPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [showRejected, setShowRejected] = useState(false);
   const userData = useSelector((state) => {
     return state.persistedReducer.setUser.user;
   });
   const orderList = useSelector((state) => {
     return state.setStock.limitList;
   });
+  const rejectedList = useSelector((state) => {
+    return state.setStock.rejectedList;
+  });
+  console.log(rejectedList)
   useEffect(() => {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
@@ -30,25 +35,30 @@ function LimitOrderPage() {
   useEffect(() => {
     dispatch(limitListGet(tmpData));
     dispatch(realtimeAccountGet(tmpData));
+    dispatch(rejectedLimitListGet(tmpData));
   }, []);
 
   function backToStockList() {
     navigate(`/`);
   }
+  function showRejectedList() {
+    setShowRejected(true);
+  }
+  function showRealizedList() {
+    setShowRejected(false);
+  }
   function MyRealizedCard(stock) {
-    let go = 'sell'
+    let go = "sell";
     let isSell = false;
-    console.log(stock.differ);
     const tmpparams =
       stock.ticker + ":" + stock.price + ":" + stock.many + ":" + stock.id;
 
-      if (stock.differ === 4) {
-        isSell = false
-        go = 'buy'
-      } else if (stock.differ === 3) {
-        isSell = true
-      }
-
+    if (stock.differ === 4) {
+      isSell = false;
+      go = "buy";
+    } else if (stock.differ === 3) {
+      isSell = true;
+    }
     return (
       <div className={classes.listbox}>
         <Link
@@ -96,28 +106,99 @@ function LimitOrderPage() {
       </div>
     );
   }
+  function MyRejectedCard(stock) {
+    let isSell = false;
+    if (stock.differ === 6) {
+      isSell = false;
+    } else if (stock.differ === 7) {
+      isSell = true;
+    }
+    return (
+      <div className={classes.listbox}>
+          <div className={classes.myLimitOrderCard}>
+            <div className={classes.rowbox}>
+              {isSell ? (
+                <div
+                  className={classes.label}
+                  style={{
+                    backgroundColor: "#4D97ED",
+                  }}
+                >
+                  <div
+                    style={{ color: "white", fontSize: 10, fontWeight: 700 }}
+                  >
+                    판매
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className={classes.label}
+                  style={{
+                    backgroundColor: "#DD4956",
+                  }}
+                >
+                  <div
+                    style={{ color: "white", fontSize: 10, fontWeight: 700 }}
+                  >
+                    구매
+                  </div>
+                </div>
+              )}
+              <div>{stock.name}</div>
+            </div>
+            <div className={classes.pr}>
+              {stock.price.toLocaleString()}원 / {stock.many}주
+            </div>
+          </div>
+          <div className={classes.hrline}></div>
+      </div>
+    );
+  }
   return (
     <div className={classes.limitbg}>
       <div className={classes.fix}>
         <div className={classes.fixbox}>
           <img
-              onClick={backToStockList}
-              src={`${process.env.PUBLIC_URL}/stock-detail/back.svg`}
-              alt=""
-            />
+            onClick={backToStockList}
+            src={`${process.env.PUBLIC_URL}/stock-detail/back.svg`}
+            alt=""
+          />
         </div>
       </div>
       <div className={classes.limitctn}>
-
-      
         <div>
-          <div className={classes.title}>대기중인 주문</div>
-          <div className={classes.timereset}>매일 15:30에 리셋</div>
+          <div className={classes.title}>
+            {!showRejected ? "대기중인 주문" : "미체결된 주문"}
+          </div>
+          <div className={classes.timereset}>
+            {!showRejected ? "매일 15:30에 리셋" : "일주일간 보관됩니다"}
+          </div>
         </div>
-        <div className={classes.limitList}>
-          {orderList &&
-            orderList.map((stock) => (
-              <MyRealizedCard
+        {!showRejected ? (
+          <div onClick={showRejectedList}>미체결주문보기</div>
+        ) : (
+          <div onClick={showRealizedList}>대기주문보기</div>
+        )}
+        {!showRejected ? (
+          <div className={classes.limitList}>
+            {orderList &&
+              orderList.map((stock) => (
+                <MyRealizedCard
+                  key={stock.tradeId}
+                  id={stock.tradeId}
+                  name={stock.ticker_name}
+                  ticker={stock.ticker}
+                  price={stock.tr_price}
+                  differ={stock.tr_type}
+                  many={stock.tr_amount}
+                />
+              ))}
+          </div>
+        ) : (
+          <div className={classes.limitList}>
+          {rejectedList &&
+            rejectedList.map((stock) => (
+              <MyRejectedCard
                 key={stock.tradeId}
                 id={stock.tradeId}
                 name={stock.ticker_name}
@@ -128,20 +209,8 @@ function LimitOrderPage() {
               />
             ))}
         </div>
+        )}
       </div>
-      
-
-      {/* <div className={classes.info}>
-        <img
-          className={classes.pd}
-          src={`${process.env.PUBLIC_URL}/grayBack.svg`}
-          alt=""
-          onClick={backToStockList}
-        />
-        <div>매일 15:30에 리셋</div>
-      </div> */}
-      {/* <div className={classes.hrline}></div>
-      <div className={classes.title}>대기중인 주문</div> */}
     </div>
   );
 }
