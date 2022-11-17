@@ -36,6 +36,7 @@ const styleTwo = {
   boxShadow: 24,
   p: 4,
   borderRadius: 5,
+  border: "none",
 };
 
 function StockDetailPage() {
@@ -161,24 +162,21 @@ function StockDetailPage() {
         />
         <Modal open={mmExplain} onClose={handleMModalClose}>
           <Box className={classes.deletebox} sx={styleTwo}>
-            <div className={classes.title}>정말 삭제하시겠습니까?</div>
-            <div className={classes.graybox}>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M7.43866e-05 9.99846C7.43866e-05 4.47648 4.4766 0 9.99857 0C15.5206 0 19.9971 4.47648 19.9971 9.99846C19.9971 11.641 19.5999 13.2274 18.8523 14.6481L19.9685 18.9358C20.0051 19.0762 20.0051 19.2237 19.9685 19.3642C19.8502 19.8184 19.3861 20.0906 18.9319 19.9724L14.6421 18.8554C13.2229 19.601 11.6387 19.997 9.99857 19.997C4.4766 19.997 7.43866e-05 15.5205 7.43866e-05 9.99846ZM9.99857 4.50078C9.58443 4.50078 9.24868 4.83652 9.24868 5.25067V11.4997C9.24868 11.9139 9.58443 12.2496 9.99857 12.2496C10.4127 12.2496 10.7485 11.9139 10.7485 11.4997V5.25067C10.7485 4.83652 10.4127 4.50078 9.99857 4.50078ZM8.99872 14.4972C8.99872 15.0493 9.44635 15.497 9.99857 15.497C10.5508 15.497 10.9984 15.0493 10.9984 14.4972C10.9984 13.945 10.5508 13.4973 9.99857 13.4973C9.44635 13.4973 8.99872 13.945 8.99872 14.4972Z"
-                  fill="#8D8D8D"
-                />
-              </svg>
-              <span style={{ marginLeft: "15px" }}>
-                계좌를 삭제하면 <br></br> 해당 계좌의 주식, 자산들이 같이
-                삭제되어요!
-              </span>
+            <div className={classes.title}>이 주식은 오늘?</div>
+            <div className={classes.minmaxbox}>
+              주식 시장에서 개별 종목이 상승할 수 있는 최대 가격을<br />상한가, 하락할 수 있는 최저가를 하한가로 정해 가격<br />변동 폭을 제한하고 있습니다.
+            </div>
+            <div className={classes.yellowbox}>
+              <div className={classes.flexrow}>
+                <div className={classes.red}>상한가</div>
+                <div>는 어제 종가를 기준으로</div>
+                <div className={classes.red} style={{ marginLeft: 8 }}>+30%</div>
+              </div>
+              <div className={classes.flexrow}>
+                <div className={classes.blue}>하한가</div>
+                <div>는 어제 종가를 기준으로</div>
+                <div className={classes.blue} style={{ marginLeft: 8 }}>-30%</div>
+              </div>
             </div>
           </Box>
         </Modal>
@@ -1548,12 +1546,48 @@ function StockDetailPage() {
                 </div>
               </div>
             </div>
-            {stockData.div_yield ? (
-              <div style={{ height: "80px" }}>{stockData.div_yield}</div>
-            ) : (
-              <></>
-            )}
           </div>
+          <div className={classes.line}></div>
+          {stockData.div_yield ? (
+            <div className={classes.epsper}>
+            <div className={classes.imgrowbox}>
+              <div className={classes.rowbox}>
+                <div className={classes.today}>{stockData.name}의 배당수익률</div>
+                <img
+                  src={`${process.env.PUBLIC_URL}/stock-detail/increase.svg`}
+                  alt=""
+                />
+              </div>
+              <div className={classes.infotxt}>{stockData.div_yield}%</div>
+            </div>
+            <div className={classes.explainbox}>
+              <div className={classes.space}>
+                <div className={classes.today}>배당수익률 이란?</div>
+                <div className={classes.script}>
+                1주당 배당금의 비율로, 해당 주식에 투자하면 얻을 수
+                있는 수익을 나타내는 지표입니다.
+                </div>
+              </div>
+              <div className={classes.space}>
+                <div className={classes.greenbox}>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/stock-detail/check-circle.svg`}
+                    alt=""
+                  />
+                  <div className={classes.green}>어떻게 판단하나요?</div>
+                </div>
+                <div
+                  style={{ marginBottom: "18px", marginTop: "0px" }}
+                  className={classes.script}
+                >
+                  주가가 오르지 않아도 배당수익률 만큼의 수익을 기대할 수 있어 실제 시장에서의 수익성을 판단할 수 있습니다.
+                </div>
+              </div>
+            </div>
+          </div>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <BuySellButton />
