@@ -81,6 +81,14 @@ const realtimeAccountGet = createAsyncThunk(
   }
 );
 
+const schoolPut = createAsyncThunk("school/schoolPut", async (data) => {
+  return axios
+    .put(`${api2}school/`, data.result, data.config)
+    .then((response) => {
+      return response.data;
+    });
+});
+
 const stockTradingPost = createAsyncThunk("stock/tradingPost", async (data) => {
   return axios.post(`${api2}trading`, data.result, data.config).then(() => {});
 });
@@ -155,6 +163,9 @@ export const userSlice = createSlice({
       window.localStorage.clear();
       window.location.replace("/login");
     });
+    builder.addCase(schoolPut.fulfilled, (state, action) => {
+      state.user.data.schoolId = action.payload;
+    });
   },
 });
 
@@ -169,4 +180,5 @@ export {
   stockTradingPost,
   accountChangePut,
   userDelete,
+  schoolPut,
 };

@@ -190,7 +190,7 @@ function MyPage() {
                 color: profitColor,
               }}
             >
-              {!walletList.earningRaito === 0
+              {walletList.earningRaito === "NaN"
                 ? 0
                 : walletList.earningRaito.toFixed(2)}
               %
