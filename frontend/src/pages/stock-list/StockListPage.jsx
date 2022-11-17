@@ -90,7 +90,15 @@ function StockListPage() {
 
   function disLike(id) {
     const data = { token: userToken, id: id };
+    const likeData = {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    };
     dispatch(likeStockPost(data));
+    setTimeout(() => {
+      dispatch(likeListGet(likeData));
+    }, 40);
   }
 
   const dispatch = useDispatch();
@@ -435,7 +443,6 @@ function StockListPage() {
       </div>
     );
   }
-
   return (
     <div className={classes.listbg}>
       <div className={classes.listctn}>
