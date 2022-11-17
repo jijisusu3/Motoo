@@ -1,0 +1,43 @@
+.menuBg {
+  background-color: #EAF0EF;
+  min-height: 100vh;
+  height: 100%;
+}
+
+.manuCtn1 {
+  max-width: 600px;
+  width: 100%;
+  margin: auto;
+  background-color: white;
+  border-radius: 20px;
+  padding: 30px 40px 30px 40px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #495252;
+}
+
+.menutitle {
+  font-size: 24px;
+  font-weight: 700;
+  /* padding-top: 80px; */
+  padding-left: 30px;
+  padding-bottom: 20px;
+  max-width: 600px;
+  width: 100%;
+  margin: auto;
+}
+
+.personalmenu {
+  max-width: 600px;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logoutbtn {
+  width: 80%;
+  margin: auto;
+
+}
