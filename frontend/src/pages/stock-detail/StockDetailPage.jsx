@@ -83,19 +83,6 @@ function StockDetailPage() {
     });
   }, [haveList]);
 
-  useEffect(() => {
-    const wss = new WebSocket("wss://k7b204.p.ssafy.io:443/api1/socket/ws");
-    wss.onopen = () => {
-      wss.send("전지수 보이삼보이삼?");
-    };
-    wss.onmessage = (event) => {
-      console.log(`받았다 니 데이터 : ${event.data}`);
-    };
-    // wss.onclose = (event) => {
-    //   console.log(`${event.data}`);
-    //   console.log(`끝`);
-    // };
-  });
 
   function changeToCandle() {
     setShowCandleGraph(true);
