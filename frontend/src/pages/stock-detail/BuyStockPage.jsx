@@ -498,7 +498,7 @@ function BuyStockPage() {
 
   return (
     <div>
-      <div className={classes.buynav}>
+      <div style={{marginBottom: "20px"}} className={classes.buynav}>
         <div>
           <img
             style={{ marginTop: "14px"}}
@@ -521,6 +521,7 @@ function BuyStockPage() {
         </div>
         <div></div>
       </div>
+      <hr />
       <div className={classes.bigctn}>
 
         <div className={classes.middlectn}>

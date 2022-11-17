@@ -263,3 +263,126 @@ line-height: 19px;
 .graphRight{
   float: right;
 }
+
+.buynav {
+  margin-top: 1.6rem;
+  margin-left: 1.8rem;
+  margin-right: 1.8rem;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: space-between;
+}
+
+.buyname{
+  font-weight: 600;
+}
+
+.buyprice{
+  font-size: 14px;
+}
+
+.middlectn {
+  max-width: 360px;
+  width: 100%;
+  margin: auto;
+  padding-top: 3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.noworder {
+  font-size: 15px;
+  color: #4E5E5E;
+  font-weight: 600;
+  padding-top: 8px;
+}
+
+.howmuch1 {
+  /* margin-top: 10px; */
+  font-size: 20px;
+  font-weight: 600;
+  color: #cdd4d4;
+  margin-bottom: 3px;
+}
+
+.howmuch2 {
+  /* margin-top: 10px; */
+  font-size: 20px;
+  font-weight: 600;
+  color: #222222;  
+  margin-bottom: 3px;
+}
+
+.middlesubctn {
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputalrt {
+  color: #DD4956;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.callwatch {
+  border-radius: 15px;
+  border: none;
+  height: 40px;
+  width: 100px;
+  background-color: #EAF0EF;
+  color: 222222;
+  font-weight: 600;
+}
+
+.middlesubleft {
+  margin-bottom: 10px;
+}
+
+.numberctn {
+  background-color: white;
+  position: fixed;
+  bottom: 0;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 5px;
+  
+
+
+}
+
+.bigctn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sellbutton {
+  width: 98%;
+  height: 54px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  border: none;
+  background-color: #7BCDC8;
+  margin-top: 10px;
+  
+}
+.sellbutton:hover {
+  opacity: 80%;
+}
+
+.numberbtn {
+  width: 30%;
+  height: 10vh;
+  font-size: 36px;
+  font-weight: 600;
+  border: none;
+  background-color: white;
+  color: #929E9E;
+}
