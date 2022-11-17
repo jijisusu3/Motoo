@@ -168,16 +168,19 @@ function LimitOrderPage() {
       <div className={classes.limitctn}>
         <div>
           <div className={classes.title}>
-            {!showRejected ? "대기중인 주문" : "미체결된 주문"}
+            {!showRejected ?    
+            "대기중인 주문" : "미체결된 주문"}
           </div>
           <div className={classes.timereset}>
             {!showRejected ? "매일 15:30에 리셋" : "일주일간 보관됩니다"}
           </div>
         </div>
         {!showRejected ? (
-          <div onClick={showRejectedList}>미체결주문보기</div>
+          <div className={ classes.selectbtn } onClick={showRejectedList}>
+            미체결주문보기</div>
         ) : (
-          <div onClick={showRealizedList}>대기주문보기</div>
+          <div className={ classes.selectbtn } onClick={showRealizedList}>
+            대기주문보기</div>
         )}
         {!showRejected ? (
           <div className={classes.limitList}>

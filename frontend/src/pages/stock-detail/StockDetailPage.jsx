@@ -1186,20 +1186,22 @@ function StockDetailPage() {
       } else {
         return (
           <div className={classes.buttons}>
-          <div className={classes.buysell}>
-            <Link to={`/stock/buy/${id}`} state={{ data: shortStockData }}>
+              <div className={classes.buysell}>
+              <Link to={`/stock/buy/${id}`} state={{ data: shortStockData }}>
               <button className={classes.sellbutton}>살래요</button>
-            </Link>
-          </div>
+              </Link>
+            </div>
         </div>
         );
       }
     } else {
       return (
-        <div className={classes.onlysellbuy}>
-          <button className={classes.onlybuy}>
-            주문가능한 시간이 아닙니다
-          </button>
+        <div className={classes.buttons}>
+          <div className={classes.buysell}>
+            <button className={classes.sellbutton}>
+              주문가능한 시간이 아닙니다
+            </button>
+          </div>
         </div>
       );
     }

@@ -37,7 +37,7 @@
 }
 .title{
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 700;
   display: flex;
   justify-content: center;
   padding: 8rem 2rem 0rem 2rem;
@@ -105,3 +105,15 @@
   padding: 2rem 0.5rem 2rem 0.5rem;
 }
 
+.selectbtn {
+  text-align: end;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #929E9E;
+}
+
+.selectbtn:hover {
+  cursor: pointer;
+}

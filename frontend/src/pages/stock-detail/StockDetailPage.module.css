@@ -456,3 +456,15 @@
   background-color: #FECE6D;
 
 }
+
+.sellbutton {
+  width: 96%;
+  height: 54px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  border: none;
+  background-color: #B4BEBE;
+
+}
