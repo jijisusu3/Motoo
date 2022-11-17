@@ -1,6 +1,6 @@
 .outdiv{
   background: linear-gradient(180deg, #FFF5F2 0%, #F2FFF8 100%);
-  padding: 2rem;
+  padding: 1.5rem;
 }
 .innerdiv{
   max-width: 600px;
@@ -66,7 +66,7 @@
   background: #FFF;
   border: 0.3px solid #FAE0C1;
   border-radius: 5px;
-  width: 67%;
+  width: 68%;
   padding: 1rem;
 }
 .mybox{
@@ -144,13 +144,13 @@
   border: 0.3px solid #EAF0EF;
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  width: 30%;
+  width: 32%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 1rem;
   font-size: 10px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .rankingBox {
@@ -161,7 +161,7 @@
   border-radius: 5px;
   display: flex;
   padding: 1rem;
-  width: 67%;
+  width: 65%;
 }
 
 .rankingRatioBox{
@@ -171,11 +171,11 @@
   border-top: none;
   border-left: none;
   border-bottom: none;
-  width: 50%;
+  width: 55%;
 }
 
 .rankingRankingBox{
   display: flex;
   justify-content: center;
-  width: 50%;
+  width: 45%;
 }

@@ -6,7 +6,6 @@ import { schoolPageGet } from "../../stores/schoolSlice";
 import { schoolBestGet } from "../../stores/stockSlice";
 import { useNavigate } from "react-router-dom";
 import classes from "./SchoolDetailPage.module.css";
-import { fontSize } from "@mui/system";
 
 function SchoolDetailPage() {
   const dispatch = useDispatch();
@@ -19,6 +18,9 @@ function SchoolDetailPage() {
     },
   };
   useEffect(() => {
+    const now = window.location.pathname;
+    dispatch(setShowNav(now));
+    dispatch(setActiveNav(3));
     dispatch(schoolPageGet(data));
     dispatch(schoolBestGet(data));
   }, []);
@@ -26,6 +28,9 @@ function SchoolDetailPage() {
   const navigate = useNavigate();
   function goToSchoolWallet() {
     navigate(`/wallet/detail/${user.data.schoolId}`);
+  }
+  function goToHotStock(ticker) {
+    navigate(`/stock/detail/${ticker}`);
   }
 
   const schoolData = useSelector((state) => {
@@ -38,7 +43,10 @@ function SchoolDetailPage() {
     return state.setSchool.schoolBattleData.schoolAccResponse;
   });
 
-  // console.log(mySchoolAsset)
+  const hotStock = useSelector((state) => {
+    return state.setStock.schoolStock;
+  });
+  console.log(hotStock);
 
   function MyAssetCard() {
     return (
@@ -48,12 +56,12 @@ function SchoolDetailPage() {
           <div className={classes.myrowbox}>
             <div>{user.data.nickname}</div>
             <div className={classes.rowbox}>
-            <img
-                  src={`${process.env.PUBLIC_URL}/wallet/coin.svg`}
-                  style={{ width: 16, height: 16, marginRight: 4 }}
-                  alt=""
-                />
-            {myAsset?.myRank ? <div>{myAsset.asset}원</div> : <></>}
+              <img
+                src={`${process.env.PUBLIC_URL}/wallet/coin.svg`}
+                style={{ width: 15, marginRight: 4 }}
+                alt=""
+              />
+              {myAsset?.asset ? <div>{myAsset.asset}원</div> : <></>}
             </div>
           </div>
           <div className={classes.mysmallbox}>
@@ -81,13 +89,21 @@ function SchoolDetailPage() {
               <div className={classes.graybox}>교내등수</div>
             </div>
             <div className={classes.rowbox}>
-              {myAsset?.myRank ? <div className={classes.rank}>{myAsset.myRank}</div> : <></>}
-              <div>등</div>
+              {myAsset?.myRank ? (
+                <div className={classes.rank}>{myAsset.myRank}등</div>
+              ) : (
+                <div>내일 8시 20분 공개</div>
+              )}
             </div>
           </div>
         </div>
-        {/* 오른쪽 */}
-        <div className={classes.mybox} onClick={goToSchoolWallet}>나의<br />학교 대항전<br />보유주식</div>
+        <div className={classes.mybox} onClick={goToSchoolWallet}>
+          나의
+          <br />
+          학교 대항전
+          <br />
+          보유주식
+        </div>
       </div>
     );
   }
@@ -101,11 +117,13 @@ function SchoolDetailPage() {
             <img
               src={`${process.env.PUBLIC_URL}/schoolstatic/first.svg`}
               alt=""
-              style={{ width: 16, marginLeft: 10}}
+              style={{ width: 16, marginLeft: 10 }}
             />
-            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+            <div style={{ display: "inline", marginLeft: 12 }}>{myInfo[0]}</div>
           </div>
-          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[1]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color: "#DD4956" }}>
+            {Number(myInfo[1]).toFixed(2)}%
+          </div>
         </div>
       );
     } else if (ranker.ranking === 1) {
@@ -115,11 +133,13 @@ function SchoolDetailPage() {
             <img
               src={`${process.env.PUBLIC_URL}/schoolstatic/second.svg`}
               alt=""
-              style={{ width: 16, marginLeft: 10}}
+              style={{ width: 16, marginLeft: 10 }}
             />
-            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+            <div style={{ display: "inline", marginLeft: 12 }}>{myInfo[0]}</div>
           </div>
-          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[1]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color: "#DD4956" }}>
+            {Number(myInfo[1]).toFixed(2)}%
+          </div>
         </div>
       );
     } else if (ranker.ranking === 2) {
@@ -129,21 +149,34 @@ function SchoolDetailPage() {
             <img
               src={`${process.env.PUBLIC_URL}/schoolstatic/third.svg`}
               alt=""
-              style={{ width: 16, marginLeft: 10}}
+              style={{ width: 16, marginLeft: 10 }}
             />
-            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+            <div style={{ display: "inline", marginLeft: 12 }}>{myInfo[0]}</div>
           </div>
-          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[1]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color: "#DD4956" }}>
+            {Number(myInfo[1]).toFixed(2)}%
+          </div>
         </div>
       );
     } else {
       return (
         <div className={classes.myschoolCardNomal}>
           <div>
-            <div style={{ display:"inline",color:"#FEBF45", width: 16, marginLeft: 15}}>{ranker.ranking + 1}</div>
-            <div style={{display:"inline", marginLeft: 15}}>{myInfo[0]}</div>
+            <div
+              style={{
+                display: "inline",
+                color: "#FEBF45",
+                width: 16,
+                marginLeft: 15,
+              }}
+            >
+              {ranker.ranking + 1}
+            </div>
+            <div style={{ display: "inline", marginLeft: 15 }}>{myInfo[0]}</div>
           </div>
-          <div style={{ marginRight: 15, color:"#DD4956" }}>{Number(myInfo[1]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color: "#DD4956" }}>
+            {Number(myInfo[1]).toFixed(2)}%
+          </div>
         </div>
       );
     }
@@ -170,12 +203,14 @@ function SchoolDetailPage() {
             <img
               src={`${process.env.PUBLIC_URL}/schoolstatic/first.svg`}
               alt=""
-              style={{ width: 16, marginLeft: 10}}
+              style={{ width: 16, marginLeft: 10 }}
             />
-            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+            <div style={{ display: "inline", marginLeft: 12 }}>{myInfo[0]}</div>
           </div>
           <div>{myInfo[1]}</div>
-          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[2]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color: "#DD4956" }}>
+            {Number(myInfo[2]).toFixed(2)}%
+          </div>
         </div>
       );
     } else if (ranker.ranking === 1) {
@@ -185,12 +220,14 @@ function SchoolDetailPage() {
             <img
               src={`${process.env.PUBLIC_URL}/schoolstatic/second.svg`}
               alt=""
-              style={{ width: 16, marginLeft: 10}}
+              style={{ width: 16, marginLeft: 10 }}
             />
-            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+            <div style={{ display: "inline", marginLeft: 12 }}>{myInfo[0]}</div>
           </div>
           <div>{myInfo[1]}</div>
-          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[2]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color: "#DD4956" }}>
+            {Number(myInfo[2]).toFixed(2)}%
+          </div>
         </div>
       );
     } else if (ranker.ranking === 2) {
@@ -200,23 +237,36 @@ function SchoolDetailPage() {
             <img
               src={`${process.env.PUBLIC_URL}/schoolstatic/third.svg`}
               alt=""
-              style={{ width: 16, marginLeft: 10}}
+              style={{ width: 16, marginLeft: 10 }}
             />
-            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+            <div style={{ display: "inline", marginLeft: 12 }}>{myInfo[0]}</div>
           </div>
           <div>{myInfo[1]}</div>
-          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[2]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color: "#DD4956" }}>
+            {Number(myInfo[2]).toFixed(2)}%
+          </div>
         </div>
       );
     } else {
       return (
         <div className={classes.myschoolCardNomal}>
           <div>
-            <div style={{ display:"inline",color:"#FEBF45", width: 16, marginLeft: 15}}>{ranker.ranking + 1}</div>
-            <div style={{display:"inline", marginLeft: 15}}>{myInfo[0]}</div>
+            <div
+              style={{
+                display: "inline",
+                color: "#FEBF45",
+                width: 16,
+                marginLeft: 15,
+              }}
+            >
+              {ranker.ranking + 1}
+            </div>
+            <div style={{ display: "inline", marginLeft: 15 }}>{myInfo[0]}</div>
           </div>
           <div>{myInfo[1]}</div>
-          <div style={{ marginRight: 15, color:"#DD4956" }}>{Number(myInfo[2]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color: "#DD4956" }}>
+            {Number(myInfo[2]).toFixed(2)}%
+          </div>
         </div>
       );
     }
@@ -224,7 +274,7 @@ function SchoolDetailPage() {
   function SigunguPersonalCards() {
     let firstSlice = mySchoolAsset?.sigunguSubResponse?.personal.split(":");
     return (
-      <div style={{ marginBottom: "2rem"}}>
+      <div style={{ marginBottom: "2rem" }}>
         {firstSlice &&
           firstSlice
             .slice(0, -1)
@@ -243,11 +293,13 @@ function SchoolDetailPage() {
             <img
               src={`${process.env.PUBLIC_URL}/schoolstatic/first.svg`}
               alt=""
-              style={{ width: 16, marginLeft: 10}}
+              style={{ width: 16, marginLeft: 10 }}
             />
-            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+            <div style={{ display: "inline", marginLeft: 12 }}>{myInfo[0]}</div>
           </div>
-          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[1]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color: "#DD4956" }}>
+            {Number(myInfo[1]).toFixed(2)}%
+          </div>
         </div>
       );
     } else if (ranker.ranking === 1) {
@@ -257,11 +309,13 @@ function SchoolDetailPage() {
             <img
               src={`${process.env.PUBLIC_URL}/schoolstatic/second.svg`}
               alt=""
-              style={{ width: 16, marginLeft: 10}}
+              style={{ width: 16, marginLeft: 10 }}
             />
-            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+            <div style={{ display: "inline", marginLeft: 12 }}>{myInfo[0]}</div>
           </div>
-          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[1]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color: "#DD4956" }}>
+            {Number(myInfo[1]).toFixed(2)}%
+          </div>
         </div>
       );
     } else if (ranker.ranking === 2) {
@@ -271,21 +325,34 @@ function SchoolDetailPage() {
             <img
               src={`${process.env.PUBLIC_URL}/schoolstatic/third.svg`}
               alt=""
-              style={{ width: 16, marginLeft: 10}}
+              style={{ width: 16, marginLeft: 10 }}
             />
-            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+            <div style={{ display: "inline", marginLeft: 12 }}>{myInfo[0]}</div>
           </div>
-          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[1]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color: "#DD4956" }}>
+            {Number(myInfo[1]).toFixed(2)}%
+          </div>
         </div>
       );
     } else {
       return (
         <div className={classes.myschoolCardNomal}>
           <div>
-            <div style={{ display:"inline",color:"#FEBF45", width: 16, marginLeft: 15}}>{ranker.ranking + 1}</div>
-            <div style={{display:"inline", marginLeft: 15}}>{myInfo[0]}</div>
+            <div
+              style={{
+                display: "inline",
+                color: "#FEBF45",
+                width: 16,
+                marginLeft: 15,
+              }}
+            >
+              {ranker.ranking + 1}
+            </div>
+            <div style={{ display: "inline", marginLeft: 15 }}>{myInfo[0]}</div>
           </div>
-          <div style={{ marginRight: 15, color:"#DD4956" }}>{Number(myInfo[1]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color: "#DD4956" }}>
+            {Number(myInfo[1]).toFixed(2)}%
+          </div>
         </div>
       );
     }
@@ -315,7 +382,9 @@ function SchoolDetailPage() {
             />
             <div className={classes.title}>
               {schoolData?.eventsResponse?.eventsId ? (
-                <div className={classes.maintitle}>제 {schoolData.eventsResponse.eventsId}회 학교대항전</div>
+                <div className={classes.maintitle}>
+                  제 {schoolData.eventsResponse.eventsId}회 학교대항전
+                </div>
               ) : (
                 <></>
               )}
@@ -331,25 +400,32 @@ function SchoolDetailPage() {
           </div>
           <div className={classes.myschool}>
             <div className={classes.rowbox}>
-              <img style={{ marginRight: 8 }}
+              <img
+                style={{ marginRight: 8 }}
                 src={`${process.env.PUBLIC_URL}/schoolstatic/school.svg`}
                 alt=""
               />
-                {schoolData?.schoolSubResponse?.schoolname ? (
-                  <div>{schoolData.schoolSubResponse.schoolname}</div>
-                ) : (
-                  <></>
-                )}
-            </div>
-              {schoolData?.schoolAccResponse?.myRank ? (
-                <div className={classes.rowbox}>
-                  <div>전국</div>
-                  <div className={classes.rank}>{schoolData.schoolAccResponse.myRank}</div>
-                  <div>등</div>
-                </div>
+              {schoolData?.schoolSubResponse?.schoolname ? (
+                <div>{schoolData.schoolSubResponse.schoolname}</div>
               ) : (
                 <></>
               )}
+            </div>
+            {schoolData?.schoolAccResponse?.myRank ? (
+              <div className={classes.rowbox}>
+                <div>전국</div>
+                <div className={classes.rank}>
+                  {schoolData.schoolAccResponse.myRank}
+                </div>
+                <div>등</div>
+              </div>
+            ) : (
+              <div className={classes.rowbox}>
+                <div>전국</div>
+                <div className={classes.rank}>???</div>
+                <div>등</div>
+              </div>
+            )}
           </div>
           <MyAssetCard />
           <div>
@@ -357,75 +433,135 @@ function SchoolDetailPage() {
               src={`${process.env.PUBLIC_URL}/schoolstatic/schoolbus.svg`}
               alt=""
             />
-            <div className={classes.halfLineText} style={{ marginTop: "1.5rem"}}>지금 우리 학교는</div>
+            <div
+              className={classes.halfLineText}
+              style={{ marginTop: "1.5rem" }}
+            >
+              지금 우리 학교는
+            </div>
           </div>
           <div className={classes.hotStockRankingBox}>
-            <div className={classes.hotStockBox}>
-              <div>
-                <div>우리 학교</div>
-                <div style={{ display: "inline", color: "#FF2D2D"}}>HOT</div>
-                <div style={{ display: "inline"}}> 주식 🔥</div>
+            {hotStock?.stock_name ? (
+              <div
+                className={classes.hotStockBox}
+                onClick={() => goToHotStock(hotStock.stock_ticker)}
+              >
+                <div>
+                  <div>우리 학교</div>
+                  <div style={{ display: "inline", color: "#FF2D2D" }}>HOT</div>
+                  <div style={{ display: "inline" }}> 주식 🔥</div>
+                </div>
+                <div style={{ color: "#36938E", fontSize: 13 }}>
+                  {hotStock.stock_name}
+                </div>
               </div>
-              <div style={{ color: "#36938E", fontSize: 13}}>LG디스플레이</div>
-            </div>
+            ) : (
+              <div className={classes.hotStockBox}>
+                <div>
+                  <div>우리 학교</div>
+                  <div style={{ display: "inline", color: "#FF2D2D" }}>HOT</div>
+                  <div style={{ display: "inline" }}> 주식 🔥</div>
+                </div>
+                <div style={{ color: "#36938E", fontSize: 13 }}>
+                  구매주식없음
+                </div>
+              </div>
+            )}
             <div className={classes.rankingBox}>
               <div className={classes.rankingRatioBox}>
-              {schoolData?.schoolSubResponse?.average ? (
+                {schoolData?.schoolSubResponse?.average === !null ? (
                   <div>
                     <div>
-                      <div style={{display: "inline", fontSize: 32}}>
-                      {schoolData.schoolSubResponse.average === "NaN"
-                        ? "0"
-                        : schoolData.schoolSubResponse.average.toFixed(2)}
+                      <div style={{ display: "inline", fontSize: 32 }}>
+                        {schoolData.schoolSubResponse.average === "NaN"
+                          ? "0"
+                          : schoolData.schoolSubResponse.average.toFixed(2)}
                       </div>
-                      <div style={{display: "inline", fontSize: 20}}>
-                      %
-                      </div>
+                      <div style={{ display: "inline", fontSize: 20 }}>%</div>
                     </div>
-                  <div style={{marginTop: 6,fontSize: 10, color: "#FED782"}}>
-                    <img
-                      src={`${process.env.PUBLIC_URL}/schoolstatic/macaron.svg`}
-                      alt=""
-                      style={{ marginRight: 2 }}
-                    />
+                    <div
+                      style={{ marginTop: 6, fontSize: 10, color: "#FED782" }}
+                    >
+                      <img
+                        src={`${process.env.PUBLIC_URL}/schoolstatic/macaron.svg`}
+                        alt=""
+                        style={{ marginRight: 2 }}
+                      />
                       평균 수익률
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <></>
-              )}
+                ) : (
+                  <div>
+                    <div>
+                      <div style={{ display: "inline", fontSize: 32 }}>??</div>
+                      <div style={{ display: "inline", fontSize: 20 }}>%</div>
+                    </div>
+                    <div
+                      style={{ marginTop: 6, fontSize: 10, color: "#FED782" }}
+                    >
+                      <img
+                        src={`${process.env.PUBLIC_URL}/schoolstatic/macaron.svg`}
+                        alt=""
+                        style={{ marginRight: 2 }}
+                      />
+                      평균 수익률
+                    </div>
+                  </div>
+                )}
               </div>
               <div className={classes.rankingRankingBox}>
                 {schoolData?.schoolSubResponse?.currentRank ? (
                   <div>
-                    <div style={{display: "inline", fontSize: 32}}>{schoolData.schoolSubResponse.currentRank}</div>
-                    <div style={{display: "inline", fontSize: 20}}>등</div>
-                    <div style={{marginTop: 6,fontSize: 10, color: "#FE8289"}}>
+                    <div style={{ display: "inline", fontSize: 32 }}>
+                      {schoolData.schoolSubResponse.currentRank}
+                    </div>
+                    <div style={{ display: "inline", fontSize: 20 }}>등</div>
+                    <div
+                      style={{ marginTop: 6, fontSize: 10, color: "#FE8289" }}
+                    >
                       <img
                         src={`${process.env.PUBLIC_URL}/schoolstatic/deco.svg`}
                         alt=""
                         style={{ marginRight: 2 }}
                       />
-                        전국
+                      전국
                     </div>
                   </div>
                 ) : (
-                  <></>
+                  <div>
+                    <div style={{ display: "inline", fontSize: 32 }}>??</div>
+                    <div style={{ display: "inline", fontSize: 20 }}>등</div>
+                    <div
+                      style={{ marginTop: 6, fontSize: 10, color: "#FE8289" }}
+                    >
+                      <img
+                        src={`${process.env.PUBLIC_URL}/schoolstatic/deco.svg`}
+                        alt=""
+                        style={{ marginRight: 2 }}
+                      />
+                      전국
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
           </div>
-
           <div>
             {schoolData?.schoolSubResponse?.schoolname ? (
               <div className={classes.rankingBanner}>
-                {schoolData.schoolSubResponse.schoolname} 
-                <div style={{ display:"inline", color: "#FE8289"}}>&nbsp;&nbsp;TOP 5</div>
+                {schoolData.schoolSubResponse.schoolname}
+                <div style={{ display: "inline", color: "#FE8289" }}>
+                  &nbsp;&nbsp;TOP
+                </div>
               </div>
             ) : (
               <></>
             )}
-            <MySchoolCards />
+            {mySchoolAsset?.studRanks === !null ? (
+              <MySchoolCards />
+            ) : (
+              <div>하하하</div>
+            )}
           </div>
           <div>
             {schoolData?.schoolSubResponse?.sigunguSubResponse?.sigungu_name ? (
@@ -442,7 +578,11 @@ function SchoolDetailPage() {
             ) : (
               <></>
             )}
-            <SigunguPersonalCards />
+            {mySchoolAsset?.sigunguSubResponse?.personal === !null ? (
+              <SigunguPersonalCards />
+            ) : (
+              <div>아아아아아아</div>
+            )}
           </div>
           <div style={{ height: 300 }}>
             {schoolData?.schoolSubResponse?.sigunguSubResponse?.sigungu_name ? (
@@ -451,7 +591,7 @@ function SchoolDetailPage() {
                   src={`${process.env.PUBLIC_URL}/schoolstatic/trophy.svg`}
                   alt=""
                 />
-                <div className={classes.halfLineText}>                
+                <div className={classes.halfLineText}>
                   {schoolData.schoolSubResponse.sigunguSubResponse.sigungu_name}{" "}
                   학교 랭킹
                 </div>
@@ -459,7 +599,11 @@ function SchoolDetailPage() {
             ) : (
               <></>
             )}
-            <SigunguSchoolCards />
+            {mySchoolAsset?.sigunguSubResponse?.school_ranks === !null ? (
+              <SigunguSchoolCards />
+            ) : (
+              <div>이러지마</div>
+            )}
           </div>
         </div>
       </div>
