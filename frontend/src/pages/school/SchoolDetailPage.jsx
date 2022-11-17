@@ -95,43 +95,54 @@ function SchoolDetailPage() {
     const myInfo = ranker.info.split("#");
     if (ranker.ranking === 0) {
       return (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/first.svg`}
-            alt=""
-          />
-          <div>{myInfo[0]}</div>
-          <div>{Number(myInfo[1]).toFixed(2)}%</div>
+        <div className={classes.myschoolCardpodium}>
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/schoolstatic/first.svg`}
+              alt=""
+              style={{ width: 16, marginLeft: 15}}
+            />
+            <div style={{display:"inline", marginLeft: 15}}>{myInfo[0]}</div>
+          </div>
+          <div style={{ marginRight: 15}}>{Number(myInfo[1]).toFixed(2)}%</div>
         </div>
       );
     } else if (ranker.ranking === 1) {
       return (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/second.svg`}
-            alt=""
-          />
-          <div>{myInfo[0]}</div>
-          <div>{Number(myInfo[1]).toFixed(2)}%</div>
+        <div className={classes.myschoolCardpodium}>
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/schoolstatic/second.svg`}
+              alt=""
+              style={{ width: 16, marginLeft: 15}}
+            />
+            <div style={{display:"inline", marginLeft: 15}}>{myInfo[0]}</div>
+          </div>
+          <div style={{ marginRight: 15}}>{Number(myInfo[1]).toFixed(2)}%</div>
         </div>
       );
     } else if (ranker.ranking === 2) {
       return (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/third.svg`}
-            alt=""
-          />
-          <div>{myInfo[0]}</div>
-          <div>{Number(myInfo[1]).toFixed(2)}%</div>
+        <div className={classes.myschoolCardpodium}>
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/schoolstatic/third.svg`}
+              alt=""
+              style={{ width: 16, marginLeft: 15}}
+            />
+            <div style={{display:"inline", marginLeft: 15}}>{myInfo[0]}</div>
+          </div>
+          <div style={{ marginRight: 15}}>{Number(myInfo[1]).toFixed(2)}%</div>
         </div>
       );
     } else {
       return (
-        <div>
-          <div>{ranker.ranking + 1}</div>
-          <div>{myInfo[0]}</div>
-          <div>{Number(myInfo[1]).toFixed(2)}%</div>
+        <div className={classes.myschoolCardNomal}>
+          <div>
+            <div style={{ display:"inline",color:"#FEBF45", width: 16, marginLeft: 15}}>{ranker.ranking + 1}</div>
+            <div style={{display:"inline", marginLeft: 15}}>{myInfo[0]}</div>
+          </div>
+          <div style={{ marginRight: 15}}>{Number(myInfo[1]).toFixed(2)}%</div>
         </div>
       );
     }
@@ -142,7 +153,7 @@ function SchoolDetailPage() {
       <div style={{ border: "1px solid red" }}>
         {firstSlice &&
           firstSlice
-            .slice(0, 5)
+            .slice(0, -1)
             .map((ranker, index) => (
               <MySchoolCard key={ranker} info={ranker} ranking={index} />
             ))}
@@ -204,7 +215,7 @@ function SchoolDetailPage() {
       <div style={{ border: "1px solid red" }}>
         {firstSlice &&
           firstSlice
-            .slice(0, 5)
+            .slice(0, -1)
             .map((ranker, index) => (
               <SigunguPersonalCard key={ranker} info={ranker} ranking={index} />
             ))}
@@ -262,7 +273,7 @@ function SchoolDetailPage() {
       <div style={{ border: "1px solid red" }}>
         {firstSlice &&
           firstSlice
-            .slice(0, 5)
+            .slice(0, -1)
             .map((ranker, index) => (
               <SigunguSchoolCard key={ranker} info={ranker} ranking={index} />
             ))}

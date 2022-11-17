@@ -86,3 +86,27 @@
   margin-left: 0.5rem;
   color: #929e9e;
 }
+
+.myschoolCardpodium {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background: #FEF4F4;
+  border: 0.3px solid #FF9F9F;
+  border-radius: 5px;
+  margin-bottom: 3px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.myschoolCardNomal {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background: #ffffff;
+  border: 0.3px solid #FF9F9F;
+  border-radius: 5px;
+  margin-bottom: 3px;
+  font-size: 12px;
+  font-weight: 600;
+}
