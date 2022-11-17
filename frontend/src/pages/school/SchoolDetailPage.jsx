@@ -50,7 +50,7 @@ function SchoolDetailPage() {
             <div className={classes.rowbox}>
             <img
                   src={`${process.env.PUBLIC_URL}/wallet/coin.svg`}
-                  style={{ width: 16, height: 16, marginRight: 4 }}
+                  style={{ width: 15, marginRight: 4 }}
                   alt=""
                 />
             {myAsset?.myRank ? <div>{myAsset.asset}원</div> : <></>}
