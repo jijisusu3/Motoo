@@ -64,6 +64,11 @@ class ShortStockData(BaseStockData, Volume):
     daily_max: Union[CandleData, None] = None
 
 
+class RealTimeStockResponse(Price, CommonResponse):
+    fluctuation_rate: Union[float, None] = Field(description="등락률")
+    fluctuation_price: Union[int, None] = Field(description="등락가")
+
+
 class EntireStockData(ShortStockData, OpenPrice, ClosePrice, MinAndMax):
     ticker: Union[str, None]
     category_id: Union[int, None] = Field(description="업종 id")

@@ -12,7 +12,7 @@ from app.schemes.stocks import (GetStockDetailResponse,
                                 GetShortStockResponse,
                                 BidAskResponse,
                                 SchoolHotStockResponse,
-                                GetTradingStockInfoResponse, CandleData)
+                                GetTradingStockInfoResponse, CandleData, RealTimeStockResponse)
 
 router = APIRouter(prefix="/stocks")
 
@@ -141,6 +141,17 @@ async def get_stock_short(ticker: str, response: Response):
                                  daily=daily,
                                  daily_min=daily_min,
                                  daily_max=daily_max)
+
+
+@router.get("/real-time/{ticker}", description="주식 실시간 조회",
+            response_model=RealTimeStockResponse)
+async def get_stock_real_time(ticker: str, response: Response):
+    try:
+        stock = await Stock.get(ticker=ticker)
+    except tortoise.exceptions.DoesNotExist:
+        response.status_code = 404
+        return RealTimeStockResponse(message="failed")
+    return RealTimeStockResponse(**dict(stock))
 
 
 @router.get("/trade/{ticker}", description="거래 중 주식 간단 조회", response_model=GetTradingStockInfoResponse)

@@ -9,6 +9,5 @@ router = APIRouter(
 router.include_router(stock_back.router)
 router.include_router(stocks.router)
 router.include_router(category.router)
-router.include_router(websocket.router)
 router.include_router(list.router)
 router.include_router(authentication.router)
