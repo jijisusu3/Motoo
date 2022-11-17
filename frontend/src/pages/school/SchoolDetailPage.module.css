@@ -1,6 +1,8 @@
 .outdiv{
   background: linear-gradient(180deg, #FFF5F2 0%, #F2FFF8 100%);
   padding: 1.5rem;
+  min-height: 100vh;
+  height: 100%;
 }
 .innerdiv{
   max-width: 600px;
@@ -16,16 +18,17 @@
   justify-content: center;
   align-items: center;
   background: #FFFFFF;
-  border: 0.3px solid #FFC1C1;
+  border: 0.3px solid #fcd4d4;
   border-radius: 5px;
   margin-top: 2rem;
+  padding-right: 10px;
 }
 .title{
   font-weight: 600;
   margin-left: 1rem;
 }
 .maintitle{
-  font-size: 24px;
+  font-size: 21px;
 }
 .rank{
   color: #FE8289;
@@ -33,20 +36,23 @@
 }
 .date{
   color: #FE8289;
-  font-size: 14px;
+  font-weight: 400;
+  font-size: 13px;
+  margin-left: 1px;
 }
 .myschool{
   display: flex;
   background: #FFFFFF;
-  border: 0.3px solid #FFC1C1;
+  border: 0.3px solid #fcd4d4;
   border-radius: 5px;
   margin-top: 0.5rem;
   margin-bottom: 1.5rem;
   align-items: center;
   justify-content: space-between;
   height: 40px;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-left: 1.3rem;
+  padding-right: 1.3rem;
+  font-size: 15px;
   font-weight: 600;
 }
 .myrowbox{
@@ -61,6 +67,7 @@
   justify-content: space-between;
   font-weight: 600;
   font-size: 12px;
+  margin-top: 4px;
 }
 .mycard{
   background: #FFF;
@@ -70,6 +77,7 @@
   padding: 1rem;
 }
 .mybox{
+  font-size: 13px;
   color: #fff;
   background: #FFB65F;
   border: 0.3px solid #FFCF95;
@@ -84,7 +92,8 @@
 }
 .graybox{
   margin-left: 0.5rem;
-  color: #929e9e;
+  color: #4E5E5E;
+  font-weight: 400;
 }
 
 .myschoolCardpodium {
@@ -129,7 +138,18 @@
   font-weight: bold;
   margin-left: 5px;
   margin-bottom: 0.5rem;
+
 }
+
+.halfLineText1 {
+  display:inline-block;
+  background: linear-gradient(to top, #FFD2C5 50%, transparent 50%);
+  font-weight: bold;
+  margin-left: 5px;
+  margin-bottom: 0.5rem;
+  margin-top: 2rem;
+}
+
 .hotStockRankingBox{
   display: flex;
   justify-content: space-between;
@@ -160,22 +180,35 @@
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   display: flex;
-  padding: 1rem;
+  padding: 1.4rem 1rem 1rem 1rem;
   width: 65%;
 }
 
 .rankingRatioBox{
   display: flex;
   justify-content: center;
-  border: 2.2px solid white;
+  border: 1.5px solid white;
   border-top: none;
   border-left: none;
   border-bottom: none;
-  width: 55%;
+  width: 50%;
+  text-align: center;
+  padding-right: 14px;
 }
 
 .rankingRankingBox{
   display: flex;
   justify-content: center;
-  width: 45%;
+  width: 50%;
+  text-align: center;
+}
+
+.whennull {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4E5E5E;
+  background-color: #f5f5f5;
+  padding: 20px;
+  box-shadow: 0px 1px 5px rgb(0 0 0 / 10%);
 }
