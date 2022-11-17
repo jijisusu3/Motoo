@@ -42,7 +42,6 @@ function MyPage() {
   const walletList = useSelector((state) => {
     return state.setAccount.accountsList;
   });
-  console.log(walletList)
   const dispatch = useDispatch();
   useEffect(() => {
     const now = window.location.pathname;
@@ -184,7 +183,6 @@ function MyPage() {
         </div>
         <div>
           <div style={{ marginLeft: "10px" }}>수익률</div>
-        </div>
           {walletList.earningRaito && (
             <div
               className={classes.rev}
@@ -198,6 +196,7 @@ function MyPage() {
               %
             </div>
           )}
+        </div>
       </div>
     );
   }

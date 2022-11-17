@@ -99,9 +99,13 @@ function BuyOrderEditPage() {
         if (tempPrice > tradeData.maximum) {
           // 상한가보다 클때
           setIsTooHigh(true);
+          setIsTooLow(false);
           setTimeout(() => {
             setIsTooHigh(false);
           }, 1000);
+          if (Number(wantedPrice) <= tradeData.price * 0.7) {
+            setIsTooLow(true);
+          }
           return;
         } else if (tempPrice < tradeData.minimum) {
           // 하한가보다 낮을때
@@ -118,7 +122,6 @@ function BuyOrderEditPage() {
           } else {
             setIsAvailable(true);
             setTotal(tempPrice * Number(wantedMany));
-            console.log(typeof total);
           }
         }
         setWantedPrice(wantedPrice + event.target.value);
@@ -147,18 +150,7 @@ function BuyOrderEditPage() {
             setIsAvailable(true);
           }, 1000);
           return;
-        } else {
-          if (tradeData.price * Number(wantedMany) > mySeed) {
-            setIsAvailable(false);
-            setTimeout(() => {
-              setIsAvailable(true);
-            }, 1000);
-            return;
-          } else {
-            setIsAvailable(true);
-            setTotal(tradeData.price * Number(wantedMany));
-          }
-        }
+        } 
         setWantedMany(String(tempMany));
       } else {
         if (wantedMany !== "") {
@@ -244,7 +236,6 @@ function BuyOrderEditPage() {
     }
   }
   function submitEdit() {
-    // 현재가로 주문, 개수입력
     if (Boolean(wantedMany) && !isTooLow) {
       const data = {
         config: {
@@ -297,13 +288,13 @@ function BuyOrderEditPage() {
         <div class={classes.manyInput}>
           <ManyInput />
         </div>
-        {/* <PriceInput />
-        <ManyInput /> */}
 
-        {isTooHigh && <p>그렇게 비싸겐 못사요</p>}
-
-        {isTooLow && <p>그렇게 싸겐 못사요</p>}
-        {!isAvailable && <p>넌 그만큼 살 돈이 없어요 </p>}
+        {mySeed && <div>사용가능 금액 {mySeed}</div>}
+        {isTooHigh === true && <p>그렇게 비싸겐 못사요</p>}
+        {isTooLow === true && isTooHigh === false && (
+          <p>그렇게 싸겐 못사요</p>
+        )}
+        {!isAvailable && <p>사용 가능한 금액을 초과했어요!</p>}
       </div>
 
       <div class={classes.buyButtom}>

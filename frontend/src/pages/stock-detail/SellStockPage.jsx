@@ -71,7 +71,7 @@ function SellStockPage() {
     const [buyData, setBuyData] = useState({
       series: [
         {
-          data: bidaskData.bid_rsqn,
+          data: bidaskData.ask_rsqn,
         },
       ],
       options: {
@@ -153,7 +153,7 @@ function SellStockPage() {
     const [sellData, setSellData] = useState({
       series: [
         {
-          data: bidaskData.ask_rsqn,
+          data: bidaskData.bid_rsqn,
         },
       ],
       options: {
@@ -256,12 +256,12 @@ function SellStockPage() {
               width={120}
             />
             <div>
-              {bidaskData.bid_pr.map((bid) => (
+              {bidaskData.ask_pr.map((bid) => (
                 <div>{bid.toLocaleString()}원</div>
               ))}
             </div>
             <div>
-              {bidaskData.ask_pr.slice(0, 4).map((ask) => (
+              {bidaskData.bid_pr.slice(0, 4).map((ask) => (
                 <div>{ask.toLocaleString()}원</div>
               ))}
             </div>
@@ -299,7 +299,7 @@ function SellStockPage() {
           setTimeout(() => {
             setIsTooHigh(false);
           }, 1000);
-          if (Number(wantedPrice) <= tradeData.price * 0.7) {
+          if (Number(wantedPrice) <= tradeData.minimum) {
             setIsTooLow(true);
           }
           return;
@@ -495,7 +495,6 @@ function SellStockPage() {
         </div>
         <hr />
       </div>
-
       <div class={classes.total}>
         <div class={classes.realPriceRadio}>
           {isMarketPrice ? (
@@ -526,13 +525,12 @@ function SellStockPage() {
         <PriceInput />
         <ManyInput />
         <div>{myStock}주 보유</div>
-        {!isMarketPrice && isTooHigh === true && <p>그렇게 비싸겐 못사요</p>}
+        {!isMarketPrice && isTooHigh === true && <p>그렇게 비싸겐 못팔아요</p>}
         {!isMarketPrice && isTooLow === true && isTooHigh === false && (
-          <p>그렇게 싸겐 못사요</p>
+          <p>그렇게 싸겐 못팔아요</p>
         )}
         {!isHave && <p>판매 가능한 개수를 초과했어요!</p>}
       </div>
-
       <div class={classes.buyButtom}>
         <div class={classes.numberSection}>
           <div>

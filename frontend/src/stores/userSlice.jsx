@@ -70,7 +70,6 @@ const quizPut = createAsyncThunk("stockList/quizResult", async (data) => {
     });
 });
 
-// 주식 디테일페이지에 ㄱㄱ, 대기중인 주식에서도 ㄱㄱ
 const realtimeAccountGet = createAsyncThunk(
   "stock/accountGet",
   async (data) => {
