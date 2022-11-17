@@ -1,6 +1,6 @@
 .outdiv{
   background: linear-gradient(180deg, #FFF5F2 0%, #F2FFF8 100%);
-  padding: 1rem;
+  padding: 2rem;
 }
 .innerdiv{
   max-width: 600px;
@@ -66,7 +66,7 @@
   background: #FFF;
   border: 0.3px solid #FAE0C1;
   border-radius: 5px;
-  width: 68%;
+  width: 67%;
   padding: 1rem;
 }
 .mybox{
@@ -109,4 +109,73 @@
   margin-bottom: 3px;
   font-size: 12px;
   font-weight: 600;
+}
+
+.rankingBanner {
+  display: flex;
+  justify-content: center;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 14px;
+  padding: 8px;
+  background: #ffffff;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.halfLineText {
+  display:inline-block;
+  background: linear-gradient(to top, #FDDE99 50%, transparent 50%);
+  font-weight: bold;
+  margin-left: 5px;
+  margin-bottom: 0.5rem;
+}
+.hotStockRankingBox{
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-size: 14px;
+  height: 110px;
+}
+
+.hotStockBox{
+  background: #FCFCFC;
+  border: 0.3px solid #EAF0EF;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.rankingBox {
+  color: #fff;
+  background: #276E6A;
+  border: 0.3px solid #F7F7F7;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  display: flex;
+  padding: 1rem;
+  width: 67%;
+}
+
+.rankingRatioBox{
+  display: flex;
+  justify-content: center;
+  border: 2.2px solid white;
+  border-top: none;
+  border-left: none;
+  border-bottom: none;
+  width: 50%;
+}
+
+.rankingRankingBox{
+  display: flex;
+  justify-content: center;
+  width: 50%;
 }
