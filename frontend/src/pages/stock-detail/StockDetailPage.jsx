@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { stockDetailGet } from "../../stores/stockSlice";
 import { likeStockPost, realtimeAccountGet } from "../../stores/userSlice";
+import { width } from "@mui/system";
+import { ButtonBase } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 
@@ -1170,33 +1172,26 @@ function StockDetailPage() {
     if (before <= nowTime && nowTime <= after) {
       if (showSellButton) {
         return (
-          <div style={{ width: "100%" }}>
-            <div className={classes.sellbuy}>
-              <div className={classes.flx}>
-                <Link to={`/stock/sell/${id}`}>
-                  <button
-                    style={{ marginRight: "5px" }}
-                    className={classes.sell}
-                  >
-                    팔래요
-                  </button>
-                </Link>
-              </div>
-              <div className={classes.flx}>
-                <Link to={`/stock/buy/${id}`}>
-                  <button className={classes.buy}>살래요</button>
-                </Link>
-              </div>
+          <div className={classes.buttons}>
+            <div className={classes.buysell}>
+              <Link to={`/stock/sell/${id}`}>
+              <button style={{backgroundColor:"#7BCDC8", marginRight: "8px"}} className={classes.buysellbutton}>팔래요</button>
+              </Link>
+              <Link to={`/stock/buy/${id}`}>
+              <button style={{backgroundColor:"#FECE6D"}} className={classes.buysellbutton}>살래요</button>
+              </Link>
             </div>
           </div>
         );
       } else {
         return (
-          <div className={classes.onlysellbuy}>
+          <div className={classes.buttons}>
+          <div className={classes.buysell}>
             <Link to={`/stock/buy/${id}`} state={{ data: shortStockData }}>
-              <button className={classes.onlybuy}>살래요</button>
+              <button className={classes.sellbutton}>살래요</button>
             </Link>
           </div>
+        </div>
         );
       }
     } else {
@@ -1208,6 +1203,7 @@ function StockDetailPage() {
         </div>
       );
     }
+
   }
   function WishListIcon() {
     const [isWatchlist, setisWatchlist] = useState(true);
