@@ -6,6 +6,7 @@ import { schoolPageGet } from "../../stores/schoolSlice";
 import { schoolBestGet } from "../../stores/stockSlice";
 import { useNavigate } from "react-router-dom";
 import classes from "./SchoolDetailPage.module.css";
+import { fontWeight } from "@mui/system";
 
 function SchoolDetailPage() {
   const dispatch = useDispatch();
@@ -92,7 +93,7 @@ function SchoolDetailPage() {
               {myAsset?.myRank ? (
                 <div className={classes.rank}>{myAsset.myRank}등</div>
               ) : (
-                <div>내일 8시 20분 공개</div>
+                <div>오전 7시 20분 공개</div>
               )}
             </div>
           </div>
@@ -390,8 +391,8 @@ function SchoolDetailPage() {
               )}
               {schoolData?.eventsResponse?.start_date ? (
                 <div className={classes.date}>
-                  {schoolData.eventsResponse.start_date.slice(0, 10)}~
-                  {schoolData.eventsResponse.close_date.slice(0, 10)}
+                  {schoolData.eventsResponse.start_date.slice(0, 10)}&nbsp;~&nbsp; 
+                   {schoolData.eventsResponse.close_date.slice(0, 10)}
                 </div>
               ) : (
                 <></>
@@ -413,17 +414,17 @@ function SchoolDetailPage() {
             </div>
             {schoolData?.schoolAccResponse?.myRank ? (
               <div className={classes.rowbox}>
-                <div>전국</div>
+                <div style={{ fontWeight: "400", fontSize: "13px"}}>지역</div>
                 <div className={classes.rank}>
                   {schoolData.schoolAccResponse.myRank}
                 </div>
-                <div>등</div>
+                <div style={{ fontWeight: "400", fontSize: "13px"}}>등</div>
               </div>
             ) : (
               <div className={classes.rowbox}>
-                <div>전국</div>
-                <div className={classes.rank}>???</div>
-                <div>등</div>
+                <div style={{ fontWeight: "400", fontSize: "13px"}}>지역</div>
+                <div className={classes.rank}>???&nbsp;</div>
+                <div style={{ fontWeight: "400", fontSize: "13px"}}>등</div>
               </div>
             )}
           </div>
@@ -451,7 +452,7 @@ function SchoolDetailPage() {
                   <div style={{ display: "inline", color: "#FF2D2D" }}>HOT</div>
                   <div style={{ display: "inline" }}> 주식 🔥</div>
                 </div>
-                <div style={{ color: "#36938E", fontSize: 13 }}>
+                <div style={{ color: "#36938E", fontSize: 12 }}>
                   {hotStock.stock_name}
                 </div>
               </div>
@@ -462,7 +463,7 @@ function SchoolDetailPage() {
                   <div style={{ display: "inline", color: "#FF2D2D" }}>HOT</div>
                   <div style={{ display: "inline" }}> 주식 🔥</div>
                 </div>
-                <div style={{ color: "#36938E", fontSize: 13 }}>
+                <div style={{ color: "#36938E", fontSize: 12 }}>
                   구매주식없음
                 </div>
               </div>
@@ -471,13 +472,13 @@ function SchoolDetailPage() {
               <div className={classes.rankingRatioBox}>
                 {schoolData?.schoolSubResponse?.average === !null ? (
                   <div>
-                    <div>
-                      <div style={{ display: "inline", fontSize: 32 }}>
+                    <div style={{ marginLeft: "12px"}}>
+                      <div style={{ display: "inline", fontSize: 28 }}>
                         {schoolData.schoolSubResponse.average === "NaN"
                           ? "0"
                           : schoolData.schoolSubResponse.average.toFixed(2)}
                       </div>
-                      <div style={{ display: "inline", fontSize: 20 }}>%</div>
+                      <div style={{ display: "inline", fontSize: 18 }}>%</div>
                     </div>
                     <div
                       style={{ marginTop: 6, fontSize: 10, color: "#FED782" }}
@@ -492,9 +493,9 @@ function SchoolDetailPage() {
                   </div>
                 ) : (
                   <div>
-                    <div>
-                      <div style={{ display: "inline", fontSize: 32 }}>??</div>
-                      <div style={{ display: "inline", fontSize: 20 }}>%</div>
+                    <div style={{ marginLeft: "12px"}}>
+                      <div style={{ display: "inline", fontSize: 28 }}>?</div>
+                      <div style={{ display: "inline", fontSize: 18 }}>%</div>
                     </div>
                     <div
                       style={{ marginTop: 6, fontSize: 10, color: "#FED782" }}
@@ -512,10 +513,10 @@ function SchoolDetailPage() {
               <div className={classes.rankingRankingBox}>
                 {schoolData?.schoolSubResponse?.currentRank ? (
                   <div>
-                    <div style={{ display: "inline", fontSize: 32 }}>
+                    <div style={{ display: "inline", fontSize: 28, marginLeft: "10px" }}>
                       {schoolData.schoolSubResponse.currentRank}
                     </div>
-                    <div style={{ display: "inline", fontSize: 20 }}>등</div>
+                    <div style={{ display: "inline", fontSize: 18 }}>등</div>
                     <div
                       style={{ marginTop: 6, fontSize: 10, color: "#FE8289" }}
                     >
@@ -529,8 +530,8 @@ function SchoolDetailPage() {
                   </div>
                 ) : (
                   <div>
-                    <div style={{ display: "inline", fontSize: 32 }}>??</div>
-                    <div style={{ display: "inline", fontSize: 20 }}>등</div>
+                    <div style={{ display: "inline", fontSize: 28, marginLeft: "10px" }}>?</div>
+                    <div style={{ display: "inline", fontSize: 18 }}>등</div>
                     <div
                       style={{ marginTop: 6, fontSize: 10, color: "#FE8289" }}
                     >
@@ -560,7 +561,9 @@ function SchoolDetailPage() {
             {mySchoolAsset?.studRanks === !null ? (
               <MySchoolCards />
             ) : (
-              <div>하하하</div>
+              <div className={classes.whennull}>아직 순위가 없습니다. <br />
+              <span>학교계좌로 주식을 사고 1등을 차지하세요!</span><br />
+              <span style={{ fontSize: "12px", color: "#36938E", fontWeight: 600}}>매일 아침 7시 20분 업데이트</span></div>
             )}
           </div>
           <div>
@@ -570,7 +573,7 @@ function SchoolDetailPage() {
                   src={`${process.env.PUBLIC_URL}/schoolstatic/trophy.svg`}
                   alt=""
                 />
-                <div className={classes.halfLineText}>
+                <div className={classes.halfLineText1}>
                   {schoolData.schoolSubResponse.sigunguSubResponse.sigungu_name}{" "}
                   개인 랭킹
                 </div>
@@ -581,7 +584,9 @@ function SchoolDetailPage() {
             {mySchoolAsset?.sigunguSubResponse?.personal === !null ? (
               <SigunguPersonalCards />
             ) : (
-              <div>아아아아아아</div>
+              <div className={classes.whennull}>아직 순위가 없습니다. <br />
+              <span>학교계좌로 주식을 사고 1등을 차지하세요!</span><br />
+              <span style={{ fontSize: "12px", color: "#36938E", fontWeight: 600}}>매일 아침 7시 20분 업데이트</span></div>
             )}
           </div>
           <div style={{ height: 300 }}>
@@ -591,7 +596,7 @@ function SchoolDetailPage() {
                   src={`${process.env.PUBLIC_URL}/schoolstatic/trophy.svg`}
                   alt=""
                 />
-                <div className={classes.halfLineText}>
+                <div className={classes.halfLineText1}>
                   {schoolData.schoolSubResponse.sigunguSubResponse.sigungu_name}{" "}
                   학교 랭킹
                 </div>
@@ -602,7 +607,9 @@ function SchoolDetailPage() {
             {mySchoolAsset?.sigunguSubResponse?.school_ranks === !null ? (
               <SigunguSchoolCards />
             ) : (
-              <div>이러지마</div>
+              <div className={classes.whennull}>아직 순위가 없습니다. <br />
+              <span>학교계좌로 주식을 사고 1등을 차지하세요!</span><br />
+              <span style={{ fontSize: "12px", color: "#36938E", fontWeight: 600}}>매일 아침 7시 20분 업데이트</span></div>
             )}
           </div>
         </div>
