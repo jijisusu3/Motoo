@@ -8,8 +8,8 @@ from app.const import *
 router = APIRouter(prefix="/socket")
 
 
-@router.websocket("/ws/{ticker}")
-async def websocket_endpoint(ticker: str, websocket: WebSocket):
+@router.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     # try:
     while True:
