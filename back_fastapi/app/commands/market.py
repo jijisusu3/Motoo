@@ -75,7 +75,6 @@ async def update_and_insert_stock_list(update_time: str = None):
         print('update')
         for category in category_dict.keys():
             await candle_map[category].bulk_create(category_dict[category])
-            print("created")
     await Stock.bulk_update(
         stocks,
         fields=('name', 'price', 'fluctuation_rate', 'fluctuation_price', 'trading_value', 'volume',)
