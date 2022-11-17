@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.routers import stock_back, stocks, category, websocket, list, authentication
+from app.routers import stock_back, stocks, category, list, authentication
 
 router = APIRouter(
     prefix="/api1",
