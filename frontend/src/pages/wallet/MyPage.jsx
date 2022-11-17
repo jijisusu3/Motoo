@@ -16,6 +16,19 @@ const style = {
   top: "40%",
   left: "50%",
   transform: "translate(-50%, -50%)",
+  width: 336,
+  height: 400,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 2,
+  borderRadius: 5,
+};
+
+const modalstyle = {
+  position: "absolute",
+  top: "40%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 324,
   height: 225,
   bgcolor: "background.paper",
@@ -398,7 +411,6 @@ function MyPage() {
               <div className={classes.vibration}>
                 <img
                   src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`}
-                  style={{ marginRight: "15px" }}
                   alt=""
                 />
                 <div>
@@ -416,7 +428,6 @@ function MyPage() {
               <div className={classes.notice}>
                 <img
                   src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`}
-                  style={{ marginRight: "15px" }}
                   alt=""
                 />
                 <div>
@@ -435,8 +446,6 @@ function MyPage() {
               <p
                 style={{
                   color: "#DD4956",
-                  fontSize: "12px",
-                  marginBottom: "10px",
                 }}
               >
                 {canStartDay} 부터 계좌를 열 수 있어요
@@ -448,7 +457,7 @@ function MyPage() {
           </Box>
         </Modal>
         <Modal open={openChangeModal} onClose={handleChangeModalClose}>
-          <Box className={classes.deletebox} sx={style}>
+          <Box className={classes.deletebox} sx={modalstyle}>
             <div className={classes.title}>주계좌를 변경하시겠습니까?</div>
             <div className={classes.graybox}>
               <svg
