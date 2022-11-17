@@ -354,19 +354,15 @@ function SellStockPage() {
     }
   };
   const priceClickHandler = () => {
-    console.log("가격누름");
     setWritePrice(true);
   };
   const manyClickHandler = () => {
-    console.log("개수누름");
     setWritePrice(false);
   };
   function PriceInput() {
-    // 시장가로 즉시판매하겠다고 했을 때,
     if (isMarketPrice) {
       return;
     } else {
-      // 직접입력하겠다고 할 때,
       if (wantedPrice === "") {
         return (
           <span class={classes.buyNumber} onClick={priceClickHandler}>
@@ -433,7 +429,6 @@ function SellStockPage() {
   }
 
   function submitOrder() {
-    // 현재가로 주문, 개수입력
     if (isMarketPrice && Boolean(wantedMany)) {
       const data = {
         config: {
@@ -462,7 +457,7 @@ function SellStockPage() {
         result: {
           accountId: String(userData.data.current),
           amount: Number(wantedMany),
-          price: tradeData.price,
+          price: Number(wantedPrice),
           stockId: String(tradeData.id),
           tr_type: "3",
         },

@@ -1,8 +1,6 @@
 from datetime import date as date_type
-from datetime import time as time_type
-from datetime import datetime
 from typing import List, Union
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field
 
 from app.schemes.common import CommonResponse
 

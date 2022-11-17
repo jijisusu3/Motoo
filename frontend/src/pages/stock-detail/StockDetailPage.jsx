@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { stockDetailGet } from "../../stores/stockSlice";
 import { likeStockPost, realtimeAccountGet } from "../../stores/userSlice";
-import { width } from "@mui/system";
+
 
 function StockDetailPage() {
   const params = useParams();
@@ -17,7 +17,7 @@ function StockDetailPage() {
   const [showCandleGraph, setShowCandleGraph] = useState(false);
   const navigate = useNavigate();
   // useEffect로 데이터 받아오고 구매주식목록에 있으면 true, 없으면 false 그대로
-  const [showSellButton, setShowSellButton] = useState(true);
+  const [showSellButton, setShowSellButton] = useState(false);
   // useEffect로 데이터 받아오고 관심목록에 있으면 true, 없으면 false 그대로
   const [isWatchlist, setisWatchlist] = useState(true);
   const [mainColor, setMainColor] = useState("#DD4956");
@@ -36,6 +36,7 @@ function StockDetailPage() {
   const haveList = useSelector((state) => {
     return state.persistedReducer.setUser.user.haveList;
   });
+  console.log("have", haveList)
   const likeList = useSelector((state) => {
     return state.persistedReducer.setUser.user.likeList;
   });
@@ -78,10 +79,10 @@ function StockDetailPage() {
         setisWatchlist(true);
       }
     } catch {
-      console.log("???????");
       return;
     }
   }, [haveList, likeList]);
+
 
   useEffect(() => {
     const wss = new WebSocket("wss://k7b204.p.ssafy.io:443/api1/socket/ws");
@@ -91,6 +92,10 @@ function StockDetailPage() {
     wss.onmessage = (event) => {
       console.log(`받았다 니 데이터 : ${event.data}`);
     };
+    wss.onclose = (event) => {
+      console.log(`${event.data}`)
+      console.log(`끝`)
+    }
   });
 
   function changeToCandle() {
@@ -156,6 +161,12 @@ function StockDetailPage() {
               hour: "HH:mm",
             },
           },
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false,
+          }
         },
         yaxis: {
           show: false,
@@ -281,6 +292,12 @@ function StockDetailPage() {
               hour: "HH:mm",
             },
           },
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false,
+          }
         },
         yaxis: [
           {
@@ -1237,6 +1254,7 @@ function StockDetailPage() {
       );
     }
   }
+
   return (
     <div className={classes.stkdtbg}>
       <div className={classes.fix}>
