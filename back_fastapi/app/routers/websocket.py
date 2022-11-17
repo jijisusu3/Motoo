@@ -1,29 +1,18 @@
-import tortoise
-from fastapi import APIRouter, Response, WebSocket
+import threading
+
+from typing import List
+from fastapi import APIRouter, WebSocket
+
+from app.const import *
 
 router = APIRouter(prefix="/socket")
 
 
 @router.websocket("/ws")
-async def websocket_endpoint(websoket: WebSocket):
-    await websoket.accept()
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    # try:
     while True:
-        data = await websoket.receive_text()
-        print(data)
-        await websoket.send_json({
-            "result": True
-        })
-
-    # await websoket.send_json({
-    #             "result": True
-    #         })
-    # while True:
-    #     week = datetime.now().weekday()
-    #     hour = datetime.now().hour
-    #     min = datetime.now().minute
-    #     sec = datetime.now().second
-    #     if week < 5 and 9 <= hour <=16 and min % 2 == 1 and sec == 1:
-    #         await websoket.send_json({
-    #             "result": True
-    #         })
-    #         time.sleep(1)
+        if redis_session.get("updated") is not None:
+            await websocket.send_json({"result": True})
+            threading.Event().wait(1)
