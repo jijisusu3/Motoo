@@ -25,6 +25,19 @@ const style = {
   borderRadius: 5,
 };
 
+const styleTwo = {
+  position: "absolute",
+  top: "40%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 324,
+  height: 225,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 5,
+};
+
 function StockDetailPage() {
   const params = useParams();
   const id = params.id;
@@ -83,7 +96,6 @@ function StockDetailPage() {
     });
   }, [haveList]);
 
-
   function changeToCandle() {
     setShowCandleGraph(true);
   }
@@ -93,10 +105,10 @@ function StockDetailPage() {
   function OpenQModal() {
     const [graphExplain, setGraphExplain] = useState(false);
     function handleQModalOpen() {
-      setGraphExplain(true)
+      setGraphExplain(true);
     }
     function handleQModalClose() {
-      setGraphExplain(false)
+      setGraphExplain(false);
     }
     return (
       <div style={{ marginLeft: "3%" }}>
@@ -106,28 +118,70 @@ function StockDetailPage() {
           onClick={handleQModalOpen}
         />
         <Modal open={graphExplain} onClose={handleQModalClose}>
-        <Box className={classes.deletebox} sx={style}>
-          <div className={classes.title}>정말 삭제하시겠습니까?</div>
-          <div className={classes.graybox}>
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M7.43866e-05 9.99846C7.43866e-05 4.47648 4.4766 0 9.99857 0C15.5206 0 19.9971 4.47648 19.9971 9.99846C19.9971 11.641 19.5999 13.2274 18.8523 14.6481L19.9685 18.9358C20.0051 19.0762 20.0051 19.2237 19.9685 19.3642C19.8502 19.8184 19.3861 20.0906 18.9319 19.9724L14.6421 18.8554C13.2229 19.601 11.6387 19.997 9.99857 19.997C4.4766 19.997 7.43866e-05 15.5205 7.43866e-05 9.99846ZM9.99857 4.50078C9.58443 4.50078 9.24868 4.83652 9.24868 5.25067V11.4997C9.24868 11.9139 9.58443 12.2496 9.99857 12.2496C10.4127 12.2496 10.7485 11.9139 10.7485 11.4997V5.25067C10.7485 4.83652 10.4127 4.50078 9.99857 4.50078ZM8.99872 14.4972C8.99872 15.0493 9.44635 15.497 9.99857 15.497C10.5508 15.497 10.9984 15.0493 10.9984 14.4972C10.9984 13.945 10.5508 13.4973 9.99857 13.4973C9.44635 13.4973 8.99872 13.945 8.99872 14.4972Z"
-                fill="#8D8D8D"
-              />
-            </svg>
-            <span style={{ marginLeft: "15px" }}>
-              계좌를 삭제하면 <br></br> 해당 계좌의 주식, 자산들이 같이
-              삭제되어요!
-            </span>
-          </div>
-        </Box>
-      </Modal>
+          <Box className={classes.deletebox} sx={style}>
+            <div className={classes.title}>정말 삭제하시겠습니까?</div>
+            <div className={classes.graybox}>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7.43866e-05 9.99846C7.43866e-05 4.47648 4.4766 0 9.99857 0C15.5206 0 19.9971 4.47648 19.9971 9.99846C19.9971 11.641 19.5999 13.2274 18.8523 14.6481L19.9685 18.9358C20.0051 19.0762 20.0051 19.2237 19.9685 19.3642C19.8502 19.8184 19.3861 20.0906 18.9319 19.9724L14.6421 18.8554C13.2229 19.601 11.6387 19.997 9.99857 19.997C4.4766 19.997 7.43866e-05 15.5205 7.43866e-05 9.99846ZM9.99857 4.50078C9.58443 4.50078 9.24868 4.83652 9.24868 5.25067V11.4997C9.24868 11.9139 9.58443 12.2496 9.99857 12.2496C10.4127 12.2496 10.7485 11.9139 10.7485 11.4997V5.25067C10.7485 4.83652 10.4127 4.50078 9.99857 4.50078ZM8.99872 14.4972C8.99872 15.0493 9.44635 15.497 9.99857 15.497C10.5508 15.497 10.9984 15.0493 10.9984 14.4972C10.9984 13.945 10.5508 13.4973 9.99857 13.4973C9.44635 13.4973 8.99872 13.945 8.99872 14.4972Z"
+                  fill="#8D8D8D"
+                />
+              </svg>
+              <span style={{ marginLeft: "15px" }}>
+                계좌를 삭제하면 <br></br> 해당 계좌의 주식, 자산들이 같이
+                삭제되어요!
+              </span>
+            </div>
+          </Box>
+        </Modal>
+      </div>
+    );
+  }
+
+  function OpenMaxMinModal() {
+    const [mmExplain, setMmExplain] = useState(false);
+    function handleMModalOpen() {
+      setMmExplain(true);
+    }
+    function handleMModalClose() {
+      setMmExplain(false);
+    }
+    return (
+      <div style={{ marginLeft: "3%" }}>
+        <img
+          src={`${process.env.PUBLIC_URL}/Q.svg`}
+          alt=""
+          onClick={handleMModalOpen}
+        />
+        <Modal open={mmExplain} onClose={handleMModalClose}>
+          <Box className={classes.deletebox} sx={styleTwo}>
+            <div className={classes.title}>정말 삭제하시겠습니까?</div>
+            <div className={classes.graybox}>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7.43866e-05 9.99846C7.43866e-05 4.47648 4.4766 0 9.99857 0C15.5206 0 19.9971 4.47648 19.9971 9.99846C19.9971 11.641 19.5999 13.2274 18.8523 14.6481L19.9685 18.9358C20.0051 19.0762 20.0051 19.2237 19.9685 19.3642C19.8502 19.8184 19.3861 20.0906 18.9319 19.9724L14.6421 18.8554C13.2229 19.601 11.6387 19.997 9.99857 19.997C4.4766 19.997 7.43866e-05 15.5205 7.43866e-05 9.99846ZM9.99857 4.50078C9.58443 4.50078 9.24868 4.83652 9.24868 5.25067V11.4997C9.24868 11.9139 9.58443 12.2496 9.99857 12.2496C10.4127 12.2496 10.7485 11.9139 10.7485 11.4997V5.25067C10.7485 4.83652 10.4127 4.50078 9.99857 4.50078ZM8.99872 14.4972C8.99872 15.0493 9.44635 15.497 9.99857 15.497C10.5508 15.497 10.9984 15.0493 10.9984 14.4972C10.9984 13.945 10.5508 13.4973 9.99857 13.4973C9.44635 13.4973 8.99872 13.945 8.99872 14.4972Z"
+                  fill="#8D8D8D"
+                />
+              </svg>
+              <span style={{ marginLeft: "15px" }}>
+                계좌를 삭제하면 <br></br> 해당 계좌의 주식, 자산들이 같이
+                삭제되어요!
+              </span>
+            </div>
+          </Box>
+        </Modal>
       </div>
     );
   }
@@ -1154,16 +1208,29 @@ function StockDetailPage() {
     const nowTime = date.getTime();
     const before = new Date(`${nowDay} 09:00:00`).getTime();
     const after = new Date(`${nowDay} 15:00:00`).getTime();
-    if (before <= nowTime && nowTime <= after) {
+    const weekend = ["Fri", "Sun"];
+    const week = date.toString().slice(0, 3);
+
+    if (before <= nowTime && nowTime <= after && !weekend.includes(week)) {
       if (showSellButton) {
         return (
           <div className={classes.buttons}>
             <div className={classes.buysell}>
               <Link to={`/stock/sell/${id}`}>
-              <button style={{backgroundColor:"#7BCDC8", marginRight: "8px"}} className={classes.buysellbutton}>팔래요</button>
+                <button
+                  style={{ backgroundColor: "#7BCDC8", marginRight: "8px" }}
+                  className={classes.buysellbutton}
+                >
+                  팔래요
+                </button>
               </Link>
               <Link to={`/stock/buy/${id}`}>
-              <button style={{backgroundColor:"#FECE6D"}} className={classes.buysellbutton}>살래요</button>
+                <button
+                  style={{ backgroundColor: "#FECE6D" }}
+                  className={classes.buysellbutton}
+                >
+                  살래요
+                </button>
               </Link>
             </div>
           </div>
@@ -1171,12 +1238,12 @@ function StockDetailPage() {
       } else {
         return (
           <div className={classes.buttons}>
-              <div className={classes.buysell}>
+            <div className={classes.buysell}>
               <Link to={`/stock/buy/${id}`} state={{ data: shortStockData }}>
-              <button className={classes.sellbutton}>살래요</button>
+                <button className={classes.sellbutton}>살래요</button>
               </Link>
             </div>
-        </div>
+          </div>
         );
       }
     } else {
@@ -1190,7 +1257,6 @@ function StockDetailPage() {
         </div>
       );
     }
-
   }
   function WishListIcon() {
     const [isWatchlist, setisWatchlist] = useState(true);
@@ -1209,9 +1275,8 @@ function StockDetailPage() {
       } catch {
         return;
       }
-    }, [likeList])
+    }, [likeList]);
     const heartClick = () => {
-      console.log('????')
       dispatch(likeStockPost(data));
     };
     if (isWatchlist) {
@@ -1299,7 +1364,7 @@ function StockDetailPage() {
       setMainColor("#DD4956");
       return (
         <div style={{ color: "#DD4956" }}>
-          어제보다 {stockData.fluctuation_price}원 올랐어요 (+
+          어제보다 {stockData.fluctuation_price.toLocaleString()}원 올랐어요 (+
           {stockData.fluctuation_rate}%)
         </div>
       );
@@ -1307,7 +1372,7 @@ function StockDetailPage() {
       setMainColor("#4D97ED");
       return (
         <div style={{ color: "#4D97ED" }}>
-          어제보다 {stockData.fluctuation_price}원 떨어졌어요 (
+          어제보다 {stockData.fluctuation_price.toLocaleString()}원 떨어졌어요 (
           {stockData.fluctuation_rate}%)
         </div>
       );
@@ -1332,7 +1397,7 @@ function StockDetailPage() {
           <div className={classes.dtctntitle}>
             <div className={classes.script}>{id} / KOSPI</div>
             <div className={classes.big}>{stockData.name}</div>
-            <div className={classes.big}>{shortStockData.price}원</div>
+            <div className={classes.big}>{shortStockData.price.toLocaleString()}원</div>
             {stockData && <CompareText />}
           </div>
           <div className={classes.subctn1graph}>
@@ -1350,22 +1415,18 @@ function StockDetailPage() {
             />
             <div className={classes.today}>이 주식은 오늘 ?</div>
           </div>
-          <img
-            style={{ marginRight: "5px" }}
-            src={`${process.env.PUBLIC_URL}/Q.svg`}
-            alt=""
-          />
+          <OpenMaxMinModal />
         </div>
         <div>
           {stockData && (
             <div className={classes.repre}>
               <div className={classes.rowbox}>
                 아무리 올라도{" "}
-                <div className={classes.upcoltex}>{stockData.maximum}원</div>
+                <div className={classes.upcoltex}>{stockData.maximum.toLocaleString()}원</div>
               </div>
               <div className={classes.rowbox}>
                 아무리 떨어져도{" "}
-                <div className={classes.downcoltex}>{stockData.minimum}원</div>
+                <div className={classes.downcoltex}>{stockData.minimum.toLocaleString()}원</div>
               </div>
             </div>
           )}
@@ -1404,7 +1465,7 @@ function StockDetailPage() {
             <div>
               <div className={classes.info}>거래대금</div>
               <div style={{ fontSize: "15px" }}>
-                {stockData.trading_value}원
+                {stockData.trading_value.toLocaleString()}원
               </div>
             </div>
             <div>
@@ -1422,7 +1483,7 @@ function StockDetailPage() {
                   alt=""
                 />
               </div>
-              <div className={classes.infotxt}>{stockData.eps}원</div>
+              <div className={classes.infotxt}>{stockData.eps.toLocaleString()}원</div>
             </div>
             <div className={classes.explainbox}>
               <div className={classes.space}>
@@ -1487,7 +1548,11 @@ function StockDetailPage() {
                 </div>
               </div>
             </div>
-            <div style={{ height: "80px" }}></div>
+            {stockData.div_yield ? (
+              <div style={{ height: "80px" }}>{stockData.div_yield}</div>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>

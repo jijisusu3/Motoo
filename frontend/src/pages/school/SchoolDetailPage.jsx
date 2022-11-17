@@ -20,7 +20,7 @@ function SchoolDetailPage() {
   useEffect(() => {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
-    dispatch(setActiveNav(2))
+    dispatch(setActiveNav(3));
     dispatch(schoolPageGet(data));
     dispatch(schoolBestGet(data));
   }, []);
@@ -61,7 +61,7 @@ function SchoolDetailPage() {
                 style={{ width: 15, marginRight: 4 }}
                 alt=""
               />
-              {myAsset?.myRank ? <div>{myAsset.asset}원</div> : <></>}
+              {myAsset?.asset ? <div>{myAsset.asset}원</div> : <></>}
             </div>
           </div>
           <div className={classes.mysmallbox}>
@@ -420,7 +420,11 @@ function SchoolDetailPage() {
                 <div>등</div>
               </div>
             ) : (
-              <></>
+              <div className={classes.rowbox}>
+                <div>전국</div>
+                <div className={classes.rank}>???</div>
+                <div>등</div>
+              </div>
             )}
           </div>
           <MyAssetCard />
@@ -465,7 +469,7 @@ function SchoolDetailPage() {
             )}
             <div className={classes.rankingBox}>
               <div className={classes.rankingRatioBox}>
-                {schoolData?.schoolSubResponse?.average ? (
+                {schoolData?.schoolSubResponse?.average === !null ? (
                   <div>
                     <div>
                       <div style={{ display: "inline", fontSize: 32 }}>
@@ -487,7 +491,22 @@ function SchoolDetailPage() {
                     </div>
                   </div>
                 ) : (
-                  <></>
+                  <div>
+                    <div>
+                      <div style={{ display: "inline", fontSize: 32 }}>??</div>
+                      <div style={{ display: "inline", fontSize: 20 }}>%</div>
+                    </div>
+                    <div
+                      style={{ marginTop: 6, fontSize: 10, color: "#FED782" }}
+                    >
+                      <img
+                        src={`${process.env.PUBLIC_URL}/schoolstatic/macaron.svg`}
+                        alt=""
+                        style={{ marginRight: 2 }}
+                      />
+                      평균 수익률
+                    </div>
+                  </div>
                 )}
               </div>
               <div className={classes.rankingRankingBox}>
@@ -509,7 +528,20 @@ function SchoolDetailPage() {
                     </div>
                   </div>
                 ) : (
-                  <></>
+                  <div>
+                    <div style={{ display: "inline", fontSize: 32 }}>??</div>
+                    <div style={{ display: "inline", fontSize: 20 }}>등</div>
+                    <div
+                      style={{ marginTop: 6, fontSize: 10, color: "#FE8289" }}
+                    >
+                      <img
+                        src={`${process.env.PUBLIC_URL}/schoolstatic/deco.svg`}
+                        alt=""
+                        style={{ marginRight: 2 }}
+                      />
+                      전국
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
@@ -519,13 +551,17 @@ function SchoolDetailPage() {
               <div className={classes.rankingBanner}>
                 {schoolData.schoolSubResponse.schoolname}
                 <div style={{ display: "inline", color: "#FE8289" }}>
-                  &nbsp;&nbsp;TOP 5
+                  &nbsp;&nbsp;TOP
                 </div>
               </div>
             ) : (
               <></>
             )}
-            <MySchoolCards />
+            {mySchoolAsset?.studRanks === !null ? (
+              <MySchoolCards />
+            ) : (
+              <div>하하하</div>
+            )}
           </div>
           <div>
             {schoolData?.schoolSubResponse?.sigunguSubResponse?.sigungu_name ? (
@@ -542,7 +578,11 @@ function SchoolDetailPage() {
             ) : (
               <></>
             )}
-            <SigunguPersonalCards />
+            {mySchoolAsset?.sigunguSubResponse?.personal === !null ? (
+              <SigunguPersonalCards />
+            ) : (
+              <div>아아아아아아</div>
+            )}
           </div>
           <div style={{ height: 300 }}>
             {schoolData?.schoolSubResponse?.sigunguSubResponse?.sigungu_name ? (
@@ -559,7 +599,11 @@ function SchoolDetailPage() {
             ) : (
               <></>
             )}
-            <SigunguSchoolCards />
+            {mySchoolAsset?.sigunguSubResponse?.school_ranks === !null ? (
+              <SigunguSchoolCards />
+            ) : (
+              <div>이러지마</div>
+            )}
           </div>
         </div>
       </div>
