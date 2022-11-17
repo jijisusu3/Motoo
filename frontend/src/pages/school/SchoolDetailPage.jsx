@@ -6,6 +6,7 @@ import { schoolPageGet } from "../../stores/schoolSlice";
 import { schoolBestGet } from "../../stores/stockSlice";
 import { useNavigate } from "react-router-dom";
 import classes from "./SchoolDetailPage.module.css";
+import { fontSize } from "@mui/system";
 
 function SchoolDetailPage() {
   const dispatch = useDispatch();
@@ -95,43 +96,54 @@ function SchoolDetailPage() {
     const myInfo = ranker.info.split("#");
     if (ranker.ranking === 0) {
       return (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/first.svg`}
-            alt=""
-          />
-          <div>{myInfo[0]}</div>
-          <div>{Number(myInfo[1]).toFixed(2)}%</div>
+        <div className={classes.myschoolCardpodium}>
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/schoolstatic/first.svg`}
+              alt=""
+              style={{ width: 16, marginLeft: 10}}
+            />
+            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+          </div>
+          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[1]).toFixed(2)}%</div>
         </div>
       );
     } else if (ranker.ranking === 1) {
       return (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/second.svg`}
-            alt=""
-          />
-          <div>{myInfo[0]}</div>
-          <div>{Number(myInfo[1]).toFixed(2)}%</div>
+        <div className={classes.myschoolCardpodium}>
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/schoolstatic/second.svg`}
+              alt=""
+              style={{ width: 16, marginLeft: 10}}
+            />
+            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+          </div>
+          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[1]).toFixed(2)}%</div>
         </div>
       );
     } else if (ranker.ranking === 2) {
       return (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/third.svg`}
-            alt=""
-          />
-          <div>{myInfo[0]}</div>
-          <div>{Number(myInfo[1]).toFixed(2)}%</div>
+        <div className={classes.myschoolCardpodium}>
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/schoolstatic/third.svg`}
+              alt=""
+              style={{ width: 16, marginLeft: 10}}
+            />
+            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+          </div>
+          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[1]).toFixed(2)}%</div>
         </div>
       );
     } else {
       return (
-        <div>
-          <div>{ranker.ranking + 1}</div>
-          <div>{myInfo[0]}</div>
-          <div>{Number(myInfo[1]).toFixed(2)}%</div>
+        <div className={classes.myschoolCardNomal}>
+          <div>
+            <div style={{ display:"inline",color:"#FEBF45", width: 16, marginLeft: 15}}>{ranker.ranking + 1}</div>
+            <div style={{display:"inline", marginLeft: 15}}>{myInfo[0]}</div>
+          </div>
+          <div style={{ marginRight: 15, color:"#DD4956" }}>{Number(myInfo[1]).toFixed(2)}%</div>
         </div>
       );
     }
@@ -139,10 +151,10 @@ function SchoolDetailPage() {
   function MySchoolCards() {
     let firstSlice = mySchoolAsset?.studRanks?.split(":");
     return (
-      <div style={{ border: "1px solid red" }}>
+      <div style={{ marginBottom: "2rem" }}>
         {firstSlice &&
           firstSlice
-            .slice(0, 5)
+            .slice(0, -1)
             .map((ranker, index) => (
               <MySchoolCard key={ranker} info={ranker} ranking={index} />
             ))}
@@ -153,47 +165,58 @@ function SchoolDetailPage() {
     const myInfo = ranker.info.split("#");
     if (ranker.ranking === 0) {
       return (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/first.svg`}
-            alt=""
-          />
-          <div>{myInfo[0]}</div>
+        <div className={classes.myschoolCardpodium}>
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/schoolstatic/first.svg`}
+              alt=""
+              style={{ width: 16, marginLeft: 10}}
+            />
+            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+          </div>
           <div>{myInfo[1]}</div>
-          <div>{Number(myInfo[2]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[2]).toFixed(2)}%</div>
         </div>
       );
     } else if (ranker.ranking === 1) {
       return (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/second.svg`}
-            alt=""
-          />
-          <div>{myInfo[0]}</div>
+        <div className={classes.myschoolCardpodium}>
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/schoolstatic/second.svg`}
+              alt=""
+              style={{ width: 16, marginLeft: 10}}
+            />
+            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+          </div>
           <div>{myInfo[1]}</div>
-          <div>{Number(myInfo[2]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[2]).toFixed(2)}%</div>
         </div>
       );
     } else if (ranker.ranking === 2) {
       return (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/third.svg`}
-            alt=""
-          />
-          <div>{myInfo[0]}</div>
+        <div className={classes.myschoolCardpodium}>
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/schoolstatic/third.svg`}
+              alt=""
+              style={{ width: 16, marginLeft: 10}}
+            />
+            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+          </div>
           <div>{myInfo[1]}</div>
-          <div>{Number(myInfo[2]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[2]).toFixed(2)}%</div>
         </div>
       );
     } else {
       return (
-        <div>
-          <div>{ranker.ranking + 1}</div>
-          <div>{myInfo[0]}</div>
+        <div className={classes.myschoolCardNomal}>
+          <div>
+            <div style={{ display:"inline",color:"#FEBF45", width: 16, marginLeft: 15}}>{ranker.ranking + 1}</div>
+            <div style={{display:"inline", marginLeft: 15}}>{myInfo[0]}</div>
+          </div>
           <div>{myInfo[1]}</div>
-          <div>{Number(myInfo[2]).toFixed(2)}%</div>
+          <div style={{ marginRight: 15, color:"#DD4956" }}>{Number(myInfo[2]).toFixed(2)}%</div>
         </div>
       );
     }
@@ -201,10 +224,10 @@ function SchoolDetailPage() {
   function SigunguPersonalCards() {
     let firstSlice = mySchoolAsset?.sigunguSubResponse?.personal.split(":");
     return (
-      <div style={{ border: "1px solid red" }}>
+      <div style={{ marginBottom: "2rem"}}>
         {firstSlice &&
           firstSlice
-            .slice(0, 5)
+            .slice(0, -1)
             .map((ranker, index) => (
               <SigunguPersonalCard key={ranker} info={ranker} ranking={index} />
             ))}
@@ -215,43 +238,54 @@ function SchoolDetailPage() {
     const myInfo = ranker.info.split("#");
     if (ranker.ranking === 0) {
       return (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/first.svg`}
-            alt=""
-          />
-          <div>{myInfo[0]}</div>
-          <div>{Number(myInfo[1]).toFixed(2)}%</div>
+        <div className={classes.myschoolCardpodium}>
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/schoolstatic/first.svg`}
+              alt=""
+              style={{ width: 16, marginLeft: 10}}
+            />
+            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+          </div>
+          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[1]).toFixed(2)}%</div>
         </div>
       );
     } else if (ranker.ranking === 1) {
       return (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/second.svg`}
-            alt=""
-          />
-          <div>{myInfo[0]}</div>
-          <div>{Number(myInfo[1]).toFixed(2)}%</div>
+        <div className={classes.myschoolCardpodium}>
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/schoolstatic/second.svg`}
+              alt=""
+              style={{ width: 16, marginLeft: 10}}
+            />
+            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+          </div>
+          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[1]).toFixed(2)}%</div>
         </div>
       );
     } else if (ranker.ranking === 2) {
       return (
-        <div>
-          <img
-            src={`${process.env.PUBLIC_URL}/schoolstatic/third.svg`}
-            alt=""
-          />
-          <div>{myInfo[0]}</div>
-          <div>{Number(myInfo[1]).toFixed(2)}%</div>
+        <div className={classes.myschoolCardpodium}>
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/schoolstatic/third.svg`}
+              alt=""
+              style={{ width: 16, marginLeft: 10}}
+            />
+            <div style={{display:"inline", marginLeft: 12}}>{myInfo[0]}</div>
+          </div>
+          <div style={{ marginRight: 15, color:"#DD4956"}}>{Number(myInfo[1]).toFixed(2)}%</div>
         </div>
       );
     } else {
       return (
-        <div>
-          <div>{ranker.ranking + 1}</div>
-          <div>{myInfo[0]}</div>
-          <div>{Number(myInfo[1]).toFixed(2)}%</div>
+        <div className={classes.myschoolCardNomal}>
+          <div>
+            <div style={{ display:"inline",color:"#FEBF45", width: 16, marginLeft: 15}}>{ranker.ranking + 1}</div>
+            <div style={{display:"inline", marginLeft: 15}}>{myInfo[0]}</div>
+          </div>
+          <div style={{ marginRight: 15, color:"#DD4956" }}>{Number(myInfo[1]).toFixed(2)}%</div>
         </div>
       );
     }
@@ -259,10 +293,10 @@ function SchoolDetailPage() {
   function SigunguSchoolCards() {
     let firstSlice = mySchoolAsset?.sigunguSubResponse?.school_ranks.split(":");
     return (
-      <div style={{ border: "1px solid red" }}>
+      <div>
         {firstSlice &&
           firstSlice
-            .slice(0, 5)
+            .slice(0, -1)
             .map((ranker, index) => (
               <SigunguSchoolCard key={ranker} info={ranker} ranking={index} />
             ))}
@@ -323,39 +357,71 @@ function SchoolDetailPage() {
               src={`${process.env.PUBLIC_URL}/schoolstatic/schoolbus.svg`}
               alt=""
             />
-            <div>지금 우리 학교는</div>
+            <div className={classes.halfLineText} style={{ marginTop: "1.5rem"}}>지금 우리 학교는</div>
           </div>
-          <div style={{ border: "2px solid red" }}>
-            <div>우리학교</div>
-            <div>HOT 주식🔥</div>
-            <div>LG디스플레이</div>
-          </div>
-          <div style={{ border: "2px solid blue" }}>
-            {schoolData?.schoolSubResponse?.average ? (
+          <div className={classes.hotStockRankingBox}>
+            <div className={classes.hotStockBox}>
               <div>
-                <div>
-                  {schoolData.schoolSubResponse.average === "NaN"
-                    ? "0"
-                    : schoolData.schoolSubResponse.average.toFixed(2)}
-                  %
+                <div>우리 학교</div>
+                <div style={{ display: "inline", color: "#FF2D2D"}}>HOT</div>
+                <div style={{ display: "inline"}}> 주식 🔥</div>
+              </div>
+              <div style={{ color: "#36938E", fontSize: 13}}>LG디스플레이</div>
+            </div>
+            <div className={classes.rankingBox}>
+              <div className={classes.rankingRatioBox}>
+              {schoolData?.schoolSubResponse?.average ? (
+                  <div>
+                    <div>
+                      <div style={{display: "inline", fontSize: 32}}>
+                      {schoolData.schoolSubResponse.average === "NaN"
+                        ? "0"
+                        : schoolData.schoolSubResponse.average.toFixed(2)}
+                      </div>
+                      <div style={{display: "inline", fontSize: 20}}>
+                      %
+                      </div>
+                    </div>
+                  <div style={{marginTop: 6,fontSize: 10, color: "#FED782"}}>
+                    <img
+                      src={`${process.env.PUBLIC_URL}/schoolstatic/macaron.svg`}
+                      alt=""
+                      style={{ marginRight: 2 }}
+                    />
+                      평균 수익률
+                  </div>
                 </div>
-                <div>평균수익률</div>
+              ) : (
+                <></>
+              )}
               </div>
-            ) : (
-              <></>
-            )}
-            {schoolData?.schoolSubResponse?.myRank ? (
-              <div>
-                <div>{schoolData.schoolSubResponse.currentRank}등</div>
-                <div>전국</div>
+              <div className={classes.rankingRankingBox}>
+                {schoolData?.schoolSubResponse?.currentRank ? (
+                  <div>
+                    <div style={{display: "inline", fontSize: 32}}>{schoolData.schoolSubResponse.currentRank}</div>
+                    <div style={{display: "inline", fontSize: 20}}>등</div>
+                    <div style={{marginTop: 6,fontSize: 10, color: "#FE8289"}}>
+                      <img
+                        src={`${process.env.PUBLIC_URL}/schoolstatic/deco.svg`}
+                        alt=""
+                        style={{ marginRight: 2 }}
+                      />
+                        전국
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
-            ) : (
-              <></>
-            )}
+            </div>
           </div>
+
           <div>
             {schoolData?.schoolSubResponse?.schoolname ? (
-              <div>{schoolData.schoolSubResponse.schoolname} TOP 5</div>
+              <div className={classes.rankingBanner}>
+                {schoolData.schoolSubResponse.schoolname} 
+                <div style={{ display:"inline", color: "#FE8289"}}>&nbsp;&nbsp;TOP 5</div>
+              </div>
             ) : (
               <></>
             )}
@@ -364,8 +430,14 @@ function SchoolDetailPage() {
           <div>
             {schoolData?.schoolSubResponse?.sigunguSubResponse?.sigungu_name ? (
               <div>
-                {schoolData.schoolSubResponse.sigunguSubResponse.sigungu_name}{" "}
-                개인 랭킹
+                <img
+                  src={`${process.env.PUBLIC_URL}/schoolstatic/trophy.svg`}
+                  alt=""
+                />
+                <div className={classes.halfLineText}>
+                  {schoolData.schoolSubResponse.sigunguSubResponse.sigungu_name}{" "}
+                  개인 랭킹
+                </div>
               </div>
             ) : (
               <></>
@@ -375,8 +447,14 @@ function SchoolDetailPage() {
           <div style={{ height: 300 }}>
             {schoolData?.schoolSubResponse?.sigunguSubResponse?.sigungu_name ? (
               <div>
-                {schoolData.schoolSubResponse.sigunguSubResponse.sigungu_name}{" "}
-                학교 랭킹
+                <img
+                  src={`${process.env.PUBLIC_URL}/schoolstatic/trophy.svg`}
+                  alt=""
+                />
+                <div className={classes.halfLineText}>                
+                  {schoolData.schoolSubResponse.sigunguSubResponse.sigungu_name}{" "}
+                  학교 랭킹
+                </div>
               </div>
             ) : (
               <></>
