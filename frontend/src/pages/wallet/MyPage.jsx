@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowNav } from "../../stores/navSlice";
+import { setShowNav, setActiveNav } from "../../stores/navSlice";
 import { accountsListGet } from "../../stores/accountSlice";
 import { nicknamePut, accountChangePut } from "../../stores/userSlice";
 import { accountCreate } from "../../stores/accountSlice";
@@ -59,6 +59,7 @@ function MyPage() {
   useEffect(() => {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
+    dispatch(setActiveNav(2));
   }, []);
   useEffect(() => {
     const data = {

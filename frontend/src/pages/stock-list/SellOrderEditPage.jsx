@@ -152,11 +152,9 @@ function SellOrderEditPage() {
   };
 
   const priceClickHandler = () => {
-    console.log("가격누름");
     setWritePrice(true);
   };
   const manyClickHandler = () => {
-    console.log("개수누름");
     setWritePrice(false);
   };
   function PriceInput() {

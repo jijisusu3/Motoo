@@ -76,7 +76,7 @@ function MyAssetList() {
                 <div className={classes.result}>평가손익</div>
               </div>
               <div className={classes.section} style={{ color: profitColor }}>
-                {stock.profit}
+                {stock?.profit ? stock.profit.toLocaleString() : 0}
               </div>
             </div>
             <div className={classes.rowbox} style={{ marginTop: "4px" }}>

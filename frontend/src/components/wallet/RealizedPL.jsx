@@ -225,13 +225,13 @@ function RealizedPL() {
             <div className={classes.infobox}>
               평균구매가
               <div className={classes.numbox}>
-                <p className={classes.txts}>{stock.mean}</p>원
+                <p className={classes.txts}>{stock.mean.toLocaleString()}</p>원
               </div>
             </div>
             <div className={classes.infobox}>
               판매가
               <div className={classes.numbox}>
-                <p className={classes.txts}>{stock.now}</p>원
+                <p className={classes.txts}>{stock.now.toLocaleString()}</p>원
               </div>
             </div>
             <div className={classes.infobox}>
@@ -243,7 +243,7 @@ function RealizedPL() {
             <div className={classes.infobox}>
               평가금액
               <div className={classes.numbox}>
-                <p className={classes.txts}>{stock.all}</p>원
+                <p className={classes.txts}>{stock.all.toLocaleString()}</p>원
               </div>
             </div>
           </div>

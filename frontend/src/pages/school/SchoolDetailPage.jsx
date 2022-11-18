@@ -6,7 +6,6 @@ import { schoolPageGet } from "../../stores/schoolSlice";
 import { schoolBestGet } from "../../stores/stockSlice";
 import { useNavigate } from "react-router-dom";
 import classes from "./SchoolDetailPage.module.css";
-import { fontWeight } from "@mui/system";
 
 function SchoolDetailPage() {
   const dispatch = useDispatch();
@@ -47,12 +46,10 @@ function SchoolDetailPage() {
   const hotStock = useSelector((state) => {
     return state.setStock.schoolStock;
   });
-  console.log(hotStock);
 
   function MyAssetCard() {
     return (
       <div className={classes.myrowbox}>
-        {/* 왼쪽 */}
         <div className={classes.mycard}>
           <div className={classes.myrowbox}>
             <div>{user.data.nickname}</div>
@@ -62,7 +59,7 @@ function SchoolDetailPage() {
                 style={{ width: 15, marginRight: 4 }}
                 alt=""
               />
-              {myAsset?.asset ? <div>{myAsset.asset}원</div> : <></>}
+              {myAsset?.asset ? <div>{myAsset.asset.toLocaleString()}원</div> : <></>}
             </div>
           </div>
           <div className={classes.mysmallbox}>
@@ -371,7 +368,6 @@ function SchoolDetailPage() {
       </div>
     );
   }
-  console.log(schoolData);
   return (
     <>
       <div className={classes.outdiv}>

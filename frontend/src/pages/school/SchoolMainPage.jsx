@@ -36,6 +36,10 @@ function SchoolMainPage() {
   useEffect(()=> {
     if (isBattle) {
       navigate(`/school-battle`);
+    } else {
+      const now = window.location.pathname;
+      dispatch(setActiveNav(3));
+      dispatch(setShowNav(now));
     }
   }, [])
 
@@ -132,7 +136,6 @@ function SchoolMainPage() {
   function startClick() {
     //학교 결과 클릭했을 때,
     if (choicedId) {
-      console.log(choicedId);
       const data = {
         config: {
           headers: {
