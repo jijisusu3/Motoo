@@ -37,19 +37,25 @@ public class QuizController {
         Long id = userService.getUserIdByToken(authentication);
         User user = userRepository.findByUserId(id).get();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date quiz = user.getQuizDay();
-        String quizdate = format.format(quiz);
         Date now = java.sql.Date.valueOf(LocalDate.now());
         String nowdate = format.format(now);
-        System.out.println(quizdate);
-        System.out.println(nowdate);
-        if (quizdate.equals(nowdate)) {
-            return ResponseEntity.status(400).body(BaseResponseBody.of(400, "욕심쟁이"));
+        if (user.getQuizDay() != null) {
+            Date quiz = user.getQuizDay();
+            String quizdate = format.format(quiz);
+            if (quizdate.equals(nowdate)) {
+                return ResponseEntity.status(400).body(BaseResponseBody.of(400, "욕심쟁이"));
+            } else {
+                userService.updateQuizDay(id, now);
+                String result = quizService.solveQuiz(id, quizReq);
+                return ResponseEntity.status(200).body(BaseResponseBody.of(200, result));
+            }
         } else {
             userService.updateQuizDay(id, now);
             String result = quizService.solveQuiz(id, quizReq);
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, result));
         }
+
+
 
 
     }
