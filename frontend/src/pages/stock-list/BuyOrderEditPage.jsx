@@ -46,7 +46,6 @@ function BuyOrderEditPage() {
     return state.persistedReducer.setUser.user;
   });
   const mySeed = userData.data.seed;
-  console.log(tradeData);
   const navigate = useNavigate();
   function backToLimitOrderList() {
     navigate(`/stock/limit-order`);
@@ -162,11 +161,9 @@ function BuyOrderEditPage() {
   };
 
   const priceClickHandler = () => {
-    console.log("가격누름");
     setWritePrice(true);
   };
   const manyClickHandler = () => {
-    console.log("개수누름");
     setWritePrice(false);
   };
   function PriceInput() {
@@ -276,7 +273,7 @@ function BuyOrderEditPage() {
           <div className={classes.middlesubctn}>
             <PriceInput />
             <ManyInput />
-            {mySeed && <div style={{ fontSize: "14px", marginTop: "5px", color: "#4E5E5E", fontWeight: "600"}}>사용가능 금액 <img src={`${process.env.PUBLIC_URL}/wallet/vege.svg`} style={{ marginBottom: '2px', marginLeft: '2px', marginRight: '10px', width: 12, height: 12 }} alt="" /> <span style={{ color: "#43B8B1", fontWeight: "500"}}>{mySeed}</span></div>}
+            {mySeed && <div style={{ fontSize: "14px", marginTop: "5px", color: "#4E5E5E", fontWeight: "600"}}>사용가능 금액 <img src={`${process.env.PUBLIC_URL}/wallet/vege.svg`} style={{ marginBottom: '2px', marginLeft: '2px', marginRight: '10px', width: 12, height: 12 }} alt="" /> <span style={{ color: "#43B8B1", fontWeight: "500"}}>{mySeed? mySeed.toLocaleString(): 0}</span></div>}
             <div class={classes.inputalrt}>
               {isTooHigh === true && <p>그렇게 비싸겐 못사요</p>}
               {isTooLow === true && isTooHigh === false && (

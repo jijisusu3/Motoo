@@ -40,7 +40,6 @@ const likeStockPost = createAsyncThunk(
         return response.data.favoriteStockCodeList;
       })
       .catch((err) => {
-        console.log(err.data);
       });
   }
 );
@@ -62,11 +61,9 @@ const quizPut = createAsyncThunk("stockList/quizResult", async (data) => {
   return axios
     .put(`${api2}quiz`, quizResult, config)
     .then((response) => {
-      console.log(response.data.message);
       return response.data.message;
     })
     .catch((err) => {
-      console.log(err.data);
     });
 });
 
@@ -119,7 +116,6 @@ export const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     setLogin: (state, action) => {
-      // console.log(action.payload)
       state.user.isLoggin = true;
       state.user.token = action.payload.token;
       state.user.likeList = action.payload.user.favoriteStockCode;
@@ -151,13 +147,11 @@ export const userSlice = createSlice({
       state.quizData = action.payload;
     });
     builder.addCase(realtimeAccountGet.fulfilled, (state, action) => {
-      console.log(action.payload)
       state.user.haveList = action.payload.stockInfo;
       state.user.data.seed = action.payload.availableSeed;
     });
     builder.addCase(accountChangePut.fulfilled, (state, action) => {
       state.user.data.current = action.payload;
-      console.log(action.payload);
     });
     builder.addCase(userDelete.fulfilled, () => {
       window.localStorage.clear();

@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowNav } from "../../stores/navSlice";
+import { setShowNav, setActiveNav } from "../../stores/navSlice";
 import { realtimeGet, likeListGet } from "../../stores/stockSlice";
 import { likeStockPost } from "../../stores/userSlice";
 
@@ -105,18 +105,9 @@ function StockListPage() {
   useEffect(() => {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
-    // setTimeout(() => {
-      
-    // }, 50);
+    dispatch(setActiveNav(1));
   }, []);
 
-  // 삭제버튼 누르면 해당함수 실행,
-  // BE에 삭제요청 보내고, 해당페이지재구성하고,
-  // 유저정보 관심주식리스트 업데이트 되어야함
-  function deleteSubmit() {
-    // eventTarget으로 어떤 아이디 클릭된건지 인식해야함
-    // const data = { token: userToken, id: id };
-  }
 
   const likeList = useSelector((state) => {
     return state.setStock.likeList;
@@ -175,7 +166,7 @@ function StockListPage() {
             <div style={{ color: profitColor, fontSize: 16 }}>
               {stock.profit}%
             </div>
-            <div>{stock.price}원</div>
+            <div>{stock?.price ? stock.price.toLocaleString():0}원</div>
           </div>
         </div>
         <div className={classes.hrline}></div>
@@ -318,7 +309,7 @@ function StockListPage() {
               <div style={{ color: profitColor, fontSize: 16 }}>
                 {stock.profit}%
               </div>
-              <div>{stock.price}원</div>
+              <div>{stock?.price ? stock.price: 0}원</div>
             </div>
           </div>
           <div className={classes.hrline}></div>

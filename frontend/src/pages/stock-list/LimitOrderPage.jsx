@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import classes from "./LimitOrderPage.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowNav } from "../../stores/navSlice";
+import { setShowNav, setActiveNav } from "../../stores/navSlice";
 import { limitListGet, rejectedLimitListGet } from "../../stores/stockSlice";
 import { realtimeAccountGet } from "../../stores/userSlice";
 
@@ -19,10 +19,10 @@ function LimitOrderPage() {
   const rejectedList = useSelector((state) => {
     return state.setStock.rejectedList;
   });
-  console.log(rejectedList)
   useEffect(() => {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
+    dispatch(setActiveNav(2));
   }, []);
   const tmpData = {
     config: {
@@ -98,7 +98,7 @@ function LimitOrderPage() {
               <div>{stock.name}</div>
             </div>
             <div className={classes.pr}>
-              {stock.price.toLocaleString()}원 / {stock.many}주
+              {stock?.price ? stock.price.toLocaleString(): 0}원 / {stock.many}주
             </div>
           </div>
           <div className={classes.hrline}></div>
@@ -147,7 +147,7 @@ function LimitOrderPage() {
               <div>{stock.name}</div>
             </div>
             <div className={classes.pr}>
-              {stock.price.toLocaleString()}원 / {stock.many}주
+              {stock?.price ? stock.price.toLocaleString():0}원 / {stock.many}주
             </div>
           </div>
           <div className={classes.hrline}></div>

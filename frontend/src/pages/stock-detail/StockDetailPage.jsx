@@ -777,7 +777,6 @@ function StockDetailPage() {
           stockData.weekly_max.time.slice(2, 4);
         extremeValues[0].y = stockData.weekly_min.min_price;
         extremeValues[1].y = stockData.weekly_max.max_price;
-        console.log("weekly", extremeValues);
         setCandleGraphData((pre) => ({
           ...pre,
           series: [
@@ -1362,7 +1361,7 @@ function StockDetailPage() {
       setMainColor("#DD4956");
       return (
         <div style={{ color: "#DD4956" }}>
-          어제보다 {stockData.fluctuation_price.toLocaleString()}원 올랐어요 (+
+          어제보다 {stockData?.fluctuation_price ? stockData.fluctuation_price.toLocaleString() : 0}원 올랐어요 (+
           {stockData.fluctuation_rate}%)
         </div>
       );
@@ -1370,7 +1369,7 @@ function StockDetailPage() {
       setMainColor("#4D97ED");
       return (
         <div style={{ color: "#4D97ED" }}>
-          어제보다 {stockData.fluctuation_price.toLocaleString()}원 떨어졌어요 (
+          어제보다 {stockData?.fluctuation_price ? stockData.fluctuation_price.toLocaleString() : 0}원 떨어졌어요 (
           {stockData.fluctuation_rate}%)
         </div>
       );
@@ -1395,7 +1394,7 @@ function StockDetailPage() {
           <div className={classes.dtctntitle}>
             <div className={classes.script}>{id} / KOSPI</div>
             <div className={classes.big}>{stockData.name}</div>
-            <div className={classes.big}>{shortStockData.price.toLocaleString()}원</div>
+            <div className={classes.big}>{shortStockData?.price ? shortStockData.price.toLocaleString(): 0}원</div>
             {stockData && <CompareText />}
           </div>
           <div className={classes.subctn1graph}>
@@ -1420,11 +1419,11 @@ function StockDetailPage() {
             <div className={classes.repre}>
               <div className={classes.rowbox}>
                 아무리 올라도{" "}
-                <div className={classes.upcoltex}>{stockData.maximum.toLocaleString()}원</div>
+                <div className={classes.upcoltex}>{stockData?.maximum ? stockData.maximum.toLocaleString():0}원</div>
               </div>
               <div className={classes.rowbox}>
                 아무리 떨어져도{" "}
-                <div className={classes.downcoltex}>{stockData.minimum.toLocaleString()}원</div>
+                <div className={classes.downcoltex}>{stockData?.minimum ? stockData.minimum.toLocaleString():0}원</div>
               </div>
             </div>
           )}
@@ -1463,7 +1462,7 @@ function StockDetailPage() {
             <div>
               <div className={classes.info}>거래대금</div>
               <div style={{ fontSize: "15px" }}>
-                {stockData.trading_value.toLocaleString()}원
+                {stockData?.trading_value ? stockData.trading_value.toLocaleString(): 0}원
               </div>
             </div>
             <div>
@@ -1481,7 +1480,7 @@ function StockDetailPage() {
                   alt=""
                 />
               </div>
-              <div className={classes.infotxt}>{stockData.eps.toLocaleString()}원</div>
+              <div className={classes.infotxt}>{stockData?.eps ? stockData.eps.toLocaleString():0}원</div>
             </div>
             <div className={classes.explainbox}>
               <div className={classes.space}>

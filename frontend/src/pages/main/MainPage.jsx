@@ -13,7 +13,6 @@ function Main() {
       `https://k7b204.p.ssafy.io/api2/users/auth/kakao/callback?code=${code}`
       )
       .then((response) => {
-        // console.log(response.data)
         dispatch(setLogin(response.data));
         navivate('/')
       });
