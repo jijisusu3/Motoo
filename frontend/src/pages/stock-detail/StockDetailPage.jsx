@@ -1237,7 +1237,7 @@ function StockDetailPage() {
           <div className={classes.buttons}>
             <div className={classes.buysell}>
               <Link to={`/stock/buy/${id}`} state={{ data: shortStockData }}>
-                <button className={classes.sellbutton}>살래요</button>
+                <button style={{ backgroundColor: "#FECE6D" }} className={classes.sellbutton}>살래요</button>
               </Link>
             </div>
           </div>
