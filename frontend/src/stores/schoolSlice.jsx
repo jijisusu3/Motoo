@@ -21,6 +21,14 @@ const schoolPageGet = createAsyncThunk("school/pageGet", async (data) => {
   });
 });
 
+const schoolChangePut = createAsyncThunk("school/schoolChangePut", async (data) => {
+  return axios
+  .put(`${api2}school/update`, data.result, data.config)
+  .then((response) => {});
+})
+
+
+
 export const schoolSlice = createSlice({
   name: "schoolSlice",
   initialState: initialState,
@@ -35,4 +43,4 @@ export const schoolSlice = createSlice({
   },
 });
 
-export { schoolGet, schoolPageGet };
+export { schoolGet, schoolPageGet, schoolChangePut };

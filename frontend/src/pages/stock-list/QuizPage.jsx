@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setActiveNav } from "../../stores/navSlice";
 import { useNavigate } from "react-router-dom";
 import classes from './QuizPage.module.css'
-import { quizPut, quizGet } from '../../stores/userSlice'
+import { quizPut, quizGet, quizUserGet } from '../../stores/userSlice'
 
 function QuizPage() {
   const dispatch = useDispatch();
@@ -13,7 +13,6 @@ function QuizPage() {
   const quizData = useSelector((state) => {
     return state.persistedReducer.setUser.quizData
   })
-
   useEffect(() => {
     dispatch(setActiveNav(1));
   },[]);
@@ -22,18 +21,34 @@ function QuizPage() {
     if (userToken){
       const data = userToken
       dispatch(quizGet(data))
+      dispatch(quizUserGet(data))
     }
   }, [userToken])
   const navigate = useNavigate();
   function backToList() {
     navigate('/');
   }
+  const quizDate = useSelector((state) => {
+    return state.persistedReducer.setUser.user.quizDay
+  })
   // 데이터 전역으로 저장해두기
   var examples = []
   if (quizData.examples) {
     examples = quizData.examples.split(':');
   }
   
+  useEffect(() => {
+    try {
+      let date = new Date();
+      const now = `${date.getFullYear()}-${("00" + (date.getMonth() + 1))
+      .toString()
+      .slice(-2)}-${("00" + date.getDate()).toString().slice(-2)}`;
+      if (quizDate === now) {
+        backToList()
+      }
+    } catch{
+    }
+  })
   const clickAnswer = (e) => {
     const idx = e.target.id
     const data = {
@@ -54,8 +69,6 @@ function QuizPage() {
     } else {
       navigate("/quiz-result/2")
     }
-    // 클릭한뒤 결과제출하는 api 호출하고 거기서 데이터 저장후 
-    // 정답인지 오답인지 데이터 변경해주고 navigate로 이동ㄱ
   }
 
   function QuizAnswer(quiz) {
