@@ -64,6 +64,10 @@ async def update_stock_info():
             for tckr in tickers[20 * r:20 * (r + 1)]:
                 async with session.get(price_url, params=parameter_setter(tckr)) as response:
                     data = await response.json()
+                if data["rt_cd"] == 1:
+                    threading.Event().wait(1)
+                    async with session.get(price_url, params=parameter_setter(tckr)) as response:
+                        data = await response.json()
                 flag = 0
                 stck = await Stock.get_or_none(ticker=tckr)
                 if stck is None:

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowNav, setActiveNav } from "../../stores/navSlice";
-import { schoolGet, schoolPut } from "../../stores/schoolSlice";
+import { schoolGet } from "../../stores/schoolSlice";
+import { schoolPut } from "../../stores/userSlice";
 import { useNavigate } from "react-router-dom";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
@@ -35,6 +36,10 @@ function SchoolMainPage() {
   useEffect(()=> {
     if (isBattle) {
       navigate(`/school-battle`);
+    } else {
+      const now = window.location.pathname;
+      dispatch(setActiveNav(3));
+      dispatch(setShowNav(now));
     }
   }, [])
 
@@ -131,7 +136,6 @@ function SchoolMainPage() {
   function startClick() {
     //학교 결과 클릭했을 때,
     if (choicedId) {
-      console.log(choicedId);
       const data = {
         config: {
           headers: {
@@ -143,6 +147,9 @@ function SchoolMainPage() {
         },
       };
       dispatch(schoolPut(data));
+      setTimeout(() => {
+        navigate('/school-battle')
+      }, 50);
     } else {
       // 결과 하나만 남았을 때,
       if (results.results) {

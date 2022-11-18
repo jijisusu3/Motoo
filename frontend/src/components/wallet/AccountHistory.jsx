@@ -18,7 +18,6 @@ function AccountHistory() {
   const accountHistoryData = useSelector((state) => {
     return state.setAccount.accountDetail.tradingHistory;
   });
-  console.log(accountHistoryData)
   const [data, setData] = useState([
     {
       all: [],
@@ -249,7 +248,7 @@ function AccountHistory() {
               alt=""
             />
             {profitLabel}
-            {stock.profit}
+            {stock?.profit ? stock.profit.toLocaleString() : 0}
           </div>
         </div>
       );
@@ -349,4 +348,3 @@ function AccountHistory() {
 }
 
 export default AccountHistory;
-//코드가 너무 길음 ㅠ

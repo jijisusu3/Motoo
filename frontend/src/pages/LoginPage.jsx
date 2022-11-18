@@ -29,7 +29,7 @@ function LoginPage() {
   function kakaoLoginClick() {
     window.location.replace(KAKAO_AUTH_URI)
     }
-  
+
   return (
     <div className={classes.loginbg}>
       <div className={classes.bigbox}>

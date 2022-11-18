@@ -1,11 +1,14 @@
 package com.motoo.api.controller;
 
 import com.motoo.api.request.SchoolReq;
+import com.motoo.api.response.SchoolRegiRes;
+import com.motoo.api.response.SchoolResponse;
 import com.motoo.api.service.AccountService;
 import com.motoo.api.service.EventService;
 import com.motoo.api.service.SchoolService;
 import com.motoo.api.service.UserService;
 import com.motoo.common.model.response.BaseResponseBody;
+import com.motoo.db.entity.Account;
 import com.motoo.db.entity.User;
 import com.motoo.db.repository.UserRepository;
 import io.swagger.annotations.Api;
@@ -26,6 +29,7 @@ public class SchoolController {
     private final EventService eventService;
 
     private final AccountService accountService;
+
 
     private final UserRepository userRepository;
 
@@ -53,7 +57,7 @@ public class SchoolController {
         if (user.getSchool() == null) {
             userService.updateSchool(id, schoolReq.getId());
             accountService.createSchoolAccount(id);
-            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "학교 대항전 등록 및 학교 계좌 발급이 완료되었습니다."));
+            return ResponseEntity.ok(accountService.getSchoolAccount(id).getAccountId());
         } else {
             return ResponseEntity.status(400).body(BaseResponseBody.of(400, "이미 계좌가 있는 유저 입니다."));
         }

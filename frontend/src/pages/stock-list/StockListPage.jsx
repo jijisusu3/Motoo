@@ -9,9 +9,9 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowNav } from "../../stores/navSlice";
+import { setShowNav, setActiveNav } from "../../stores/navSlice";
 import { realtimeGet, likeListGet } from "../../stores/stockSlice";
-
+import { likeStockPost } from "../../stores/userSlice";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -64,56 +64,58 @@ function StockListPage() {
     const now = `${date.getFullYear()}-${("00" + (date.getMonth() + 1))
       .toString()
       .slice(-2)}-${("00" + date.getDate()).toString().slice(-2)}`;
-    let getDay = ""
-    if (userQuiz){
-      getDay = userQuiz.substr(0,10)
+    let getDay = "";
+    if (userQuiz) {
+      getDay = userQuiz.substr(0, 10);
     }
     if (now === getDay) {
-      setIsSolved(true)
+      setIsSolved(true);
     }
-  }, [userQuiz])
+  }, [userQuiz]);
   useEffect(() => {
-    dispatch(realtimeGet())
+    dispatch(realtimeGet());
     const data = {
       headers: {
-        Authorization: `Bearer ${userToken}`
-      }
-    }
-    dispatch(likeListGet(data))
-  }, [])
+        Authorization: `Bearer ${userToken}`,
+      },
+    };
+    dispatch(likeListGet(data));
+  }, []);
 
-  const goToDetail = (e) => {
-    const isPk = e.target.id;
+  function goToDetail(isPk) {
     if (Boolean(isPk)) {
       navigate(`/stock/detail/${isPk}`);
     }
-  };
+  }
 
-  function disLike(id){
-    console.log(id)
+  function disLike(id) {
+    const data = { token: userToken, id: id };
+    const likeData = {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    };
+    dispatch(likeStockPost(data));
+    setTimeout(() => {
+      dispatch(likeListGet(likeData));
+    }, 40);
   }
 
   const dispatch = useDispatch();
   useEffect(() => {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
+    dispatch(setActiveNav(1));
   }, []);
 
-  // 삭제버튼 누르면 해당함수 실행,
-  // BE에 삭제요청 보내고, 해당페이지재구성하고,
-  // 유저정보 관심주식리스트 업데이트 되어야함
-  function deleteSubmit() {
-    // eventTarget으로 어떤 아이디 클릭된건지 인식해야함
-    // const data = { token: userToken, id: id };
-  }
 
   const likeList = useSelector((state) => {
-    return state.setStock.likeList
-  })
-  
+    return state.setStock.likeList;
+  });
+
   const realtimeData = useSelector((state) => {
-    return state.setStock.realtime
-  })
+    return state.setStock.realtime;
+  });
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -155,18 +157,16 @@ function StockListPage() {
     const profitColor = profitCheck();
     return (
       <div>
-        <div className={classes.lists}>
+        <div className={classes.lists} onClick={() => goToDetail(stock.code)}>
           <div className={classes.listcard}>
             <div className={classes.rank}>{stock.ranking}</div>
-            <div style={{ color: '#3E3E3E' }} id={stock.code} onClick={goToDetail}>
-              {stock.name}
-            </div>
+            <div style={{ color: "#3E3E3E" }}>{stock.name}</div>
           </div>
           <div className={classes.nowpr}>
             <div style={{ color: profitColor, fontSize: 16 }}>
               {stock.profit}%
             </div>
-            <div>{stock.price}원</div>
+            <div>{stock?.price ? stock.price.toLocaleString():0}원</div>
           </div>
         </div>
         <div className={classes.hrline}></div>
@@ -175,21 +175,12 @@ function StockListPage() {
   }
 
   function RealtimeLists() {
-    const selectedString = [
-      "rate_up",
-      "rate_down",
-      "capital_up",
-      "volume_up",
-    ];
+    const selectedString = ["rate_up", "rate_down", "capital_up", "volume_up"];
     const selectedRealtimeData =
       realtimeData[realtimeValue][selectedString[realtimeValue]];
     return (
-      <div
-        className={classes.listbox}
-        style={{ backgroundColor: "white"}}
-      >
+      <div className={classes.listbox} style={{ backgroundColor: "white" }}>
         <div className={classes.listctnbox}>
-
           <Box sx={{ width: "100%" }}>
             <Box sx={{ borderBottom: 0, borderColor: "divider" }}>
               <div className={classes.tabbox}>
@@ -281,16 +272,17 @@ function StockListPage() {
               </div>
             </Box>
           </Box>
-          {selectedRealtimeData && selectedRealtimeData.map((stock, index) => (
-            <RealtimeCard
-              key={stock.ticker}
-              name={stock.name}
-              code={stock.ticker}
-              ranking={index + 1}
-              profit={stock.fluctuation_rate}
-              price={stock.price}
-            />
-          ))}
+          {selectedRealtimeData &&
+            selectedRealtimeData.map((stock, index) => (
+              <RealtimeCard
+                key={stock.ticker}
+                name={stock.name}
+                code={stock.ticker}
+                ranking={index + 1}
+                profit={stock.fluctuation_rate}
+                price={stock.price}
+              />
+            ))}
         </div>
       </div>
     );
@@ -298,7 +290,6 @@ function StockListPage() {
 
   function MyWishCard(stock) {
     if (!myListEdit) {
-      // 수정중 아닐때
       function profitCheck() {
         if (stock.profit < 0) {
           return "#4D97ED";
@@ -309,22 +300,22 @@ function StockListPage() {
       const profitColor = profitCheck();
       return (
         <div>
-          <div className={classes.lists}>
-            <div style={{ color: '#3E3E3E' }} id={stock.ticker} onClick={goToDetail}>
-              {stock.name}
-            </div>
+          <div
+            className={classes.lists}
+            onClick={() => goToDetail(stock.ticker)}
+          >
+            <div style={{ color: "#3E3E3E" }}>{stock.name}</div>
             <div className={classes.nowpr}>
               <div style={{ color: profitColor, fontSize: 16 }}>
                 {stock.profit}%
               </div>
-              <div>{stock.price}원</div>
+              <div>{stock?.price ? stock.price: 0}원</div>
             </div>
           </div>
           <div className={classes.hrline}></div>
         </div>
       );
     } else {
-      //수정중일때
       return (
         <div>
           <div className={classes.eleslists}>
@@ -409,7 +400,6 @@ function StockListPage() {
       <div className={classes.listbox}>
         <div className={classes.editbox}>
           <div className={classes.interestnav}>
-
             <div className={classes.favorite}>
               <div>관심주식</div>
               <img
@@ -421,24 +411,29 @@ function StockListPage() {
             {myListEdit ? (
               <div onClick={editFinish}>완료</div>
             ) : (
-              <div style={{ marginTop: "3px", marginRight: "4px"}} onClick={editStart}>편집</div>
+              <div
+                style={{ marginTop: "3px", marginRight: "4px" }}
+                onClick={editStart}
+              >
+                편집
+              </div>
             )}
           </div>
-          {likeList && likeList.map((stock) => (
-            <MyWishCard
-              key={stock.ticker}
-              name={stock.name}
-              ticker={stock.ticker}
-              profit={stock.fluctuation_rate}
-              price={stock.price}
-              id={stock.id}
-            />
-          ))}
+          {likeList &&
+            likeList.map((stock) => (
+              <MyWishCard
+                key={stock.ticker}
+                name={stock.name}
+                ticker={stock.ticker}
+                profit={stock.fluctuation_rate}
+                price={stock.price}
+                id={stock.id}
+              />
+            ))}
         </div>
       </div>
     );
   }
-
   return (
     <div className={classes.listbg}>
       <div className={classes.listctn}>

@@ -9,7 +9,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { stockDetailGet } from "../../stores/stockSlice";
 import { likeStockPost, realtimeAccountGet } from "../../stores/userSlice";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 
+const style = {
+  position: "absolute",
+  top: "40%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 324,
+  height: 320,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 5,
+};
+
+const styleTwo = {
+  position: "absolute",
+  top: "40%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 324,
+  height: 225,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 5,
+  border: "none",
+};
 
 function StockDetailPage() {
   const params = useParams();
@@ -19,7 +47,6 @@ function StockDetailPage() {
   // useEffect로 데이터 받아오고 구매주식목록에 있으면 true, 없으면 false 그대로
   const [showSellButton, setShowSellButton] = useState(false);
   // useEffect로 데이터 받아오고 관심목록에 있으면 true, 없으면 false 그대로
-  const [isWatchlist, setisWatchlist] = useState(true);
   const [mainColor, setMainColor] = useState("#DD4956");
   const stockData = useSelector((state) => {
     return state.setStock.detail;
@@ -35,10 +62,6 @@ function StockDetailPage() {
   });
   const haveList = useSelector((state) => {
     return state.persistedReducer.setUser.user.haveList;
-  });
-  console.log("have", haveList)
-  const likeList = useSelector((state) => {
-    return state.persistedReducer.setUser.user.likeList;
   });
   const data = {
     config: {
@@ -72,31 +95,7 @@ function StockDetailPage() {
         setShowSellButton(false);
       }
     });
-    try {
-      if (!likeList.includes(id)) {
-        setisWatchlist(false);
-      } else {
-        setisWatchlist(true);
-      }
-    } catch {
-      return;
-    }
-  }, [haveList, likeList]);
-
-
-  useEffect(() => {
-    const wss = new WebSocket("wss://k7b204.p.ssafy.io:443/api1/socket/ws");
-    wss.onopen = () => {
-      wss.send("전지수 보이삼보이삼?");
-    };
-    wss.onmessage = (event) => {
-      console.log(`받았다 니 데이터 : ${event.data}`);
-    };
-    wss.onclose = (event) => {
-      console.log(`${event.data}`)
-      console.log(`끝`)
-    }
-  });
+  }, [haveList]);
 
   function changeToCandle() {
     setShowCandleGraph(true);
@@ -104,7 +103,89 @@ function StockDetailPage() {
   function changeToLine() {
     setShowCandleGraph(false);
   }
+  function OpenQModal() {
+    const [graphExplain, setGraphExplain] = useState(false);
+    function handleQModalOpen() {
+      setGraphExplain(true);
+    }
+    function handleQModalClose() {
+      setGraphExplain(false);
+    }
+    return (
+      <div style={{ marginLeft: "3%" }}>
+        <img
+          src={`${process.env.PUBLIC_URL}/Q.svg`}
+          alt=""
+          onClick={handleQModalOpen}
+        />
+        <Modal open={graphExplain} onClose={handleQModalClose}>
+          <Box className={classes.deletebox} sx={style}>
+            <div className={classes.title}>라인그래프의 색은?</div>
+            <div className={classes.yellowbox}>
+              <div className={classes.flexrow}>
+                <div>현재가가 전일 종가보다 높을때</div>
+                <div className={classes.red} style={{ marginLeft: 8 }}>빨간색</div>
+              </div>
+              <div className={classes.flexrow}>
+                <div>현재가가 전일 종가보다 낮을때</div>
+                <div className={classes.blue} style={{ marginLeft: 8 }}>파란색</div>
+              </div>
+            </div>
+            <div className={classes.title} style={{ marginTop: 8 }}>라인그래프의 구성</div>
+            <div className={classes.graybox}>
+              <div>
+                <div style={{ color: '#7BCDC8' }}>최고가</div>
+                <div>해당 기간중 가장 높은 가격으로 거래된 가격</div>
+              </div>
+              <div>
+                <div style={{ color: '#7BCDC8' }}>최저가</div>
+                <div>해당 기간중 가장 낮은 가격으로 거래된 가격</div>
+              </div>
+            </div>
+          </Box>
+        </Modal>
+      </div>
+    );
+  }
 
+  function OpenMaxMinModal() {
+    const [mmExplain, setMmExplain] = useState(false);
+    function handleMModalOpen() {
+      setMmExplain(true);
+    }
+    function handleMModalClose() {
+      setMmExplain(false);
+    }
+    return (
+      <div style={{ marginLeft: "3%" }}>
+        <img
+          src={`${process.env.PUBLIC_URL}/Q.svg`}
+          alt=""
+          onClick={handleMModalOpen}
+        />
+        <Modal open={mmExplain} onClose={handleMModalClose}>
+          <Box className={classes.deletebox} sx={styleTwo}>
+            <div className={classes.title}>이 주식은 오늘?</div>
+            <div className={classes.minmaxbox}>
+              주식 시장에서 개별 종목이 상승할 수 있는 최대 가격을<br />상한가, 하락할 수 있는 최저가를 하한가로 정해 가격<br />변동 폭을 제한하고 있습니다.
+            </div>
+            <div className={classes.yellowbox}>
+              <div className={classes.flexrow}>
+                <div className={classes.red}>상한가</div>
+                <div>는 어제 종가를 기준으로</div>
+                <div className={classes.red} style={{ marginLeft: 8 }}>+30%</div>
+              </div>
+              <div className={classes.flexrow}>
+                <div className={classes.blue}>하한가</div>
+                <div>는 어제 종가를 기준으로</div>
+                <div className={classes.blue} style={{ marginLeft: 8 }}>-30%</div>
+              </div>
+            </div>
+          </Box>
+        </Modal>
+      </div>
+    );
+  }
   function StockDetailGraph() {
     const [candleGraphData, setCandleGraphData] = useState({
       series: [
@@ -162,11 +243,11 @@ function StockDetailPage() {
             },
           },
           axisBorder: {
-            show: false
+            show: false,
           },
           axisTicks: {
             show: false,
-          }
+          },
         },
         yaxis: {
           show: false,
@@ -293,11 +374,11 @@ function StockDetailPage() {
             },
           },
           axisBorder: {
-            show: false
+            show: false,
           },
           axisTicks: {
             show: false,
-          }
+          },
         },
         yaxis: [
           {
@@ -699,7 +780,6 @@ function StockDetailPage() {
           stockData.weekly_max.time.slice(2, 4);
         extremeValues[0].y = stockData.weekly_min.min_price;
         extremeValues[1].y = stockData.weekly_max.max_price;
-        console.log("weekly", extremeValues);
         setCandleGraphData((pre) => ({
           ...pre,
           series: [
@@ -1043,6 +1123,7 @@ function StockDetailPage() {
               />
             </div>
           )}
+          <OpenQModal />
         </div>
       </>
     );
@@ -1120,39 +1201,81 @@ function StockDetailPage() {
   }
   // 가격업데이트 될 때, 해당 데이터도 업데이트
   function BuySellButton() {
-    if (showSellButton) {
-      return (
-        <div style={{ width: "100%" }}>
-          <div className={classes.sellbuy}>
-            <div className={classes.flx}>
+    const date = new Date();
+    const nowDay = `${date.getFullYear()}-${("00" + (date.getMonth() + 1))
+      .toString()
+      .slice(-2)}-${("00" + date.getDate()).toString().slice(-2)}`;
+    const nowTime = date.getTime();
+    const before = new Date(`${nowDay} 09:00:00`).getTime();
+    const after = new Date(`${nowDay} 15:00:00`).getTime();
+    const weekend = ["Sat", "Sun"];
+    const week = date.toString().slice(0, 3);
+
+    if (before <= nowTime && nowTime <= after && !weekend.includes(week)) {
+      if (showSellButton) {
+        return (
+          <div className={classes.buttons}>
+            <div className={classes.buysell}>
               <Link to={`/stock/sell/${id}`}>
-                <button style={{ marginRight: "5px" }} className={classes.sell}>
+                <button
+                  style={{ backgroundColor: "#7BCDC8", marginRight: "8px" }}
+                  className={classes.buysellbutton}
+                >
                   팔래요
                 </button>
               </Link>
-            </div>
-            <div className={classes.flx}>
               <Link to={`/stock/buy/${id}`}>
-                <button className={classes.buy}>살래요</button>
+                <button
+                  style={{ backgroundColor: "#FECE6D" }}
+                  className={classes.buysellbutton}
+                >
+                  살래요
+                </button>
               </Link>
             </div>
+          </div>
+        );
+      } else {
+        return (
+          <div className={classes.buttons}>
+            <div className={classes.buysell}>
+              <Link to={`/stock/buy/${id}`} state={{ data: shortStockData }}>
+                <button style={{ backgroundColor: "#FECE6D" }} className={classes.sellbutton}>살래요</button>
+              </Link>
+            </div>
+          </div>
+        );
+      }
+    } else {
+      return (
+        <div className={classes.buttons}>
+          <div className={classes.buysell}>
+            <button className={classes.sellbutton}>
+              주문가능한 시간이 아닙니다
+            </button>
           </div>
         </div>
       );
     }
-    return (
-      <div className={classes.onlysellbuy}>
-        <Link to={`/stock/buy/${id}`} state={{ data: shortStockData }}>
-          <button className={classes.onlybuy}>살래요</button>
-        </Link>
-      </div>
-    );
   }
   function WishListIcon() {
-    let data = {};
-    if (userToken) {
-      data = { token: userToken, id: stockData.id };
-    }
+    const [isWatchlist, setisWatchlist] = useState(true);
+
+    const data = { token: userToken, id: stockData.id };
+    const likeList = useSelector((state) => {
+      return state.persistedReducer.setUser.user.likeList;
+    });
+    useEffect(() => {
+      try {
+        if (!likeList.includes(id)) {
+          setisWatchlist(false);
+        } else {
+          setisWatchlist(true);
+        }
+      } catch {
+        return;
+      }
+    }, [likeList]);
     const heartClick = () => {
       dispatch(likeStockPost(data));
     };
@@ -1164,7 +1287,7 @@ function StockDetailPage() {
           viewBox="0 0 23 20"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          onClick={heartClick}
+          onClick={() => heartClick()}
         >
           <path
             d="M20.6386 1.36753C18.1922 -0.717255 14.5539 -0.342262 12.3084 1.97466L11.4289 2.88089L10.5495 1.97466C8.30843 -0.342262 4.66564 -0.717255 2.21926 1.36753C-0.584263 3.76034 -0.731582 8.05491 1.7773 10.6486L10.4155 19.5681C10.9736 20.144 11.8798 20.144 12.4378 19.5681L21.0761 10.6486C23.5894 8.05491 23.4421 3.76034 20.6386 1.36753Z"
@@ -1180,7 +1303,7 @@ function StockDetailPage() {
         viewBox="0 0 23 20"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        onClick={heartClick}
+        onClick={() => heartClick()}
       >
         <path
           d="M20.6386 1.36753C18.1922 -0.717255 14.5539 -0.342262 12.3084 1.97466L11.4289 2.88089L10.5495 1.97466C8.30843 -0.342262 4.66564 -0.717255 2.21926 1.36753C-0.584263 3.76034 -0.731582 8.05491 1.7773 10.6486L10.4155 19.5681C10.9736 20.144 11.8798 20.144 12.4378 19.5681L21.0761 10.6486C23.5894 8.05491 23.4421 3.76034 20.6386 1.36753Z"
@@ -1235,20 +1358,21 @@ function StockDetailPage() {
       </div>
     );
   }
+
   function CompareText() {
     if (stockData.fluctuation_rate > 0) {
       setMainColor("#DD4956");
       return (
-        <div>
-          어제보다 {stockData.fluctuation_price}원 올랐어요 (+
+        <div style={{ color: "#DD4956" }}>
+          어제보다 {stockData?.fluctuation_price ? stockData.fluctuation_price.toLocaleString() : 0}원 올랐어요 (+
           {stockData.fluctuation_rate}%)
         </div>
       );
     } else {
       setMainColor("#4D97ED");
       return (
-        <div>
-          어제보다 {stockData.fluctuation_price}원 떨어졌어요 (
+        <div style={{ color: "#4D97ED" }}>
+          어제보다 {stockData?.fluctuation_price ? stockData.fluctuation_price.toLocaleString() : 0}원 떨어졌어요 (
           {stockData.fluctuation_rate}%)
         </div>
       );
@@ -1273,7 +1397,7 @@ function StockDetailPage() {
           <div className={classes.dtctntitle}>
             <div className={classes.script}>{id} / KOSPI</div>
             <div className={classes.big}>{stockData.name}</div>
-            <div className={classes.big}>{shortStockData.price}원</div>
+            <div className={classes.big}>{shortStockData?.price ? shortStockData.price.toLocaleString(): 0}원</div>
             {stockData && <CompareText />}
           </div>
           <div className={classes.subctn1graph}>
@@ -1291,22 +1415,18 @@ function StockDetailPage() {
             />
             <div className={classes.today}>이 주식은 오늘 ?</div>
           </div>
-          <img
-            style={{ marginRight: "5px" }}
-            src={`${process.env.PUBLIC_URL}/Q.svg`}
-            alt=""
-          />
+          <OpenMaxMinModal />
         </div>
         <div>
           {stockData && (
             <div className={classes.repre}>
               <div className={classes.rowbox}>
                 아무리 올라도{" "}
-                <div className={classes.upcoltex}>{stockData.maximum}원</div>
+                <div className={classes.upcoltex}>{stockData?.maximum ? stockData.maximum.toLocaleString():0}원</div>
               </div>
               <div className={classes.rowbox}>
                 아무리 떨어져도{" "}
-                <div className={classes.downcoltex}>{stockData.minimum}원</div>
+                <div className={classes.downcoltex}>{stockData?.minimum ? stockData.minimum.toLocaleString():0}원</div>
               </div>
             </div>
           )}
@@ -1345,7 +1465,7 @@ function StockDetailPage() {
             <div>
               <div className={classes.info}>거래대금</div>
               <div style={{ fontSize: "15px" }}>
-                {stockData.trading_value}원
+                {stockData?.trading_value ? stockData.trading_value.toLocaleString(): 0}원
               </div>
             </div>
             <div>
@@ -1363,7 +1483,7 @@ function StockDetailPage() {
                   alt=""
                 />
               </div>
-              <div className={classes.infotxt}>{stockData.eps}원</div>
+              <div className={classes.infotxt}>{stockData?.eps ? stockData.eps.toLocaleString():0}원</div>
             </div>
             <div className={classes.explainbox}>
               <div className={classes.space}>
@@ -1428,8 +1548,48 @@ function StockDetailPage() {
                 </div>
               </div>
             </div>
-            <div style={{ height: "80px" }}></div>
           </div>
+          <div className={classes.line}></div>
+          {stockData.div_yield ? (
+            <div className={classes.epsper}>
+            <div className={classes.imgrowbox}>
+              <div className={classes.rowbox}>
+                <div className={classes.today}>{stockData.name}의 배당수익률</div>
+                <img
+                  src={`${process.env.PUBLIC_URL}/stock-detail/increase.svg`}
+                  alt=""
+                />
+              </div>
+              <div className={classes.infotxt}>{stockData.div_yield}%</div>
+            </div>
+            <div className={classes.explainbox}>
+              <div className={classes.space}>
+                <div className={classes.today}>배당수익률 이란?</div>
+                <div className={classes.script}>
+                1주당 배당금의 비율로, 해당 주식에 투자하면 얻을 수
+                있는 수익을 나타내는 지표입니다.
+                </div>
+              </div>
+              <div className={classes.space}>
+                <div className={classes.greenbox}>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/stock-detail/check-circle.svg`}
+                    alt=""
+                  />
+                  <div className={classes.green}>어떻게 판단하나요?</div>
+                </div>
+                <div
+                  style={{ marginBottom: "18px", marginTop: "0px" }}
+                  className={classes.script}
+                >
+                  주가가 오르지 않아도 배당수익률 만큼의 수익을 기대할 수 있어 실제 시장에서의 수익성을 판단할 수 있습니다.
+                </div>
+              </div>
+            </div>
+          </div>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <BuySellButton />

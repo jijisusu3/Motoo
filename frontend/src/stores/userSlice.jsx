@@ -40,7 +40,6 @@ const likeStockPost = createAsyncThunk(
         return response.data.favoriteStockCodeList;
       })
       .catch((err) => {
-        console.log(err.data);
       });
   }
 );
@@ -62,15 +61,12 @@ const quizPut = createAsyncThunk("stockList/quizResult", async (data) => {
   return axios
     .put(`${api2}quiz`, quizResult, config)
     .then((response) => {
-      console.log(response.data.message);
       return response.data.message;
     })
     .catch((err) => {
-      console.log(err.data);
     });
 });
 
-// 주식 디테일페이지에 ㄱㄱ, 대기중인 주식에서도 ㄱㄱ
 const realtimeAccountGet = createAsyncThunk(
   "stock/accountGet",
   async (data) => {
@@ -81,6 +77,14 @@ const realtimeAccountGet = createAsyncThunk(
       });
   }
 );
+
+const schoolPut = createAsyncThunk("school/schoolPut", async (data) => {
+  return axios
+    .put(`${api2}school/`, data.result, data.config)
+    .then((response) => {
+      return response.data;
+    });
+});
 
 const stockTradingPost = createAsyncThunk("stock/tradingPost", async (data) => {
   return axios.post(`${api2}trading`, data.result, data.config).then(() => {});
@@ -112,7 +116,6 @@ export const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     setLogin: (state, action) => {
-      // console.log(action.payload)
       state.user.isLoggin = true;
       state.user.token = action.payload.token;
       state.user.likeList = action.payload.user.favoriteStockCode;
@@ -144,17 +147,18 @@ export const userSlice = createSlice({
       state.quizData = action.payload;
     });
     builder.addCase(realtimeAccountGet.fulfilled, (state, action) => {
-      console.log(action.payload)
       state.user.haveList = action.payload.stockInfo;
       state.user.data.seed = action.payload.availableSeed;
     });
     builder.addCase(accountChangePut.fulfilled, (state, action) => {
       state.user.data.current = action.payload;
-      console.log(action.payload);
     });
     builder.addCase(userDelete.fulfilled, () => {
       window.localStorage.clear();
       window.location.replace("/login");
+    });
+    builder.addCase(schoolPut.fulfilled, (state, action) => {
+      state.user.data.schoolId = action.payload;
     });
   },
 });
@@ -170,4 +174,5 @@ export {
   stockTradingPost,
   accountChangePut,
   userDelete,
+  schoolPut,
 };

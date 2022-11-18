@@ -13,6 +13,7 @@ const initialState = {
   limitList: [],
   bidask: {},
   schoolStock: {},
+  rejectedList: [],
 };
 
 const categoryGet = createAsyncThunk("stock-detail/categoryGet", async (id) => {
@@ -33,7 +34,6 @@ const stockDetailGet = createAsyncThunk("stock-detail", async (num) => {
 
 const shortStockGet = createAsyncThunk("stock/short", async (num) => {
   return axios.get(`${api1}stocks/trade/${num}`).then((response) => {
-    console.log(response.data);
     return response.data;
   });
 });
@@ -51,11 +51,9 @@ const likeListGet = createAsyncThunk("stock-list/likeList", async (data) => {
 });
 
 const stockSellPost = createAsyncThunk("stock/sellPost", async (data) => {
-  console.log(data);
   return axios
     .post(`${api2}account/sell`, data.result, data.config)
     .then(() => {
-      console.log("여긴안오고");
     });
 });
 
@@ -67,18 +65,25 @@ const limitListGet = createAsyncThunk("stock/limitListGet", async (data) => {
     });
 });
 
+const rejectedLimitListGet = createAsyncThunk("stock/rejectedLimitListGet", async (data) => {
+  return axios
+    .get(`${api2}trading/rejected/${data.id}`, data.config)
+    .then((response) => {
+      return response.data.tradings
+    });
+});
+
 const limitOrderPut = createAsyncThunk("stock/limitEditPut", async (data) => {
   return axios
     .put(`${api2}trading/${data.tradeId}`, data.result, data.config)
     .then((response) => {
-      console.log(response.data);
     });
 });
+
 const limitOrderDelete = createAsyncThunk("stock/limitEditPut", async (data) => {
   return axios
     .delete(`${api2}trading/${data.tradeId}`, data.config)
     .then((response) => {
-      console.log(response.data);
     });
 });
 
@@ -103,7 +108,6 @@ export const stockSlice = createSlice({
       state.category = action.payload;
     });
     builder.addCase(stockDetailGet.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.detail = action.payload;
       const tmp = {
         price: action.payload.price,
@@ -124,7 +128,6 @@ export const stockSlice = createSlice({
     });
     builder.addCase(likeListGet.fulfilled, (state, action) => {
       state.likeList = action.payload;
-      console.log(action.payload);
     });
     builder.addCase(limitListGet.fulfilled, (state, action) => {
       state.limitList = action.payload;
@@ -134,6 +137,9 @@ export const stockSlice = createSlice({
     });
     builder.addCase(schoolBestGet.fulfilled, (state, action) => {
       state.schoolStock = action.payload;
+    });
+    builder.addCase(rejectedLimitListGet.fulfilled, (state, action) => {
+      state.rejectedList = action.payload;
     });
   },
 });
@@ -149,5 +155,6 @@ export {
   limitOrderPut,
   limitOrderDelete,
   bidaskGet,
-  schoolBestGet
+  schoolBestGet,
+  rejectedLimitListGet
 };

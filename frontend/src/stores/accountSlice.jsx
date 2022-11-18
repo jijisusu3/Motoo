@@ -20,7 +20,6 @@ const accountDetailGet = createAsyncThunk(
     return axios
       .get(`${api2}detail?accountId=${data.id}`, data.config)
       .then((response) => {
-        console.log(response.data)
         return response.data;
       });
   }
@@ -53,7 +52,6 @@ const accountCreate = createAsyncThunk(
     return axios
       .post(`${api2}account`, data.result, data.config)
       .then((response) => {
-        console.log("???")
         return response.data;
       });
   }

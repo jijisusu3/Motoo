@@ -13,7 +13,6 @@ function QuizPage() {
   const quizData = useSelector((state) => {
     return state.persistedReducer.setUser.quizData
   })
-  console.log(quizData)
 
   useEffect(() => {
     dispatch(setActiveNav(1));

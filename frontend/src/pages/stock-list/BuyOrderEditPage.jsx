@@ -46,7 +46,6 @@ function BuyOrderEditPage() {
     return state.persistedReducer.setUser.user;
   });
   const mySeed = userData.data.seed;
-  console.log(tradeData);
   const navigate = useNavigate();
   function backToLimitOrderList() {
     navigate(`/stock/limit-order`);
@@ -99,9 +98,13 @@ function BuyOrderEditPage() {
         if (tempPrice > tradeData.maximum) {
           // 상한가보다 클때
           setIsTooHigh(true);
+          setIsTooLow(false);
           setTimeout(() => {
             setIsTooHigh(false);
           }, 1000);
+          if (Number(wantedPrice) <= tradeData.price * 0.7) {
+            setIsTooLow(true);
+          }
           return;
         } else if (tempPrice < tradeData.minimum) {
           // 하한가보다 낮을때
@@ -118,7 +121,6 @@ function BuyOrderEditPage() {
           } else {
             setIsAvailable(true);
             setTotal(tempPrice * Number(wantedMany));
-            console.log(typeof total);
           }
         }
         setWantedPrice(wantedPrice + event.target.value);
@@ -147,18 +149,7 @@ function BuyOrderEditPage() {
             setIsAvailable(true);
           }, 1000);
           return;
-        } else {
-          if (tradeData.price * Number(wantedMany) > mySeed) {
-            setIsAvailable(false);
-            setTimeout(() => {
-              setIsAvailable(true);
-            }, 1000);
-            return;
-          } else {
-            setIsAvailable(true);
-            setTotal(tradeData.price * Number(wantedMany));
-          }
-        }
+        } 
         setWantedMany(String(tempMany));
       } else {
         if (wantedMany !== "") {
@@ -170,18 +161,16 @@ function BuyOrderEditPage() {
   };
 
   const priceClickHandler = () => {
-    console.log("가격누름");
     setWritePrice(true);
   };
   const manyClickHandler = () => {
-    console.log("개수누름");
     setWritePrice(false);
   };
   function PriceInput() {
     // 직접입력하겠다고 할 때,
     if (wantedPrice === "") {
       return (
-        <span class={classes.buyNumber} onClick={priceClickHandler}>
+        <div class={classes.howmuch1} onClick={priceClickHandler}>
           {writePrice && (
             <img
               className={classes.blinking}
@@ -189,23 +178,23 @@ function BuyOrderEditPage() {
               alt=""
             />
           )}
-          <span class={classes.howMuchWant}>얼마로 변경할까요?</span>
-        </span>
+          <span>얼마로 변경할까요?</span>
+        </div>
       );
     } else {
       return (
         <>
-          <span class={classes.buyNumber} onClick={priceClickHandler}>
+          <div class={classes.howmuch2} onClick={priceClickHandler}>
             {wantedPrice}
-          </span>
-          {writePrice && (
-            <img
+            {writePrice && (
+              <img
               className={classes.blinking}
               src={`${process.env.PUBLIC_URL}/stock-detail/inputIcon.svg`}
               alt=""
-            />
-          )}
-          <span class={classes.zuOrwon}>원</span>
+              />
+              )}
+            <span>원</span>
+          </div>
         </>
       );
     }
@@ -213,7 +202,7 @@ function BuyOrderEditPage() {
   function ManyInput() {
     if (wantedMany === "") {
       return (
-        <div class={classes.buyNumber} onClick={manyClickHandler}>
+        <div class={classes.howmuch1} onClick={manyClickHandler}>
           {!writePrice && (
             <img
               className={classes.blinking}
@@ -221,15 +210,14 @@ function BuyOrderEditPage() {
               alt=""
             />
           )}
-          <span class={classes.howMuchWant}>몇 주로 변경할까요?</span>
+          <span>몇 주로 변경할까요?</span>
         </div>
       );
     } else {
       return (
         <>
-          <div class={classes.buyNumber} onClick={manyClickHandler}>
+          <div class={classes.howmuch2} onClick={manyClickHandler}>
             {wantedMany}
-
             {!writePrice && (
               <img
                 className={classes.blinking}
@@ -237,14 +225,13 @@ function BuyOrderEditPage() {
                 alt=""
               />
             )}
-            <span class={classes.zuOrwon}>주</span>
+            <span>주</span>
           </div>
         </>
       );
     }
   }
   function submitEdit() {
-    // 현재가로 주문, 개수입력
     if (Boolean(wantedMany) && !isTooLow) {
       const data = {
         config: {
@@ -266,66 +253,69 @@ function BuyOrderEditPage() {
   }
   return (
     <div>
-      <div>
-        <div className={classes.info}>
+      <div style={{marginBottom: "20px"}} className={classes.buynav}>
+        <div>
           <img
-            className={classes.pd}
             src={`${process.env.PUBLIC_URL}/grayBack.svg`}
             alt=""
             onClick={backToLimitOrderList}
           />
-          <div>
-            <div>{tradeData.name}</div>
-          </div>
         </div>
-        <hr />
-      </div>
 
-      <div class={classes.total}>
-        <div class={classes.realPriceRadio}>
-          <div>
+        <p className={classes.buyname}>{tradeData.name}</p>
+
+        <div></div>
+      </div>
+      <hr />
+
+      <div class={classes.bigctn}>
+        <div className={classes.middlectn}>
+          <div className={classes.middlesubctn}>
             <PriceInput />
+            <ManyInput />
+            {mySeed && <div style={{ fontSize: "14px", marginTop: "5px", color: "#4E5E5E", fontWeight: "600"}}>사용가능 금액 <img src={`${process.env.PUBLIC_URL}/wallet/vege.svg`} style={{ marginBottom: '2px', marginLeft: '2px', marginRight: '10px', width: 12, height: 12 }} alt="" /> <span style={{ color: "#43B8B1", fontWeight: "500"}}>{mySeed? mySeed.toLocaleString(): 0}</span></div>}
+            <div class={classes.inputalrt}>
+              {isTooHigh === true && <p>그렇게 비싸겐 못사요</p>}
+              {isTooLow === true && isTooHigh === false && (
+                <p>그렇게 싸겐 못사요</p>
+              )}
+              {!isAvailable && <p>사용 가능한 금액을 초과했어요!</p>}
+            </div>
+
           </div>
+          <div>
 
-          <img
-            class={classes.hogaButton}
-            onClick={handleDeleteModalOpen}
-            src={`${process.env.PUBLIC_URL}/stock-list/trashcan.svg`}
-            alt=""
-          />
+            <img
+              class={classes.hogaButton}
+              onClick={handleDeleteModalOpen}
+              src={`${process.env.PUBLIC_URL}/trash.svg`}
+              alt=""
+            />
+
+          </div>
         </div>
-        <div class={classes.manyInput}>
-          <ManyInput />
-        </div>
-        {/* <PriceInput />
-        <ManyInput /> */}
 
-        {isTooHigh && <p>그렇게 비싸겐 못사요</p>}
 
-        {isTooLow && <p>그렇게 싸겐 못사요</p>}
-        {!isAvailable && <p>넌 그만큼 살 돈이 없어요 </p>}
-      </div>
-
-      <div class={classes.buyButtom}>
-        <div class={classes.numberSection}>
+      <div class={classes.numberctn}>
+        <div class={classes.numberbtns}>
           <div>
             <button
               value={1}
-              class={classes.numberButton}
+              class={classes.numberbtn}
               onClick={numberClick}
             >
               1
             </button>
             <button
               value={2}
-              class={classes.numberButton}
+              class={classes.numberbtn}
               onClick={numberClick}
             >
               2
             </button>
             <button
               value={3}
-              class={classes.numberButton}
+              class={classes.numberbtn}
               onClick={numberClick}
             >
               3
@@ -334,21 +324,21 @@ function BuyOrderEditPage() {
           <div>
             <button
               value={4}
-              class={classes.numberButton}
+              class={classes.numberbtn}
               onClick={numberClick}
             >
               4
             </button>
             <button
               value={5}
-              class={classes.numberButton}
+              class={classes.numberbtn}
               onClick={numberClick}
             >
               5
             </button>
             <button
               value={6}
-              class={classes.numberButton}
+              class={classes.numberbtn}
               onClick={numberClick}
             >
               6
@@ -357,21 +347,21 @@ function BuyOrderEditPage() {
           <div>
             <button
               value={7}
-              class={classes.numberButton}
+              class={classes.numberbtn}
               onClick={numberClick}
             >
               7
             </button>
             <button
               value={8}
-              class={classes.numberButton}
+              class={classes.numberbtn}
               onClick={numberClick}
             >
               8
             </button>
             <button
               value={9}
-              class={classes.numberButton}
+              class={classes.numberbtn}
               onClick={numberClick}
             >
               9
@@ -379,17 +369,17 @@ function BuyOrderEditPage() {
           </div>
 
           <div>
-            <button class={classes.numberButton} id={classes.lastNumber}>
-              ``
+            <button style={{color:"white"}} className={classes.numberbtn}>
+              0
             </button>
             <button
               value={0}
-              class={classes.numberButton}
+              class={classes.numberbtn}
               onClick={numberClick}
             >
               0
             </button>
-            <button class={classes.numberButton} onClick={numberClick}>
+            <button class={classes.numberbtn} onClick={numberClick}>
               <img
                 value="삭제"
                 src={`${process.env.PUBLIC_URL}/stock-detail/eraser.svg`}
@@ -397,15 +387,15 @@ function BuyOrderEditPage() {
               />
             </button>
           </div>
-        </div>
-        <div class={classes.buyButtonDiv} onClick={submitEdit}>
-          <button class={classes.buyButton}>살래요 수정</button>
+          <div onClick={submitEdit}>
+            <button className={classes.sellbutton}>매수 가격 수정하기</button>
+          </div>
         </div>
       </div>
 
       <Modal open={openDeleteModal} onClose={handleDeleteModalClose}>
         <Box className={classes.deletebox} sx={style}>
-          <div className={classes.title}>정말 삭제하시겠습니까??</div>
+          <div className={classes.title}>정말 삭제하시겠습니까?</div>
           <div className={classes.graybox}>
             <svg
               width="20"
@@ -422,7 +412,7 @@ function BuyOrderEditPage() {
             <div style={{ marginLeft: "15px" }}>
               구매 주문을 취소하면
               <br />
-              사용가능한 씨드가 재설정됩니다!
+              사용가능한 시드가 재설정됩니다.
             </div>
           </div>
           <button className={classes.btn} onClick={deleteSubmit}>
@@ -430,6 +420,7 @@ function BuyOrderEditPage() {
           </button>
         </Box>
       </Modal>
+      </div>
     </div>
   );
 }

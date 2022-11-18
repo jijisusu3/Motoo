@@ -12,7 +12,7 @@ from app.schemes.stocks import (GetStockDetailResponse,
                                 GetShortStockResponse,
                                 BidAskResponse,
                                 SchoolHotStockResponse,
-                                GetTradingStockInfoResponse, CandleData)
+                                GetTradingStockInfoResponse, CandleData, RealTimeStockResponse)
 
 router = APIRouter(prefix="/stocks")
 
@@ -53,7 +53,17 @@ async def get_stock_detail(ticker: str, response: Response):
     yearly_min = min(yearly, key=lambda x: x.min_price, default=None)
     yearly_max = max(yearly, key=lambda x: x.max_price, default=None)
     if not daily:
-        daily.append(CandleData(stock_id=stock.pk, date=today.strftime("%Y-%m-%d"), time='090000'))
+        daily.append(CandleData(
+            price=0,
+            open_price=0,
+            volume=0,
+            max_price=0,
+            min_price=0,
+            id=0,
+            stock_id=stock.pk,
+            date=today.strftime("%Y-%m-%d"),
+            time='090000'
+        ))
     today_len = abs(38-len(daily))
     for t in range(today_len):
         daily.append(
@@ -104,7 +114,17 @@ async def get_stock_short(ticker: str, response: Response):
     daily_min = min(daily, key=lambda x: x.min_price, default=None)
     daily_max = max(daily, key=lambda x: x.max_price, default=None)
     if not daily:
-        daily.append(CandleData(stock_id=stock.pk, date=today.strftime("%Y-%m-%d"), time='090000'))
+        daily.append(CandleData(
+            price=0,
+            open_price=0,
+            volume=0,
+            max_price=0,
+            min_price=0,
+            id=0,
+            stock_id=stock.pk,
+            date=today.strftime("%Y-%m-%d"),
+            time='090000'
+        ))
     today_len = abs(38-len(daily))
     for t in range(today_len):
         daily.append(
@@ -121,6 +141,17 @@ async def get_stock_short(ticker: str, response: Response):
                                  daily=daily,
                                  daily_min=daily_min,
                                  daily_max=daily_max)
+
+
+@router.get("/real-time/{ticker}", description="주식 실시간 조회",
+            response_model=RealTimeStockResponse)
+async def get_stock_real_time(ticker: str, response: Response):
+    try:
+        stock = await Stock.get(ticker=ticker)
+    except tortoise.exceptions.DoesNotExist:
+        response.status_code = 404
+        return RealTimeStockResponse(message="failed")
+    return RealTimeStockResponse(**dict(stock))
 
 
 @router.get("/trade/{ticker}", description="거래 중 주식 간단 조회", response_model=GetTradingStockInfoResponse)

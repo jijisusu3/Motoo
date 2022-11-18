@@ -14,13 +14,6 @@ const schoolGet = createAsyncThunk("school/listGet", async (data) => {
   });
 });
 
-const schoolPut = createAsyncThunk("school/schoolPut", async (data) => {
-  return axios
-    .put(`${api2}school/`, data.result, data.config)
-    .then((response) => {
-      return response.data;
-    });
-});
 
 const schoolPageGet = createAsyncThunk("school/pageGet", async (data) => {
   return axios.get(`${api2}schoolpage`, data).then((response) => {
@@ -36,13 +29,10 @@ export const schoolSlice = createSlice({
     builder.addCase(schoolGet.fulfilled, (state, action) => {
       state.schoolData = action.payload;
     });
-    builder.addCase(schoolPut.fulfilled, (state, action) => {
-      console.log("여기는 학교등록 thunk~!!");
-    });
     builder.addCase(schoolPageGet.fulfilled, (state, action) => {
       state.schoolBattleData = action.payload;
     });
   },
 });
 
-export { schoolGet, schoolPut, schoolPageGet };
+export { schoolGet, schoolPageGet };
