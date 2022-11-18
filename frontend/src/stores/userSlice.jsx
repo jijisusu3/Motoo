@@ -55,6 +55,18 @@ const quizGet = createAsyncThunk("stockList/quizGet", async (data) => {
   });
 });
 
+const quizUserGet = createAsyncThunk("stockList/quizUserGet", async (data) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${data}`,
+    },
+  };
+  return axios.get(`${api2}users`, config).then((response) => {
+    console.log(response.data)
+    return response.data
+  })
+})
+
 const quizPut = createAsyncThunk("stockList/quizResult", async (data) => {
   const config = data.config;
   const quizResult = data.quizResult;
@@ -160,6 +172,12 @@ export const userSlice = createSlice({
     builder.addCase(schoolPut.fulfilled, (state, action) => {
       state.user.data.schoolId = action.payload;
     });
+    builder.addCase(quizUserGet.fulfilled, (state, action) => {
+      const tmpQ = new Date(action.payload.quizDay)
+      const setD = `${tmpQ.getFullYear()}-${("00" + (tmpQ.getMonth() + 1))
+      .toString().slice(-2)}-${("00" + tmpQ.getDate()).toString().slice(-2)}`;
+      state.user.quizDay = setD
+    });
   },
 });
 
@@ -175,4 +193,5 @@ export {
   accountChangePut,
   userDelete,
   schoolPut,
+  quizUserGet
 };

@@ -44,8 +44,6 @@ function StockDetailPage() {
   const id = params.id;
   const [showCandleGraph, setShowCandleGraph] = useState(false);
   const navigate = useNavigate();
-  // useEffect로 데이터 받아오고 구매주식목록에 있으면 true, 없으면 false 그대로
-  const [showSellButton, setShowSellButton] = useState(false);
   // useEffect로 데이터 받아오고 관심목록에 있으면 true, 없으면 false 그대로
   const [mainColor, setMainColor] = useState("#DD4956");
   const stockData = useSelector((state) => {
@@ -59,9 +57,6 @@ function StockDetailPage() {
   });
   const userCurrent = useSelector((state) => {
     return state.persistedReducer.setUser.user.data.current;
-  });
-  const haveList = useSelector((state) => {
-    return state.persistedReducer.setUser.user.haveList;
   });
   const data = {
     config: {
@@ -86,16 +81,6 @@ function StockDetailPage() {
     dispatch(stockDetailGet(id));
     dispatch(realtimeAccountGet(data));
   }, []);
-
-  useEffect(() => {
-    haveList.forEach((element) => {
-      if (element.ticker === id) {
-        setShowSellButton(true);
-      } else {
-        setShowSellButton(false);
-      }
-    });
-  }, [haveList]);
 
   function changeToCandle() {
     setShowCandleGraph(true);
@@ -142,6 +127,7 @@ function StockDetailPage() {
                 <div>해당 기간중 가장 낮은 가격으로 거래된 가격</div>
               </div>
             </div>
+            <div>캔들그래프 알아보기</div>
           </Box>
         </Modal>
       </div>
@@ -1161,7 +1147,7 @@ function StockDetailPage() {
           <div className={classes.perc}>{sen.sen.toFixed(2)}%</div>
         </div>
       );
-    } else {
+    } else { 
       if (sen.thisIndex === sen.maxIndex) {
         border = "2px solid #B1CC33";
       }
@@ -1201,13 +1187,25 @@ function StockDetailPage() {
   }
   // 가격업데이트 될 때, 해당 데이터도 업데이트
   function BuySellButton() {
+    const [showSellButton, setShowSellButton] = useState(false);
+    const haveList = useSelector((state) => {
+      return state.persistedReducer.setUser.user.haveList;
+    });
+    useEffect(() => {
+      haveList.forEach((element) => {
+        if (element.ticker === id) {
+          setShowSellButton(true);
+        } else {
+        }
+      });
+    }, [haveList]);
     const date = new Date();
     const nowDay = `${date.getFullYear()}-${("00" + (date.getMonth() + 1))
       .toString()
       .slice(-2)}-${("00" + date.getDate()).toString().slice(-2)}`;
     const nowTime = date.getTime();
     const before = new Date(`${nowDay} 09:00:00`).getTime();
-    const after = new Date(`${nowDay} 15:00:00`).getTime();
+    const after = new Date(`${nowDay} 15:30:00`).getTime();
     const weekend = ["Sat", "Sun"];
     const week = date.toString().slice(0, 3);
 
@@ -1246,7 +1244,8 @@ function StockDetailPage() {
           </div>
         );
       }
-    } else {
+    } 
+    else {
       return (
         <div className={classes.buttons}>
           <div className={classes.buysell}>
