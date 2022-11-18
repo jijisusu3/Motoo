@@ -17,6 +17,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "100%",
+  maxWidth: "800px",
   height: "60%",
   bgcolor: "background.paper",
   boxShadow: 24,
@@ -69,9 +70,10 @@ function BuyStockPage() {
       options: {
         chart: {
           type: "bar",
-          height: 350,
+          height: "50%",
           width: 120,
-          offsetX: 10,
+          offsetX: -51,
+          offsetY: 25,
           toolbar: {
             show: false,
           },
@@ -98,15 +100,7 @@ function BuyStockPage() {
         },
         xaxis: {
           show: false,
-          categories: [
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December",
-          ],
+          categories: bidaskData.ask_pr,
           labels: {
             show: false,
           },
@@ -130,8 +124,21 @@ function BuyStockPage() {
           },
         },
         yaxis: {
-          show: false,
+          show: true,
           reversed: true,
+          labels: {
+            show: true,
+            style: {
+                fontSize: "14px",
+                fontWeight: "bold",
+            },
+            offsetX: 0,
+            offsetY: 0,
+            rotate: 0,
+            formatter: function(val) {
+              return Number(val).toLocaleString()+"원"
+            }
+        },
           axisTicks: {
             show: false,
           },
@@ -151,9 +158,10 @@ function BuyStockPage() {
       options: {
         chart: {
           type: "bar",
-          height: 400,
+          height: "50%",
           width: 120,
-          offsetX: 220,
+          offsetX: 51,
+          offsetY: -20,
           toolbar: {
             show: false,
           },
@@ -180,15 +188,7 @@ function BuyStockPage() {
         },
         xaxis: {
           show: false,
-          categories: [
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December",
-          ],
+          categories: bidaskData.bid_pr,
           labels: {
             show: false,
           },
@@ -212,11 +212,25 @@ function BuyStockPage() {
           },
         },
         yaxis: {
-          show: false,
+          show: true,
           reversed: false,
           axisTicks: {
             show: false,
           },
+          labels: {
+            show:true,
+            style: {
+              fontSize: "14px",
+              fontWeight: "bold",
+            },
+            offsetX: 0,
+            offsetY: 0,
+            rotate: 0,
+            formatter: function(val) {
+              return Number(val).toLocaleString()+"원"
+            }
+          }
+         
         },
         tooltip: {
           enabled: false,
@@ -240,31 +254,22 @@ function BuyStockPage() {
               <span class={classes.sellHoga}>팔려는 주식수</span>
               <span class={classes.buyHoga}>사려는 주식수</span>
             </div>
-
-            <ReactApexChart
-              options={buyData.options}
-              series={buyData.series}
-              type="bar"
-              height={200}
-              width={120}
-            />
-            <div>
-              {bidaskData.ask_pr.map((ask) => (
-                <div>{ask.toLocaleString()}원</div>
-              ))}
+            <div class={classes.bidaskCharts}>
+              <ReactApexChart
+                options={buyData.options}
+                series={buyData.series}
+                type="bar"
+                height={"40%"}
+                width={185}
+              />
+              <ReactApexChart
+                options={sellData.options}
+                series={sellData.series}
+                type="bar"
+                height={"40%"}
+                width={185}
+              />
             </div>
-            <div>
-              {bidaskData.bid_pr.slice(0, 4).map((bid) => (
-                <div>{bid.toLocaleString()}원</div>
-              ))}
-            </div>
-            <ReactApexChart
-              options={sellData.options}
-              series={sellData.series}
-              type="bar"
-              height={200}
-              width={120}
-            />
           </Box>
         </Modal>
       );
