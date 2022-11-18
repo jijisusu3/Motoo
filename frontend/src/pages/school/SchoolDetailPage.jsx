@@ -585,7 +585,7 @@ function SchoolDetailPage() {
               <span style={{ fontSize: "12px", color: "#36938E", fontWeight: 600}}>매일 아침 7시 20분 업데이트</span></div>
             )}
           </div>
-          <div style={{ height: 300 }}>
+          <div style={{ height: 250 }}>
             {schoolData?.schoolSubResponse?.sigunguSubResponse?.sigungu_name ? (
               <div>
                 <img
