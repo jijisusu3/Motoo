@@ -194,9 +194,9 @@ async def get_bidask_list(ticker: str):
             ask_list = redis_session.lrange('ask_' + ticker, 0, 9)
     return BidAskResponse(
         bid_pr=bid_list[:5],
-        ask_pr=ask_list[:5],
+        ask_pr=ask_list[:5][::-1],
         bid_rsqn=bid_list[5:],
-        ask_rsqn=ask_list[5:]
+        ask_rsqn=ask_list[5:][::-1]
     )
 
 
