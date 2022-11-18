@@ -1205,7 +1205,7 @@ function StockDetailPage() {
     const nowTime = date.getTime();
     const before = new Date(`${nowDay} 09:00:00`).getTime();
     const after = new Date(`${nowDay} 15:00:00`).getTime();
-    const weekend = ["Fri", "Sun"];
+    const weekend = ["Sat", "Sun"];
     const week = date.toString().slice(0, 3);
 
     if (before <= nowTime && nowTime <= after && !weekend.includes(week)) {
