@@ -62,7 +62,6 @@ const quizUserGet = createAsyncThunk("stockList/quizUserGet", async (data) => {
     },
   };
   return axios.get(`${api2}users`, config).then((response) => {
-    console.log(response.data)
     return response.data
   })
 })
