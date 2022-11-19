@@ -28,12 +28,12 @@ class ClosePrice(BaseModel):
 
 class ChartBase(MinMaxPrice, Volume, OpenPrice):
     id: int = None
-    stock_id: int
+    stock_id: int = None
     date: date_type = Field(default=None, description="날짜")
 
 
 class CandleData(ChartBase, Price):
-    time: str
+    time: str = None
 
 
 class DayChartData(ChartBase, ClosePrice):
