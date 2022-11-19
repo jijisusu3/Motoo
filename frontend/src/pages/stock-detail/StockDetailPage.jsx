@@ -96,6 +96,13 @@ function StockDetailPage() {
     function handleQModalClose() {
       setGraphExplain(false);
     }
+    const [showLineExplain, setShowLineExplain] = useState(false)
+    function clickLineExplain(){
+      setShowLineExplain(true)
+    }
+    function clickCandleExplain() {
+      setShowLineExplain(false)
+    }
     return (
       <div style={{ marginLeft: "3%" }}>
         <img
@@ -104,8 +111,35 @@ function StockDetailPage() {
           onClick={handleQModalOpen}
         />
         <Modal open={graphExplain} onClose={handleQModalClose}>
-          <Box className={classes.deletebox} sx={style}>
-            <div className={classes.title}>라인그래프의 색은?</div>
+          {showLineExplain ? (
+            <Box className={classes.deletebox} sx={style}>
+              <div className={classes.title}>라인그래프의 색은?</div>
+              <div className={classes.yellowbox}>
+                <div className={classes.flexrow}>
+                  <div>현재가가 전일 종가보다 높을때</div>
+                  <div className={classes.red} style={{ marginLeft: 8 }}>빨간색</div>
+                </div>
+                <div className={classes.flexrow}>
+                  <div>현재가가 전일 종가보다 낮을때</div>
+                  <div className={classes.blue} style={{ marginLeft: 8 }}>파란색</div>
+                </div>
+              </div>
+              <div className={classes.title} style={{ marginTop: 8 }}>라인그래프의 구성</div>
+              <div className={classes.graybox}>
+                <div>
+                  <div style={{ color: '#7BCDC8' }}>최고가</div>
+                  <div>해당 기간중 가장 높은 가격으로 거래된 가격</div>
+                </div>
+                <div>
+                  <div style={{ color: '#7BCDC8' }}>최저가</div>
+                  <div>해당 기간중 가장 낮은 가격으로 거래된 가격</div>
+                </div>
+              </div>
+              <div onClick={clickCandleExplain}>캔들그래프 알아보기</div>
+            </Box>
+          ):(
+            <Box className={classes.deletebox} sx={style}>
+            <div className={classes.title}>캔들그래프내용</div>
             <div className={classes.yellowbox}>
               <div className={classes.flexrow}>
                 <div>현재가가 전일 종가보다 높을때</div>
@@ -116,19 +150,20 @@ function StockDetailPage() {
                 <div className={classes.blue} style={{ marginLeft: 8 }}>파란색</div>
               </div>
             </div>
-            <div className={classes.title} style={{ marginTop: 8 }}>라인그래프의 구성</div>
+            <div className={classes.title} style={{ marginTop: 8 }}>캔들그래프의 구성</div>
             <div className={classes.graybox}>
               <div>
                 <div style={{ color: '#7BCDC8' }}>최고가</div>
-                <div>해당 기간중 가장 높은 가격으로 거래된 가격</div>
+                <div>지수화이팅~!</div>
               </div>
               <div>
                 <div style={{ color: '#7BCDC8' }}>최저가</div>
                 <div>해당 기간중 가장 낮은 가격으로 거래된 가격</div>
               </div>
             </div>
-            <div>캔들그래프 알아보기</div>
+            <div onClick={clickLineExplain}>라인그래프 알아보기</div>
           </Box>
+          )}
         </Modal>
       </div>
     );
