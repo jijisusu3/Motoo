@@ -119,6 +119,20 @@ function IndustryPage() {
       </div>
     );
   }
+  function IndustryInfo() {
+    try {
+      const IndustryDatas  = industryData.info.split(':')
+      return (
+        <div className={classes.titlebox}>
+          <div className={classes.title}>{industryData.name}</div>
+          {IndustryDatas && IndustryDatas.map((explain) => (
+            <div key={explain} className={classes.txts}>{explain}</div>
+          ))}
+        </div>
+      )
+    } catch{
+    }
+  }
   
   return (
     <div className={classes.industrybg}>
@@ -135,10 +149,7 @@ function IndustryPage() {
       <div className={classes.industryctn}>
 
         {/* <div className={classes.hrline}></div> */}
-        <div className={classes.titlebox}>
-          <div className={classes.title}>{industryData.name}</div>
-          <div className={classes.txts}>{industryData.info}</div>
-        </div>
+        <IndustryInfo />
         <div className={classes.hrline}></div>
         <div className={classes.rowbox}>
           <img
