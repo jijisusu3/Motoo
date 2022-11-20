@@ -18,8 +18,9 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 324,
-  height: 320,
+  height: 400,
   bgcolor: "background.paper",
+  border: "none",
   boxShadow: 24,
   p: 4,
   borderRadius: 5,
@@ -124,7 +125,7 @@ function StockDetailPage() {
                   <div className={classes.blue} style={{ marginLeft: 8 }}>파란색</div>
                 </div>
               </div>
-              <div className={classes.title} style={{ marginTop: 8 }}>라인그래프의 구성</div>
+              <div className={classes.title} style={{ marginTop: 16 }}>라인그래프의 구성</div>
               <div className={classes.graybox}>
                 <div>
                   <div style={{ color: '#7BCDC8' }}>최고가</div>
@@ -135,33 +136,35 @@ function StockDetailPage() {
                   <div>해당 기간중 가장 낮은 가격으로 거래된 가격</div>
                 </div>
               </div>
-              <div onClick={clickCandleExplain}>캔들그래프 알아보기</div>
+              <div className={classes.changebtn} onClick={clickCandleExplain}>캔들그래프 알아보기</div>
             </Box>
           ):(
             <Box className={classes.deletebox} sx={style}>
-            <div className={classes.title}>캔들그래프내용</div>
+            <div className={classes.title}>캔들그래프의 색은?</div>
             <div className={classes.yellowbox}>
               <div className={classes.flexrow}>
-                <div>현재가가 전일 종가보다 높을때</div>
+                <div>시가가 종가보다 낮을때</div>
                 <div className={classes.red} style={{ marginLeft: 8 }}>빨간색</div>
               </div>
               <div className={classes.flexrow}>
-                <div>현재가가 전일 종가보다 낮을때</div>
+                <div>시가가 종가보다 높을때</div>
                 <div className={classes.blue} style={{ marginLeft: 8 }}>파란색</div>
               </div>
             </div>
-            <div className={classes.title} style={{ marginTop: 8 }}>캔들그래프의 구성</div>
-            <div className={classes.graybox}>
+            <div className={classes.title} style={{ marginTop: 16 }}>캔들그래프의 구성</div>
+            <div className={classes.biggraybox}>
               <div>
-                <div style={{ color: '#7BCDC8' }}>최고가</div>
-                <div>지수화이팅~!</div>
+                <img className={classes.candleimg} src={`${process.env.PUBLIC_URL}/stock-detail/red.png`} alt=""/>
+                <img className={classes.candleimg} src={`${process.env.PUBLIC_URL}/stock-detail/blue.png`} alt=""/>
               </div>
-              <div>
-                <div style={{ color: '#7BCDC8' }}>최저가</div>
-                <div>해당 기간중 가장 낮은 가격으로 거래된 가격</div>
+              <div className={classes.txts}>
+                <div style={{ color: '#7BCDC8' }}>시가</div>
+                <div>주식시장이 시작하면서 당일<br />처음 거래된 개별종목의 가격</div>
+                <div style={{ color: '#7BCDC8', marginTop: 8 }}>종가</div>
+                <div>주식시장이 마감하면서 당일<br />마지막 거래된 개별종목의 가격</div>
               </div>
             </div>
-            <div onClick={clickLineExplain}>라인그래프 알아보기</div>
+            <div className={classes.changebtn} onClick={clickLineExplain}>라인그래프 알아보기</div>
           </Box>
           )}
         </Modal>

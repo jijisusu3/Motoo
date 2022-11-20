@@ -71,7 +71,7 @@ public class SchoolService {
         Float avg = accountAssetService.getTotalValuePLRatio(schoolAccId, id);
         School school = user.getSchool();
         Events events = eventsRepository.findFirstByOrderByEventsIdDesc();
-        return SchoolPageResponse.response(school, events, currentRank, asset, avg);
+        return SchoolPageResponse.response(school, events, currentRank, asset, avg,schoolAccId);
     }
 
     @Scheduled(cron = "0 0 07 * * *")

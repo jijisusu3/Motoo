@@ -31,7 +31,6 @@ public class AccountDetailController {
     @ApiResponses({@ApiResponse(code = 200, message = "계좌 상세조회 성공", response = BaseResponseBody.class), @ApiResponse(code = 401, message = "계좌 계좌 상세조회 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     public AccountDetailDTO accountDetail(Authentication authentication, Long accountId) {
         Long userId = userService.getUserIdByToken(authentication);
-//        Long accountId = accountDetailReq.getAccountId();
         AccountDetailDTO detailBuild = AccountDetailDTO.builder()
                 .AccountName(accountService.getAccount(accountId, userId).getName())
                 .School(accountService.getAccount(accountId, userId).isSchool())

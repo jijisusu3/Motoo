@@ -12,7 +12,7 @@ from app.schemes.stocks import (GetStockDetailResponse,
                                 GetShortStockResponse,
                                 BidAskResponse,
                                 SchoolHotStockResponse,
-                                GetTradingStockInfoResponse, CandleData, RealTimeStockResponse)
+                                GetTradingStockInfoResponse, CandleData, RealTimeStockResponse, DayChartData)
 
 router = APIRouter(prefix="/stocks")
 
@@ -29,10 +29,14 @@ async def get_stock_detail(ticker: str, response: Response):
         return GetStockDetailResponse(message="failed")
     now = datetime.datetime.now()
     today = date.today()
-    if now.hour < 9:
-        today -= timedelta(1)
     if today.weekday() >= 5:
         today = date.today() - timedelta(today.weekday() - 4)
+    if now.hour < 9 and now.weekday() < 5:
+        if now.weekday() == 0:
+            today -= timedelta(3)
+        else:
+            today -= timedelta(1)
+    # today += timedelta(1)
     # 차트 데이터
     daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today.strftime("%Y-%m-%d"))
     weekly = (await candle_map[stock.category_id].filter(
@@ -44,14 +48,106 @@ async def get_stock_detail(ticker: str, response: Response):
         stock_id=stock.pk,
         date__gte=date.today() - timedelta(365)
     ).order_by('-id'))[::5][::-1]
-    daily_min = min(daily, key=lambda x: x.min_price, default=None)
-    daily_max = max(daily, key=lambda x: x.max_price, default=None)
-    weekly_min = min(weekly, key=lambda x: x.min_price, default=None)
-    weekly_max = max(weekly, key=lambda x: x.max_price, default=None)
-    monthly_min = min(monthly, key=lambda x: x.min_price, default=None)
-    monthly_max = max(monthly, key=lambda x: x.max_price, default=None)
-    yearly_min = min(yearly, key=lambda x: x.min_price, default=None)
-    yearly_max = max(yearly, key=lambda x: x.max_price, default=None)
+    if daily:
+        daily_min = min(daily, key=lambda x: x.min_price, default=None)
+        daily_max = max(daily, key=lambda x: x.max_price, default=None)
+    else:
+        daily_min = CandleData(
+            price=0,
+            open_price=0,
+            volume=0,
+            max_price=0,
+            min_price=0,
+            id=0,
+            stock_id=stock.pk,
+            date=today.strftime("%Y-%m-%d"),
+            time='090000'
+        )
+        daily_max = CandleData(
+            price=0,
+            open_price=0,
+            volume=0,
+            max_price=0,
+            min_price=0,
+            id=0,
+            stock_id=stock.pk,
+            date=today.strftime("%Y-%m-%d"),
+            time='090000'
+        )
+    if weekly:
+        weekly_min = min(weekly, key=lambda x: x.min_price, default=None)
+        weekly_max = max(weekly, key=lambda x: x.max_price, default=None)
+    else:
+        weekly_min = CandleData(
+            price=0,
+            open_price=0,
+            volume=0,
+            max_price=0,
+            min_price=0,
+            id=0,
+            stock_id=stock.pk,
+            date=today.strftime("%Y-%m-%d"),
+            time='090000'
+        )
+        weekly_max = CandleData(
+            price=0,
+            open_price=0,
+            volume=0,
+            max_price=0,
+            min_price=0,
+            id=0,
+            stock_id=stock.pk,
+            date=today.strftime("%Y-%m-%d"),
+            time='090000'
+        )
+    if monthly:
+        monthly_min = min(monthly, key=lambda x: x.min_price, default=None)
+        monthly_max = max(monthly, key=lambda x: x.max_price, default=None)
+    else:
+        monthly_min = DayChartData(
+            close_price=0,
+            open_price=0,
+            volume=0,
+            max_price=0,
+            min_price=0,
+            id=0,
+            stock_id=0,
+            date=today.strftime("%Y-%m-%d")
+        )
+        monthly_max = DayChartData(
+            close_price=0,
+            open_price=0,
+            volume=0,
+            max_price=0,
+            min_price=0,
+            id=0,
+            stock_id=0,
+            date=today.strftime("%Y-%m-%d")
+        )
+    if yearly:
+        yearly_min = min(yearly, key=lambda x: x.min_price, default=None)
+        yearly_max = max(yearly, key=lambda x: x.max_price, default=None)
+    else:
+        yearly_min = DayChartData(
+            close_price=0,
+            open_price=0,
+            volume=0,
+            max_price=0,
+            min_price=0,
+            id=0,
+            stock_id=0,
+            date=today.strftime("%Y-%m-%d")
+        )
+        yearly_max = DayChartData(
+            close_price=0,
+            open_price=0,
+            volume=0,
+            max_price=0,
+            min_price=0,
+            id=0,
+            stock_id=0,
+            date=today.strftime("%Y-%m-%d")
+        )
     if not daily:
         daily.append(CandleData(
             price=0,
@@ -105,14 +201,41 @@ async def get_stock_short(ticker: str, response: Response):
         return GetStockDetailResponse(message="failed")
     now = datetime.datetime.now()
     today = date.today()
-    if now.hour < 9:
-        today -= timedelta(1)
     if today.weekday() >= 5:
         today = date.today() - timedelta(today.weekday() - 4)
+    if now.hour < 9 and now.weekday() < 5:
+        if now.weekday() == 0:
+            today -= timedelta(3)
+        else:
+            today -= timedelta(1)
     # 차트 데이터
     daily = await candle_map[stock.category_id].filter(stock_id=stock.pk, date=today.strftime("%Y-%m-%d"))
-    daily_min = min(daily, key=lambda x: x.min_price, default=None)
-    daily_max = max(daily, key=lambda x: x.max_price, default=None)
+    if daily:
+        daily_min = min(daily, key=lambda x: x.min_price, default=None)
+        daily_max = max(daily, key=lambda x: x.max_price, default=None)
+    else:
+        daily_min = CandleData(
+            price=0,
+            open_price=0,
+            volume=0,
+            max_price=0,
+            min_price=0,
+            id=0,
+            stock_id=stock.pk,
+            date=today.strftime("%Y-%m-%d"),
+            time='090000'
+        )
+        daily_max = CandleData(
+            price=0,
+            open_price=0,
+            volume=0,
+            max_price=0,
+            min_price=0,
+            id=0,
+            stock_id=stock.pk,
+            date=today.strftime("%Y-%m-%d"),
+            time='090000'
+        )
     if not daily:
         daily.append(CandleData(
             price=0,

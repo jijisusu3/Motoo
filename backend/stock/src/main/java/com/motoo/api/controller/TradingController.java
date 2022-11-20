@@ -40,9 +40,18 @@ public class TradingController {
     public ResponseEntity<? extends BaseResponseBody> createOrder(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "주문 상세 내용", required = true) @Valid MakeOrderPostReq makeOrderPostReq) throws Exception {
         //거래시간 설정
 //        LocalTime now = LocalTime.now();
+//        LocalDate date = LocalDate.now();
+//        // 2. DayOfWeek 객체 구하기
+//        DayOfWeek dayOfWeek = date.getDayOfWeek();
+//        // 3. 숫자 요일 구하기
+//        int dayOfWeekNumber = dayOfWeek.getValue();
+//        // 4. 숫자 요일 검증
+//        if (dayOfWeekNumber >=6){
+//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
+//        }
 //        int hour = now.getHour();
-//        if (hour >16){
-//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래시간이 아닙니다."));
+//        if (hour >16 || hour <9){
+//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
 //        }
 
 

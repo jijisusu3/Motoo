@@ -27,7 +27,7 @@ public class OrderDeleteBatch6And7 {
     }
 
     //초분시일월주
-    @Scheduled(cron = " 0 30 14 * * FRI ")
+    @Scheduled(cron = " 0 30 16 * * FRI ")
     public void timeScheduleAfterOneDay(){
         List<Trading> tradingList =  tradingService.tradingList6Or7WillBeDelete();
         for (int i=0; i<tradingList.size(); i++){

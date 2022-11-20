@@ -99,8 +99,8 @@ public class OrderExcution {
                     //accountStockId
 //                    Long accountStockId = accountStockService.getAccountStockIdByStockId(accountId, stockId);
 //                    AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
-//
-//                    //판매 거래내역에 추가
+////
+////                    //판매 거래내역에 추가
 //                    int original = accountStock.getPrice();
 //                    Integer converted = Integer.valueOf(original);
 //
@@ -111,12 +111,9 @@ public class OrderExcution {
 
 
                         //accountStockId 가져오기
-//                        System.out.println("account Id : "+ accountId);
-//                        System.out.println("stockId : "+ stockId);
+
                         //문제의 그곳 ..
 
-
-//                        Long accountStockId = accountStockRepositorySupport.findAccountIdByStockId(accountId,stockId);
 
 
                         //주식 소유여부 분기
@@ -174,7 +171,7 @@ public class OrderExcution {
                     else {
                         //시드머니 조회하여 구매가격이 시드머니보다 높으면 구매가능
                         if (account.getSeed() >= stock.getPrice()*amount){
-                            //구매할 금액*양이 현재 주식가격*양 보다 낮을경우 구매불가
+                            //구매할 금액*양이 현재 주식가격*양 보다 높을경우에 구매가능
                             if(amount*price > amount*stock.getPrice()){
                             //계좌 주식 리스트에 해당 주식이 있으면 주식 평단가 수정
                                 if (stockList.contains(stockId)){
@@ -198,17 +195,15 @@ public class OrderExcution {
                                      accountService.updateSeed(account, -(price * amount));
                                      //해당 보유주식 가격, 수량 변경
                                      accountStockService.updateAmountPrice(accountStock, newAmount, newPrice);
-                                     tradingService.updateType(trading,2);
-                                     log.info("주식이 체결됐습니다.");
-                                    }
+                                }
                             //사려는 주식이 계좌에 없는 경우 새로 구매 후 추가
                                  else {
                                      //시드머니 변경
                                      accountService.updateSeed(account, -(price * amount));
                                      accountStockService.addStockToAccount(userId, accountId, stockId, price, amount);
-                                     tradingService.updateType(trading,2);
-                                     log.info("주식이 체결됐습니다.");
-                                    }
+                                }
+                                tradingService.updateType(trading,2);
+                                log.info("주식이 체결됐습니다.");
                             }else {
                                 log.info("구매할 수 없는 금액입니다.");
                                 continue;
