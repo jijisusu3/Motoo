@@ -37,7 +37,7 @@
 
 ### 🖥 기술스택 
 
-![모투기술스택](/uploads/1e7c01d379255695dc0c37272e33f20f/모투기술스택.png)
+![모투기술스택](/uploads/a9e132eee98fc0bb13275b97fe8f799c/모투기술스택.png)
 
 
 
