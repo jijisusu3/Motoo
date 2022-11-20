@@ -43,7 +43,7 @@ function SellStockPage() {
   useEffect(() => {
     userData.haveList?.forEach((element) => {
       if (element.ticker === id) {
-        setMyStock(element.amount);
+        setMyStock(element.available);
       }
     });
   }, [userData]);
@@ -534,7 +534,7 @@ function SellStockPage() {
             <PriceInput />
 
             <ManyInput />
-            <div style={{ fontSize: "14px", marginTop: "5px", color: "#4E5E5E", fontWeight: "600"}}><img src={`${process.env.PUBLIC_URL}/wallet/egg.svg`}style={{ marginBottom: '2px', marginLeft: '2px', marginRight: '10px', width: 12, height: 12 }} alt="" />{myStock}주 보유</div>
+            <div style={{ fontSize: "14px", marginTop: "5px", color: "#4E5E5E", fontWeight: "600"}}><img src={`${process.env.PUBLIC_URL}/wallet/egg.svg`}style={{ marginBottom: '2px', marginLeft: '2px', marginRight: '10px', width: 12, height: 12 }} alt="" />최대 {myStock}주 입력가능</div>
             <div class={classes.inputalrt}>
               {!isMarketPrice && isTooHigh === true && <p>그렇게 비싸겐 못팔아요</p>}
               {!isMarketPrice && isTooLow === true && isTooHigh === false && (

@@ -678,7 +678,7 @@ function SchoolDetailPage() {
                   <div style={{ display: "inline" }}> 주식 🔥</div>
                 </div>
                 <div style={{ color: "#36938E", fontSize: 12 }}>
-                  구매주식없음
+                  HOT 주식없음
                 </div>
               </div>
             )}
