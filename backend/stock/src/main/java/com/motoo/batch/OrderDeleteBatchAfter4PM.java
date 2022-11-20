@@ -27,7 +27,7 @@ public class OrderDeleteBatchAfter4PM {
         this.tradingService = tradingService;
     }
     //초분시일월주
-    @Scheduled(cron = " 0 30 15 * * MON-FRI ")
+    @Scheduled(cron = " 0 30 16 * * MON-FRI ")
     public void timeScheduleAfter4Pm() {
         List<Trading> tradingLists = tradingService.tradingList3Or4WillBeChange();
         if (tradingLists == null) {
@@ -63,7 +63,6 @@ public class OrderDeleteBatchAfter4PM {
                     //구매미수 타입은 7
                     trading.updateType(7);
                 }
-
             }
         }
     }

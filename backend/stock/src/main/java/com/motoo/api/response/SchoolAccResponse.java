@@ -16,8 +16,10 @@ public class SchoolAccResponse {
 
     private Float myAvg;
 
-    public static SchoolAccResponse response(Integer r, Integer as, Float av){
-        return new SchoolAccResponse(r, as, av);
+    private Long schoolAccId;
+
+    public static SchoolAccResponse response(Integer r, Integer as, Float av, Long schoolAccId){
+        return new SchoolAccResponse(r, as, av, schoolAccId);
     }
     }
 
