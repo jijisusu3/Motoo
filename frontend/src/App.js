@@ -18,10 +18,14 @@ import IndustryPage from "./pages/stock-detail/IndustryPage";
 import StockDetailPage from "./pages/stock-detail/StockDetailPage";
 import QuizPage from "./pages/stock-list/QuizPage";
 import QuizResultPage from "./pages/stock-list/QuizResultPage";
+import { useSelector } from "react-redux";
 
 function PrivateOutlet() {
-  const isLogin = localStorage.getItem("login-token");
-  return isLogin ? <Outlet /> : <Navigate to="/login" />;
+  const getMyToken = useSelector((state) => {
+    return state.persistedReducer.setUser.user.token;
+  });
+  const getToken = localStorage.getItem("login-token");
+  return (getMyToken === getToken) ? <Outlet /> : <Navigate to="/login" />;
 }
 
 function App() {

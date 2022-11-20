@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const api1 = "https://k7b204.p.ssafy.io/api1/";
 const api2 = "https://k7b204.p.ssafy.io/api2/";
-
 const initialState = {
   user: {
     isLoggin: false,
@@ -82,7 +82,7 @@ const realtimeAccountGet = createAsyncThunk(
   "stock/accountGet",
   async (data) => {
     return axios
-      .get(`${api2}account/check/${data.id}`, data.config)
+      .get(`${api1}account/check/${data.id}`, data.config)
       .then((response) => {
         return response.data;
       });
