@@ -17,11 +17,16 @@ public class SchoolPageResponse {
 
     private SchoolAccResponse schoolAccResponse;
 
-    public static SchoolPageResponse response(School school, Events events, Integer cash, Integer asset, Float avg){
+    public static SchoolPageResponse response(School school, Events events, Integer cash, Integer asset, Float avg, Long schoolAccId){
 
-        return new SchoolPageResponse(new SchoolSubResponse(school.getSchoolId(),school.getSchoolname(), school.getCurrentRank(), school.getAverage(), school.getStudRanks(), SigunguSubResponse.response(school.getSigungu())),
+        return new SchoolPageResponse(
+
+                new SchoolSubResponse(school.getSchoolId(),school.getSchoolname(), school.getCurrentRank(), school.getAverage(), school.getStudRanks(), SigunguSubResponse.response(school.getSigungu())),
                 new EventsResponse(events.getEventsId(), events.getOpen_date(), events.getClose_date(), events.getHall_of_fame()),
-                new SchoolAccResponse(cash, asset, avg));
+                new SchoolAccResponse(cash, asset, avg, schoolAccId)
+
+
+        );
 
     }
 
