@@ -452,7 +452,7 @@ function SellStockPage() {
       dispatch(stockSellPost(data));
       setTimeout(() => {
         backTo();
-      }, 100);
+      }, 200);
     } else if (!isMarketPrice && Boolean(wantedMany) && !isTooLow) {
       const data = {
         config: {
@@ -471,7 +471,7 @@ function SellStockPage() {
       dispatch(stockTradingPost(data));
       setTimeout(() => {
         backTo();
-      }, 100);
+      }, 200);
     }
   }
 

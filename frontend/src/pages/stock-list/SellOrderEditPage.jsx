@@ -85,7 +85,7 @@ function SellOrderEditPage() {
     handleDeleteModalClose(false);
     setTimeout(() => {
       backToLimitOrderList();
-    }, 70);
+    }, 200);
   }
 
   const numberClick = (event) => {
@@ -242,7 +242,7 @@ function SellOrderEditPage() {
       dispatch(limitOrderPut(data));
       setTimeout(() => {
         backToLimitOrderList();
-      }, 70);
+      }, 200);
     }
   }
   return (
