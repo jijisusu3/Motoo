@@ -37,7 +37,7 @@
 
 ### 🖥 기술스택 
 
-
+![기술스택](/uploads/8bd70746f8bb0d51d4c6d66be2cb0616/KakaoTalk_20221121_014218431.png)
 
 
 
@@ -239,7 +239,7 @@
 
 ### 👨🏻‍💻팀원소개
 
-|           | <img src="/uploads/0e82c0ce1ac0cc7fb8f5df3267c62291/KakaoTalk_20221117_210513871.png" width="150"/> | <img src="/uploads/4e1190816bdcf50d86e753e3706ac4d3/KakaoTalk_20221117_210515048.png" width="150"/> | <img src="/uploads/9507670d4c8fa55a389366f0b70f8cbc/KakaoTalk_20221117_210514890.png" width="150"/> | <img src="/uploads/ddae2b16ae4bd7e780922394a1500598/KakaoTalk_20221117_210514376.png" width="150"/> |        |
+| <img src="/uploads/33a2fca5ddabdd76957bf0d200f233a9/KakaoTalk_20221117_221333841.png" width="120"/> | <img src="/uploads/0e82c0ce1ac0cc7fb8f5df3267c62291/KakaoTalk_20221117_210513871.png" width="120"/> | <img src="/uploads/4e1190816bdcf50d86e753e3706ac4d3/KakaoTalk_20221117_210515048.png" width="120"/> | <img src="/uploads/9507670d4c8fa55a389366f0b70f8cbc/KakaoTalk_20221117_210514890.png" width="120"/> | <img src="/uploads/ddae2b16ae4bd7e780922394a1500598/KakaoTalk_20221117_210514376.png" width="120"/> | <img src="/uploads/f6915ab7b36d9d076ea62a3231116a84/KakaoTalk_20221117_232242534.png" width="120"/> |
 | --------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------ |
 | 김지수    | 장진세                                                       | 전지수                                                       | 이진행                                                       | 권예슬                                                       | 이수랑 |
 | FE/LEADER | BE                                                           | BE                                                           | BE                                                           | BE/INFRA                                                     | BE     |
