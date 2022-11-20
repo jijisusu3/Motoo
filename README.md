@@ -37,45 +37,7 @@
 
 ### 🖥 기술스택 
 
-#### [BACK END]
-
-- FastAPI
-- Spring Boot
-
-#### [FRONT END]
-
-- React
-
-#### [DATABASE]
-
-- MySQL
-- Redis
-
-#### [DATA]
-
-- PyTorch
-- Pandas
-- Transfomers
-
-#### [DEVOPS]
-
-- Docker
-- AWS
-- Jenkins
-- Nginx
-- GitLab
-
-#### [TCT]
-
-- Jira
-- Figma
-- Notion
-- MatterMost
-
-#### [OPEN API]
-
-- KIS Developers
-- PyKrx
+![모투기술스택](/uploads/1e7c01d379255695dc0c37272e33f20f/모투기술스택.png)
 
 
 
