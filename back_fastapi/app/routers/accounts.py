@@ -13,18 +13,16 @@ from app.schemes.accounts import CheckAccountStockResponse, AccountStockInfo
 router = APIRouter(prefix="/account")
 
 
-@router.get("/check/{account_id}/{user_id}",
+@router.get("/check/{account_id}",
             description="해당 계좌의 보유한 주식, 보유량 조회",
             response_model=CheckAccountStockResponse)
-# async def check_account_stock(account_id: int, response: Response = 200, user: User = Depends(get_current_user)):
-async def check_account_stock(account_id: int, user_id: int, response: Response = 200):
+async def check_account_stock(account_id: int, response: Response = 200, user: User = Depends(get_current_user)):
     response.status_code = 200
     try:
-        user = await User.get(id=user_id)
         account = await Account.get(id=account_id, user_id=user.pk)
         account_stocks = await account.account_stock
-        selling = await Trading.filter(account_id=account_id, user_id=user_id, tr_type=3)
-        buying = await Trading.filter(account_id=account_id, user_id=user_id, tr_type=4)
+        selling = await Trading.filter(account_id=account_id, user_id=user.pk, tr_type=3)
+        buying = await Trading.filter(account_id=account_id, user_id=user.pk, tr_type=4)
         acc_stck_map = dict()
         seed = account.seed
         for ac_st in account_stocks:
