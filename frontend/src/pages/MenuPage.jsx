@@ -6,8 +6,6 @@ import { setActiveNav } from "../stores/navSlice";
 import { Link } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import { fontSize } from "@mui/system";
-import { ClassSharp } from "@mui/icons-material";
 // import classes from "../components/wallet/AccountDetailPage.module.css";
 const style = {
   position: "absolute",

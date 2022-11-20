@@ -43,7 +43,7 @@ function SellStockPage() {
   useEffect(() => {
     userData.haveList?.forEach((element) => {
       if (element.ticker === id) {
-        setMyStock(element.available);
+        setMyStock(element.amount);
       }
     });
   }, [userData]);
@@ -452,7 +452,7 @@ function SellStockPage() {
       dispatch(stockSellPost(data));
       setTimeout(() => {
         backTo();
-      }, 40);
+      }, 100);
     } else if (!isMarketPrice && Boolean(wantedMany) && !isTooLow) {
       const data = {
         config: {
@@ -471,7 +471,7 @@ function SellStockPage() {
       dispatch(stockTradingPost(data));
       setTimeout(() => {
         backTo();
-      }, 40);
+      }, 100);
     }
   }
 
@@ -516,7 +516,7 @@ function SellStockPage() {
                     onClick={checkBoxHandler}
                   />
                   &nbsp; &nbsp;
-                  <span className={classes.noworder}>시장가로 즉시 판매</span>
+                  <span className={classes.noworder}>현재가로 판매 주문</span>
                 </div>
               ) : (
                 <div>
@@ -526,7 +526,7 @@ function SellStockPage() {
                     onClick={checkBoxHandler}
                   />
                   &nbsp; &nbsp;
-                  <span className={classes.noworder}>시장가로 즉시 판매</span>
+                  <span className={classes.noworder}>현재가로 판매 주문</span>
                 </div>
               )}
             </div>

@@ -27,7 +27,6 @@ const style = {
 
 
 function SchoolDetailPage() {
-
   const dispatch = useDispatch();
   const user = useSelector((state) => {
     return state.persistedReducer.setUser.user;
@@ -44,15 +43,11 @@ function SchoolDetailPage() {
     dispatch(schoolPageGet(data));
     dispatch(schoolBestGet(data));
   }, []);
-
   const navigate = useNavigate();
-  function goToSchoolWallet() {
-    navigate(`/wallet/detail/${user.data.schoolId}`);
-  }
   function goToHotStock(ticker) {
     navigate(`/stock/detail/${ticker}`);
   }
-
+  
   const schoolData = useSelector((state) => {
     return state.setSchool.schoolBattleData;
   });
@@ -62,10 +57,12 @@ function SchoolDetailPage() {
   const myAsset = useSelector((state) => {
     return state.setSchool.schoolBattleData.schoolAccResponse;
   });
-
   const hotStock = useSelector((state) => {
     return state.setStock.schoolStock;
   });
+  function goToSchoolWallet() {
+    navigate(`/wallet/detail/${myAsset.schoolAccId}`);
+  }
 
   function ChangeSchool() {
     const [open, setOpen] = React.useState(false);
