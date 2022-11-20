@@ -43,11 +43,7 @@ function SchoolDetailPage() {
     dispatch(schoolPageGet(data));
     dispatch(schoolBestGet(data));
   }, []);
-  
   const navigate = useNavigate();
-  function goToSchoolWallet() {
-    navigate(`/wallet/detail/${mySchoolAsset.schoolAccId}`);
-  }
   function goToHotStock(ticker) {
     navigate(`/stock/detail/${ticker}`);
   }
@@ -64,6 +60,9 @@ function SchoolDetailPage() {
   const hotStock = useSelector((state) => {
     return state.setStock.schoolStock;
   });
+  function goToSchoolWallet() {
+    navigate(`/wallet/detail/${myAsset.schoolAccId}`);
+  }
 
   function ChangeSchool() {
     const [open, setOpen] = React.useState(false);

@@ -43,7 +43,7 @@ function SellStockPage() {
   useEffect(() => {
     userData.haveList?.forEach((element) => {
       if (element.ticker === id) {
-        setMyStock(element.available);
+        setMyStock(element.amount);
       }
     });
   }, [userData]);
@@ -452,7 +452,7 @@ function SellStockPage() {
       dispatch(stockSellPost(data));
       setTimeout(() => {
         backTo();
-      }, 40);
+      }, 100);
     } else if (!isMarketPrice && Boolean(wantedMany) && !isTooLow) {
       const data = {
         config: {
@@ -471,7 +471,7 @@ function SellStockPage() {
       dispatch(stockTradingPost(data));
       setTimeout(() => {
         backTo();
-      }, 40);
+      }, 100);
     }
   }
 
