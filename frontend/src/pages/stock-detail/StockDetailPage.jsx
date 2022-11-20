@@ -557,7 +557,7 @@ function StockDetailPage() {
               showNullDataPoints: true,
               hover: {
                 size: undefined,
-                sizeOffset: 3,
+                sizeOffset: 3, 
               },
             },
             yaxis: [
@@ -1244,7 +1244,7 @@ function StockDetailPage() {
     const weekend = ["Sat", "Sun"];
     const week = date.toString().slice(0, 3);
 
-    if (before <= nowTime && nowTime <= after && !weekend.includes(week)) {
+    // if (before <= nowTime && nowTime <= after && !weekend.includes(week)) {
       if (showSellButton) {
         return (
           <div className={classes.buttons}>
@@ -1279,18 +1279,18 @@ function StockDetailPage() {
           </div>
         );
       }
-    } 
-    else {
-      return (
-        <div className={classes.buttons}>
-          <div className={classes.buysell}>
-            <button className={classes.sellbutton}>
-              주문가능한 시간이 아닙니다
-            </button>
-          </div>
-        </div>
-      );
-    }
+    // } 
+    // else {
+    //   return (
+    //     <div className={classes.buttons}>
+    //       <div className={classes.buysell}>
+    //         <button className={classes.sellbutton}>
+    //           주문가능한 시간이 아닙니다
+    //         </button>
+    //       </div>
+    //     </div>
+    //   );
+    // }
   }
   function WishListIcon() {
     const [isWatchlist, setisWatchlist] = useState(true);

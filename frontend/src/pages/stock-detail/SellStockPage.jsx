@@ -516,7 +516,7 @@ function SellStockPage() {
                     onClick={checkBoxHandler}
                   />
                   &nbsp; &nbsp;
-                  <span className={classes.noworder}>시장가로 즉시 판매</span>
+                  <span className={classes.noworder}>현재가로 판매 주문</span>
                 </div>
               ) : (
                 <div>
@@ -526,7 +526,7 @@ function SellStockPage() {
                     onClick={checkBoxHandler}
                   />
                   &nbsp; &nbsp;
-                  <span className={classes.noworder}>시장가로 즉시 판매</span>
+                  <span className={classes.noworder}>현재가로 판매 주문</span>
                 </div>
               )}
             </div>

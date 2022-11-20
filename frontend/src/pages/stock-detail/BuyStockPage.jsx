@@ -539,7 +539,7 @@ function BuyStockPage() {
                     onClick={checkBoxHandler}
                   />
                   &nbsp; &nbsp;
-                  <span className={classes.noworder}>현재가로 주문</span>
+                  <span className={classes.noworder}>현재가로 구매 주문</span>
                 </div>
               ) : (
                 <div>
@@ -549,7 +549,7 @@ function BuyStockPage() {
                     onClick={checkBoxHandler}
                   />
                   &nbsp; &nbsp;
-                  <span className={classes.noworder}>현재가로 주문</span>
+                  <span className={classes.noworder}>현재가로 구매 주문</span>
                 </div>
               )}
             </div>
