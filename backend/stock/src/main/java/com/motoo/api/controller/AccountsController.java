@@ -9,7 +9,6 @@ import com.motoo.common.model.response.BaseResponseBody;
 import com.motoo.db.entity.*;
 import com.motoo.db.repository.StockRepositorySupport;
 
-import com.motoo.db.repository.TradingRepository;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Api(value = "계좌 API", tags = {"Account"})
@@ -189,21 +187,21 @@ public class AccountsController {
     public ResponseEntity<? extends BaseResponseBody> addStockToAccount(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "주식번호", required = true) @Valid AccountStockAddPostReq accountStockAddPostReq) {
 
 //        //거래시간 설정
-//        LocalTime now = LocalTime.now();
-//        LocalDate date = LocalDate.now();
-//        // 2. DayOfWeek 객체 구하기
-//        DayOfWeek dayOfWeek = date.getDayOfWeek();
-////        the day-of-week, from 1 (Monday) to 7 (Sunday)
-//        // 3. 숫자 요일 구하기
-//        int dayOfWeekNumber = dayOfWeek.getValue();
-//        // 4. 숫자 요일 검증
-//        if (dayOfWeekNumber >=6){
-//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 요일이 아닙니다."));
-//        }
-//        int hour = now.getHour();
-//        if (hour >16 || hour <9){
-//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
-//        }
+        LocalTime now = LocalTime.now();
+        LocalDate date = LocalDate.now();
+        // 2. DayOfWeek 객체 구하기
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+//        the day-of-week, from 1 (Monday) to 7 (Sunday)
+        // 3. 숫자 요일 구하기
+        int dayOfWeekNumber = dayOfWeek.getValue();
+        // 4. 숫자 요일 검증
+        if (dayOfWeekNumber >=6){
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 요일이 아닙니다."));
+        }
+        int hour = now.getHour();
+        if (hour >16 || hour <9){
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
+        }
 
         Long userId = userService.getUserIdByToken(authentication);
         Account account = accountService.getAccount(accountStockAddPostReq.getAccountId(), userId);
@@ -276,20 +274,20 @@ public class AccountsController {
         Long accountId = account.getAccountId();
 
 //        //거래시간 설정
-//        LocalTime now = LocalTime.now();
-//        LocalDate date = LocalDate.now();
-//        // 2. DayOfWeek 객체 구하기
-//        DayOfWeek dayOfWeek = date.getDayOfWeek();
-//        // 3. 숫자 요일 구하기
-//        int dayOfWeekNumber = dayOfWeek.getValue();
-//        // 4. 숫자 요일 검증
-//        if (dayOfWeekNumber >=6){
-//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
-//        }
-//        int hour = now.getHour();
-//        if (hour >16 || hour <9){
-//            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
-
+        LocalTime now = LocalTime.now();
+        LocalDate date = LocalDate.now();
+        // 2. DayOfWeek 객체 구하기
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        // 3. 숫자 요일 구하기
+        int dayOfWeekNumber = dayOfWeek.getValue();
+        // 4. 숫자 요일 검증
+        if (dayOfWeekNumber >=6){
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
+        }
+        int hour = now.getHour();
+        if (hour >16 || hour <9) {
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
+        }
         //주문 객체
 
         int postPrice = accountStockAddPostReq.getPrice();
@@ -345,6 +343,7 @@ public class AccountsController {
             return ResponseEntity.status(401).body(SellOrBuyRes.of(stockList, seed, 401, "계좌에 해당 주식이 없습니다."));
         }
     }
+
     //보유한 주식 계좌 리스트 조회
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 계좌상세 목록 조회 성공", response = AccountListRes.class), @ApiResponse(code = 401, message = "계좌상세 목록 조회 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @ApiOperation(value = "보유한 주식 Id, 보유량 조회", notes = "보유한 주식 Id, 보유량 조회")
@@ -361,6 +360,9 @@ public class AccountsController {
         List<AccountStockInfo> stockInfo = userService.getStockInfoByAccountId(userId,account_id);
         StockListRes stockListRes = StockListRes.of(account, stockInfo, available, 200, "보유주식 리스트 조회에 성공하였습니다.");
         int seed = account.getSeed();
+
+
+
         List<Trading> tradings4 = tradingService.tradingList4(userId, account_id);
         List<Integer> waitingPriceList = tradings4.stream().map(trading -> trading.getTr_amount() * trading.getTr_price()).collect(Collectors.toList());
         int waitingPrice = waitingPriceList.stream().mapToInt(Integer::intValue).sum();
