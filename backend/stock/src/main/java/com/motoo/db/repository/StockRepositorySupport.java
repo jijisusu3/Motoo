@@ -25,10 +25,6 @@ public class StockRepositorySupport {
     }
 
 
-//
-//    public long CountByAccountsId(Long accountsId){
-//        return jpaQueryFactory.selectFrom(qAccountStock)
-//                .where(qAccountStock.accounts.accountsId.eq(accountsId)).fetch().size();
-//    }
+
 
 }

@@ -18,3 +18,407 @@
   0% {opacity: 0;}
   100% {opacity: 1;}
 }
+.chartChangeBtn{
+  background-color: #EAF0EF;
+  width: 32px;
+  height: 28px;
+  border-radius: 5px;
+}
+
+.radioUlClass label {
+  cursor: pointer;
+}
+.radioLiClass input:checked + label {
+  color: inherit;
+}
+.radioLiClass input:not(:checked) + label {
+  --bg-opacity: 0;
+  box-shadow: none;
+}
+
+.radioUlClass {
+  display:inline-flex;
+  padding:.25rem;
+  font-weight:600;
+  border-radius:15px;
+  --bg-opacity:1;background-color:#EAF0EF;background-color:rgba(234, 240, 239,var(--bg-opacity));
+  --text-opacity:1;color:#ffffff;color:rgba(255,255,255,var(--text-opacity));
+  margin-top:1rem;margin-bottom:1rem;
+
+  width: 300px;
+}
+
+.radioLiClass {
+  display:flex;
+}
+
+.radioClass {
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border-width:0;
+}
+
+.radioLabelClass {
+  width: 60px;
+  padding-top:.25rem;
+  padding-bottom:.25rem;
+  padding-left:.5rem;
+  padding-right:.5rem;
+  font-size:.875rem;
+  line-height:1.5rem;
+  --text-opacity:1;color:#718096;color:rgba(113,128,150,var(--text-opacity));
+  --bg-opacity:1;background-color:#276E6A;background-color:rgba(39, 110, 106,var(--bg-opacity));
+  border-radius:50px;
+  box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06);
+}
+.radioLabelClass:hover {
+  --text-opacity:1;color:#2d3748;color:rgba(45,55,72,var(--text-opacity))
+}
+
+.radiobox {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  text-align: center;
+
+}
+
+.buyButtom{
+  position: fixed;
+  bottom: 10%;
+  margin: 0 auto;
+   left: 0;
+   right: 0;
+}
+
+.numberSection {
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  margin:0 auto; 
+  width: 100%;
+  height: 80%;
+  margin-top: 140px;
+
+
+
+}
+
+.numberButton {
+  width: 60px;
+  height: 80px;
+  background-color: #ffffff;
+  color:#718096;
+  border: 0px;
+  outline: 0px;
+  font-size: 36px;
+  margin-inline: 22px;
+  
+
+}
+
+#lastNumber{
+  color: white;
+  
+}
+
+.buyButtonDiv{
+  margin:0 auto; 
+  text-align: center;
+  align-items: center;
+}
+.buyButton{
+  width:80%;
+  height: 45px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 19px;
+
+  border: 0;
+  outline: 0;
+  margin-top: 10px;
+  border-radius: 10px;
+  background: #7BCDC8;
+  color: white;
+box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.info{
+  display: flex;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  justify-content: center;
+  font-weight: 600;
+  text-align: center;
+}
+.pd{
+  position: absolute;
+  left: 5%;
+}
+
+.hogaButton{
+  
+  background: white;
+  border-radius: 15px;
+  height: 30px;
+  width: 50px;
+  border: 0;
+  outline: 0;
+  
+}
+.manyInput{
+  margin-left: 10px;
+}
+
+.realPriceRadio{
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 15px;
+  color: #4E5E5E;
+ 
+  margin-top: 15px;
+}
+
+.howMuchWant{
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 29px;
+
+  color: #929E9E;
+
+  
+}
+
+.buyNumber{
+  font-weight: 600;
+font-size: 24px;
+line-height: 29px;
+
+color: #000000;
+
+}
+
+
+.zuOrwon{
+  font-weight: 600;
+font-size: 16px;
+line-height: 19px;
+
+}
+
+.total{
+  margin-left: 50px;
+}
+
+/* 호가 보기 모달 */
+.words{
+  margin-top: 20px;
+  align-items: center;
+  text-align: center;
+}
+.thisMoney{
+  color: #797878;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 17px;
+}
+.sellHoga{
+  color: #4D97ED;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.buyHoga{
+  margin-left: 100px;
+  color: #DD4956;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+}
+.graph{
+  display: flex;
+  flex-direction: column;
+}
+.graphLeft{
+  float: left;
+}
+
+.graphRight{
+  float: right;
+}
+
+
+/* 모달관련 작업 */
+.title{
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.graybox{
+  width: 100%;
+  height: 60px;
+  border-radius: 10px;
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f5f5;
+  font-weight: 500;
+}
+
+.btn{
+  background: #DD4956;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  border: none;
+  color: #fff;
+  font-size: 2vh;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 42px;
+}
+.deletebox{
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.buynav {
+  margin-top: 1.6rem;
+  margin-left: 1.8rem;
+  margin-right: 1.8rem;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: space-between;
+}
+
+.buyname{
+  font-weight: 600;
+
+}
+
+.middlectn {
+  max-width: 360px;
+  width: 100%;
+  margin: auto;
+  padding-top: 3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.noworder {
+  font-size: 15px;
+  color: #4E5E5E;
+  font-weight: 600;
+  padding-top: 8px;
+}
+
+.howmuch1 {
+  /* margin-top: 10px; */
+  font-size: 20px;
+  font-weight: 600;
+  color: #cdd4d4;
+  margin-bottom: 3px;
+}
+
+.howmuch2 {
+  /* margin-top: 10px; */
+  font-size: 20px;
+  font-weight: 600;
+  color: #222222;  
+  margin-bottom: 3px;
+}
+
+.middlesubctn {
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputalrt {
+  color: #DD4956;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.callwatch {
+  border-radius: 15px;
+  border: none;
+  height: 40px;
+  width: 100px;
+  background-color: #EAF0EF;
+  color: 222222;
+  font-weight: 600;
+}
+
+.middlesubleft {
+  margin-bottom: 10px;
+}
+
+.numberctn {
+  background-color: white;
+  position: fixed;
+  bottom: 0;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 5px;
+  
+
+
+}
+
+.bigctn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sellbutton {
+  width: 98%;
+  height: 54px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  border: none;
+  background-color: #7BCDC8;
+  margin-top: 10px;
+}
+.sellbutton:hover {
+  opacity: 80%;
+}
+
+.numberbtn {
+  width: 30%;
+  height: 10vh;
+  font-size: 36px;
+  font-weight: 600;
+  border: none;
+  background-color: white;
+  color: #929E9E;
+}

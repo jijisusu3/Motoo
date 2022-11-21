@@ -1,8 +1,7 @@
-from datetime import date, timedelta
 import asyncio
 from collections import defaultdict
 from datetime import date, timedelta
-
+import threading
 import aiohttp
 import typer
 from pykrx import stock
@@ -36,7 +35,7 @@ async def insert_daily_and_close_price():
             )
             ctgr_dict[stck.category_id].append(res)
             stck.close_price = new_df.get('종가')[k]
-        time.sleep(0.2)
+        threading.Event().wait(0.2)
     for ctgr in range(1, len(ctgr_list) + 1):
         await day_map[ctgr].bulk_create(ctgr_dict[ctgr])
     await Stock.bulk_update(stocks, fields=('close_price',))
@@ -65,6 +64,10 @@ async def update_stock_info():
             for tckr in tickers[20 * r:20 * (r + 1)]:
                 async with session.get(price_url, params=parameter_setter(tckr)) as response:
                     data = await response.json()
+                if data["rt_cd"] == 1:
+                    threading.Event().wait(1)
+                    async with session.get(price_url, params=parameter_setter(tckr)) as response:
+                        data = await response.json()
                 flag = 0
                 stck = await Stock.get_or_none(ticker=tckr)
                 if stck is None:
@@ -104,7 +107,7 @@ async def update_stock_info():
                     new_stocks.append(stck)
             check_end = time.time()
             end_s = time.time()
-            time.sleep(min(abs(1.1 - end_s + start), 1.02))
+            threading.Event().wait(min(abs(1.1 - end_s + start), 1.05))
             end_t = time.time()
             print(f'{min(20 * (r + 1), len(stocks))}개 {end_t - start}s')
     await Stock.bulk_update(

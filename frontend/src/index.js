@@ -10,6 +10,7 @@ import "./styles/index.css";
 import "./styles/minireset.min.css";
 import "./styles/pretendard.css";
 
+
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import BottomNav from "./components/common/BottomNav";
@@ -36,7 +37,7 @@ root.render(
         <ScrollToTop />
         <BottomNav />
         <App />
-        <FooterBar />
+        {/* <FooterBar /> */}
       </BrowserRouter>
     </PersistGate>
   </Provider>

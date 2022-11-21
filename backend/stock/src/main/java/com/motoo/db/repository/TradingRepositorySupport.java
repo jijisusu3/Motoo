@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -44,10 +45,20 @@ public class TradingRepositorySupport {
                 .where(qTrading.tr_type.eq(3).or(qTrading.tr_type.eq(4)))
                 .fetch();
 
-         if (tradings==null) return null;
+         if (tradings==null) return Collections.emptyList();
          else return tradings;
     }
 
+    public List<Trading> find4ByUserIdAcountId(Long userId, Long accountId){
+        List<Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
+                        .where(qTrading.tr_type.eq(4))
+                        .where(qTrading.account.user.userId.eq(userId))
+                        .where(qTrading.account.accountId.eq(accountId))
+                        .fetch();
+        if (tradings==null) return Collections.emptyList();
+        else return tradings;
+    }
 
     //개인 특정계좌 판매됨,구매됨 조회
 
@@ -58,7 +69,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -69,7 +80,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
 
     }
@@ -83,7 +94,7 @@ public class TradingRepositorySupport {
                         .orderBy(qTrading.tr_date.desc())
                         .fetch();
 
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -94,7 +105,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -105,7 +116,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -116,7 +127,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
-        if (tradings ==null) {return null;}
+        if (tradings ==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -128,7 +139,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -139,7 +150,7 @@ public class TradingRepositorySupport {
                         .where(qTrading.account.accountId.eq(accountId))
                         .where(qTrading.user.userId.eq(userId))
                         .fetch();
-        if (tradings==null) {return null;}
+        if (tradings==null) {return Collections.emptyList();}
         else {return tradings;}
     }
 
@@ -152,5 +163,27 @@ public class TradingRepositorySupport {
                         .where(qTrading.ticker.eq(ticker))
                         .fetch().size();
         return tradings;
+    }
+
+    public List<Trading> find6And7(){
+        List<Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
+                        .where(qTrading.tr_type.eq(6).or(qTrading.tr_type.eq(7)))
+                        .fetch();
+        if (tradings==null) {return Collections.emptyList();}
+        else {return tradings;}
+    }
+
+    public List<Trading>find6And7ByUserIdAccountId(Long userId, Long accountId){
+        List<Trading> tradings =
+                jpaQueryFactory.select(qTrading).from(qTrading)
+                        .where(qTrading.user.userId.eq(userId))
+                        .where(qTrading.account.accountId.eq(accountId))
+                        .where(qTrading.tr_type.eq(6).or(qTrading.tr_type.eq(7)))
+                        .fetch();
+
+        if (tradings==null) {return Collections.emptyList();}
+        else {return tradings;}
+
     }
 }

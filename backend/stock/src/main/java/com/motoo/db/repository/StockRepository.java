@@ -7,11 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StockRepository extends JpaRepository<Stock, Long> {
 
-//    Optional<Stock> findStockByStockId(Long stockId);
-//
-//
-//    @Transactional
-//    Optional<Stock> deleteByStockAccountStockId(Long stockId);
 
 
 

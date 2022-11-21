@@ -6,12 +6,25 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setShowNav } from "../../stores/navSlice";
+import { setShowNav, setActiveNav } from "../../stores/navSlice";
 import { accountsListGet } from "../../stores/accountSlice";
 import { nicknamePut, accountChangePut } from "../../stores/userSlice";
 import { accountCreate } from "../../stores/accountSlice";
 
 const style = {
+  position: "absolute",
+  top: "40%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 336,
+  height: 400,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 2,
+  borderRadius: 5,
+};
+
+const modalstyle = {
   position: "absolute",
   top: "40%",
   left: "50%",
@@ -46,6 +59,7 @@ function MyPage() {
   useEffect(() => {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
+    dispatch(setActiveNav(2));
   }, []);
   useEffect(() => {
     const data = {
@@ -108,7 +122,7 @@ function MyPage() {
       result: {
         name: "",
       },
-    }
+    };
     if (!canAddDate) {
       setWarningEffect(true);
       setTimeout(function () {
@@ -117,12 +131,11 @@ function MyPage() {
       return;
     }
     if (assetInfo.assetName && assetInfo.openReason) {
-      data.result.name = assetInfo.assetName
-      dispatch(accountCreate(data))
+      data.result.name = assetInfo.assetName;
+      dispatch(accountCreate(data));
       setTimeout(() => {
-        window.location.reload();
-        handleCreateModalClose(false);
-      }, 30);
+        dispatch(accountsListGet(data.config))
+      }, 100);
     }
   }
   const [openChangeModal, setChangeModalOpen] = useState(false);
@@ -144,8 +157,8 @@ function MyPage() {
     dispatch(accountChangePut(data));
     handleChangeModalClose(false);
     setTimeout(() => {
-      window.location.reload();
-    }, 30);
+      dispatch(accountsListGet(data.config))
+    }, 100);
   }
   function AllAssets() {
     function profitCheck() {
@@ -155,7 +168,9 @@ function MyPage() {
         } else {
           return "#DD4956";
         }
-      } catch {}
+      } catch {
+        return "#4D97ED"
+      }
     }
     const profitColor = profitCheck();
     return (
@@ -187,7 +202,10 @@ function MyPage() {
                 color: profitColor,
               }}
             >
-              {walletList.earningRaito.toFixed(2)}%
+              {walletList.earningRaito === "NaN"
+                ? 0
+                : walletList.earningRaito.toFixed(2)}
+              %
             </div>
           )}
         </div>
@@ -223,7 +241,6 @@ function MyPage() {
       return (
         <div className={classes.accountbox}>
           <img
-            onClick={handleOnKeyPress}
             src={`${process.env.PUBLIC_URL}/wallet/mypageIcon.svg`}
             style={{ marginRight: "10px" }}
             alt=""
@@ -235,7 +252,11 @@ function MyPage() {
             className={classes.editname}
             onChange={handleInputChange}
             value={nickname}
-            onKeyPress={handleOnKeyPress}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleOnKeyPress();
+              }
+            }}
           />
           <img
             style={{
@@ -254,7 +275,6 @@ function MyPage() {
     return (
       <div className={classes.accountbox}>
         <img
-          onClick={handleOnKeyPress}
           src={`${process.env.PUBLIC_URL}/wallet/mypageIcon.svg`}
           style={{ marginRight: "10px" }}
           alt=""
@@ -337,7 +357,6 @@ function MyPage() {
           <div className={classes.rowbox}>
             <div>{walletList.pitches[asset.num].toLocaleString()}원</div>
             <img
-              // id={tmpId}
               onClick={() => handleChangeModalOpen(tmpId)}
               src={`${process.env.PUBLIC_URL}/wallet/change.svg`}
               alt=""
@@ -393,7 +412,6 @@ function MyPage() {
               <div className={classes.vibration}>
                 <img
                   src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`}
-                  style={{ marginRight: "15px" }}
                   alt=""
                 />
                 <div>
@@ -411,7 +429,6 @@ function MyPage() {
               <div className={classes.notice}>
                 <img
                   src={`${process.env.PUBLIC_URL}/wallet/createMessage.svg`}
-                  style={{ marginRight: "15px" }}
                   alt=""
                 />
                 <div>
@@ -430,8 +447,6 @@ function MyPage() {
               <p
                 style={{
                   color: "#DD4956",
-                  fontSize: "12px",
-                  marginBottom: "10px",
                 }}
               >
                 {canStartDay} 부터 계좌를 열 수 있어요
@@ -443,7 +458,7 @@ function MyPage() {
           </Box>
         </Modal>
         <Modal open={openChangeModal} onClose={handleChangeModalClose}>
-          <Box className={classes.deletebox} sx={style}>
+          <Box className={classes.deletebox} sx={modalstyle}>
             <div className={classes.title}>주계좌를 변경하시겠습니까?</div>
             <div className={classes.graybox}>
               <svg

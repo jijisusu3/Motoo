@@ -7,7 +7,11 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { setShowNav } from "../../stores/navSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { shortStockGet, limitOrderPut, limitOrderDelete } from "../../stores/stockSlice";
+import {
+  shortStockGet,
+  limitOrderPut,
+  limitOrderDelete,
+} from "../../stores/stockSlice";
 
 const style = {
   position: "absolute",
@@ -25,7 +29,7 @@ const style = {
 function BuyOrderEditPage() {
   const params = useParams();
   const dataList = params.id.split(":");
-  const tradeId = Number(dataList[3])
+  const tradeId = Number(dataList[3]);
   const [wantedPrice, setWantedPrice] = useState(dataList[1]);
   const [wantedMany, setWantedMany] = useState(dataList[2]);
   const [writePrice, setWritePrice] = useState(false);
@@ -42,7 +46,6 @@ function BuyOrderEditPage() {
     return state.persistedReducer.setUser.user;
   });
   const mySeed = userData.data.seed;
-  console.log(tradeData);
   const navigate = useNavigate();
   function backToLimitOrderList() {
     navigate(`/stock/limit-order`);
@@ -71,13 +74,13 @@ function BuyOrderEditPage() {
           Authorization: `Bearer ${userData.token}`,
         },
       },
-      tradeId: tradeId
+      tradeId: tradeId,
     };
     dispatch(limitOrderDelete(data));
     handleDeleteModalClose(false);
     setTimeout(() => {
       backToLimitOrderList();
-    }, 70);
+    }, 200);
   }
 
   const numberClick = (event) => {
@@ -95,9 +98,13 @@ function BuyOrderEditPage() {
         if (tempPrice > tradeData.maximum) {
           // 상한가보다 클때
           setIsTooHigh(true);
+          setIsTooLow(false);
           setTimeout(() => {
             setIsTooHigh(false);
           }, 1000);
+          if (Number(wantedPrice) <= tradeData.price * 0.7) {
+            setIsTooLow(true);
+          }
           return;
         } else if (tempPrice < tradeData.minimum) {
           // 하한가보다 낮을때
@@ -114,7 +121,6 @@ function BuyOrderEditPage() {
           } else {
             setIsAvailable(true);
             setTotal(tempPrice * Number(wantedMany));
-            console.log(typeof total);
           }
         }
         setWantedPrice(wantedPrice + event.target.value);
@@ -143,18 +149,7 @@ function BuyOrderEditPage() {
             setIsAvailable(true);
           }, 1000);
           return;
-        } else {
-          if (tradeData.price * Number(wantedMany) > mySeed) {
-            setIsAvailable(false);
-            setTimeout(() => {
-              setIsAvailable(true);
-            }, 1000);
-            return;
-          } else {
-            setIsAvailable(true);
-            setTotal(tradeData.price * Number(wantedMany));
-          }
-        }
+        } 
         setWantedMany(String(tempMany));
       } else {
         if (wantedMany !== "") {
@@ -166,18 +161,16 @@ function BuyOrderEditPage() {
   };
 
   const priceClickHandler = () => {
-    console.log("가격누름");
     setWritePrice(true);
   };
   const manyClickHandler = () => {
-    console.log("개수누름");
     setWritePrice(false);
   };
   function PriceInput() {
     // 직접입력하겠다고 할 때,
     if (wantedPrice === "") {
       return (
-        <div onClick={priceClickHandler}>
+        <div class={classes.howmuch1} onClick={priceClickHandler}>
           {writePrice && (
             <img
               className={classes.blinking}
@@ -185,21 +178,23 @@ function BuyOrderEditPage() {
               alt=""
             />
           )}
-          <h1>얼마로 변경할까요?</h1>
+          <span>얼마로 변경할까요?</span>
         </div>
       );
     } else {
       return (
         <>
-          <span onClick={priceClickHandler}>{wantedPrice}</span>
-          {writePrice && (
-            <img
+          <div class={classes.howmuch2} onClick={priceClickHandler}>
+            {wantedPrice}
+            {writePrice && (
+              <img
               className={classes.blinking}
               src={`${process.env.PUBLIC_URL}/stock-detail/inputIcon.svg`}
               alt=""
-            />
-          )}
-          <span>원</span>
+              />
+              )}
+            <span>원</span>
+          </div>
         </>
       );
     }
@@ -207,7 +202,7 @@ function BuyOrderEditPage() {
   function ManyInput() {
     if (wantedMany === "") {
       return (
-        <div onClick={manyClickHandler}>
+        <div class={classes.howmuch1} onClick={manyClickHandler}>
           {!writePrice && (
             <img
               className={classes.blinking}
@@ -215,28 +210,28 @@ function BuyOrderEditPage() {
               alt=""
             />
           )}
-          <h1>몇 주로 변경할까요?</h1>
+          <span>몇 주로 변경할까요?</span>
         </div>
       );
     } else {
       return (
         <>
-          <p onClick={manyClickHandler}>{wantedMany}</p>
-          {!writePrice && (
-            <img
-              className={classes.blinking}
-              src={`${process.env.PUBLIC_URL}/stock-detail/inputIcon.svg`}
-              alt=""
-            />
-          )}
-          <span>주</span>
+          <div class={classes.howmuch2} onClick={manyClickHandler}>
+            {wantedMany}
+            {!writePrice && (
+              <img
+                className={classes.blinking}
+                src={`${process.env.PUBLIC_URL}/stock-detail/inputIcon.svg`}
+                alt=""
+              />
+            )}
+            <span>주</span>
+          </div>
         </>
       );
     }
   }
   function submitEdit() {
-    // 현재가로 주문, 개수입력
-    console.log('하하')
     if (Boolean(wantedMany) && !isTooLow) {
       const data = {
         config: {
@@ -248,90 +243,184 @@ function BuyOrderEditPage() {
           tr_amount: String(wantedMany),
           tr_price: String(tradeData.price),
         },
-        tradeId: tradeId
+        tradeId: tradeId,
       };
       dispatch(limitOrderPut(data));
       setTimeout(() => {
         backToLimitOrderList();
-      }, 70);
+      }, 200);
     }
   }
   return (
     <div>
-      <div>
-        <div className={classes.info}>
+      <div style={{marginBottom: "20px"}} className={classes.buynav}>
+        <div>
           <img
-            className={classes.pd}
             src={`${process.env.PUBLIC_URL}/grayBack.svg`}
             alt=""
             onClick={backToLimitOrderList}
           />
+        </div>
+
+        <p className={classes.buyname}>{tradeData.name}</p>
+
+        <div></div>
+      </div>
+      <hr />
+
+      <div class={classes.bigctn}>
+        <div className={classes.middlectn}>
+          <div className={classes.middlesubctn}>
+            <PriceInput />
+            <ManyInput />
+            {mySeed && <div style={{ fontSize: "14px", marginTop: "5px", color: "#4E5E5E", fontWeight: "600"}}>사용가능 금액 <img src={`${process.env.PUBLIC_URL}/wallet/vege.svg`} style={{ marginBottom: '2px', marginLeft: '2px', marginRight: '10px', width: 12, height: 12 }} alt="" /> <span style={{ color: "#43B8B1", fontWeight: "500"}}>{mySeed? mySeed.toLocaleString(): 0}</span></div>}
+            <div class={classes.inputalrt}>
+              {isTooHigh === true && <p>그렇게 비싸겐 못사요</p>}
+              {isTooLow === true && isTooHigh === false && (
+                <p>그렇게 싸겐 못사요</p>
+              )}
+              {!isAvailable && <p>사용 가능한 금액을 초과했어요!</p>}
+            </div>
+
+          </div>
           <div>
-            <div>{tradeData.name}</div>
+
+            <img
+              class={classes.hogaButton}
+              onClick={handleDeleteModalOpen}
+              src={`${process.env.PUBLIC_URL}/trash.svg`}
+              alt=""
+            />
+
+          </div>
+        </div>
+
+
+      <div class={classes.numberctn}>
+        <div class={classes.numberbtns}>
+          <div>
+            <button
+              value={1}
+              class={classes.numberbtn}
+              onClick={numberClick}
+            >
+              1
+            </button>
+            <button
+              value={2}
+              class={classes.numberbtn}
+              onClick={numberClick}
+            >
+              2
+            </button>
+            <button
+              value={3}
+              class={classes.numberbtn}
+              onClick={numberClick}
+            >
+              3
+            </button>
+          </div>
+          <div>
+            <button
+              value={4}
+              class={classes.numberbtn}
+              onClick={numberClick}
+            >
+              4
+            </button>
+            <button
+              value={5}
+              class={classes.numberbtn}
+              onClick={numberClick}
+            >
+              5
+            </button>
+            <button
+              value={6}
+              class={classes.numberbtn}
+              onClick={numberClick}
+            >
+              6
+            </button>
+          </div>
+          <div>
+            <button
+              value={7}
+              class={classes.numberbtn}
+              onClick={numberClick}
+            >
+              7
+            </button>
+            <button
+              value={8}
+              class={classes.numberbtn}
+              onClick={numberClick}
+            >
+              8
+            </button>
+            <button
+              value={9}
+              class={classes.numberbtn}
+              onClick={numberClick}
+            >
+              9
+            </button>
+          </div>
+
+          <div>
+            <button style={{color:"white"}} className={classes.numberbtn}>
+              0
+            </button>
+            <button
+              value={0}
+              class={classes.numberbtn}
+              onClick={numberClick}
+            >
+              0
+            </button>
+            <button class={classes.numberbtn} onClick={numberClick}>
+              <img
+                value="삭제"
+                src={`${process.env.PUBLIC_URL}/stock-detail/eraser.svg`}
+                alt=""
+              />
+            </button>
+          </div>
+          <div onClick={submitEdit}>
+            <button className={classes.sellbutton}>매수 가격 수정하기</button>
           </div>
         </div>
       </div>
-      <hr />
-      <img
-        onClick={handleDeleteModalOpen}
-        src={`${process.env.PUBLIC_URL}/stock-list/trashcan.svg`}
-        alt=""
-      />
-      <hr />
-      <PriceInput />
-      <ManyInput />
-      {isTooHigh && <p>그렇게 비싸겐 못사요</p>}
-      {isTooLow && <p>그렇게 싸겐 못사요</p>}
-      {!isAvailable && <p>넌 그만큼 살 돈이 없어요</p>}
-      <div class="numberSection">
-        <button value={1} class="number" onClick={numberClick}>
-          1
-        </button>
-        <button value={2} class="number" onClick={numberClick}>
-          2
-        </button>
-        <button value={3} class="number" onClick={numberClick}>
-          3
-        </button>
-        <button value={4} class="number" onClick={numberClick}>
-          4
-        </button>
-        <button value={5} class="number" onClick={numberClick}>
-          5
-        </button>
-        <button value={6} class="number" onClick={numberClick}>
-          6
-        </button>
-        <button value={7} class="number" onClick={numberClick}>
-          7
-        </button>
-        <button value={8} class="number" onClick={numberClick}>
-          8
-        </button>
-        <button value={9} class="number" onClick={numberClick}>
-          9
-        </button>
-        <button value={0} class="number" onClick={numberClick}>
-          0
-        </button>
-        <button class="number" onClick={numberClick}>
-          <img
-            value="삭제"
-            src={`${process.env.PUBLIC_URL}/stock-detail/eraser.svg`}
-            alt=""
-          />
-        </button>
-      </div>
-      <div onClick={submitEdit}>
-        <div>수정</div>
-      </div>
+
       <Modal open={openDeleteModal} onClose={handleDeleteModalClose}>
-        <Box sx={style}>
-          <p>정말 삭제하시겠습니까?</p>
-          <p>구매 주문을 취소하면 사용가능한 씨드가 재설정됩니다!</p>
-          <button onClick={deleteSubmit}>삭제하기</button>
+        <Box className={classes.deletebox} sx={style}>
+          <div className={classes.title}>정말 삭제하시겠습니까?</div>
+          <div className={classes.graybox}>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M7.43866e-05 9.99846C7.43866e-05 4.47648 4.4766 0 9.99857 0C15.5206 0 19.9971 4.47648 19.9971 9.99846C19.9971 11.641 19.5999 13.2274 18.8523 14.6481L19.9685 18.9358C20.0051 19.0762 20.0051 19.2237 19.9685 19.3642C19.8502 19.8184 19.3861 20.0906 18.9319 19.9724L14.6421 18.8554C13.2229 19.601 11.6387 19.997 9.99857 19.997C4.4766 19.997 7.43866e-05 15.5205 7.43866e-05 9.99846ZM9.99857 4.50078C9.58443 4.50078 9.24868 4.83652 9.24868 5.25067V11.4997C9.24868 11.9139 9.58443 12.2496 9.99857 12.2496C10.4127 12.2496 10.7485 11.9139 10.7485 11.4997V5.25067C10.7485 4.83652 10.4127 4.50078 9.99857 4.50078ZM8.99872 14.4972C8.99872 15.0493 9.44635 15.497 9.99857 15.497C10.5508 15.497 10.9984 15.0493 10.9984 14.4972C10.9984 13.945 10.5508 13.4973 9.99857 13.4973C9.44635 13.4973 8.99872 13.945 8.99872 14.4972Z"
+                fill="#8D8D8D"
+              />
+            </svg>
+            <div style={{ marginLeft: "15px" }}>
+              구매 주문을 취소하면
+              <br />
+              사용가능한 시드가 재설정됩니다.
+            </div>
+          </div>
+          <button className={classes.btn} onClick={deleteSubmit}>
+            삭제하기
+          </button>
         </Box>
       </Modal>
+      </div>
     </div>
   );
 }

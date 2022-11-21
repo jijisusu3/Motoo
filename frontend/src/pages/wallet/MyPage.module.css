@@ -9,8 +9,8 @@
 .make{
   font-size: 20px;
   font-weight: 600;
-  margin-top: 1.5rem;
-  margin-bottom: 20px;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 .ipttag{
   color: #4E5E5E;
@@ -60,38 +60,32 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 .vibration {
   animation: vibration 0.1s infinite;
   display: flex;
   align-items: center;
-  font-size: 10px;
-  width: 80%;
-  height: 20%;
-  background: #FBF7F0;
-  border-radius: none;
   justify-content: space-between;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 10px;
-}
-.notice{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* justify-content: space-between; */
   padding: 1rem;
   font-size: 10px;
   width: 90%;
   height: 20%;
   background: #FBF7F0;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  border-radius: none;
   border-radius: 10px;
-  color: black;
+  font-weight: 600;
+}
+.notice{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
   font-size: 10px;
+  width: 90%;
+  height: 20%;
+  background: #FBF7F0;
+  font-weight: 600;
+  border-radius: 10px;
 }
 .firstAssetCard {
   border: 1px solid #FAE0C1;

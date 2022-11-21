@@ -1,8 +1,6 @@
 from datetime import date as date_type
-from datetime import time as time_type
-from datetime import datetime
 from typing import List, Union
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field
 
 from app.schemes.common import CommonResponse
 
@@ -13,15 +11,15 @@ class MinMaxPrice(BaseModel):
 
 
 class Volume(BaseModel):
-    volume: Union[int, None] = Field(description="거래량")
+    volume: Union[int, None] = Field(default=None, description="거래량")
 
 
 class Price(BaseModel):
-    price: Union[int, None] = Field(description="현재가")
+    price: Union[int, None] = Field(default=None, description="현재가")
 
 
 class OpenPrice(BaseModel):
-    open_price: Union[int, None] = Field(description="시작가")
+    open_price: Union[int, None] = Field(default=None, description="시작가")
 
 
 class ClosePrice(BaseModel):
@@ -29,13 +27,13 @@ class ClosePrice(BaseModel):
 
 
 class ChartBase(MinMaxPrice, Volume, OpenPrice):
-    id: int
-    stock_id: int
+    id: int = None
+    stock_id: int = None
     date: date_type = Field(default=None, description="날짜")
 
 
 class CandleData(ChartBase, Price):
-    time: str
+    time: str = None
 
 
 class DayChartData(ChartBase, ClosePrice):
@@ -66,6 +64,11 @@ class ShortStockData(BaseStockData, Volume):
     daily_max: Union[CandleData, None] = None
 
 
+class RealTimeStockResponse(Price, CommonResponse):
+    fluctuation_rate: Union[float, None] = Field(description="등락률")
+    fluctuation_price: Union[int, None] = Field(description="등락가")
+
+
 class EntireStockData(ShortStockData, OpenPrice, ClosePrice, MinAndMax):
     ticker: Union[str, None]
     category_id: Union[int, None] = Field(description="업종 id")
@@ -73,6 +76,7 @@ class EntireStockData(ShortStockData, OpenPrice, ClosePrice, MinAndMax):
     per: Union[float, None] = Field(default=None, description="주가수익률")
     eps: Union[float, None] = Field(default=None, description="주당순이익")
     m_capital: Union[int, None] = Field(description="시가총액")
+    div_yield: Union[float, None] = Field(default=None, description="배당수익률")
     keyword: Union[List[str], None] = Field(description="종목키워드")
     sentiment: Union[List[float], None] = Field(description="종목감정분석")
     weekly: Union[List[CandleData], None] = Field(default=None, description="주간 60분봉")

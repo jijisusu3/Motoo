@@ -11,6 +11,7 @@ import com.motoo.db.repository.StockRepositorySupport;
 
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -19,15 +20,18 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Api(value = "계좌 API", tags = {"Account"})
 @CrossOrigin("*")
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/api2/account")
 public class AccountsController {
 
@@ -43,23 +47,40 @@ public class AccountsController {
 
     private final TradingService tradingService;
     private final AccountAssetService accountAssetService;
+
     //계좌 생성
     @ApiOperation(value = "계좌 생성", notes = "(token) 계좌를 생성한다.")
     @ApiResponses({@ApiResponse(code = 200, message = "계좌 생성 성공", response = BaseResponseBody.class), @ApiResponse(code = 401, message = "계좌 생성 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @PostMapping()
     public ResponseEntity<? extends BaseResponseBody> createAccount(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "계좌 상세 내용", required = true) @Valid MakeAccountPostReq makeAccountPostReq) throws Exception {
-
         Long userId = userService.getUserIdByToken(authentication);
-
+        List<Account> accounts = accountService.listAccount(userId);
+        boolean isSchool = false;
+        for (int i=0; i<accounts.size(); i++){
+            if ( accounts.get(i).isSchool()){
+                isSchool=true;
+            }
+            else {
+                continue;
+            }
+        }
+        //계좌 갯수 유효성 검사
+        if (isSchool==true){
+            if (accounts.size()>=4){
+                return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌가 4개 이상입니다. 생성할 수 없습니다."));
+            }
+        }else {
+            if (accounts.size()>=3){
+                return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌가 3개 이상입니다. 생성할 수 없습니다."));
+            }
+        }
         try {
             accountService.createAccount(userId, makeAccountPostReq.getName());
         } catch (
                 Exception e) {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "계좌 생성에 실패하였습니다."));
         }
-        return ResponseEntity.status(200).
-
-                body(BaseResponseBody.of(200, "계좌가 생성되었습니다."));
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "계좌가 생성되었습니다."));
     }
 
     //계좌 목록조회
@@ -68,19 +89,19 @@ public class AccountsController {
     @ApiOperation(value = "계좌 목록 조회", notes = "계좌 목록을 조회한다.")
     public ResponseEntity<AccountsListRes> listAccounts(@ApiIgnore Authentication authentication) {
         Long userId = userService.getUserIdByToken(authentication);
-        Optional<User> user = userService.getByUserId(userId);
         List<Account> account = accountService.listAccount(userId);
         int seeds=0;
-
         List<Integer> pitches = new ArrayList<>();
-//
+//      구매할때는 시드-구매가*주식수 + 구매가 *주식수 라서 pitches은 안변함
+//      판매할때는 시드+평단가*주식수 라서 pitches는 변함
+        log.info("계좌가 생성됨");
         for (Account value : account) {
             int accountAsset=0;
             seeds+=value.getSeed();
             accountAsset+=value.getSeed();
             for (int a = 0; a < value.getAccountStocks().size(); a++) {
-                seeds += value.getAccountStocks().get(a).getAmount() * value.getAccountStocks().get(a).getPrice();
-                accountAsset += value.getAccountStocks().get(a).getAmount() * value.getAccountStocks().get(a).getPrice();
+                seeds += value.getAccountStocks().get(a).getAmount() * value.getAccountStocks().get(a).getStock().getPrice();
+                accountAsset += value.getAccountStocks().get(a).getAmount() * value.getAccountStocks().get(a).getStock().getPrice();
             }
             pitches.add(accountAsset);
         }
@@ -164,19 +185,34 @@ public class AccountsController {
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 주식 구매 성공", response = BaseResponseBody.class), @ApiResponse(code = 401, message = "계좌에 주식 구매 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @ApiOperation(value = "계좌에 구매 추가", notes = "계좌에 주식 구매한다.")
     public ResponseEntity<? extends BaseResponseBody> addStockToAccount(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "주식번호", required = true) @Valid AccountStockAddPostReq accountStockAddPostReq) {
+
+//        //거래시간 설정
+        LocalTime now = LocalTime.now();
+        LocalDate date = LocalDate.now();
+        // 2. DayOfWeek 객체 구하기
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+//        the day-of-week, from 1 (Monday) to 7 (Sunday)
+        // 3. 숫자 요일 구하기
+        int dayOfWeekNumber = dayOfWeek.getValue();
+        // 4. 숫자 요일 검증
+        if (dayOfWeekNumber >=6){
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 요일이 아닙니다."));
+        }
+        int hour = now.getHour();
+        if (hour >16 || hour <9){
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
+        }
+
         Long userId = userService.getUserIdByToken(authentication);
         Account account = accountService.getAccount(accountStockAddPostReq.getAccountId(), userId);
         List<Long> stockList = accountStockService.getAccountStockIdList(account);
         int seed = account.getSeed();
-//        Stock stock = stockService.getStock(accountStockAddPostReq.getStockId());
         int postPrice = accountStockAddPostReq.getPrice();
         int postAmount = accountStockAddPostReq.getAmount();
         Long accountId = account.getAccountId();
 
         //지금 주식 가격이랑 내 주문량, 가격이랑 비교용도의 주식객체
         Stock stock = stockRepositorySupport.findStockByAStockId(accountStockAddPostReq.getStockId());
-        List<AccountStock> accountStocks = accountService.getAccountStockByUserIdAccountId(accountStockAddPostReq.getAccountId(), userId);
-
 
         //시드머니 조회하여 구매가격이 시드머니보다 높으면 구매불가
         if (seed >= postPrice * postAmount) {
@@ -186,7 +222,6 @@ public class AccountsController {
 
                 //계좌 주식 리스트에 해당 주식이 있으면 주식 평단가 수정
                 if (stockList.contains(accountStockAddPostReq.getStockId())) {
-//            accountStockService.deleteStockInAccount(userId, accountStockAddPostReq.getAccountId(), accountStockAddPostReq.getStockId());
                     Long accountStockId = accountStockService.getAccountStockIdByStockId(account.getAccountId(), accountStockAddPostReq.getStockId());
                     AccountStock accountStock = accountStockService.getAccountStockByUserIdAccountStockId(userId, accountStockId);
                     int currentAmount = accountStock.getAmount();
@@ -202,7 +237,6 @@ public class AccountsController {
                     accountStockService.updateAmountPrice(accountStock, newAmount, newPrice);
                     tradingService.writeOrder(userId,accountId,accountStockAddPostReq.getStockId(),2 ,postPrice,postAmount, null);
                     //변경된 stockList
-
 
                     return ResponseEntity.status(200).body(SellOrBuyRes.of(stockList, seed, 200, "계좌에 이동평균가격 적용"));
                 }
@@ -225,14 +259,12 @@ public class AccountsController {
         }
     }
     //판매 유효성 검사해야됌
-
     //계좌에 주식 판매
     @PostMapping("/sell")
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 주식 판매 성공", response = BaseResponseBody.class), @ApiResponse(code = 401, message = "계좌에 주식 판매 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @ApiOperation(value = "계좌에 주식 판매", notes = "계좌에 주식을 판매한다.")
     public ResponseEntity<? extends BaseResponseBody> sellStockToAccount(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "주식번호", required = true) @Valid AccountStockAddPostReq accountStockAddPostReq) {
         Long userId = userService.getUserIdByToken(authentication);
-        Optional<User> user = userService.getByUserId(userId);
         Account account = accountService.getAccount(accountStockAddPostReq.getAccountId(), userId);
         List<Long> stockList = accountStockService.getAccountStockIdList(account);
         Long accountStockId = accountStockService.getAccountStockIdByStockId(account.getAccountId(), accountStockAddPostReq.getStockId());
@@ -240,8 +272,23 @@ public class AccountsController {
         Stock stock = stockRepositorySupport.findStockByAStockId(accountStockAddPostReq.getStockId());
         Long stockId =  stock.getStockId();
         Long accountId = account.getAccountId();
+
+//        //거래시간 설정
+        LocalTime now = LocalTime.now();
+        LocalDate date = LocalDate.now();
+        // 2. DayOfWeek 객체 구하기
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        // 3. 숫자 요일 구하기
+        int dayOfWeekNumber = dayOfWeek.getValue();
+        // 4. 숫자 요일 검증
+        if (dayOfWeekNumber >=6){
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
+        }
+        int hour = now.getHour();
+        if (hour >16 || hour <9) {
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "거래 가능한 시간이 아닙니다."));
+        }
         //주문 객체
-//
 
         int postPrice = accountStockAddPostReq.getPrice();
         int postAmount = accountStockAddPostReq.getAmount();
@@ -254,15 +301,12 @@ public class AccountsController {
                 tradingService.writeOrder(userId,accountId,accountStockAddPostReq.getStockId(),3 ,postPrice,postAmount, null);
                 return ResponseEntity.status(401).body(SellOrBuyRes.of(stockList, seed, 401, "판매가격이 시장가보다 높습니다. 판매예약을 보냅니다."));
             } else {
-                //해당 보유한 주식의 양분기
-                if (accountStock.getAmount() <= accountStockAddPostReq.getAmount()) {
+                //해당 보유한 주식의 양분기 같으면 안됌!!!!!
+                if (accountStock.getAmount() < accountStockAddPostReq.getAmount()) {
 
 
                     return ResponseEntity.status(401).body(SellOrBuyRes.of(stockList, seed, 401, "계좌에 해당 주식의 양이 없습니다."));
                 } else {
-//                accountStockService.deleteStockInAccount(userId, accountStockAddPostReq.getAccountId(), accountStockAddPostReq.getStockId());
-//                List<AccountStock> accountStocks = accountService.getAccountStockByUserIdAccountId(accountStockAddPostReq.getAccountId(),userId);
-
                     int currentAmount = accountStock.getAmount();
                     int currentPrice = accountStock.getPrice();
 
@@ -300,7 +344,6 @@ public class AccountsController {
         }
     }
 
-
     //보유한 주식 계좌 리스트 조회
     @ApiResponses({@ApiResponse(code = 200, message = "(token) 계좌상세 목록 조회 성공", response = AccountListRes.class), @ApiResponse(code = 401, message = "계좌상세 목록 조회 실패", response = BaseResponseBody.class), @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)})
     @ApiOperation(value = "보유한 주식 Id, 보유량 조회", notes = "보유한 주식 Id, 보유량 조회")
@@ -308,26 +351,25 @@ public class AccountsController {
     public ResponseEntity<? extends BaseResponseBody> checkStockList(@ApiIgnore Authentication authentication, @PathVariable("account_id") @ApiParam(value = "상세계좌 번호", required = true) Long account_id) {
         Long userId = userService.getUserIdByToken(authentication);
         Account account = accountService.getAccount(account_id, userId);
-        Optional<User> user = userService.getByUserId(userId);
 
         //주 계좌 시드머니 세팅
-        int seed = userService.getAccountSeed(user);
 
         //판매가능한 수
         int available=0;
 
-        List<Trading> trading = tradingService.tradingList3(userId, account_id);
-//        Long stockId = accountStockService.getStockIdByTicker(ticker);
-        long stockId = 1L;
-        List<AccountStock> accountStocks = accountStockService.getAccountStockListByUserIdAccountIdStockId(userId,account_id,stockId);
-
-
-
-
-
         List<AccountStockInfo> stockInfo = userService.getStockInfoByAccountId(userId,account_id);
+        StockListRes stockListRes = StockListRes.of(account, stockInfo, available, 200, "보유주식 리스트 조회에 성공하였습니다.");
+        int seed = account.getSeed();
 
-        return ResponseEntity.status(200).body(StockListRes.of(account,stockInfo, available,200, "보유주식 리스트 조회에 성공하였습니다."));
+
+
+        List<Trading> tradings4 = tradingService.tradingList4(userId, account_id);
+        List<Integer> waitingPriceList = tradings4.stream().map(trading -> trading.getTr_amount() * trading.getTr_price()).collect(Collectors.toList());
+        int waitingPrice = waitingPriceList.stream().mapToInt(Integer::intValue).sum();
+
+        stockListRes.setAvailableSeed(seed-waitingPrice);
+
+        return ResponseEntity.status(200).body(stockListRes);
     }
 }
 

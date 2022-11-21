@@ -8,7 +8,7 @@ nav > div {
   /* 수평정렬, 5개의 button을 각각 20% width만큼 할당 */
   text-align: center;
   float: left;
-  width: 20%;
+  width: 25%;
 
   /* 세로길이 설정 */
   height: 25px;

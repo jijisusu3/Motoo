@@ -13,7 +13,6 @@ function QuizResultPage() {
   const quizData = useSelector((state) => {
     return state.persistedReducer.setUser.quizData
   })
-  console.log(quizData.question)
   var examples = []
   if (quizData.examples) {
     examples = quizData.examples.split(':');

@@ -1,0 +1,225 @@
+
+.loginbg {
+  min-height: 100vh;  
+  width: 100%; 
+  height: 100%;
+  background: linear-gradient(45deg, #FFDA90, #D9F1EC, #FFAF96);
+  background-size: 400% 400%;
+  animation: gradient 8s ease infinite;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.bigbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+}
+
+@keyframes gradient {
+  0% {
+     background-position: 0% 40%;
+  }
+  50% {
+     background-position: 100% 40%;
+  }
+  100% {
+     background-position: 0% 40%;
+  }
+}
+
+.kakao {
+  background-color: transparent;
+  border: none;
+}
+
+.kakao:hover {
+  cursor: pointer; 
+}
+
+.ctnbox{
+  width: 100%;
+}
+
+.subbox{
+  max-width: 300px;
+  width: 90%;
+  margin: auto;
+}
+
+.logintitle{
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.subtitle{
+  font-size: 15px;
+  font-weight: 600; 
+  color: #737d7d;
+
+}
+
+.ctnbox p {
+  margin-left: 20px;
+}
+
+.cross {
+  position: relative;
+  z-index: 1;
+  fill-opacity: 90%;
+  top: -200px;
+  left: 100px;
+  animation: fadein;
+  animation-duration: 2s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+}
+@keyframes fadein {
+  0% {
+      opacity: 0;
+  }
+  50% {
+      opacity: 1;
+  }
+  100% {
+    opacity: 0;
+}
+}
+.cross2 {
+  position: relative;
+  z-index: 1;
+  fill-opacity: 90%;
+  top: -100px;
+  left: 20px;
+  animation: fadein;
+  animation-duration: 3s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+}
+
+.cross3 {
+  position: relative;
+  z-index: 1;
+  fill-opacity: 90%;
+  top: -170px;
+  left: 160px;
+  animation: fadein;
+  animation-duration: 3.5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+}
+
+.cross4 {
+  position: relative;
+  z-index: 1;
+  fill-opacity: 90%;
+  top: -70px;
+  left: 43px;
+  animation: fadein;
+  animation-duration: 2.5s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+}
+
+.blah {
+  opacity: 70%;
+  position: relative;
+  top: -240px;
+  left: 40px;
+
+}
+
+/* .dotdotdot{
+  font-weight: 800;
+  font-size: 20px;
+  z-index: 1;
+  position: relative;
+  top: -248px;
+  left: -65px;
+  color: #43B8B1;
+  width: 5ch;
+  overflow: hidden; 
+  white-space: nowrap;
+  border-right: .05em solid black;
+  animation: typing 5s steps(5), cursor 1s steps(1) infinite;
+}
+@keyframes typing{
+  from{ width: 0; }
+}
+ 
+@keyframes cursor{
+  50%{ border-color: transparent; }
+} */
+.dotdotdot {
+  width: 6.5ch;
+  z-index: 1;
+  position: relative;
+  top: -299px;
+  left: 65px;  
+  animation: typing 2s steps(14) infinite, blink .5s step-end infinite alternate;
+  white-space: nowrap;
+  overflow: hidden;
+  /* border-right: 1px solid; */
+  font-size: 14px;
+  color: #43B8B1;
+  font-weight: 800;
+}
+
+@keyframes typing {
+  from {
+    width: 0
+  }
+}
+    
+@keyframes blink {
+  50% {
+    border-color: transparent
+  }
+}
+
+.ap1 {
+  position: relative;
+  z-index: 1;
+  top: -250px;
+  left: 60px;
+  animation:bounce2 3.5s infinite;
+}
+
+.ap2 {
+  position: relative;
+  z-index: 1;
+  top: -295px;
+  left: 200px;
+  animation:bounce1 3s infinite;
+}
+
+.ap3 {
+  position: relative;
+  z-index: 1;
+  top: -270px;
+  left: 250px;
+  animation:bounce 4s infinite;
+}
+
+@keyframes bounce {
+  0% { top: -270px; }
+  25% { top: -265px;  transform: scale(1.05); }
+  40% { top: -270px; transform: scale(1); }
+  100% { top: -270px; }
+}
+
+@keyframes bounce1 {
+  0% { top: -285px; }
+  25% { top: -290px; transform: scale(1.05); }
+  40% { top: -285x; transform: scale(1); }
+  100% { top: -285px; }
+}
+
+@keyframes bounce2 {
+  0% { top: -240px; }
+  25% { top: -245px; transform: scale(1.05); }
+  40% { top: -240px; transform: scale(1); }
+  100% { top: -240px; }
+}

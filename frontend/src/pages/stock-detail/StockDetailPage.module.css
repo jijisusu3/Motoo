@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 1rem;
 }
 
 .radioUlClass label {
@@ -73,9 +74,9 @@
 }
 .infobox{
   display: flex;
-  margin-top: 1rem;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
+  margin-top: 1.8rem;
+  margin-left: 2.5rem;
+  margin-right: 2.5rem;
   align-items: center;
   justify-content: space-between;
   font-weight: 600;
@@ -84,19 +85,39 @@
   color: #929E9E;
   margin-bottom: 0.5rem;
 }
-.hrline{
-  border: #EAF0EF 8px solid;
+.hrline2{
+  height: 15px;
+  background-color: #EAF0EF;
   display: flex;
   justify-content: center;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-top: 1.6rem;
+  margin-bottom: 1.6rem;
+}
+
+.hrline{
+  height: 30px;
+  background-color: #EAF0EF;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  position: relative;
+  top: -20px;
+}
+.hrline3{
+  height: 15px;
+  background-color: #EAF0EF;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  position: relative;
+  top: -20px;
 }
 .line{
   border: #EAF0EF 1px solid;
   display: flex;
   justify-content: center;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 .back{
   margin-top: 2rem;
@@ -110,10 +131,11 @@
 }
 .radio{
   display: flex;
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
+  /* margin-left: 2.2rem; */
+  width: 80%;
+  max-width: 600px;
   align-items: center;
-  justify-content: space-between;
+  margin: auto;
 }
 .imgrowbox{
   display: flex;
@@ -149,10 +171,9 @@
   margin-right: 1.5rem;
   margin-top: 1rem;
 }
-.start{
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-  margin-top: 6rem;
+.subctn1graph{
+  /* margin: auto; */
+  margin-top: 3rem;
 }
 .top{
   display: flex;
@@ -173,8 +194,9 @@
   align-items: center;
   justify-content: center;
   margin: 1.5rem;
-  background: #f5f5f5;
-  border: 0.5px solid #929E9E;
+  margin: 1.5rem 1.5rem 3.2rem 1.5rem;
+  background: #f9f9f9;
+  border: 0.5px solid #c8d3d3;
   border-radius: 10px;
   font-weight: 600;
 }
@@ -189,8 +211,9 @@
   margin-left: 0.5rem;
 }
 .news{
-  font-size: 10px;
-  margin-left: 1.5rem;
+  font-size: 12px;
+  margin-left: 10px;
+  font-weight: 400;
   color: #929e9e;
 }
 .weatherbox{
@@ -201,6 +224,7 @@
   width: 30%;
   height: 88px;
   border-radius: 10px;
+  margin-bottom: 10px;
 }
 .wimg{
   height: 40px;
@@ -212,7 +236,8 @@
 .script{
   color: #929e9e;
   font-size: 14px;
-  margin-top: 0.5rem;
+  margin-top: 3px;
+  /* margin-top: 0.5rem; */
 }
 .edge{
   display: flex;
@@ -232,12 +257,14 @@
   height: 30px;
   display: inline-flex;
   align-items: center;
-  margin-right: 1rem;
-  margin-top: 1rem;
+  margin-right: 0.7rem;
+  margin-top: 0.7rem;
 }
 .boxes{
   margin-left: 1rem;
   margin-right: 1rem;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 .onlybuy{
   width: 100%;
@@ -253,12 +280,12 @@
   font-size: 20px;
 }
 .sell{
-  width: 100%;
+  width: 180px;
   height: 54px;
   color: #fff;
   border: none;
   margin-top: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 5px;
   background: #7BCDC8;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -269,12 +296,12 @@
   justify-content: center;
 }
 .buy{
-  width: 100%;
+  width: 180px;
   height: 54px;
   color: #fff;
   border: none;
   margin-top: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 5px;
   background: #FECE6D;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -295,33 +322,40 @@
 .greenbox{
   display: flex;
   align-items: center;
+  margin-bottom: 5px;
 }
 .sellbuy{
   position: fixed;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  /* justify-content: space-between; */
   bottom: 0;
   width: 100%;
   background: linear-gradient(to top, white, white 50%, transparent);
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
-.flx{
-  width: 45%;
-}
+
 .fixbox{
   display: flex;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+  margin-top: 1.3rem;
   margin-left: 1.5rem;
   margin-right: 1.5rem;
+  margin-bottom: 1.3rem;
+
+  /* margin-top: 2rem;
+  margin-bottom: 1rem;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem; */
   justify-content: space-between;
 }
 .fix{
   position: fixed;
+  z-index: 1;
   background-color: #fff;
   width: 100%;
   top: 0;
+  box-shadow: 0px 1px 2px 1px rgba(148, 148, 148, 0.25);
 }
 .topline{
   border: #EAF0EF 1px solid;
@@ -329,4 +363,177 @@
 .big{
   font-size: 24px;
   font-weight: 600;
+}
+
+.stkdtctn{
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  background-color: white;
+  padding-top: 30px;
+
+}
+
+.stkdtbg {
+  background-color: #EAF0EF ;
+  position: relative;
+  top: -29px;
+  min-height: 100vh;
+  height: 100%;
+}
+
+.testtest{
+  margin-top: 1rem;
+  margin-left: 2.4rem;
+  /* margin: auto; */
+  /* display: flex;
+  justify-content: center; */
+}
+
+.dtctntitle{
+  margin-left: 40px;
+  margin-right: 1.5rem;
+  margin-top: 8rem;
+}
+
+.dtsub1{
+  margin-bottom: 50px;
+  background-color: white;
+
+}
+
+.epsper{
+  margin-left: 1.3rem;
+  margin-right: 1.3rem;
+}
+
+.explainbox {
+  margin-top: 20px;
+  padding: 5px;
+  margin-left: 1.2rem;
+  margin-right: 1.2rem;
+  background-color: #EAF0EF60;
+  border-radius: 10px;
+}
+
+.buysell {
+  position: fixed;
+  bottom: 0;
+  z-index: 1;
+  max-width: 640px;
+  width: 100%;  
+  text-align: center;
+  height: 58px;
+  margin-bottom: 5px;
+  /* background-color: #ffffff95; */
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+
+  
+}
+
+.buysellbutton {
+  width: 48%;
+  height: 54px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  border: none;
+}
+
+.sellbutton {
+  width: 96%;
+  height: 54px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  border: none;
+  background-color: #FECE6D;
+
+}
+
+.sellbutton {
+  width: 96%;
+  height: 54px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  border: none;
+  background-color: #B4BEBE;
+}
+.flexrow{
+  display: flex;
+  font-weight: 600;
+  font-size: 14px;
+}
+.red{
+  color: #DD4956;
+}
+.blue{
+  color: #2795FF;
+}
+.minmaxbox{
+  font-weight: 600;
+  margin-top: 0.5rem;
+  font-size: 12px;
+  color: #929E9E;
+}
+.title{
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  font-size: 18px;
+}
+.yellowbox{
+  margin-top: 0.5rem;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+}
+.graybox{
+  margin-top: 0.5rem;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 160px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.biggraybox{
+  margin-top: 0.5rem;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 160px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.candleimg{
+  height: 80px;
+  margin-left: 1rem;
+}
+.txts{
+  width: 100%;
+  margin-right: 0.5rem;
+}
+.changebtn{
+  display: flex;
+  justify-content: center;
+  font-weight: 600;
+  margin-top: 1rem;
 }

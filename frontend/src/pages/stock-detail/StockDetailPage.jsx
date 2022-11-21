@@ -8,17 +8,45 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowNav } from "../../stores/navSlice";
 import { stockDetailGet } from "../../stores/stockSlice";
-import { likeStockPost } from "../../stores/userSlice";
+import { likeStockPost, realtimeAccountGet } from "../../stores/userSlice";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+
+const style = {
+  position: "absolute",
+  top: "40%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 324,
+  height: 400,
+  bgcolor: "background.paper",
+  border: "none",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 5,
+};
+
+const styleTwo = {
+  position: "absolute",
+  top: "40%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 324,
+  height: 225,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 5,
+  border: "none",
+};
 
 function StockDetailPage() {
   const params = useParams();
   const id = params.id;
   const [showCandleGraph, setShowCandleGraph] = useState(false);
   const navigate = useNavigate();
-  // useEffect로 데이터 받아오고 구매주식목록에 있으면 true, 없으면 false 그대로
-  const [showSellButton, setShowSellButton] = useState(true);
   // useEffect로 데이터 받아오고 관심목록에 있으면 true, 없으면 false 그대로
-  const [isWatchlist, setisWatchlist] = useState(true);
+  const [mainColor, setMainColor] = useState("#DD4956");
   const stockData = useSelector((state) => {
     return state.setStock.detail;
   });
@@ -28,12 +56,17 @@ function StockDetailPage() {
   const userToken = useSelector((state) => {
     return state.persistedReducer.setUser.user.token;
   });
-  const haveList = useSelector((state) => {
-    return state.persistedReducer.setUser.user.haveList;
+  const userCurrent = useSelector((state) => {
+    return state.persistedReducer.setUser.user.data.current;
   });
-  const likeList = useSelector((state) => {
-    return state.persistedReducer.setUser.user.likeList;
-  });
+  const data = {
+    config: {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    },
+    id: userCurrent,
+  };
   function backTo() {
     navigate(-1);
   }
@@ -47,34 +80,8 @@ function StockDetailPage() {
     const now = window.location.pathname;
     dispatch(setShowNav(now));
     dispatch(stockDetailGet(id));
+    dispatch(realtimeAccountGet(data));
   }, []);
-
-  useEffect(() => {
-    // if (!haveList.includes(id)) {
-    //   setShowSellButton(false);
-    // } else {
-    //   setShowSellButton(true);
-    // }
-    try {
-      if (!likeList.includes(id)) {
-        setisWatchlist(false);
-      } else {
-        setisWatchlist(true);
-      }
-    } catch{
-      return
-    }
-  }, [haveList, likeList]);
-
-  useEffect(() => {
-    const wss = new WebSocket("wss://k7b204.p.ssafy.io:443/api1/socket/ws");
-    wss.onopen = () => {
-      wss.send("전지수 보이삼보이삼?");
-    };
-    wss.onmessage = (event) => {
-      console.log(`받았다 니 데이터 : ${event.data}`);
-    };
-  });
 
   function changeToCandle() {
     setShowCandleGraph(true);
@@ -82,400 +89,1070 @@ function StockDetailPage() {
   function changeToLine() {
     setShowCandleGraph(false);
   }
+  function OpenQModal() {
+    const [graphExplain, setGraphExplain] = useState(false);
+    function handleQModalOpen() {
+      setGraphExplain(true);
+    }
+    function handleQModalClose() {
+      setGraphExplain(false);
+    }
+    const [showLineExplain, setShowLineExplain] = useState(false)
+    function clickLineExplain(){
+      setShowLineExplain(true)
+    }
+    function clickCandleExplain() {
+      setShowLineExplain(false)
+    }
+    return (
+      <div style={{ marginLeft: "3%" }}>
+        <img
+          src={`${process.env.PUBLIC_URL}/Q.svg`}
+          alt=""
+          onClick={handleQModalOpen}
+        />
+        <Modal open={graphExplain} onClose={handleQModalClose}>
+          {showLineExplain ? (
+            <Box className={classes.deletebox} sx={style}>
+              <div className={classes.title}>라인그래프의 색은?</div>
+              <div className={classes.yellowbox}>
+                <div className={classes.flexrow}>
+                  <div>현재가가 전일 종가보다 높을때</div>
+                  <div className={classes.red} style={{ marginLeft: 8 }}>빨간색</div>
+                </div>
+                <div className={classes.flexrow}>
+                  <div>현재가가 전일 종가보다 낮을때</div>
+                  <div className={classes.blue} style={{ marginLeft: 8 }}>파란색</div>
+                </div>
+              </div>
+              <div className={classes.title} style={{ marginTop: 16 }}>라인그래프의 구성</div>
+              <div className={classes.graybox}>
+                <div>
+                  <div style={{ color: '#7BCDC8' }}>최고가</div>
+                  <div>해당 기간중 가장 높은 가격으로 거래된 가격</div>
+                </div>
+                <div>
+                  <div style={{ color: '#7BCDC8' }}>최저가</div>
+                  <div>해당 기간중 가장 낮은 가격으로 거래된 가격</div>
+                </div>
+              </div>
+              <div className={classes.changebtn} onClick={clickCandleExplain}>캔들그래프 알아보기</div>
+            </Box>
+          ):(
+            <Box className={classes.deletebox} sx={style}>
+            <div className={classes.title}>캔들그래프의 색은?</div>
+            <div className={classes.yellowbox}>
+              <div className={classes.flexrow}>
+                <div>시가가 종가보다 낮을때</div>
+                <div className={classes.red} style={{ marginLeft: 8 }}>빨간색</div>
+              </div>
+              <div className={classes.flexrow}>
+                <div>시가가 종가보다 높을때</div>
+                <div className={classes.blue} style={{ marginLeft: 8 }}>파란색</div>
+              </div>
+            </div>
+            <div className={classes.title} style={{ marginTop: 16 }}>캔들그래프의 구성</div>
+            <div className={classes.biggraybox}>
+              <div>
+                <img className={classes.candleimg} src={`${process.env.PUBLIC_URL}/stock-detail/red.png`} alt=""/>
+                <img className={classes.candleimg} src={`${process.env.PUBLIC_URL}/stock-detail/blue.png`} alt=""/>
+              </div>
+              <div className={classes.txts}>
+                <div style={{ color: '#7BCDC8' }}>시가</div>
+                <div>주식시장이 시작하면서 당일<br />처음 거래된 개별종목의 가격</div>
+                <div style={{ color: '#7BCDC8', marginTop: 8 }}>종가</div>
+                <div>주식시장이 마감하면서 당일<br />마지막 거래된 개별종목의 가격</div>
+              </div>
+            </div>
+            <div className={classes.changebtn} onClick={clickLineExplain}>라인그래프 알아보기</div>
+          </Box>
+          )}
+        </Modal>
+      </div>
+    );
+  }
 
-  const [candleGraphData, setCandleGraphData] = useState({
-    series: [
-      {
-        data: [
-          {
-            x: new Date(1538805600000),
-            y: [6618.69, 6618.74, 6610, 6610.4],
-          },
-          {
-            x: new Date(1538807400000),
-            y: [6611, 6622.78, 6610.4, 6614.9],
-          },
-          {
-            x: new Date(1538809200000),
-            y: [6614.9, 6626.2, 6613.33, 6623.45],
-          },
-          {
-            x: new Date(1538811000000),
-            y: [6623.48, 6627, 6618.38, 6620.35],
-          },
-          {
-            x: new Date(1538812800000),
-            y: [6619.43, 6620.35, 6610.05, 6615.53],
-          },
-          {
-            x: new Date(1538814600000),
-            y: [6615.53, 6617.93, 6610, 6615.19],
-          },
-          {
-            x: new Date(1538816400000),
-            y: [6615.19, 6621.6, 6608.2, 6620],
-          },
-          {
-            x: new Date(1538818200000),
-            y: [6619.54, 6625.17, 6614.15, 6620],
-          },
-          {
-            x: new Date(1538820000000),
-            y: [6620.33, 6634.15, 6617.24, 6624.61],
-          },
-          {
-            x: new Date(1538821800000),
-            y: [6625.95, 6626, 6611.66, 6617.58],
-          },
-          {
-            x: new Date(1538823600000),
-            y: [6619, 6625.97, 6595.27, 6598.86],
-          },
-          {
-            x: new Date(1538825400000),
-            y: [6598.86, 6598.88, 6570, 6587.16],
-          },
-          {
-            x: new Date(1538827200000),
-            y: [6588.86, 6600, 6580, 6593.4],
-          },
-          {
-            x: new Date(1538829000000),
-            y: [6593.99, 6598.89, 6585, 6587.81],
-          },
-          {
-            x: new Date(1538830800000),
-            y: [6587.81, 6592.73, 6567.14, 6578],
-          },
-          {
-            x: new Date(1538832600000),
-            y: [6578.35, 6581.72, 6567.39, 6579],
-          },
-          {
-            x: new Date(1538834400000),
-            y: [6579.38, 6580.92, 6566.77, 6575.96],
-          },
-          {
-            x: new Date(1538836200000),
-            y: [6575.96, 6589, 6571.77, 6588.92],
-          },
-          {
-            x: new Date(1538838000000),
-            y: [6588.92, 6594, 6577.55, 6589.22],
-          },
-          {
-            x: new Date(1538839800000),
-            y: [6589.3, 6598.89, 6589.1, 6596.08],
-          },
-          {
-            x: new Date(1538841600000),
-            y: [6597.5, 6600, 6588.39, 6596.25],
-          },
-          {
-            x: new Date(1538843400000),
-            y: [6598.03, 6600, 6588.73, 6595.97],
-          },
-          {
-            x: new Date(1538845200000),
-            y: [6595.97, 6602.01, 6588.17, 6602],
-          },
-          {
-            x: new Date(1538847000000),
-            y: [6602, 6607, 6596.51, 6599.95],
-          },
-          {
-            x: new Date(1538848800000),
-            y: [6600.63, 6601.21, 6590.39, 6591.02],
-          },
-          {
-            x: new Date(1538850600000),
-            y: [6591.02, 6603.08, 6591, 6591],
-          },
-          {
-            x: new Date(1538852400000),
-            y: [6591, 6601.32, 6585, 6592],
-          },
-          {
-            x: new Date(1538854200000),
-            y: [6593.13, 6596.01, 6590, 6593.34],
-          },
-          {
-            x: new Date(1538856000000),
-            y: [6593.34, 6604.76, 6582.63, 6593.86],
-          },
-          {
-            x: new Date(1538857800000),
-            y: ["X", "X", "X", "X"],
-          },
-          {
-            x: new Date(1538859600000),
-            y: ["X", "X", "X", "X"],
-          },
-          {
-            x: new Date(1538861400000),
-            y: [],
-          },
-          {
-            x: new Date(1538863200000),
-            y: [],
-          },
-          {
-            x: new Date(1538865000000),
-            y: [],
-          },
-          {
-            x: new Date(1538866800000),
-            y: [],
-          },
-        ],
-      },
-    ],
-    options: {
-      plotOptions: {
-        candlestick: {
-          colors: {
-            upward: "#DD4956",
-            downward: "#4D97ED",
-          },
-        },
-      },
-      chart: {
-        animations: {
-          enabled: false,
-        },
-        type: "candlestick",
-        height: 350,
-        locales: [ko],
-        defaultLocale: "ko",
-        toolbar: {
-          show: true,
-          tools: {
-            download: false,
-            selection: false,
-            zoom: false,
-            zoomin: true,
-            zoomout: true,
-            pan: false,
-            reset: false,
-            // 툴바 아이콘 커스텀 하는 곳...
-            // customIcons: [
-            //   {
-            //     icon: '<img src={`${process.env.PUBLIC_URL}/dateRefresh.svg`} alt="">',
-            //     index: 6,
-            //     class: 'custom-icon',
-            //     click: function (chart, options, e) {
-            //       console.log("clicked custom-icon")
-            //     }
-            //   }
-            // ]
-          },
-        },
-        selection: {
-          enabled: false,
-        },
-      },
-      grid: {
-        show: false,
-      },
-      xaxis: {
-        type: "datetime",
-      },
-      yaxis: {
-        show: false,
-      },
-      tooltip: {
-        custom: function ({ seriesIndex, dataPointIndex, w }) {
-          const o = w.globals.seriesCandleO[seriesIndex][dataPointIndex];
-          const h = w.globals.seriesCandleH[seriesIndex][dataPointIndex];
-          const l = w.globals.seriesCandleL[seriesIndex][dataPointIndex];
-          const c = w.globals.seriesCandleC[seriesIndex][dataPointIndex];
-          return (
-            '<div class="apexcharts-tooltip-candlestick">' +
-            '<div>&nbsp시작가: <span class="value">' +
-            o +
-            "&nbsp</span></div>" +
-            '<div>&nbsp최고가: <span class="value">' +
-            h +
-            "&nbsp</span></div>" +
-            '<div>&nbsp최저가: <span class="value">' +
-            l +
-            "&nbsp</span></div>" +
-            '<div>&nbsp마감가: <span class="value">' +
-            c +
-            "&nbsp</span></div>" +
-            "</div>"
-          );
-        },
-        // 일인지 월인지 등등에 따라 format 바꿔주기
-        // 일 일때는: 'HH:mm' 주일 때는: 'dddd' 월일때에는: 'MMM dd', 년일때에는: 'MMM dd'
-        x: {
-          format: "HH:mm",
-        },
-      },
-    },
-  });
-  const extremeValues = [
-    { x: new Date(2019, 4, 1), y: 31003, z: "최저가" },
-    { x: new Date(2019, 8, 1), y: 79987, z: "최고가" },
-  ];
-  const [lineGraphData, setLineGraphData] = useState({
-    series: [
-      {
-        name: "ExtremeValue",
-        type: "scatter",
-        data: [
-          { x: extremeValues[0].x, y: (extremeValues[0].y * 0.92).toFixed(), z: extremeValues[0].z },
-          { x: extremeValues[1].x, y: (extremeValues[1].y * 1.05).toFixed(), z: extremeValues[1].z },
-        ],
-      },
-      {
-        name: "Line",
-        data: [
-          { x: new Date("01-01-2019"), y: 60000 },
-          { x: "02-05-2019", y: 70000 },
-          { x: new Date(2019, 2, 1), y: 60000 },
-          { x: new Date(2019, 3, 1), y: 50000 },
-          { x: new Date(2019, 4, 1), y: 31003 },
-          { x: new Date(2019, 5, 1), y: 40000 },
-          { x: new Date(2019, 6, 1), y: 50000 },
-          { x: new Date(2019, 7, 1), y: 60000 },
-          { x: new Date(2019, 8, 1), y: 79987 },
-          { x: new Date(2019, 9, 1), y: 70000 },
-          { x: new Date(2019, 10, 1), y: null },
-          { x: new Date(2019, 11, 1), y: null },
-        ],
-      },
-    ],
-    options: {
-      colors: ["#DD4956", "#DD4956"],
-      chart: {
-        animations: {
-          enabled: false,
-        },
-        height: 350,
-        type: "line",
-        locales: [ko, ko],
-        defaultLocale: "ko",
-        toolbar: {
-          show: false,
-          tools: {
-            download: false,
-            selection: false,
-            zoom: false,
-            zoomin: true,
-            zoomout: true,
-            pan: false,
-            reset: false,
-            // 툴바 아이콘 커스텀 하는 곳...
-            // customIcons: [
-            //   {
-            //     icon: '<img src={`${process.env.PUBLIC_URL}/dateRefresh.svg`} alt="">',
-            //     index: 6,
-            //     class: 'custom-icon',
-            //     click: function (chart, options, e) {
-            //       console.log("clicked custom-icon")
-            //     }
-            //   }
-            // ]
-          },
-        },
-        selection: {
-          enabled: false,
-        },
-      },
-      grid: {
-        show: false,
-      },
-      markers: {
-        size: [1, 0],
-        hover: {
-          size: 0,
-        },
-      },
-      dataLabels: {
-        enabled: true,
-        textAnchor: "start",
-        formatter: function (val, opt) {
-          const thisData = opt.w.globals.initialSeries[opt.seriesIndex].data[opt.dataPointIndex];
-          if (opt.seriesIndex == 0) {
-            return thisData.z + " " + extremeValues[opt.dataPointIndex].y.toLocaleString() + "원";
-          }
-        },
-        background: {
-          enabled: false,
-        },
-      },
-      stroke: {
-        width: 3,
-        curve: "smooth",
-        colors: "#DD4956",
-        lineCap: "butt",
-      },
-      legend: {
-        show: false,
-      },
-      xaxis: {
-        show: true,
-        seriesName: "Line",
-        type: "datetime",
-        labels: {
-          show: true,
-          datetimeFormatter: {
-            year: "yy년",
-            month: "yy년 MM월",
-            day: "MM월 dd일",
-            hour: "HH:mm",
-          },
-        },
-      },
-      yaxis: [
+  function OpenMaxMinModal() {
+    const [mmExplain, setMmExplain] = useState(false);
+    function handleMModalOpen() {
+      setMmExplain(true);
+    }
+    function handleMModalClose() {
+      setMmExplain(false);
+    }
+    return (
+      <div style={{ marginLeft: "3%" }}>
+        <img
+          src={`${process.env.PUBLIC_URL}/Q.svg`}
+          alt=""
+          onClick={handleMModalOpen}
+        />
+        <Modal open={mmExplain} onClose={handleMModalClose}>
+          <Box className={classes.deletebox} sx={styleTwo}>
+            <div className={classes.title}>이 주식은 오늘?</div>
+            <div className={classes.minmaxbox}>
+              주식 시장에서 개별 종목이 상승할 수 있는 최대 가격을<br />상한가, 하락할 수 있는 최저가를 하한가로 정해 가격<br />변동 폭을 제한하고 있습니다.
+            </div>
+            <div className={classes.yellowbox}>
+              <div className={classes.flexrow}>
+                <div className={classes.red}>상한가</div>
+                <div>는 어제 종가를 기준으로</div>
+                <div className={classes.red} style={{ marginLeft: 8 }}>+30%</div>
+              </div>
+              <div className={classes.flexrow}>
+                <div className={classes.blue}>하한가</div>
+                <div>는 어제 종가를 기준으로</div>
+                <div className={classes.blue} style={{ marginLeft: 8 }}>-30%</div>
+              </div>
+            </div>
+          </Box>
+        </Modal>
+      </div>
+    );
+  }
+  function StockDetailGraph() {
+    const [candleGraphData, setCandleGraphData] = useState({
+      series: [
         {
-          show: false,
-          seriesName: "ExtremeValue",
-          min: extremeValues[0].y * 0.85,
-          max: extremeValues[1].y * 1.1,
-          labels: {
-            style: {
-              colors: "#DC6031",
+          data: [],
+        },
+      ],
+      options: {
+        plotOptions: {
+          candlestick: {
+            colors: {
+              upward: "#DD4956",
+              downward: "#4D97ED",
             },
           },
         },
-        {
+        chart: {
+          animations: {
+            enabled: false,
+          },
+          type: "candlestick",
+          height: 350,
+          locales: [ko],
+          defaultLocale: "ko",
+          toolbar: {
+            show: true,
+            tools: {
+              download: false,
+              selection: false,
+              zoom: false,
+              zoomin: true,
+              zoomout: true,
+              pan: false,
+              reset: false,
+            },
+          },
+          selection: {
+            enabled: false,
+          },
+        },
+        grid: {
           show: false,
-          seriesName: "Line",
-          min: extremeValues[0].y * 0.85,
-          max: extremeValues[1].y * 1.1,
         },
-      ],
-      // responsive: [{ breakpoint: 1000 }],
-      tooltip: {
-        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-          if (seriesIndex == 1) {
-            return series[seriesIndex][dataPointIndex].toLocaleString() + "원";
-          }
-          return extremeValues[dataPointIndex].y.toLocaleString() + "원";
+        xaxis: {
+          tickPlacement: "between",
+          show: false,
+          type: "category",
+          labels: {
+            show: false,
+            datetimeFormatter: {
+              year: "yy년",
+              month: "yy년 MM월",
+              day: "MM월 dd일",
+              hour: "HH:mm",
+            },
+          },
+          axisBorder: {
+            show: false,
+          },
+          axisTicks: {
+            show: false,
+          },
         },
-        x: {
-          enabled: true,
-          formatter: function (value, timeStamp) {
-            const date = new Date(value);
-            return date.toLocaleString();
+        yaxis: {
+          show: false,
+        },
+        tooltip: {
+          custom: function ({ seriesIndex, dataPointIndex, w }) {
+            const o = w.globals.seriesCandleO[seriesIndex][dataPointIndex];
+            const h = w.globals.seriesCandleH[seriesIndex][dataPointIndex];
+            const l = w.globals.seriesCandleL[seriesIndex][dataPointIndex];
+            const c = w.globals.seriesCandleC[seriesIndex][dataPointIndex];
+            return (
+              '<div class="apexcharts-tooltip-candlestick">' +
+              '<div>&nbsp시작가: <span class="value">' +
+              o +
+              "&nbsp</span></div>" +
+              '<div>&nbsp최고가: <span class="value">' +
+              h +
+              "&nbsp</span></div>" +
+              '<div>&nbsp최저가: <span class="value">' +
+              l +
+              "&nbsp</span></div>" +
+              '<div>&nbsp마감가: <span class="value">' +
+              c +
+              "&nbsp</span></div>" +
+              "</div>"
+            );
+          },
+          // 일인지 월인지 등등에 따라 format 바꿔주기
+          // 일 일때는: 'HH:mm' 주일 때는: 'dddd' 월일때에는: 'MMM dd', 년일때에는: 'MMM dd'
+          x: {
+            enabled: true,
+            formatter: function (value, timeStamp) {
+              const date = new Date(value);
+              return date.toLocaleString();
+            },
           },
         },
       },
-    },
-  });
-  function StockDetailGraph() {
-    if (showCandleGraph) {
-      return <ReactApexChart options={candleGraphData.options} series={candleGraphData.series} type="candlestick" height={350} width={310} />;
+    });
+    const extremeValues = [
+      { x: new Date(), y: 0, z: "최저가" },
+      { x: new Date(), y: 0, z: "최고가" },
+    ];
+    const [lineGraphData, setLineGraphData] = useState({
+      series: [
+        {
+          name: "ExtremeValue",
+          type: "scatter",
+          data: [
+            // {
+            //   x: extremeValues[0].x,
+            //   y: extremeValues[0].y,
+            //   z: extremeValues[0].z,
+            // },
+            // {
+            //   x: extremeValues[1].x,
+            //   y: extremeValues[0].y,
+            //   z: extremeValues[1].z,
+            // },
+          ],
+        },
+        {
+          name: "Line",
+          data: [],
+        },
+      ],
+      options: {
+        colors: [mainColor, mainColor],
+        chart: {
+          animations: {
+            enabled: false,
+          },
+          height: 350,
+          width: "100%",
+          type: "line",
+          locales: [ko, ko],
+          defaultLocale: "ko",
+          toolbar: {
+            show: false,
+            tools: {
+              download: false,
+              selection: false,
+              zoom: false,
+              zoomin: true,
+              zoomout: true,
+              pan: false,
+              reset: false,
+            },
+          },
+          selection: {
+            enabled: false,
+          },
+        },
+        grid: {
+          show: false,
+        },
+        markers: {
+          size: [1, 0],
+          hover: {
+            size: 0,
+          },
+        },
+
+        stroke: {
+          width: 3,
+          curve: "smooth",
+          colors: mainColor,
+          lineCap: "butt",
+        },
+        legend: {
+          show: false,
+        },
+        xaxis: {
+          show: false,
+          seriesName: "Line",
+          type: "datetime",
+          labels: {
+            show: true,
+            datetimeFormatter: {
+              year: "yy년",
+              month: "yy년 MM월",
+              day: "MM월 dd일",
+              hour: "HH:mm",
+            },
+          },
+          axisBorder: {
+            show: false,
+          },
+          axisTicks: {
+            show: false,
+          },
+        },
+        yaxis: [
+          {
+            show: false,
+            seriesName: "ExtremeValue",
+            labels: {
+              style: {
+                colors: mainColor,
+              },
+            },
+          },
+          {
+            show: false,
+            seriesName: "Line",
+            labels: {
+              style: {
+                colors: mainColor,
+              },
+            },
+          },
+        ],
+        tooltip: {
+          custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+            if (seriesIndex === 1) {
+              return (
+                series[seriesIndex][dataPointIndex].toLocaleString() + "원"
+              );
+            }
+            return extremeValues[dataPointIndex].y.toLocaleString() + "원";
+          },
+          x: {
+            enabled: true,
+            formatter: function (value, timeStamp) {
+              const date = new Date(value);
+              return date.toLocaleString();
+            },
+          },
+        },
+      },
+    });
+    useEffect(() => {
+      if (stockData.daily) {
+        let tmpDaily = [];
+        let tmpDailyCandle = [];
+        stockData.daily.forEach((element) => {
+          const tmpLine = {
+            x:
+              element.date +
+              " " +
+              element.time.slice(0, 2) +
+              ":" +
+              element.time.slice(2, 4),
+            y: element.price,
+          };
+          const tmpCandle = {
+            x:
+              element.date +
+              " " +
+              element.time.slice(0, 2) +
+              ":" +
+              element.time.slice(2, 4),
+            y: [
+              element.open_price,
+              element.max_price,
+              element.min_price,
+              element.price,
+            ],
+          };
+          tmpDaily.push(tmpLine);
+          tmpDailyCandle.push(tmpCandle);
+        });
+
+        setCandleGraphData((pre) => ({
+          ...pre,
+          series: [
+            {
+              data: tmpDailyCandle,
+            },
+          ],
+          options: {
+            yaxis: {
+              show: false,
+              min: parseInt(
+                (8 * stockData.daily_min.min_price + stockData.minimum - 900) /
+                  9
+              ),
+              max: parseInt(
+                (8 * stockData.daily_max.max_price + stockData.maximum + 900) /
+                  9
+              ),
+            },
+          },
+        }));
+
+        extremeValues[0].x =
+          stockData.daily_min.date +
+          " " +
+          stockData.daily_min.time.slice(0, 2) +
+          ":" +
+          stockData.daily_min.time.slice(2, 4);
+        extremeValues[1].x =
+          stockData.daily_max.date +
+          " " +
+          stockData.daily_max.time.slice(0, 2) +
+          ":" +
+          stockData.daily_max.time.slice(2, 4);
+        extremeValues[0].y = stockData.daily_min.min_price;
+        extremeValues[1].y = stockData.daily_max.max_price;
+        setLineGraphData((pre) => ({
+          ...pre,
+          series: [
+            {
+              name: "ExtremeValue",
+              type: "scatter",
+              data: [
+                {
+                  x: extremeValues[0].x,
+                  y: extremeValues[0].y,
+                  z: extremeValues[0].z,
+                },
+                {
+                  x: extremeValues[1].x,
+                  y: extremeValues[1].y,
+                  z: extremeValues[1].z,
+                },
+              ],
+            },
+            {
+              name: "Line",
+              data: tmpDaily,
+            },
+          ],
+          options: {
+            xaxis: {
+              show: false,
+              seriesName: "Line",
+              type: "datetime",
+              labels: {
+                show: false,
+                datetimeFormatter: {
+                  year: "yy년",
+                  month: "yy년 MM월",
+                  day: "MM월 dd일",
+                  hour: "HH:mm",
+                },
+              },
+            },
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3, 
+              },
+            },
+            yaxis: [
+              {
+                show: false,
+                min: parseInt(
+                  (8 * stockData.daily_min.min_price +
+                    stockData.minimum -
+                    1350) /
+                    9
+                ),
+                max: parseInt(
+                  (8 * stockData.daily_max.max_price +
+                    stockData.maximum +
+                    1350) /
+                    9
+                ),
+                labels: {
+                  style: {
+                    colors: mainColor,
+                  },
+                },
+              },
+              {
+                show: false,
+                min: parseInt(
+                  (8 * stockData.daily_min.min_price +
+                    stockData.minimum -
+                    1350) /
+                    9
+                ),
+                max: parseInt(
+                  (8 * stockData.daily_max.max_price +
+                    stockData.maximum +
+                    1350) /
+                    9
+                ),
+                labels: {
+                  style: {
+                    colors: mainColor,
+                  },
+                },
+              },
+            ],
+          },
+        }));
+      }
+    }, []);
+    let clickedOptions = candleGraphData.options;
+    let clickedSeries = candleGraphData.series;
+    let clickedType = "candlestick";
+    const handleOptionChange = (event) => {
+      if (event.target.id === "daily") {
+        const tmpDaily = [];
+        const tmpDailyCandle = [];
+        stockData.daily.forEach((element) => {
+          const tmpLine = {
+            x:
+              element.date +
+              " " +
+              element.time.slice(0, 2) +
+              ":" +
+              element.time.slice(2, 4),
+            y: element.price,
+          };
+          const tmpCandle = {
+            x:
+              element.date +
+              " " +
+              element.time.slice(0, 2) +
+              ":" +
+              element.time.slice(2, 4),
+            y: [
+              element.open_price,
+              element.max_price,
+              element.min_price,
+              element.price,
+            ],
+          };
+          tmpDaily.push(tmpLine);
+          tmpDailyCandle.push(tmpCandle);
+        });
+        extremeValues[0].x =
+          stockData.daily_min.date +
+          " " +
+          stockData.daily_min.time.slice(0, 2) +
+          ":" +
+          stockData.daily_min.time.slice(2, 4);
+        extremeValues[1].x =
+          stockData.daily_max.date +
+          " " +
+          stockData.daily_max.time.slice(0, 2) +
+          ":" +
+          stockData.daily_max.time.slice(2, 4);
+        extremeValues[0].y = stockData.daily_min.min_price;
+        extremeValues[1].y = stockData.daily_max.max_price;
+        setCandleGraphData((pre) => ({
+          ...pre,
+          series: [
+            {
+              data: tmpDailyCandle,
+            },
+          ],
+          options: {
+            yaxis: {
+              show: false,
+              min: parseInt(
+                (8 * stockData.daily_min.min_price + stockData.minimum - 1350) /
+                  9
+              ),
+              max: parseInt(
+                (8 * stockData.daily_max.max_price + stockData.maximum + 1350) /
+                  9
+              ),
+            },
+          },
+        }));
+        setLineGraphData((pre) => ({
+          ...pre,
+          series: [
+            {
+              name: "ExtremeValue",
+              type: "scatter",
+              data: [
+                {
+                  x: extremeValues[0].x,
+                  y: extremeValues[0].y,
+                  z: extremeValues[0].z,
+                },
+                {
+                  x: extremeValues[1].x,
+                  y: extremeValues[1].y,
+                  z: extremeValues[1].z,
+                },
+              ],
+            },
+            {
+              name: "Line",
+              data: tmpDaily,
+            },
+          ],
+          options: {
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3,
+              },
+            },
+            yaxis: [
+              {
+                show: false,
+                min: parseInt(
+                  (8 * stockData.daily_min.min_price +
+                    stockData.minimum -
+                    1350) /
+                    9
+                ),
+                max: parseInt(
+                  (8 * stockData.daily_max.max_price +
+                    stockData.maximum +
+                    1350) /
+                    9
+                ),
+                labels: {
+                  style: {
+                    colors: mainColor,
+                  },
+                },
+              },
+              {
+                show: false,
+                min: parseInt(
+                  (8 * stockData.daily_min.min_price +
+                    stockData.minimum -
+                    1350) /
+                    9
+                ),
+                max: parseInt(
+                  (8 * stockData.daily_max.max_price +
+                    stockData.maximum +
+                    1350) /
+                    9
+                ),
+                labels: {
+                  style: {
+                    colors: mainColor,
+                  },
+                },
+              },
+            ],
+          },
+        }));
+      } else if (event.target.id === "weekly") {
+        const tmpWeeky = [];
+        const tmpWeeklyCandle = [];
+        stockData.weekly.forEach((element) => {
+          const tmpLine = {
+            x:
+              element.date +
+              " " +
+              element.time.slice(0, 2) +
+              ":" +
+              element.time.slice(2, 4),
+            y: element.price,
+          };
+          const tmpCandle = {
+            x:
+              element.date +
+              " " +
+              element.time.slice(0, 2) +
+              ":" +
+              element.time.slice(2, 4),
+            y: [
+              element.open_price,
+              element.max_price,
+              element.min_price,
+              element.price,
+            ],
+          };
+          tmpWeeky.push(tmpLine);
+          tmpWeeklyCandle.push(tmpCandle);
+        });
+        extremeValues[0].x =
+          stockData.weekly_min.date +
+          " " +
+          stockData.weekly_min.time.slice(0, 2) +
+          ":" +
+          stockData.weekly_min.time.slice(2, 4);
+        extremeValues[1].x =
+          stockData.weekly_max.date +
+          " " +
+          stockData.weekly_max.time.slice(0, 2) +
+          ":" +
+          stockData.weekly_max.time.slice(2, 4);
+        extremeValues[0].y = stockData.weekly_min.min_price;
+        extremeValues[1].y = stockData.weekly_max.max_price;
+        setCandleGraphData((pre) => ({
+          ...pre,
+          series: [
+            {
+              data: tmpWeeklyCandle,
+            },
+          ],
+          options: {
+            yaxis: {
+              show: false,
+              min: parseInt(stockData.weekly_min.min_price * 0.9),
+              max: parseInt(stockData.weekly_max.max_price * 1.1),
+            },
+          },
+        }));
+        setLineGraphData((pre) => ({
+          ...pre,
+          series: [
+            {
+              name: "ExtremeValue",
+              type: "scatter",
+              data: [
+                {
+                  x: extremeValues[0].x,
+                  y: extremeValues[0].y,
+                  z: extremeValues[0].z,
+                },
+                {
+                  x: extremeValues[1].x,
+                  y: extremeValues[1].y,
+                  z: extremeValues[1].z,
+                },
+              ],
+            },
+            {
+              name: "Line",
+              data: tmpWeeky,
+            },
+          ],
+          options: {
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3,
+              },
+            },
+            yaxis: [
+              {
+                show: false,
+                min: parseInt(stockData.weekly_min.min_price * 0.9),
+                max: parseInt(stockData.weekly_max.max_price * 1.1),
+              },
+              {
+                show: false,
+                min: parseInt(stockData.weekly_min.min_price * 0.9),
+                max: parseInt(stockData.weekly_max.max_price * 1.1),
+              },
+            ],
+          },
+        }));
+      } else if (event.target.id === "monthly") {
+        const tmpMonthly = [];
+        const tmpMonthlyCandle = [];
+        stockData.monthly.forEach((element) => {
+          const tmpLine = {
+            x: element.date,
+            y: element.open_price,
+          };
+          const tmpCandle = {
+            x: element.date,
+            y: [
+              element.open_price,
+              element.max_price,
+              element.min_price,
+              element.close_price,
+            ],
+          };
+          tmpMonthly.push(tmpLine);
+          tmpMonthlyCandle.push(tmpCandle);
+        });
+        setCandleGraphData((pre) => ({
+          ...pre,
+          series: [
+            {
+              data: tmpMonthlyCandle,
+            },
+          ],
+          options: {
+            yaxis: {
+              show: false,
+              min: parseInt(stockData.monthly_min.min_price * 0.9),
+              max: parseInt(stockData.monthly_max.max_price * 1.1),
+            },
+          },
+        }));
+        extremeValues[0].x = stockData.monthly_min.date;
+        extremeValues[1].x = stockData.monthly_max.date;
+        extremeValues[0].y = stockData.monthly_min.min_price;
+        extremeValues[1].y = stockData.monthly_max.max_price;
+        setLineGraphData((pre) => ({
+          ...pre,
+          series: [
+            {
+              name: "ExtremeValue",
+              type: "scatter",
+              data: [
+                {
+                  x: extremeValues[0].x,
+                  y: extremeValues[0].y,
+                  z: extremeValues[0].z,
+                },
+                {
+                  x: extremeValues[1].x,
+                  y: extremeValues[1].y,
+                  z: extremeValues[1].z,
+                },
+              ],
+            },
+            {
+              name: "Line",
+              data: tmpMonthly,
+            },
+          ],
+          options: {
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3,
+              },
+            },
+            yaxis: [
+              {
+                show: false,
+                min: parseInt(stockData.monthly_min.min_price * 0.9),
+                max: parseInt(stockData.monthly_max.max_price * 1.1),
+              },
+              {
+                show: false,
+                min: parseInt(stockData.monthly_min.min_price * 0.9),
+                max: parseInt(stockData.monthly_max.max_price * 1.1),
+              },
+            ],
+          },
+        }));
+      } else {
+        const tmpYearly = [];
+        const tmpYearlyCandle = [];
+        stockData.yearly.forEach((element) => {
+          const tmpLine = {
+            x: element.date,
+            y: element.open_price,
+          };
+          const tmpCandle = {
+            x: element.date,
+            y: [
+              element.open_price,
+              element.max_price,
+              element.min_price,
+              element.close_price,
+            ],
+          };
+          tmpYearly.push(tmpLine);
+          tmpYearlyCandle.push(tmpCandle);
+        });
+        setCandleGraphData((pre) => ({
+          ...pre,
+          series: [
+            {
+              data: tmpYearlyCandle,
+            },
+          ],
+          options: {
+            yaxis: {
+              show: false,
+              min: parseInt(stockData.yearly_min.min_price * 0.9),
+              max: parseInt(stockData.yearly_max.max_price * 1.1),
+            },
+          },
+        }));
+        extremeValues[0].x = stockData.yearly_min.date;
+        extremeValues[1].x = stockData.yearly_max.date;
+        extremeValues[0].y = stockData.yearly_min.min_price;
+        extremeValues[1].y = stockData.yearly_max.max_price;
+        setLineGraphData((pre) => ({
+          ...pre,
+          series: [
+            {
+              name: "ExtremeValue",
+              type: "scatter",
+              data: [
+                {
+                  x: extremeValues[0].x,
+                  y: extremeValues[0].y,
+                  z: extremeValues[0].z,
+                },
+                {
+                  x: extremeValues[1].x,
+                  y: extremeValues[1].y,
+                  z: extremeValues[1].z,
+                },
+              ],
+            },
+            {
+              name: "Line",
+              data: tmpYearly,
+            },
+          ],
+          options: {
+            markers: {
+              size: [5, 0],
+              strokeWidth: 5,
+              strokeOpacity: 0.5,
+              shape: "circle",
+              radius: 2,
+              fillOpacity: 1,
+              showNullDataPoints: true,
+              hover: {
+                size: undefined,
+                sizeOffset: 3,
+              },
+            },
+            yaxis: [
+              {
+                show: false,
+                min: parseInt(stockData.yearly_min.min_price * 0.9),
+                max: parseInt(stockData.yearly_max.max_price * 1.1),
+              },
+              {
+                show: false,
+                min: parseInt(stockData.yearly_min.min_price * 0.9),
+                max: parseInt(stockData.yearly_max.max_price * 1.1),
+              },
+            ],
+          },
+        }));
+      }
+      // data 변경해주기
+    };
+    if (!showCandleGraph) {
+      clickedOptions = lineGraphData.options;
+      clickedSeries = lineGraphData.series;
+      clickedType = "line";
+    } else {
+      clickedOptions = candleGraphData.options;
+      clickedSeries = candleGraphData.series;
+      clickedType = "candlestick";
     }
-    return <ReactApexChart options={lineGraphData.options} series={lineGraphData.series} type="line" height={350} width={310} />;
+    return (
+      <>
+        <div>
+          <div className={classes.testtest}>
+            <ReactApexChart
+              options={clickedOptions}
+              series={clickedSeries}
+              type={clickedType}
+              height={330}
+              width={"90%"}
+            />
+          </div>
+        </div>
+        <div className={classes.radio}>
+          <ul id="filter" className={classes.radioUlClass}>
+            <div className={classes.radiobox}>
+              <li className={classes.radioLiClass}>
+                <input
+                  type="radio"
+                  name="filter"
+                  id="daily"
+                  className={classes.radioClass}
+                  defaultChecked
+                  onChange={handleOptionChange}
+                />
+                <label checked for="daily" className={classes.radioLabelClass}>
+                  하루
+                </label>
+              </li>
+              <li className={classes.radioLiClass}>
+                <input
+                  type="radio"
+                  name="filter"
+                  id="weekly"
+                  className={classes.radioClass}
+                  onChange={handleOptionChange}
+                />
+                <label for="weekly" className={classes.radioLabelClass}>
+                  일주일
+                </label>
+              </li>
+              <li className={classes.radioLiClass}>
+                <input
+                  type="radio"
+                  name="filter"
+                  id="monthly"
+                  className={classes.radioClass}
+                  onChange={handleOptionChange}
+                />
+                <label for="monthly" className={classes.radioLabelClass}>
+                  한 달
+                </label>
+              </li>
+              <li className={classes.radioLiClass}>
+                <input
+                  type="radio"
+                  name="filter"
+                  id="yearly"
+                  className={classes.radioClass}
+                  onChange={handleOptionChange}
+                />
+                <label for="yearly" className={classes.radioLabelClass}>
+                  일 년
+                </label>
+              </li>
+            </div>
+          </ul>
+          {showCandleGraph ? (
+            <div className={classes.chartChangeBtn} onClick={changeToLine}>
+              <img
+                src={`${process.env.PUBLIC_URL}/stock-detail/line.svg`}
+                alt=""
+              />
+            </div>
+          ) : (
+            <div className={classes.chartChangeBtn} onClick={changeToCandle}>
+              <img
+                src={`${process.env.PUBLIC_URL}/stock-detail/candle.svg`}
+                alt=""
+              />
+            </div>
+          )}
+          <OpenQModal />
+        </div>
+      </>
+    );
   }
 
-  const handleOptionChange = (event) => {
-    console.log(event.target.id);
-    // data 변경해주기
-  };
   function WeatherCard(sen) {
     let border = "1px solid #C4CECE";
     // 나쁨일때
@@ -484,9 +1161,13 @@ function StockDetailPage() {
         border = "2px solid #DD4956";
       }
       return (
-        <div className={classes.weatherbox}  style={{ border: border }}>
-          <img className={classes.wimg} src={`${process.env.PUBLIC_URL}/stock-detail/rain.svg`} alt="" />
-          <div className={classes.perc}>지수야</div>
+        <div className={classes.weatherbox} style={{ border: border }}>
+          <img
+            className={classes.wimg}
+            src={`${process.env.PUBLIC_URL}/stock-detail/rain.svg`}
+            alt=""
+          />
+          <div className={classes.perc}>{sen.sen.toFixed(2)}%</div>
         </div>
       );
     } else if (sen.thisIndex === 1) {
@@ -495,19 +1176,27 @@ function StockDetailPage() {
         border = "2px solid #FEBF45";
       }
       return (
-        <div className={classes.weatherbox}  style={{ border: border }}>
-          <img className={classes.wimg} src={`${process.env.PUBLIC_URL}/stock-detail/cloudy.svg`} alt=""/>
-          <div className={classes.perc}>퍼센트</div>
+        <div className={classes.weatherbox} style={{ border: border }}>
+          <img
+            className={classes.wimg}
+            src={`${process.env.PUBLIC_URL}/stock-detail/cloudy.svg`}
+            alt=""
+          />
+          <div className={classes.perc}>{sen.sen.toFixed(2)}%</div>
         </div>
       );
-    } else {
+    } else { 
       if (sen.thisIndex === sen.maxIndex) {
         border = "2px solid #B1CC33";
       }
       return (
-        <div className={classes.weatherbox}  style={{ border: border }}>
-          <img className={classes.wimg} src={`${process.env.PUBLIC_URL}/stock-detail/sun.svg`} alt="" />
-          <div className={classes.perc}>너어죠</div>
+        <div className={classes.weatherbox} style={{ border: border }}>
+          <img
+            className={classes.wimg}
+            src={`${process.env.PUBLIC_URL}/stock-detail/sun.svg`}
+            alt=""
+          />
+          <div className={classes.perc}>{sen.sen.toFixed(2)}%</div>
         </div>
       );
     }
@@ -524,50 +1213,119 @@ function StockDetailPage() {
     return (
       <div className={classes.edge}>
         {sentiments.map((sentiment, index) => (
-          <WeatherCard key={index} sen={sentiment} maxIndex={max_index} thisIndex={index} />
+          <WeatherCard
+            key={index}
+            sen={sentiment}
+            maxIndex={max_index}
+            thisIndex={index}
+          />
         ))}
       </div>
     );
   }
   // 가격업데이트 될 때, 해당 데이터도 업데이트
   function BuySellButton() {
-    if (showSellButton) {
-      return (
-        <>
-        <div className={classes.sellbuy}>
-          <div className={classes.flx}>
-            <Link to={`/stock/sell/${id}`}>
-              <button className={classes.sell}>팔래요</button>
-            </Link>
+    const [showSellButton, setShowSellButton] = useState(false);
+    const haveList = useSelector((state) => {
+      return state.persistedReducer.setUser.user.haveList;
+    });
+    useEffect(() => {
+      haveList.forEach((element) => {
+        if ((element.ticker === id) && (element.available > 0)) {
+          setShowSellButton(true);
+        } else {
+        }
+      });
+    }, [haveList]);
+    const date = new Date();
+    const nowDay = `${date.getFullYear()}-${("00" + (date.getMonth() + 1))
+      .toString()
+      .slice(-2)}-${("00" + date.getDate()).toString().slice(-2)}`;
+    const nowTime = date.getTime();
+    const before = new Date(`${nowDay} 09:00:00`).getTime();
+    const after = new Date(`${nowDay} 15:30:00`).getTime();
+    const weekend = ["Sat", "Sun"];
+    const week = date.toString().slice(0, 3);
+
+    if (before <= nowTime && nowTime <= after && !weekend.includes(week)) {
+      if (showSellButton) {
+        return (
+          <div className={classes.buttons}>
+            <div className={classes.buysell}>
+              <Link to={`/stock/sell/${id}`}>
+                <button
+                  style={{ backgroundColor: "#7BCDC8", marginRight: "8px" }}
+                  className={classes.buysellbutton}
+                >
+                  팔래요
+                </button>
+              </Link>
+              <Link to={`/stock/buy/${id}`}>
+                <button
+                  style={{ backgroundColor: "#FECE6D" }}
+                  className={classes.buysellbutton}
+                >
+                  살래요
+                </button>
+              </Link>
+            </div>
           </div>
-          <div className={classes.flx}>
-            <Link to={`/stock/buy/${id}`}>
-              <button className={classes.buy}>살래요</button>
-            </Link>
+        );
+      } else {
+        return (
+          <div className={classes.buttons}>
+            <div className={classes.buysell}>
+              <Link to={`/stock/buy/${id}`} state={{ data: shortStockData }}>
+                <button style={{ backgroundColor: "#FECE6D" }} className={classes.sellbutton}>살래요</button>
+              </Link>
+            </div>
+          </div>
+        );
+      }
+    } 
+    else {
+      return (
+        <div className={classes.buttons}>
+          <div className={classes.buysell}>
+            <button className={classes.sellbutton}>
+              주문가능한 시간이 아닙니다
+            </button>
           </div>
         </div>
-        </>
       );
     }
-    return (
-      <div className={classes.onlysellbuy}>
-          <Link to={`/stock/buy/${id}`} state={{ data: shortStockData }}>
-              <button className={classes.onlybuy}>살래요</button>
-          </Link>
-      </div>
-    );
   }
   function WishListIcon() {
-    let data = {};
-    if (userToken) {
-      data = { token: userToken, id: stockData.id };
-    }
+    const [isWatchlist, setisWatchlist] = useState(true);
+
+    const data = { token: userToken, id: stockData.id };
+    const likeList = useSelector((state) => {
+      return state.persistedReducer.setUser.user.likeList;
+    });
+    useEffect(() => {
+      try {
+        if (!likeList.includes(id)) {
+          setisWatchlist(false);
+        } else {
+          setisWatchlist(true);
+        }
+      } catch {
+        return;
+      }
+    }, [likeList]);
     const heartClick = () => {
       dispatch(likeStockPost(data));
     };
     if (isWatchlist) {
       return (
-        <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={heartClick}>
+        <svg
+          width="23"
+          height="20"
+          viewBox="0 0 23 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          onClick={() => heartClick()}
+        >
           <path
             d="M20.6386 1.36753C18.1922 -0.717255 14.5539 -0.342262 12.3084 1.97466L11.4289 2.88089L10.5495 1.97466C8.30843 -0.342262 4.66564 -0.717255 2.21926 1.36753C-0.584263 3.76034 -0.731582 8.05491 1.7773 10.6486L10.4155 19.5681C10.9736 20.144 11.8798 20.144 12.4378 19.5681L21.0761 10.6486C23.5894 8.05491 23.4421 3.76034 20.6386 1.36753Z"
             fill="#FE8289"
@@ -576,7 +1334,14 @@ function StockDetailPage() {
       );
     }
     return (
-      <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={heartClick}>
+      <svg
+        width="23"
+        height="20"
+        viewBox="0 0 23 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        onClick={() => heartClick()}
+      >
         <path
           d="M20.6386 1.36753C18.1922 -0.717255 14.5539 -0.342262 12.3084 1.97466L11.4289 2.88089L10.5495 1.97466C8.30843 -0.342262 4.66564 -0.717255 2.21926 1.36753C-0.584263 3.76034 -0.731582 8.05491 1.7773 10.6486L10.4155 19.5681C10.9736 20.144 11.8798 20.144 12.4378 19.5681L21.0761 10.6486C23.5894 8.05491 23.4421 3.76034 20.6386 1.36753Z"
           fill="#929E9E"
@@ -590,55 +1355,69 @@ function StockDetailPage() {
     }
     return (
       <div>
-      <div className={classes.rowbox}>
-        <div className={classes.today}>오늘 {stockData.name} 날씨는?</div>
-        <img
-          src={`${process.env.PUBLIC_URL}/stock-detail/newspaper.svg`}
-          alt=""
-        />
-      </div>
-        <div className={classes.news}>*네이버 뉴스 기반</div>
-        <div className={classes.weather}>{stockData.sentiment && <WeatherCards />}</div>
-        <div className={classes.hrline}></div>
         <div className={classes.rowbox}>
-          <div className={classes.today}>{stockData.name} 이렇게 표현되고 있어요</div>
           <img
-            src={`${process.env.PUBLIC_URL}/stock-detail/keyword.svg`}
+            src={`${process.env.PUBLIC_URL}/stock-detail/newspaper.svg`}
             alt=""
+            style={{ marginRight: "16px" }}
           />
+          <div className={classes.today}>
+            오늘 {stockData.name} 날씨는?{" "}
+            <span className={classes.news}>* 네이버 뉴스 기반</span>
+          </div>
+        </div>
+        <div className={classes.weather}>
+          {stockData.sentiment && <WeatherCards />}
+        </div>
+
+        <div className={classes.hrline2}></div>
+        <div className={classes.rowbox}>
+          <img
+            src={`${process.env.PUBLIC_URL}/stock-detail/explain.svg`}
+            alt=""
+            style={{ marginRight: "16px", width: "20px" }}
+          />
+          <div style={{ marginTop: "8px" }} className={classes.today}>
+            {stockData.name} 이렇게 표현되고 있어요
+          </div>
         </div>
         <div className={classes.box}>
           <div className={classes.boxes}>
-              {stockData.keyword &&
-                stockData.keyword.map((word) =>
+            {stockData.keyword &&
+              stockData.keyword.map((word) => (
                 <div className={classes.parent}>
                   <div className={classes.smbox}>{word}</div>
                 </div>
-                )}            
-            </div>
+              ))}
+          </div>
         </div>
-        <div className={classes.hrline}></div>
+        <div className={classes.hrline2}></div>
       </div>
     );
   }
+
   function CompareText() {
     if (stockData.fluctuation_rate > 0) {
+      setMainColor("#DD4956");
       return (
-        <div>
-          어제보다 {stockData.fluctuation_price}원 올랐어요 (+
+        <div style={{ color: "#DD4956" }}>
+          어제보다 {stockData?.fluctuation_price ? stockData.fluctuation_price.toLocaleString() : 0}원 올랐어요 (+
           {stockData.fluctuation_rate}%)
         </div>
       );
     } else {
+      setMainColor("#4D97ED");
       return (
-        <div>
-          어제보다 {stockData.fluctuation_price}원 떨어졌어요 ({stockData.fluctuation_rate}%)
+        <div style={{ color: "#4D97ED" }}>
+          어제보다 {stockData?.fluctuation_price ? stockData.fluctuation_price.toLocaleString() : 0}원 떨어졌어요 (
+          {stockData.fluctuation_rate}%)
         </div>
       );
     }
   }
+
   return (
-    <div>
+    <div className={classes.stkdtbg}>
       <div className={classes.fix}>
         <div className={classes.fixbox}>
           <img
@@ -648,193 +1427,208 @@ function StockDetailPage() {
           />
           <WishListIcon />
         </div>
-        <div className={classes.topline}></div>
+        {/* <div className={classes.topline}></div> */}
       </div>
-      <div className={classes.start}>
-        <div className={classes.script}>{id} / KOSPI</div>
-        <div className={classes.big}>{stockData.name}</div>
-        <div className={classes.big}>{shortStockData.price}원</div>
-        {stockData && <CompareText />}
-      </div>
-      <StockDetailGraph />
-      <div className={classes.radio}>
-        <ul id="filter" className={classes.radioUlClass}>
-          <div className={classes.radiobox}>
-            <li className={classes.radioLiClass}>
-              <input 
-                type="radio" 
-                name="filter" 
-                id="day"
-                className={classes.radioClass} 
-                defaultChecked
-                onChange={handleOptionChange}
-              />
-              <label checked for="day" className={classes.radioLabelClass}>
-                하루
-              </label>
-            </li>
-            <li className={classes.radioLiClass}>
-              <input 
-                type="radio" 
-                name="filter" 
-                id="week" 
-                className={classes.radioClass}
-                onChange={handleOptionChange}
-              />
-              <label for="week" className={classes.radioLabelClass}>
-                일주일
-              </label>
-            </li>
-            <li className={classes.radioLiClass}>
-              <input 
-                type="radio" 
-                name="filter" 
-                id="month"
-                className={classes.radioClass}
-                onChange={handleOptionChange}
-              />
-              <label for="month" className={classes.radioLabelClass}>
-                한 달
-              </label>
-            </li>
-            <li className={classes.radioLiClass}>
-              <input 
-                type="radio" 
-                name="filter" 
-                id="year"
-                className={classes.radioClass}
-                onChange={handleOptionChange}
-              />
-              <label for="year" className={classes.radioLabelClass}>
-                일 년
-              </label>
-            </li>
+      <div className={classes.stkdtctn}>
+        <div className={classes.dtsub1}>
+          <div className={classes.dtctntitle}>
+            <div className={classes.script}>{id} / KOSPI</div>
+            <div className={classes.big}>{stockData.name}</div>
+            <div className={classes.big}>{shortStockData?.price ? shortStockData.price.toLocaleString(): 0}원</div>
+            {stockData && <CompareText />}
           </div>
-        </ul>
-        {showCandleGraph ? (
-          <div className={classes.chartChangeBtn} onClick={changeToLine}>
-            <img src={`${process.env.PUBLIC_URL}/stock-detail/line.svg`} alt="" />
+          <div className={classes.subctn1graph}>
+            <StockDetailGraph />
           </div>
-        ) : (
-          <div className={classes.chartChangeBtn} onClick={changeToCandle}>
+        </div>
+        <div className={classes.roundline}></div>
+        <div className={classes.hrline}></div>
+        <div className={classes.imgrowbox}>
+          <div className={classes.rowbox}>
             <img
-              src={`${process.env.PUBLIC_URL}/stock-detail/candle.svg`}
+              src={`${process.env.PUBLIC_URL}/stock-detail/cal.svg`}
+              style={{ marginRight: "16px" }}
               alt=""
             />
+            <div className={classes.today}>이 주식은 오늘 ?</div>
           </div>
-        )}
-      </div>
-      <div className={classes.hrline}></div>
-      <div className={classes.imgrowbox}>
-        <div className={classes.rowbox}>
-          <div className={classes.today}>이 주식은 오늘 ?</div>
-          <img src={`${process.env.PUBLIC_URL}/stock-detail/cal.svg`} alt="" />
+          <OpenMaxMinModal />
         </div>
-        <img src={`${process.env.PUBLIC_URL}/Q.svg`} alt="" />
-      </div>
-      <div>
-        {stockData && (
-          <div className={classes.repre}>
-            <div className={classes.rowbox}>
-              아무리 올라도 <div className={classes.upcoltex}>{stockData.maximum}원</div>
-            </div>
-            <div className={classes.rowbox}>
-              아무리 떨어져도 <div className={classes.downcoltex}>{stockData.minimum}원</div>
-            </div>
-          </div>
-        )}
-      </div>
-      <div className={classes.hrline}></div>
-      <AnalyzedData />
-      <div className={classes.imgrowbox} onClick={goToIndustry}>
-        <div className={classes.rowbox}>
-          <div className={classes.today}>{stockData.category_name} 업종 키워드 보러가기</div>
-          <img className={classes.ind} src={`${process.env.PUBLIC_URL}/stock-detail/industry.svg`} alt="" />
-        </div>
-        <img src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
-      </div>
-      <div className={classes.hrline}></div>
-      <div> 
-        <div className={classes.rowbox}>
-          <div className={classes.today}>기업정보</div>
-          <img src={`${process.env.PUBLIC_URL}/stock-detail/checklist.svg`} alt="" />
-        </div>
-        <div className={classes.infobox}>
-          <div>
-            <div className={classes.info}>거래량</div>
-            <div>{stockData.volume}</div>
-          </div>
-          <div>
-            <div className={classes.info}>거래대금</div>
-            <div>{stockData.trading_value}원</div>
-          </div>
-          <div>
-            <div className={classes.info}>시가총액</div>
-            <div>{stockData.m_capital}억원</div>
-          </div>
-        </div>
-        <div className={classes.line}></div>
         <div>
-          <div className={classes.imgrowbox}>
-            <div className={classes.rowbox}>
-              <div className={classes.today}>{stockData.name}의 EPS</div>
-              <img src={`${process.env.PUBLIC_URL}/stock-detail/increase.svg`} alt="" />
+          {stockData && (
+            <div className={classes.repre}>
+              <div className={classes.rowbox}>
+                아무리 올라도{" "}
+                <div className={classes.upcoltex}>{stockData?.maximum ? stockData.maximum.toLocaleString():0}원</div>
+              </div>
+              <div className={classes.rowbox}>
+                아무리 떨어져도{" "}
+                <div className={classes.downcoltex}>{stockData?.minimum ? stockData.minimum.toLocaleString():0}원</div>
+              </div>
             </div>
-            <div className={classes.infotxt}>{stockData.eps}원</div>
-          </div>
-          <div className={classes.space}>
-            <div className={classes.today}>EPS 란?</div>
-            <div className={classes.script}>
-              1년간의 순이익을 현재 발행된 총 주식수로 나누어 1주당
-              <br />
-              얼마나 많은 이익을 창출했는지 나타내는 지표입니다.
-            </div>
-          </div>
-          <div className={classes.space}>
-            <div className={classes.greenbox}>
-              <img src={`${process.env.PUBLIC_URL}/stock-detail/check-circle.svg`} alt="" />
-              <div className={classes.green}>어떻게 판단하나요?</div>
-            </div>
-            <div className={classes.script}>
-              EPS가 높다면 기업의 경영실적이 양호하고 배당여력이
-              <br />
-              많다는 것을 의미하므로 주가 상승의 요인이 됩니다.
-            </div>
-          </div>
+          )}
         </div>
-        <div className={classes.line}></div>
+        <div className={classes.hrline3}></div>
+        <AnalyzedData />
+        <div className={classes.imgrowbox} onClick={goToIndustry}>
+          <div className={classes.rowbox}>
+            <img
+              className={classes.ind}
+              src={`${process.env.PUBLIC_URL}/stock-detail/industry.svg`}
+              alt=""
+              style={{ marginRight: "16px" }}
+            />
+            <div className={classes.today}>
+              {stockData.category_name} 업종 키워드 보러가기
+            </div>
+          </div>
+          <img src={`${process.env.PUBLIC_URL}/stock-list/goTo.svg`} alt="" />
+        </div>
+        <div className={classes.hrline2}></div>
         <div>
-        <div className={classes.imgrowbox}>
-            <div className={classes.rowbox}>
-              <div className={classes.today}>{stockData.name}의 PER</div>
-              <img src={`${process.env.PUBLIC_URL}/stock-detail/increase.svg`} alt="" />
-            </div>
-            <div className={classes.infotxt}>{stockData.per}배</div>
+          <div className={classes.rowbox}>
+            <img
+              src={`${process.env.PUBLIC_URL}/stock-detail/checklist.svg`}
+              alt=""
+              style={{ marginRight: "16px" }}
+            />
+            <div className={classes.today}>기업정보</div>
           </div>
-          <div className={classes.space}>
-            <div className={classes.today}>PER 란?</div>
-            <div className={classes.script}>
-            현재 주가가 지난 1년간의 순이익의 몇배에 거래되고 있는지
-            <br />
-            보여주는 지표입니다.
+          <div className={classes.infobox}>
+            <div>
+              <div className={classes.info}>거래량</div>
+              <div style={{ fontSize: "15px" }}>{stockData.volume}</div>
             </div>
-          </div>
-          <div className={classes.space}>
-            <div className={classes.greenbox}>
-              <img src={`${process.env.PUBLIC_URL}/stock-detail/check-circle.svg`} alt="" />
-              <div className={classes.green}>어떻게 판단하나요?</div>
+            <div>
+              <div className={classes.info}>거래대금</div>
+              <div style={{ fontSize: "15px" }}>
+                {stockData?.trading_value ? stockData.trading_value.toLocaleString(): 0}원
+              </div>
             </div>
-            <div className={classes.script}>
-            주가가 적당하게 평가되는지 판단하기 위해서는 같은 업종의
-            <br />
-            비슷한 규모의 회사와 비교해봐야 합니다.
+            <div>
+              <div className={classes.info}>시가총액</div>
+              <div style={{ fontSize: "15px" }}>{stockData.m_capital}억원</div>
             </div>
           </div>
+          <div className={classes.line}></div>
+          <div className={classes.epsper}>
+            <div className={classes.imgrowbox}>
+              <div className={classes.rowbox}>
+                <div className={classes.today}>{stockData.name}의 EPS</div>
+                <img
+                  src={`${process.env.PUBLIC_URL}/stock-detail/increase.svg`}
+                  alt=""
+                />
+              </div>
+              <div className={classes.infotxt}>{stockData?.eps ? stockData.eps.toLocaleString():0}원</div>
+            </div>
+            <div className={classes.explainbox}>
+              <div className={classes.space}>
+                <div className={classes.today}>EPS 란?</div>
+                <div className={classes.script}>
+                  1년간의 순이익을 현재 발행된 총 주식수로 나누어 1주당 얼마나
+                  많은 이익을 창출했는지 나타내는 지표입니다.
+                </div>
+              </div>
+              <div className={classes.space}>
+                <div className={classes.greenbox}>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/stock-detail/check-circle.svg`}
+                    alt=""
+                  />
+                  <div className={classes.green}>어떻게 판단하나요?</div>
+                </div>
+                <div
+                  style={{ marginBottom: "18px", marginTop: "0px" }}
+                  className={classes.script}
+                >
+                  EPS가 높다면 기업의 경영실적이 양호하고 배당여력이 많다는 것을
+                  의미하므로 주가 상승의 요인이 됩니다.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={classes.line}></div>
+          <div className={classes.epsper}>
+            <div className={classes.imgrowbox}>
+              <div className={classes.rowbox}>
+                <div className={classes.today}>{stockData.name}의 PER</div>
+                <img
+                  src={`${process.env.PUBLIC_URL}/stock-detail/increase.svg`}
+                  alt=""
+                />
+              </div>
+              <div className={classes.infotxt}>{stockData.per}배</div>
+            </div>
+            <div className={classes.explainbox}>
+              <div className={classes.space}>
+                <div className={classes.today}>PER 란?</div>
+                <div className={classes.script}>
+                  현재 주가가 지난 1년간의 순이익의 몇배에 거래되고 있는지
+                  보여주는 지표입니다.
+                </div>
+              </div>
+              <div className={classes.space}>
+                <div className={classes.greenbox}>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/stock-detail/check-circle.svg`}
+                    alt=""
+                  />
+                  <div className={classes.green}>어떻게 판단하나요?</div>
+                </div>
+                <div
+                  style={{ marginBottom: "18px", marginTop: "0px" }}
+                  className={classes.script}
+                >
+                  주가가 적당하게 평가되는지 판단하기 위해서는 같은 업종의
+                  비슷한 규모의 회사와 비교해봐야 합니다.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={classes.line}></div>
+          {stockData.div_yield ? (
+            <div className={classes.epsper}>
+            <div className={classes.imgrowbox}>
+              <div className={classes.rowbox}>
+                <div className={classes.today}>{stockData.name}의 배당수익률</div>
+                <img
+                  src={`${process.env.PUBLIC_URL}/stock-detail/increase.svg`}
+                  alt=""
+                />
+              </div>
+              <div className={classes.infotxt}>{stockData.div_yield}%</div>
+            </div>
+            <div className={classes.explainbox}>
+              <div className={classes.space}>
+                <div className={classes.today}>배당수익률 이란?</div>
+                <div className={classes.script}>
+                1주당 배당금의 비율로, 해당 주식에 투자하면 얻을 수
+                있는 수익을 나타내는 지표입니다.
+                </div>
+              </div>
+              <div className={classes.space}>
+                <div className={classes.greenbox}>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/stock-detail/check-circle.svg`}
+                    alt=""
+                  />
+                  <div className={classes.green}>어떻게 판단하나요?</div>
+                </div>
+                <div
+                  style={{ marginBottom: "18px", marginTop: "0px" }}
+                  className={classes.script}
+                >
+                  주가가 오르지 않아도 배당수익률 만큼의 수익을 기대할 수 있어 실제 시장에서의 수익성을 판단할 수 있습니다.
+                </div>
+              </div>
+            </div>
+          </div>
+          ) : (
+            <></>
+          )}
         </div>
-        <div className={classes.line}></div>
-        <div>지수야 배당수익률 여기넣어줘라!!!!!!</div>
       </div>
-      <div className={classes.hrline}></div>
       <BuySellButton />
     </div>
   );

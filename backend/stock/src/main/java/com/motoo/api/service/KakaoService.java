@@ -31,22 +31,21 @@ public class KakaoService {
     private final String REDIRECT_URI;
     private final UserService userService;
     private final AccountService accountService;
-    private final TradingService tradingService;
+
 
     public KakaoService(@Value("${kakao.client_id}") String CLIENT_ID,
-                        @Value("${kakao.redirect_uri}") String REDIRECT_URI, UserService userService, AccountService accountService, TradingService tradingService) {
+                        @Value("${kakao.redirect_uri}") String REDIRECT_URI, UserService userService, AccountService accountService) {
         this.CLIENT_ID = CLIENT_ID;
         this.REDIRECT_URI = REDIRECT_URI;
         this.userService = userService;
         this.accountService = accountService;
-        this.tradingService = tradingService;
+
     }
 
     /**
      * 카카오 엑세스토큰 받아오기
      */
     public String getAccessToken(String code) {
-        System.out.println("getAccessToken");
         RestTemplate rt = new RestTemplate();
 
         //헤더 생성
@@ -85,7 +84,7 @@ public class KakaoService {
      * 카카오로부터 유저 정보 받아오기
      */
     public KakaoProfile getUserInfo(String access_token) {
-        System.out.println("getUserInfo");
+
         RestTemplate rt2 = new RestTemplate();
         //헤더2 생성
         HttpHeaders headers2 = new HttpHeaders();
@@ -111,8 +110,7 @@ public class KakaoService {
             e.printStackTrace();
         }
 
-        System.out.println("카카오아이디: " + kakaoProfile.getId());
-        System.out.println("카카오이메일: " + kakaoProfile.getKakao_account().getEmail());
+
 
         return kakaoProfile;
     }

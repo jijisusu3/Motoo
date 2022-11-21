@@ -33,10 +33,9 @@ function MyAssetList() {
   }, [accountAssetData]);
 
   const navigate = useNavigate();
-  const goToDetail = (e) => {
-    const isPk = e.target.id;
-    if (Boolean(isPk)) {
-      navigate(`/stock/detail/${isPk}`);
+  function goToDetail(ticker) {
+    if (Boolean(ticker)) {
+      navigate(`/stock/detail/${ticker}`);
     }
   };
 
@@ -63,7 +62,7 @@ function MyAssetList() {
     }
     const profitColor = profitCheck();
     return (
-      <div id={stock.code} onClick={goToDetail} className={classes.myStockCard}>
+      <div onClick={()=>goToDetail(stock.code)} className={classes.myStockCard}>
         <div className={classes.abovebox}>
           <div className={classes.stname}>{stock.name}</div>
           <div>
@@ -77,7 +76,7 @@ function MyAssetList() {
                 <div className={classes.result}>평가손익</div>
               </div>
               <div className={classes.section} style={{ color: profitColor }}>
-                {stock.profit}
+                {stock?.profit ? stock.profit.toLocaleString() : 0}
               </div>
             </div>
             <div className={classes.rowbox} style={{ marginTop: "4px" }}>
@@ -169,6 +168,7 @@ function MyAssetList() {
           example.map((stock) => (
             <MyStockCard
               key={stock.ticker}
+              code={stock.ticker}
               name={stock.stockName}
               profit={stock.valuePL}
               percent={stock.valuePLRatio}

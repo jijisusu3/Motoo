@@ -23,6 +23,7 @@ function MyAssets() {
     try{
       setAssetProfit(accountAssetData.totalValuePLRatio.toFixed(1))
     } catch {
+      setAssetProfit(0)
       return
     }
   }, [accountAssetData])
@@ -68,14 +69,14 @@ function MyAssets() {
               <div>현재 씨앗</div>
               <img src={`${process.env.PUBLIC_URL}/wallet/seeds.svg`} style={{ marginLeft: '3px', width: 12, height: 12 }} alt="" />
             </div>
-            {accountAssetData && <div className={classes.detail}>{accountAssetData.asset.toLocaleString()}원</div>}
+            {accountAssetData && <div className={classes.detail}>{accountAssetData.cash.toLocaleString()}원</div>}
           </div>
           <div className={classes.rowbox}>
             <div className={classes.rowbox}>
               <div>사용 가능</div>
               <img src={`${process.env.PUBLIC_URL}/wallet/vege.svg`} style={{ marginLeft: '3px', width: 12, height: 12 }} alt="" />
             </div>
-            {accountAssetData && <div className={classes.detail}>{accountAssetData.cash.toLocaleString()}원</div>}
+            {accountAssetData && <div className={classes.detail}>{accountAssetData.availableCash.toLocaleString()}원</div>}
           </div>
         </div>
       </div>
@@ -101,7 +102,7 @@ function MyAssets() {
           </div>
         </AccordionSummary>
         <AccordionDetails
-          style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)", borderRadius: "0 0 10px 10px", padding: "30px"}}>
+          style={{ boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)", borderRadius: "0 0 10px 10px", padding: "30px", display:"flex", justifyContent:"center"}}>
           <Portfolio />
         </AccordionDetails>
       </Accordion>

@@ -9,6 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -39,7 +40,7 @@ public class AccountStockRepositorySupport {
                 .from(qAccountStock)
                 .where(qAccountStock.account.accountId.eq(accountId))
                 .fetch();
-        if (accountStocks == null) return null;
+        if (accountStocks == null) return Collections.emptyList();
         return accountStocks;
     }
 
@@ -49,7 +50,7 @@ public class AccountStockRepositorySupport {
                 .from(qAccountStock)
                 .where(qAccountStock.account.user.userId.eq(userId))
                 .fetch();
-        if (accountStocks == null) return null;
+        if (accountStocks == null) return Collections.emptyList();
         return accountStocks;
 
     }
@@ -61,7 +62,7 @@ public class AccountStockRepositorySupport {
                 .where(qAccountStock.account.user.userId.eq(userId))
                 .where(qAccountStock.account.accountId.eq(accountId))
                 .fetch();
-        if (accountStocks == null) return null;
+        if (accountStocks == null) return Collections.emptyList();
         return accountStocks;
     }
 
@@ -86,7 +87,7 @@ public class AccountStockRepositorySupport {
                 .fetchOne().getAccountStockId();
 
 
-        System.out.println(getAccountStockId);
+
         if (getAccountStockId==null) {return null;}
         else {return getAccountStockId;}
     }
@@ -98,7 +99,7 @@ public class AccountStockRepositorySupport {
                 .where(qAccountStock.stock.stockId.eq(stockId))
                 .fetch();
         if (accountStocks ==null){
-            return null;
+            return Collections.emptyList();
         }
         else {
             return accountStocks;

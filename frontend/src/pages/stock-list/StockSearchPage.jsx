@@ -60,6 +60,10 @@ function StockSearchPage() {
     if (keyword === "") return false;
     return name === keyword.toString().toLowerCase();
   };
+  function backTo() {
+    navigate(-1);
+  }
+  
 
   function SearchBar() {
     const updateText = (text) => {
@@ -84,19 +88,31 @@ function StockSearchPage() {
     return renderResults;
   }
   return (
-    <div className={classes.bar}>
-      <div className={classes.iptbox}>
-        <input
-          className={classes.ipt}
-          type="text"
-          autoFocus
-          value={keyword || ""}
-          onChange={(e) => updateField("keyword", e.target.value)}
-          placeholder='검색할 주식을 입력해주세요.'
-        />
-        <img className={classes.dot} src={`${process.env.PUBLIC_URL}/stock-list/dotbogi.svg`} alt="" />
+    <div className={classes.searchbg}>
+      <div className={classes.fix}>
+        <div className={classes.fixbox}>
+          <img
+            onClick={backTo}
+            src={`${process.env.PUBLIC_URL}/stock-detail/back.svg`}
+            alt=""
+          />
+        </div>
+
+      </div> 
+      <div className={classes.bar}>
+        <div className={classes.iptbox}>
+          <input
+            className={classes.ipt}
+            type="text"
+            autoFocus
+            value={keyword || ""}
+            onChange={(e) => updateField("keyword", e.target.value)}
+            placeholder='검색할 주식을 입력해주세요.'
+          />
+          <img className={classes.dot} src={`${process.env.PUBLIC_URL}/stock-list/stockListSearchIcon.svg`} alt="" />
+        </div>
+        <SearchBar/>
       </div>
-      <SearchBar/>
     </div>
   );
 }

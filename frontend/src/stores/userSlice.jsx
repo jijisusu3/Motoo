@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const api1 = "https://k7b204.p.ssafy.io/api1/";
 const api2 = "https://k7b204.p.ssafy.io/api2/";
-
 const initialState = {
   user: {
     isLoggin: false,
@@ -40,7 +40,6 @@ const likeStockPost = createAsyncThunk(
         return response.data.favoriteStockCodeList;
       })
       .catch((err) => {
-        console.log(err.data);
       });
   }
 );
@@ -56,40 +55,50 @@ const quizGet = createAsyncThunk("stockList/quizGet", async (data) => {
   });
 });
 
+const quizUserGet = createAsyncThunk("stockList/quizUserGet", async (data) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${data}`,
+    },
+  };
+  return axios.get(`${api2}users`, config).then((response) => {
+    return response.data
+  })
+})
+
 const quizPut = createAsyncThunk("stockList/quizResult", async (data) => {
   const config = data.config;
   const quizResult = data.quizResult;
   return axios
     .put(`${api2}quiz`, quizResult, config)
     .then((response) => {
-      console.log(response.data.message);
       return response.data.message;
     })
     .catch((err) => {
-      console.log(err.data);
     });
 });
 
-// 주식 디테일페이지에 ㄱㄱ
-// const realtimeAccountGet = createAsyncThunk(
-//   "stock/accountGet",
-//   async (data) => {
-//     return axios
-//       .get(`${api2}account/check/${data.id}`, data.config)
-//       .then((response) => {
-//         console.log(response.data);
-//       });
-//   }
-// );
+const realtimeAccountGet = createAsyncThunk(
+  "stock/accountGet",
+  async (data) => {
+    return axios
+      .get(`${api1}account/check/${data.id}`, data.config)
+      .then((response) => {
+        return response.data;
+      });
+  }
+);
+
+const schoolPut = createAsyncThunk("school/schoolPut", async (data) => {
+  return axios
+    .put(`${api2}school/`, data.result, data.config)
+    .then((response) => {
+      return response.data;
+    });
+});
 
 const stockTradingPost = createAsyncThunk("stock/tradingPost", async (data) => {
-  return axios.post(`${api2}trading`, data.result, data.config).then(() => {
-    axios
-      .get(`${api2}account/check/${data.result.accountId}`, data.config)
-      .then((response) => {
-        console.log(response.data);
-      });
-  });
+  return axios.post(`${api2}trading`, data.result, data.config).then(() => {});
 });
 
 const stockBuyPost = createAsyncThunk("stock/buyPost", async (data) => {
@@ -101,7 +110,6 @@ const stockBuyPost = createAsyncThunk("stock/buyPost", async (data) => {
 const accountChangePut = createAsyncThunk(
   "account/accountChangePut",
   async (data) => {
-    console.log(data)
     return axios
       .put(`${api2}users/current`, data.result, data.config)
       .then(() => {
@@ -110,12 +118,15 @@ const accountChangePut = createAsyncThunk(
   }
 );
 
+const userDelete = createAsyncThunk("user/userDelete", async (data) => {
+  return axios.delete(`${api2}users`, data).then(() => {});
+});
+
 export const userSlice = createSlice({
   name: "userSlice",
   initialState: initialState,
   reducers: {
     setLogin: (state, action) => {
-      // console.log(action.payload)
       state.user.isLoggin = true;
       state.user.token = action.payload.token;
       state.user.likeList = action.payload.user.favoriteStockCode;
@@ -146,12 +157,25 @@ export const userSlice = createSlice({
     builder.addCase(quizGet.fulfilled, (state, action) => {
       state.quizData = action.payload;
     });
-    // builder.addCase(realtimeAccountGet.fulfilled, (state, action) => {
-    //   state.quizData = action.payload;
-    // });
+    builder.addCase(realtimeAccountGet.fulfilled, (state, action) => {
+      state.user.haveList = action.payload.stockInfo;
+      state.user.data.seed = action.payload.availableSeed;
+    });
     builder.addCase(accountChangePut.fulfilled, (state, action) => {
-      state.user.data.current = action.payload
-      console.log(action.payload)
+      state.user.data.current = action.payload;
+    });
+    builder.addCase(userDelete.fulfilled, () => {
+      window.localStorage.clear();
+      window.location.replace("/login");
+    });
+    builder.addCase(schoolPut.fulfilled, (state, action) => {
+      state.user.data.schoolId = action.payload;
+    });
+    builder.addCase(quizUserGet.fulfilled, (state, action) => {
+      const tmpQ = new Date(action.payload.quizDay)
+      const setD = `${tmpQ.getFullYear()}-${("00" + (tmpQ.getMonth() + 1))
+      .toString().slice(-2)}-${("00" + tmpQ.getDate()).toString().slice(-2)}`;
+      state.user.quizDay = setD
     });
   },
 });
@@ -161,9 +185,12 @@ export {
   likeStockPost,
   quizPut,
   nicknamePut,
-  // realtimeAccountGet,
+  realtimeAccountGet,
   stockBuyPost,
   quizGet,
   stockTradingPost,
-  accountChangePut
+  accountChangePut,
+  userDelete,
+  schoolPut,
+  quizUserGet
 };

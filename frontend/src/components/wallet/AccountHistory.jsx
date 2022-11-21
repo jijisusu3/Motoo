@@ -206,7 +206,7 @@ function AccountHistory() {
 
     function MyRealizedCard(stock) {
       function profitCheck() {
-        if (stock.differ === "구매") {
+        if (stock.differ === 2) {
           return "- ";
         } else {
           return "+ ";
@@ -248,7 +248,7 @@ function AccountHistory() {
               alt=""
             />
             {profitLabel}
-            {stock.profit}
+            {stock?.profit ? stock.profit.toLocaleString() : 0}
           </div>
         </div>
       );
@@ -348,4 +348,3 @@ function AccountHistory() {
 }
 
 export default AccountHistory;
-//코드가 너무 길음 ㅠ

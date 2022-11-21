@@ -2,24 +2,28 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import classes from "./BottomNav.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { setActiveNav  } from "../../stores/navSlice";
+import { setActiveNav } from "../../stores/navSlice";
 
 const BottomNav = () => {
-  const dispatch = useDispatch()
-  const activeNav = useSelector(state => {
-    return state.setNav.nav.activeNav
-  })
-  const show = useSelector(state=> {
-    return state.setNav.nav.showNav
-  })
-  if(!show) {
-    return
+  const dispatch = useDispatch();
+  const activeNav = useSelector((state) => {
+    return state.setNav.nav.activeNav;
+  });
+  const show = useSelector((state) => {
+    return state.setNav.nav.showNav;
+  });
+  if (!show) {
+    return;
   }
 
   return (
     <nav className={classes.wrapper}>
       <div>
-        <Link to="/" className="nav-link" onClick={() => dispatch(setActiveNav(1))}>
+        <Link
+          to="/"
+          className="nav-link"
+          onClick={() => dispatch(setActiveNav(1))}
+        >
           <svg
             width="30"
             height="26"
@@ -35,7 +39,11 @@ const BottomNav = () => {
         </Link>
       </div>
       <div>
-        <Link to="/wallet" className="nav-link" onClick={() => dispatch(setActiveNav(2))}>
+        <Link
+          to="/wallet/my"
+          className="nav-link"
+          onClick={() => dispatch(setActiveNav(2))}
+        >
           <svg
             width="23"
             height="22"
@@ -48,7 +56,11 @@ const BottomNav = () => {
         </Link>
       </div>
       <div>
-        <Link to="/school" className="nav-link" onClick={() => dispatch(setActiveNav(3))}>
+        <Link
+          to="/school"
+          className="nav-link"
+          onClick={() => dispatch(setActiveNav(3))}
+        >
           <svg
             width="28"
             height="22"
@@ -61,7 +73,11 @@ const BottomNav = () => {
         </Link>
       </div>
       <div>
-        <Link to="/menu" className="nav-link" onClick={() => dispatch(setActiveNav(4))}>
+        <Link
+          to="/menu"
+          className="nav-link"
+          onClick={() => dispatch(setActiveNav(4))}
+        >
           <svg
             width="22"
             height="22"

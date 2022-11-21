@@ -13,6 +13,7 @@ public class AccountAsset {
     float TotalValuePLRatio;
     int Asset;
     int Cash;
+    int AvailableCash;
     List<ValueStock> StockOrderByTotalValue;
     List<ValueStock> StockOrderByValuePLRatio;
 }
