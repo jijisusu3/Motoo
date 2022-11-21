@@ -26,11 +26,13 @@ public class StockListRes extends BaseResponseBody {
 
     @ApiModelProperty(name = "해당 계좌 주식 리스트")
     List<AccountStockInfo> stockInfo;
-    @ApiModelProperty(name = "판매가능한 계좌 주식 수")
+    @ApiModelProperty(name = "판매가능한 계좌 시드수")
     int availableSeed;
 
+//    @ApiModelProperty(name="판매가능한 주식 수")
+//    int available;
 
-    public static StockListRes of(Account account, List<AccountStockInfo> stockInfo, int available,Integer statusCode, String message){
+    public static StockListRes of(Account account, List<AccountStockInfo> stockInfo, int available, Integer statusCode, String message){
         StockListRes res = new StockListRes();
         res.setSeed(account.getSeed());
         res.setStockInfo(stockInfo);
