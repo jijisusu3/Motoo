@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const api2 = "https://k7b204.p.ssafy.io/api2/";
+const api2 = REACT_APP_API2;
 
 const initialState = {
   schoolData: {},
