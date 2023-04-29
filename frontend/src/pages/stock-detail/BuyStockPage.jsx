@@ -346,7 +346,7 @@ function BuyStockPage() {
           }, 1000);
           return;
         } else {
-          if (tradeData.price * Number(wantedMany) > mySeed) {
+          if (tradeData.price * tempMany > mySeed) {
             setIsAvailable(false);
             setTimeout(() => {
               setIsAvailable(true);
@@ -395,7 +395,7 @@ function BuyStockPage() {
               <img
                 className={classes.blinking}
                 src={`${process.env.PUBLIC_URL}/stock-detail/inputIcon.svg`}
-                alt="얼마에 사고싶나요?"
+                alt=""
               />
             )}
             <span >얼마에 사고싶나요?</span>

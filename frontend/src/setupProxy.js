@@ -4,7 +4,7 @@ module.exports = app => {
   app.use(
     '/api1',
     createProxyMiddleware({
-      target: 'https://k7b204.p.ssafy.io/api1/',
+      target: REACT_APP_API1,
       changeOrigin: true,
     }),
   );
@@ -14,7 +14,7 @@ module.exports = app => {
   app.use(
     '/api2',
     createProxyMiddleware({
-      target: 'https://k7b204.p.ssafy.io/api2/',
+      target: REACT_APP_API2,
       changeOrigin: true,
     }),
   );
