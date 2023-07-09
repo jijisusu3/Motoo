@@ -113,6 +113,9 @@
 #### 메인 페이지
 
 
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/737433a0-3e70-40b6-824a-6928779b65d2" width="200"/>
+
+
 사용자가 설정한 관심주식을 손쉽게 보고, 삭제할 수 있습니다.
 
 또한 실시간 차트를 통해 급상승/급하락/시가총액/거래량의 정보를 볼 수 있습니다.
@@ -125,7 +128,9 @@
 
 #### 주식 상세보기
 
-![검색_주식상세_업종](/uploads/d9166a40bbab3feb5439b8e558ff58ae/검색_주식상세_업종.gif)
+
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/3dc30a6d-e7ae-47fd-b522-3af63761bc35" width="200"/>
+
 
 (1)  주식가격 관련정보
 
@@ -161,7 +166,9 @@
 
 (1) 매도/매수
 
-![현재가구매판매](/uploads/b2d3ea36088463335c80c849ce158384/현재가구매판매.gif)
+
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/29a92f0a-e12f-472c-bb3b-59c3245887c5" width="200"/>
+
 
 ​	주식을 현재가로 구매하고 판매할 수 있습니다. 호가와 시장가, 판매/구매하고자 하는 주식수 등 많은 것을 고려해 매도 매수를 하게된다면 주식에 대한 흥미가 떨어질 것이라 예상했습니다.  
 
@@ -169,9 +176,11 @@
 
 (2) 매도/매수 주문
 
-![구매주문대기](/uploads/40438f5057e14f1c38f1e32773c8e7be/구매주문대기.gif)
 
-![주식판매대기](/uploads/c897ee0caef118e6bf8df5f22701dcc2/주식판매대기.gif)
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/b69c3214-b6e7-458d-9eee-3eced2c86a74" width="200"/>
+
+
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/382b1f3b-ed2b-4307-9b43-af0eb91f5f4e" width="200"/>
 
 거래가능한 가격이 아닐때, 주문 대기 상태를 학습할 수 있도록 주문 기능을 제공합니다. 
 
@@ -179,7 +188,9 @@
 
 (3)대기중인 주식 목록
 
-![대기중인주문](/uploads/14ef8e2e8030265d97db026db3afd0b8/대기중인주문.gif)
+
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/0447f548-4e34-4d6b-a4aa-b9646cce3b8c" width="200"/>
+
 
 주문되었지만 거래되지 않은 주식은 대기 중인 주식 목록에서, 주문정정/삭제를 할 수 있습니다.
 
@@ -189,7 +200,9 @@
 
 #### 주식퀴즈
 
-![퀴즈](/uploads/8af77bda99284399ba3e7ccc33280faf/퀴즈.gif)
+
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/4590dd5b-3668-4564-861a-804bf8905068" width="200"/>
+
 
 경제 상식 퀴즈를 통해 씨드머니를 하루에 한번 20만원 획득할 수 있는 기회를 제공합니다.
 
@@ -199,7 +212,9 @@
 
 #### 학교대항전
 
-![학교대항전참여_변경](/uploads/da390e97eb1da7907da1d4b508c4c4d4/학교대항전참여_변경.gif)
+
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/eea0a94f-b700-4461-9a67-75a3c4228dd6" width="200"/>
+
 
 학교대항전에 참여해, 같은 지역에 있는 학교 내 본인의 랭킹, 본교의 랭킹을 확인할 수 있습니다.
 
@@ -211,11 +226,15 @@
 
 
 
+
 #### 지갑
+
 
 (1) 지갑 리스트
 
-![지갑리스트](/uploads/75ed1f346e667a406ce139aa8acf3682/지갑리스트.gif)
+
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/57f9ceb0-af43-4070-afeb-2b1bbf3716c0" width="200"/>
+
 
 자신이 가지고 있는 모든 계좌를 합친 총 보유자산과 수익률을 확인할 수 있습니다.
 
@@ -223,9 +242,12 @@
 
 생성된 계좌는 삭제하지 않는 이상 지속되기 때문에, 해당 계좌를 통해 청소년들은 장기 투자에 대해 경험할 수 있습니다. 
 
+
 (2) 지갑 상세
 
-![지갑상세](/uploads/7c35724a27e45f4a9af089b338db680a/지갑상세.gif)
+
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/48da3d70-b09e-45e3-844f-ab1d4392e360" width="200"/>
+
 
 지갑 상세 페이지의 계좌자산페이지에서는 현재 자신의 계좌 자산과 포트폴리오의 최대 상위 6개의 투자비율을 확인할 수 있습니다. 또한 각 주식 마다 어느 정도의 손익이 있었는지 한눈에 파악할 수 있도록 카드를 제작했습니다.
 
@@ -236,9 +258,8 @@
 
 
 ### 👨🏻‍💻팀원소개
-![지수](https://github.com/jijisusu3/Motoo/assets/97648027/c666670b-ca5f-4137-93a2-53f9729d0af5)
 
-| ![지수](https://github.com/jijisusu3/Motoo/assets/97648027/c666670b-ca5f-4137-93a2-53f9729d0af5) width="120" | <img src="/uploads/0e82c0ce1ac0cc7fb8f5df3267c62291/KakaoTalk_20221117_210513871.png" width="120"/> | <img src="/uploads/4e1190816bdcf50d86e753e3706ac4d3/KakaoTalk_20221117_210515048.png" width="120"/> | <img src="/uploads/9507670d4c8fa55a389366f0b70f8cbc/KakaoTalk_20221117_210514890.png" width="120"/> | <img src="/uploads/ddae2b16ae4bd7e780922394a1500598/KakaoTalk_20221117_210514376.png" width="120"/> | <img src="/uploads/f6915ab7b36d9d076ea62a3231116a84/KakaoTalk_20221117_232242534.png" width="120"/> |
+| <img src="https://github.com/jijisusu3/Motoo/assets/97648027/c666670b-ca5f-4137-93a2-53f9729d0af5" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/7561e556-eb79-4279-863f-dbb65bc097b1" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/805b97ac-5350-4e8b-bae0-14ce571439ab" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/bdf2da06-ba8a-4bf1-a9ae-27962b3c7aa4" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/2f489edf-28f2-4d4c-a698-93f312a1b65c" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/c64e921f-83b3-44b5-88ee-599cedd597cb" width="120"/> |
 | --------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------ |
 | 김지수    | 장진세                                                       | 전지수                                                       | 이진행                                                       | 권예슬                                                       | 이수랑 |
 | FE/LEADER | BE                                                           | BE/CORE                                                           | BE                                                           | BE/INFRA                                                     | BE     |
