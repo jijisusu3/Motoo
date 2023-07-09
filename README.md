@@ -37,7 +37,7 @@
 
 ### 🖥 기술스택 
 
-![기술스택](/uploads/8bd70746f8bb0d51d4c6d66be2cb0616/KakaoTalk_20221121_014218431.png)
+![기술스택](https://github.com/jijisusu3/Motoo/assets/97648027/6e1fbea6-cc0e-4244-93c5-eb1578ef4e07)
 
 
 
