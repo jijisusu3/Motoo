@@ -40,13 +40,13 @@
 
 ### 🖥 Tech Stack 
 
-![기술스택](/uploads/8bd70746f8bb0d51d4c6d66be2cb0616/KakaoTalk_20221121_014218431.png)
+![기술스택](https://github.com/jijisusu3/Motoo/assets/97648027/6e1fbea6-cc0e-4244-93c5-eb1578ef4e07)
 
 
 
 ### 🛠 System Architecture
 
-![시스템아키텍처](/uploads/51406fbf508f87be56d254908e00786f/시스템아키텍처.png)
+![시스템아키텍처](https://github.com/jijisusu3/Motoo/assets/97648027/befb2ec3-e231-4efc-b704-b4c33aff28d0)
 
 
 
@@ -107,7 +107,7 @@
 
 #### Main Page
 
-![stockList](/uploads/de6d3d5405ab7a50c1bd3630b6595365/stockList.gif)
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/737433a0-3e70-40b6-824a-6928779b65d2" width="200"/>
 
 Easily view and remove stocks from personalized watchlist.
 
@@ -121,7 +121,7 @@ Seamlessly navigate to other features, including the watchlist, today’s quiz, 
 
 #### Detailed Stock Page
 
-![검색_주식상세_업종](/uploads/d9166a40bbab3feb5439b8e558ff58ae/검색_주식상세_업종.gif)
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/3dc30a6d-e7ae-47fd-b522-3af63761bc35" width="200"/>
 
 (1)  Stock Price Information
 
@@ -143,7 +143,7 @@ Seamlessly navigate to other features, including the watchlist, today’s quiz, 
 
 (1) Buying & Selling
 
-![현재가구매판매](/uploads/b2d3ea36088463335c80c849ce158384/현재가구매판매.gif)
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/29a92f0a-e12f-472c-bb3b-59c3245887c5" width="200"/>
 
 - Users can buy and sell stocks when their offer is the same as the current market price. 
 - To maintain engagement, the system simplifies transactions by removing complex factors such as bid/ask prices, market orders, and tradeable stock quantities, ensuring a more accessible and enjoyable tranding experience.
@@ -152,9 +152,9 @@ Seamlessly navigate to other features, including the watchlist, today’s quiz, 
 
 (2) Buy / Sell Orders
 
-![구매주문대기](/uploads/40438f5057e14f1c38f1e32773c8e7be/구매주문대기.gif)
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/b69c3214-b6e7-458d-9eee-3eced2c86a74" width="200"/>
 
-![주식판매대기](/uploads/c897ee0caef118e6bf8df5f22701dcc2/주식판매대기.gif)
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/382b1f3b-ed2b-4307-9b43-af0eb91f5f4e" width="200"/>
 
 - Provides an order placement feature that allows users to learn about pending orders when an order is placed at a non-tradable price.
 
@@ -162,7 +162,7 @@ Seamlessly navigate to other features, including the watchlist, today’s quiz, 
 
 (3) List of Pending Stock Orders
 
-![대기중인주문](/uploads/14ef8e2e8030265d97db026db3afd0b8/대기중인주문.gif)
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/0447f548-4e34-4d6b-a4aa-b9646cce3b8c" width="200"/>
 
 - Stocks that have been ordered but not yet executed are listed in the pending stock list, where users can modify or cancel their orders as needed.
 
@@ -170,7 +170,7 @@ Seamlessly navigate to other features, including the watchlist, today’s quiz, 
 
 #### Quizs
 
-![퀴즈](/uploads/8af77bda99284399ba3e7ccc33280faf/퀴즈.gif)
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/4590dd5b-3668-4564-861a-804bf8905068" width="200"/>
 
 - Offers a daily opportunity to earn ₩200,000 in virtual money through an economic knowledge quiz. This virtual money will be deposited into the student's primary account.
 - No time limit is imposed on answering questions, allowing users to discuss with friends or research online to learn the concepts and earn virtual money.
@@ -179,7 +179,7 @@ Seamlessly navigate to other features, including the watchlist, today’s quiz, 
 
 #### School Ranking Challenge
 
-![학교대항전참여_변경](/uploads/da390e97eb1da7907da1d4b508c4c4d4/학교대항전참여_변경.gif)
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/eea0a94f-b700-4461-9a67-75a3c4228dd6" width="200"/>
 
 - Participate in the School Ranking Challenge to check your individual ranking within your school and your school's ranking within the region.
 - Discover tranding stocks in your school through the Hot Stocks feature, which highlights the most selected stocks among students. This function can encourage discussions among students about their stock choices, fostering a collaborative learning environment.
@@ -191,7 +191,7 @@ Seamlessly navigate to other features, including the watchlist, today’s quiz, 
 
 (1) Wallet List
 
-![지갑리스트](/uploads/75ed1f346e667a406ce139aa8acf3682/지갑리스트.gif)
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/57f9ceb0-af43-4070-afeb-2b1bbf3716c0" width="200"/>
 
 - View total assets and returns by aggregating all owned accounts.
 - **Switch primary accounts** to manage investments from different accounts.
@@ -202,7 +202,7 @@ Seamlessly navigate to other features, including the watchlist, today’s quiz, 
 
 (2) Wallet Details
 
-![지갑상세](/uploads/7c35724a27e45f4a9af089b338db680a/지갑상세.gif)
+<img src="https://github.com/jijisusu3/Motoo/assets/97648027/48da3d70-b09e-45e3-844f-ab1d4392e360" width="200"/>
 
 - The Account Assets section provides an overview of current account holdings and highlights the top six investments by portfolio percentage. Each stock is displayed with a profit and loss summary for easy tracking.
 
@@ -213,9 +213,8 @@ Seamlessly navigate to other features, including the watchlist, today’s quiz, 
 
 
 ### 👨🏻‍💻Team Member Introduction
-
-| <img src="/uploads/33a2fca5ddabdd76957bf0d200f233a9/KakaoTalk_20221117_221333841.png" width="120"/> | <img src="/uploads/0e82c0ce1ac0cc7fb8f5df3267c62291/KakaoTalk_20221117_210513871.png" width="120"/> | <img src="/uploads/4e1190816bdcf50d86e753e3706ac4d3/KakaoTalk_20221117_210515048.png" width="120"/> | <img src="/uploads/9507670d4c8fa55a389366f0b70f8cbc/KakaoTalk_20221117_210514890.png" width="120"/> | <img src="/uploads/ddae2b16ae4bd7e780922394a1500598/KakaoTalk_20221117_210514376.png" width="120"/> | <img src="/uploads/f6915ab7b36d9d076ea62a3231116a84/KakaoTalk_20221117_232242534.png" width="120"/> |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Jisu Kim                                                     | 장진세                                                       | 전지수                                                       | 이진행                                                       | 권예슬                                                       | 이수랑                                                       |
-| FE/LEADER                                                    | BE                                                           | BE/Data Analysis                                             | BE                                                           | BE/INFRA                                                     | BE                                                           |
+| <img src="https://github.com/jijisusu3/Motoo/assets/97648027/c666670b-ca5f-4137-93a2-53f9729d0af5" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/7561e556-eb79-4279-863f-dbb65bc097b1" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/805b97ac-5350-4e8b-bae0-14ce571439ab" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/bdf2da06-ba8a-4bf1-a9ae-27962b3c7aa4" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/2f489edf-28f2-4d4c-a698-93f312a1b65c" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/c64e921f-83b3-44b5-88ee-599cedd597cb" width="120"/> |
+| --------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------ |
+| Jisu Kim    | 장진세                                                       | 전지수                                                       | 이진행                                                       | 권예슬                                                       | 이수랑 |
+| FE/LEADER | BE                                                           | BE/Data Analysis                                                           | BE                                                           | BE/INFRA                                                     | BE     |
 
