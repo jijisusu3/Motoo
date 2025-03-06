@@ -1,266 +1,221 @@
 # 📈MOTOO
 
-### 청소년 모의 주식투자 교육 플랫폼 모투
+### Motoo, a mock stock investment education platform for youth
 
 
 
-### 📊프로젝트 개요
+### 📊Project Introduction
 
-[모투 바로가기](https://k7b204.p.ssafy.io/)
+- Motoo is a mock stock trading platform designed to help students learn financial investment concepts through interactive and gamified experiences. Nearly half of Korean students have experience with financial investment, yet high school economics textbooks barely cover the topic. Also, existing mock investment competitions are one-off events, and real stock platforms remain inaccessible to young users.
+- To bridge this gap, Motoo provides a structured and engaging learning environment, allowing students to grasp investment concepts in simpler terms and practice mock trading in a realistic but risk-free setting. The platform features real-time stock search, price visualization, and portfolio management tools, making financial learning more accessible and practical for students.
 
-- 청소년 재테크 인식 설문 결과, 절반에 가까운 학생이 재테크 경험이 있다고 답했습니다. 이렇듯 재테크에 대한 학생들의 관심은 높아지고 있지만 고등학교 경제교과서에서 재테크와 관련된 부분은 한 문단에 불과합니다.
-  코로나 이후 주식 열풍이 불면서 투자자 예탁금이 두배이상 급증했고 주식에 대한 관심도 높아졌지만 기존의 모의투자 대회는 단발적이며 교육과 분리되어 있고, 기존의 주식 투자 서비스는 청소년에게 불친절합니다.
-  이를 해결하기 위해 쉽고 간편한 용어로 개념을 익히고 직접 모의투자를 경험할 수 있는 서비스를 구상하였습니다.
 
 
+### ✏ Main Functionality
+#### Mock Investment
+- Check real-time stock prices and various market indicators.
+- View time-series price data visualized through charts.
+- Access the real-time quotation list.
+- Place buy and sell orders for the stocks when the market opens.
+- Easily Understand information about the industry through keyword analysis and sentiment analysis for companies and industries.
 
-### ✏주요기능
-#### 모의투자
-- 실시간으로 주식 현재가 및 각종 지표들을 조회할 수 있습니다.
-- 차트를 이용해 시각화된 시간 별 가격 데이터를 확인할 수 있습니다.
-- 실시간 호가 목록을 조회할 수 있습니다.
-- 시장이 열리면 원하는 종목의 주식에 대해 매수, 매도 주문을 넣을 수 있습니다.
-- 기업과 업종에 대해 키워드 분석 및 감정 분석으로 업계에 대한 정보를 간단히 파악할 수 있습니다.
+#### Investment Education
+- We made an effort to present indicators in a more user-friendly way, adding explanations for complex terms to facilitate  natural learning.
+- Users can earn virtual money by participating in quizzes related to economics, which encourages learning.
 
-#### 경제교육
-- 방대한 데이터들을 간소화하여 접근성을 높였습니다.
-- 지표들을 친근하게 나타내기 위해 노력하였으며 어려운 용어들은 설명을 덧붙여서 자연스럽게 학습이 되도록 유도하였습니다.
-- 경제 관련 퀴즈를 통해 시드머니를 얻게 하여 자연스럽게 학습을 할 수 있도록 유도하였습니다.
 
+#### Portfolio Manage
+- Calculates assets, returns and other key metrics for each account, allowing users to easily monitor their account status.
+- Users can review theri transaction history to track asset fluctuations over time, while profit and loss for each stock is calculated and displayed at glance.
+- Generates a portfolio that visulaizes the proportion of assets held by analyzing currently owned stocks.
 
-#### 포트폴리오 관리
-- 계좌별 자산, 수익률 등을 계산해줘서 계좌들의 상태를 쉽게 파악할 수 있게 하였습니다.
-- 거래내역을 조회하여 자산이 어떻게 변동되어왔는지 확인할 수 있게 하였고, 종목별 판매손익을 계산해주고 한눈에 볼 수 있게 하였습니다.
-- 현재 보유한 주식들을 조회하여 보유한 자산의 비중을 나타내는 포트폴리오를 자동으로 만들어주도록 하였습니다.
+#### School Ranking Challenge
 
+- Displays individual rankings within schools and school ranking within a region in real time, allowing users to track performance.
+- Users can view ranking of the most popular stocks within their school and have opportunities to discuss them with friends.
 
 
-### 🖥 기술스택 
 
-![기술스택](https://github.com/jijisusu3/Motoo/assets/97648027/6e1fbea6-cc0e-4244-93c5-eb1578ef4e07)
 
 
+### 🖥 Tech Stack 
 
-### 🛠 시스템 아키텍쳐
-![시스템아키텍처](https://github.com/jijisusu3/Motoo/assets/97648027/befb2ec3-e231-4efc-b704-b4c33aff28d0)
+![기술스택](/uploads/8bd70746f8bb0d51d4c6d66be2cb0616/KakaoTalk_20221121_014218431.png)
 
 
 
+### 🛠 System Architecture
 
+![시스템아키텍처](/uploads/51406fbf508f87be56d254908e00786f/시스템아키텍처.png)
 
-### :classical_building: 기술 소개
 
 
 
-#### 주식 데이터
 
-- 한국투자증권 open api와 pykrx를 통해 데이터를 받아와서 저장하는 기능 제작
+### :classical_building: Introduction to Technology
 
-- 작업 내용
+#### Stock Data
 
-  - 오래 저장할 필요가 없지만 자주 조회하는 데이터들은 레디스에 저장 및 조회를 하도록 하였음(호가조회,  api 접근 토큰)
+- Developed a system to fetch and store stock data using the **Korea Investment & Securities Open API** and **pykrx**.
 
-  - 다양한 주식들의 시간대별로 변하는 데이터를 효과적으로 저장/조회하기 위하여 테이블을 업종별로 분류
+- Details:
 
-  - 오픈 api를 통해 데이터를 받아오기 떄문에 900개가 넘는 종목의 데이터를 한번에 받아오기에는 어려움이 있었음.
+  - Frequently accessed but short-lived data (e.g., order book, API access tokens) is stored and retrieved using Redis for efficiency.
 
-    - 이 문제를 해결하기 위해 대략 1초 정도에 20개씩을 받아오도록 하였음.
-    - 많은 요청을 반복하기 때문에 비동기로 데이터를 받도록 하여 키에 할당된 초당 데이터 제한만 없다면 성능을 크게 올릴 수 있도록 설계.
-    - 또한 DB에 저장하는 것도 테이블마다 bulk create, update(또는 bulk insert)를 사용하여 대량의 데이터를 넣고 수정하는데 DB의 과부하를 낮추기 위해 노력하였음.
+  - Since retrieving data for over 900 stocks at once via Open API was challenging.
 
-  - typer 라이브러리와 crontab을 이용하여 주식 데이터를 실시간으로 업데이트
+    - Optimized the process to fetch 20 stocks per second.
+    - Implemented asynchronous data retrieval to maximize performance while adhering to API rate limits.
+    - Used bulk create, update, and insert operations in the database to handle large data volumes while reducing server load.
+  
+  - Automated real-time stock data updates using Typer library and crontab
 
-    - typer 라이브러리를 통해 api와 별개로 여러가지 백그라운드에서 실행되는 기능들을 정의하고 터미널에 커맨드를 입력하여 실행
+    
 
-    - crontab으로 정해진 시간에 해당 커맨드를 입력하도록 설정
+#### Industry & Stock-Specific Keyword Analysis
 
-    - ec2 및 컨테이너 내부의 시간대를 한국 시간대로 설정
+- News Collection: Used the Naver Search API to gather financial news.
 
-      
+- Keyword Analysis:
 
-#### 업종 종목별 키워드 분석
+  - Instead of using a dedicated NLP module, processed data directly.
 
-- 키워드분석
+  - Avoided excessive morphological decomposition (e.g., “Artificial Intelligence” being split into “Artificial” and “Intelligence”) by manually refining data.
 
-  - 네이버 검색 api를 사용해 뉴스를 수집했습니다.
+  - Preprocessed data by removing special characters, particles, and stopwords, then structured them into a dataset.
 
-  - 키워드 분석에서는 별개의 자연어 처리 모듈을 사용하지 않고 데이터를 직접 가공했습니다.
+  - Counted word frequencies and provided users with the **top 10 most frequent keywords**, helping them quickly understand trends in specific industries and companies.
 
-    - konlpy를 사용해본 결과 '인공지능'이라는 단어를 '인공', '지능' 과 같이 형태소 단위로 잘게 쪼개 전달하고자 하는 의미에서 벗어나는 경우가 발생했습니다. 때문에 데이터를 직접 가공해 사용하는 방향으로 진행했습니다.
 
-    - 준비된 데이터셋에서 불필요한 특수문자, 조사, 연결어들이 카운팅되지 않도록 먼저 제거한 뒤 단어를 잘라 하나의 집합으로 만듭니다.
+  
 
-    - 단어의 집합에서 stopword들을 제거하고 정제된 단어들을 array에 담아 빈도를 카운트합니다.
+#### Industry & Stock-Specific Sentiment Analysis
 
-    - 모투는 이중 빈도가 가장 높은 상위 10개 단어를 사용자에게 제공해 해당 업종과 기업에 어떤 일이 일어나고 있는지 간편하게 확인하고, 투자가치에 대한 기준을 스스로 정립할 수 있도록 도와줍니다.
+- Used the KR-FinBERT model, trained on Korean financial articles, for sentiment analysis.
 
-      
+- Implementation Process:
+  - Cleaned the dataset by removing unnecessary special characters.
+  - Tokenized text using Transformers and pre-trained models.
+  - Used TQDM to monitor progress while processing the dataset.
+  - Converted output values into **tensors** using **PyTorch** for deep learning-based computations.
+  - Computed sentiment scores in the order of negative-neutral-positive, as defined by the KR-FinBERT model.
+  - Displayed sentiment results using **weather icons (cloudy-neutral-sunny)**, allowing users to quickly assess the market sentiment of a specific industry or company.
 
-#### 업종 종목별 감정 분석
 
-- 감정분석은 한국어 경제 기사를 학습한 KR-FinBERT모델을 사용했습니다.
-  - 준비된 데이터셋에서 불필요한 특수문자를 제거합니다.
-  - transformers를 통해 사전학습된 모델을 데려온 뒤 문장을 토큰화합니다.
-  - 사전학습 모델에 데이터를 입력하고 tqdm을 사용해 진행 상황을 확인할 수 있도록 설계해줍니다.
-  - 출력값을 tensor로 변환하기 위해 딥러닝 라이브러리 pytorch를 사용했습니다.
-  - tensor로 변환된 출력값을 확률로 연산하면 KR-FinBERT 모델에 학습한 결과에 따라 부정-중립-긍정 순서로 확률이 나타납니다.
-  - 모투는 이 확률을 비-흐림-맑음 순서의 날씨 아이콘으로 사용자에게 제공하여 해당 업종과 기업의 현황이 어떠한지 쉽게 확인할 수 있도록 제공합니다.
 
+### 🔎 Service
 
+#### Main Page
 
-### 🔎 서비스소개
+![stockList](/uploads/de6d3d5405ab7a50c1bd3630b6595365/stockList.gif)
 
-#### 메인 페이지
+Easily view and remove stocks from personalized watchlist.
 
+Monitor key market trends such as sharp price increases or drops, market capitalization, and tranding volume through real-time charts.
 
-<img src="https://github.com/jijisusu3/Motoo/assets/97648027/737433a0-3e70-40b6-824a-6928779b65d2" width="200"/>
+User can navigate to the detailed stock page easily.
 
+Seamlessly navigate to other features, including the watchlist, today’s quiz, and the stock search page.
 
-사용자가 설정한 관심주식을 손쉽게 보고, 삭제할 수 있습니다.
 
-또한 실시간 차트를 통해 급상승/급하락/시가총액/거래량의 정보를 볼 수 있습니다.
 
-사용자가 관심이 있거나 주목할 만한 실시간차트의 변화 내역을 손쉽게 파악하고 주식 디테일 페이지로 이동할 수 있습니다. 
+#### Detailed Stock Page
 
-또한 대기 중인 주식 목록으로의 이동, 오늘의 퀴즈, 종목 검색 페이지 등으로 이동할 수 있습니다.
+![검색_주식상세_업종](/uploads/d9166a40bbab3feb5439b8e558ff58ae/검색_주식상세_업종.gif)
 
+(1)  Stock Price Information
 
+- View both current and historical price data in the stock details page.
 
-#### 주식 상세보기
+(2) Major Companies' Stocks – Keyword & Sentiment Analysis
 
+- Displays key trending keywords for major companies' stocks  based on data retrieved via the Naver News API.
 
-<img src="https://github.com/jijisusu3/Motoo/assets/97648027/3dc30a6d-e7ae-47fd-b522-3af63761bc35" width="200"/>
+- Analyzes news sentiment to classify articles as negative, neutral, or positive for a given stock.
 
+(3) Glossary of Terms
 
-(1)  주식가격 관련정보
+- Provides simplified explanations or alternative terms for complex stock market concepts such as upper/lower price limits, PER, and dividend yield.
 
-주식상세보기에서는 가격정보와 더불어 현재 또는 과거의 가격 그래프를 확인할 수 있습니다.
 
-라인그래프를 통해 하루/일주일/한달/일년 간의 최고가, 최저가, 가격의 변동을 확인할 수 있습니다.
 
-또한 캔들그래프를 통해 x좌표에 해당하는 날짜의 최저가, 최고가, 종가 등의 가격을 확인할 수 있습니다. 
+#### Mock Investment
 
-주식과 관련된 차트를 보는 것을 돕기 위해 설명 기능을 제공합니다.
+(1) Buying & Selling
 
-(2) 주요종목 Keyword, 감정분석
+![현재가구매판매](/uploads/b2d3ea36088463335c80c849ce158384/현재가구매판매.gif)
 
-​	주요종목에 해당할때 네이버 뉴스 api를 통해 가져온 데이터를 기반으로 키워드를 보여줍니다.
+- Users can buy and sell stocks when their offer is the same as the current market price. 
+- To maintain engagement, the system simplifies transactions by removing complex factors such as bid/ask prices, market orders, and tradeable stock quantities, ensuring a more accessible and enjoyable tranding experience.
 
-또한 해당 종목의 뉴스 분석 결과가 부정/중립/긍정인지 알 수 있습니다.
 
-(3) 용어 설명
 
-​	상한가, 하한가, per, 배당수익률 등 어려운 용어들을 쉽게 바꾸어 사용하거나, 설명해줍니다.
+(2) Buy / Sell Orders
 
-(4) 업종별 Keyword, 감정분석
+![구매주문대기](/uploads/40438f5057e14f1c38f1e32773c8e7be/구매주문대기.gif)
 
-​	해당 업종에 대해 네이버 뉴스 api를 통해 가져온 데이터를 기반으로 키워드를 보여줍니다.
+![주식판매대기](/uploads/c897ee0caef118e6bf8df5f22701dcc2/주식판매대기.gif)
 
-또한 해당 종목의 뉴스 분석 결과가 부정/중립/긍정인지 알 수 있습니다.
+- Provides an order placement feature that allows users to learn about pending orders when an order is placed at a non-tradable price.
 
 
 
+(3) List of Pending Stock Orders
 
+![대기중인주문](/uploads/14ef8e2e8030265d97db026db3afd0b8/대기중인주문.gif)
 
-#### 모의투자
+- Stocks that have been ordered but not yet executed are listed in the pending stock list, where users can modify or cancel their orders as needed.
 
-(1) 매도/매수
 
 
-<img src="https://github.com/jijisusu3/Motoo/assets/97648027/29a92f0a-e12f-472c-bb3b-59c3245887c5" width="200"/>
+#### Quizs
 
+![퀴즈](/uploads/8af77bda99284399ba3e7ccc33280faf/퀴즈.gif)
 
-​	주식을 현재가로 구매하고 판매할 수 있습니다. 호가와 시장가, 판매/구매하고자 하는 주식수 등 많은 것을 고려해 매도 매수를 하게된다면 주식에 대한 흥미가 떨어질 것이라 예상했습니다.  
+- Offers a daily opportunity to earn ₩200,000 in virtual money through an economic knowledge quiz. This virtual money will be deposited into the student's primary account.
+- No time limit is imposed on answering questions, allowing users to discuss with friends or research online to learn the concepts and earn virtual money.
 
 
 
-(2) 매도/매수 주문
+#### School Ranking Challenge
 
+![학교대항전참여_변경](/uploads/da390e97eb1da7907da1d4b508c4c4d4/학교대항전참여_변경.gif)
 
-<img src="https://github.com/jijisusu3/Motoo/assets/97648027/b69c3214-b6e7-458d-9eee-3eced2c86a74" width="200"/>
+- Participate in the School Ranking Challenge to check your individual ranking within your school and your school's ranking within the region.
+- Discover tranding stocks in your school through the Hot Stocks feature, which highlights the most selected stocks among students. This function can encourage discussions among students about their stock choices, fostering a collaborative learning environment.
+- **The competition lasts for one month**, allowing students to **experience short-term investing** and develop a better understanding of market dynamics.
 
 
-<img src="https://github.com/jijisusu3/Motoo/assets/97648027/382b1f3b-ed2b-4307-9b43-af0eb91f5f4e" width="200"/>
 
-거래가능한 가격이 아닐때, 주문 대기 상태를 학습할 수 있도록 주문 기능을 제공합니다. 
+#### Wallet
 
+(1) Wallet List
 
+![지갑리스트](/uploads/75ed1f346e667a406ce139aa8acf3682/지갑리스트.gif)
 
-(3)대기중인 주식 목록
+- View total assets and returns by aggregating all owned accounts.
+- **Switch primary accounts** to manage investments from different accounts.
+- Create additional accounts to experiment with different investment strategies. However, to prevent excessive account creation and deletion, users can only create a new account every 20 trading days.
+- Once created, accounts remain **permanent unless manually deleted**, allowing students to **experience long-term investing**.
 
 
-<img src="https://github.com/jijisusu3/Motoo/assets/97648027/0447f548-4e34-4d6b-a4aa-b9646cce3b8c" width="200"/>
 
+(2) Wallet Details
 
-주문되었지만 거래되지 않은 주식은 대기 중인 주식 목록에서, 주문정정/삭제를 할 수 있습니다.
+![지갑상세](/uploads/7c35724a27e45f4a9af089b338db680a/지갑상세.gif)
 
+- The Account Assets section provides an overview of current account holdings and highlights the top six investments by portfolio percentage. Each stock is displayed with a profit and loss summary for easy tracking.
 
+- The Realized Gains/Losses page displays completed buy/sell transactions with detailed profit and loss records.
 
+- The Transaction History page tracks seed money additions, quiz rewards, and buy/sell activity in a simplified format.
 
 
-#### 주식퀴즈
 
+### 👨🏻‍💻Team Member Introduction
 
-<img src="https://github.com/jijisusu3/Motoo/assets/97648027/4590dd5b-3668-4564-861a-804bf8905068" width="200"/>
-
-
-경제 상식 퀴즈를 통해 씨드머니를 하루에 한번 20만원 획득할 수 있는 기회를 제공합니다.
-
-타이머로 문제를 풀 수 있는 시간을 제한하지 않기 때문에, 친구들과 상의하거나 인터넷에 검색하여 해당 개념을 학습하고 씨드 머니를 획득할 수 있습니다.
-
-
-
-#### 학교대항전
-
-
-<img src="https://github.com/jijisusu3/Motoo/assets/97648027/eea0a94f-b700-4461-9a67-75a3c4228dd6" width="200"/>
-
-
-학교대항전에 참여해, 같은 지역에 있는 학교 내 본인의 랭킹, 본교의 랭킹을 확인할 수 있습니다.
-
-교내 핫 종목기능을 만들어, 우리 학교에서 가장 많이 선택되고 있는 종목을 알 수 있습니다.
-
-모투에서는 학생들이 친구들과 해당 종목을 왜 선택했는지 대화할 수 있는 창구가 되기를 바라는 마음에서 해당 기능을 제공합니다. 
-
-학교대항전은 한 달 간 지속되므로, 해당 계좌를 통해 청소년들은 단기 투자에 대해 경험할 수 있습니다.
-
-
-
-
-#### 지갑
-
-
-(1) 지갑 리스트
-
-
-<img src="https://github.com/jijisusu3/Motoo/assets/97648027/57f9ceb0-af43-4070-afeb-2b1bbf3716c0" width="200"/>
-
-
-자신이 가지고 있는 모든 계좌를 합친 총 보유자산과 수익률을 확인할 수 있습니다.
-
-주계좌 변경을 통해 이용 하고 싶은 계좌를 변경할 수 있습니다. 또한 계좌를 추가하여 다른 투자방식을 시도해볼 수 있습니다. 그러나 계좌의 무분별한 삭제와 생성을 막기 위해 20영업일간의 제한을 두어 계좌를 생성하도록 합니다. 
-
-생성된 계좌는 삭제하지 않는 이상 지속되기 때문에, 해당 계좌를 통해 청소년들은 장기 투자에 대해 경험할 수 있습니다. 
-
-
-(2) 지갑 상세
-
-
-<img src="https://github.com/jijisusu3/Motoo/assets/97648027/48da3d70-b09e-45e3-844f-ab1d4392e360" width="200"/>
-
-
-지갑 상세 페이지의 계좌자산페이지에서는 현재 자신의 계좌 자산과 포트폴리오의 최대 상위 6개의 투자비율을 확인할 수 있습니다. 또한 각 주식 마다 어느 정도의 손익이 있었는지 한눈에 파악할 수 있도록 카드를 제작했습니다.
-
-판매 손익 페이지에서는 이미 매도/매수가 완료된 내역에 대해 확인할 수 있습니다.
-
-거래 내역 페이지에서는  씨드머니 추가, 퀴즈보상, 구매/판매 등의 간단한 정보를 확인할 수 있습니다.
-
-
-
-### 👨🏻‍💻팀원소개
-
-| <img src="https://github.com/jijisusu3/Motoo/assets/97648027/c666670b-ca5f-4137-93a2-53f9729d0af5" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/7561e556-eb79-4279-863f-dbb65bc097b1" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/805b97ac-5350-4e8b-bae0-14ce571439ab" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/bdf2da06-ba8a-4bf1-a9ae-27962b3c7aa4" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/2f489edf-28f2-4d4c-a698-93f312a1b65c" width="120"/> | <img src="https://github.com/jijisusu3/Motoo/assets/97648027/c64e921f-83b3-44b5-88ee-599cedd597cb" width="120"/> |
-| --------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------ |
-| 김지수    | 장진세                                                       | 전지수                                                       | 이진행                                                       | 권예슬                                                       | 이수랑 |
-| FE/LEADER | BE                                                           | BE/CORE                                                           | BE                                                           | BE/INFRA                                                     | BE     |
+| <img src="/uploads/33a2fca5ddabdd76957bf0d200f233a9/KakaoTalk_20221117_221333841.png" width="120"/> | <img src="/uploads/0e82c0ce1ac0cc7fb8f5df3267c62291/KakaoTalk_20221117_210513871.png" width="120"/> | <img src="/uploads/4e1190816bdcf50d86e753e3706ac4d3/KakaoTalk_20221117_210515048.png" width="120"/> | <img src="/uploads/9507670d4c8fa55a389366f0b70f8cbc/KakaoTalk_20221117_210514890.png" width="120"/> | <img src="/uploads/ddae2b16ae4bd7e780922394a1500598/KakaoTalk_20221117_210514376.png" width="120"/> | <img src="/uploads/f6915ab7b36d9d076ea62a3231116a84/KakaoTalk_20221117_232242534.png" width="120"/> |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Jisu Kim                                                     | 장진세                                                       | 전지수                                                       | 이진행                                                       | 권예슬                                                       | 이수랑                                                       |
+| FE/LEADER                                                    | BE                                                           | BE/Data Analysis                                             | BE                                                           | BE/INFRA                                                     | BE                                                           |
 
